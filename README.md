@@ -42,7 +42,9 @@ Complete documentation, installation instructions, and examples are available at
 Tests
 -----
 
-The tests can be executed by using this command from the tests directory:
+Create a test app on [Facebook Developers](https://developers.facebook.com) and add your credentials to tests/FacebookTestCredentials.php.
+
+The tests can be executed by running this command from the tests directory:
 
     ../vendor/bin/phpunit --stderr .
 
