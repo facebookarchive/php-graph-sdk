@@ -4,7 +4,7 @@
     "keywords": ["facebook", "sdk"],
     "type": "library",
     "homepage": "https://github.com/facebook/facebook-php-sdk-v4",
-    "license": "Apache2",
+    "license": "Facebook Platform",
     "authors": [
         {
             "name": "Facebook",
