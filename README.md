@@ -9,7 +9,11 @@ Usage
 Minimal example:
 
 ```php
-using Facebook\FacebookSession;
+use Facebook\FacebookSession;
+use Facebook\FacebookRequest;
+use Facebook\GraphUser;
+use Facebook\FacebookRequestException;
+use Facebook\FacebookSDKException;
 
 FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
 
@@ -29,7 +33,7 @@ try {
   echo $me->getName();
 } catch (FacebookRequestException $e) {
   // The Graph API returned an error
-} catch (\Exception $e) {
+} catch (FacebookSDKException $e) {
   // Some other error occurred
 }
 
