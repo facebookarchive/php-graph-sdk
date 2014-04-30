@@ -1,7 +1,12 @@
-## Facebook SDK for PHP
-#### v4.0.0
+Facebook SDK for PHP
+====================
 
-This repository contains the open source PHP SDK that allows you to access Facebook Platform from your PHP app.
+[![Latest Stable Version](http://img.shields.io/packagist/v/facebook/php-sdk-v4.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
+
+
+This repository contains the open source PHP SDK that allows you to access Facebook
+Platform from your PHP app.
+
 
 Usage
 -----
@@ -42,15 +47,19 @@ Complete documentation, installation instructions, and examples are available at
 Tests
 -----
 
-Create a test app on [Facebook Developers](https://developers.facebook.com) and add your credentials to tests/FacebookTestCredentials.php.
+Create a test app on [Facebook Developers](https://developers.facebook.com) and add
+your credentials to `tests/FacebookTestCredentials.php`.
 
 The tests can be executed by running this command from the tests directory:
 
-    ../vendor/bin/phpunit --stderr .
+```bash
+../vendor/bin/phpunit --stderr .
+```
 
 
 Contributing
-===========
+------------
+
 For us to accept contributions you will have to first have signed the
 [Contributor License Agreement](https://developers.facebook.com/opensource/cla).
 
@@ -61,6 +70,3 @@ Before creating a pull request, squash your commits into a single commit.
 
 Add the comments where needed, and provide ample explanation in the
 commit message.
-
-
-
