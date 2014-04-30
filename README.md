@@ -33,7 +33,7 @@ try {
   echo $me->getName();
 } catch (FacebookRequestException $e) {
   // The Graph API returned an error
-} catch (FacebookSDKException $e) {
+} catch (\Exception $e) {
   // Some other error occurred
 }
 
