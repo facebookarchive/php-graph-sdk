@@ -48,14 +48,14 @@ class FacebookRedirectLoginHelper
   private $redirectUrl;
 
   /**
-   * @var string State token for CSRF validation
-   */
-  private $state;
-
-  /**
    * @var string Prefix to use for session variables
    */
   private $sessionPrefix = 'FBRLH_';
+
+  /**
+   * @var string State token for CSRF validation
+   */
+  protected $state;
 
 
   /**
