@@ -13,7 +13,6 @@ use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\GraphUser;
 use Facebook\FacebookRequestException;
-use Facebook\FacebookSDKException;
 
 FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
 
