@@ -18,6 +18,8 @@
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "classmap": ["src"]
+        "psr-0": {
+            "Facebook\\": "src/"
+        }
     }
 }
