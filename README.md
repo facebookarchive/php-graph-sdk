@@ -14,7 +14,10 @@ Usage
 Minimal example:
 
 ```php
-using Facebook\FacebookSession;
+use Facebook\FacebookSession;
+use Facebook\FacebookRequest;
+use Facebook\GraphUser;
+use Facebook\FacebookRequestException;
 
 FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
 
