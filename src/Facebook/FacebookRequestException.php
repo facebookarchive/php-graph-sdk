@@ -58,7 +58,7 @@ class FacebookRequestException extends \Exception
   {
     $this->rawResponse = $rawResponse;
     $this->statusCode = $statusCode;
-    $this->responseData = self::convertToArray($responseData);
+    $this->responseData = static::convertToArray($responseData);
     parent::__construct(
       $this->get('message', 'Unknown Exception'), $this->get('code', -1), null
     );
@@ -76,7 +76,7 @@ class FacebookRequestException extends \Exception
    */
   public static function create($raw, $data, $statusCode)
   {
-    $data = self::convertToArray($data);
+    $data = static::convertToArray($data);
     if (!isset($data['error']['code']) && isset($data['code'])) {
       $data = array('error' => $data);
     }

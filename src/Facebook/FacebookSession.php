@@ -112,7 +112,7 @@ class FacebookSession
     // The response for this endpoint is not JSON, so it must be handled
     //   differently, not as a GraphObject.
     $response = (new FacebookRequest(
-      self::newAppSession($targetAppId, $targetAppSecret),
+      static::newAppSession($targetAppId, $targetAppSecret),
       'GET',
       '/oauth/access_token',
       $params
@@ -144,7 +144,7 @@ class FacebookSession
       'redirect_uri' => ''
     );
     $response = (new FacebookRequest(
-      self::newAppSession($targetAppId, $targetAppSecret),
+      static::newAppSession($targetAppId, $targetAppSecret),
       'GET',
       '/oauth/client_code',
       $params
@@ -165,7 +165,7 @@ class FacebookSession
     $targetAppId = static::_getTargetAppId($appId);
     $targetAppSecret = static::_getTargetAppSecret($appSecret);
     $info = $this->getSessionInfo($targetAppId, $targetAppSecret);
-    return self::validateSessionInfo($info, $targetAppId, $targetAppSecret);
+    return static::validateSessionInfo($info, $targetAppId, $targetAppSecret);
   }
 
   /**
@@ -206,9 +206,9 @@ class FacebookSession
   public static function newSessionFromSignedRequest($signedRequest,
                                                      $state = null)
   {
-    $parsedRequest = self::parseSignedRequest($signedRequest, $state);
+    $parsedRequest = static::parseSignedRequest($signedRequest, $state);
     if (isset($parsedRequest['code'])) {
-      return self::newSessionAfterValidation($parsedRequest);
+      return static::newSessionAfterValidation($parsedRequest);
     }
     return new FacebookSession($parsedRequest['oauth_token']);
   }
@@ -216,15 +216,15 @@ class FacebookSession
   private static function newSessionAfterValidation($parsedSignedRequest)
   {
     $params = array(
-      'client_id' => self::$defaultAppId,
+      'client_id' => static::$defaultAppId,
       'redirect_uri' => '',
       'client_secret' =>
-        self::$defaultAppSecret,
+        static::$defaultAppSecret,
       'code' => $parsedSignedRequest['code']
     );
     $response = (new FacebookRequest(
-      self::newAppSession(
-        self::$defaultAppId, self::$defaultAppSecret),
+      static::newAppSession(
+        static::$defaultAppId, static::$defaultAppSecret),
       'GET',
       '/oauth/access_token',
       $params
@@ -243,8 +243,8 @@ class FacebookSession
   {
     if (strpos($signedRequest, '.') !== false) {
       list($encodedSig, $encodedData) = explode('.', $signedRequest, 2);
-      $sig = self::_base64UrlDecode($encodedSig);
-      $data = json_decode(self::_base64UrlDecode($encodedData), true);
+      $sig = static::_base64UrlDecode($encodedSig);
+      $data = json_decode(static::_base64UrlDecode($encodedData), true);
       if (isset($data['algorithm']) && $data['algorithm'] === 'HMAC-SHA256') {
         $expectedSig = hash_hmac(
           'sha256', $encodedData, static::$defaultAppSecret, true

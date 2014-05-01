@@ -22,7 +22,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
   public function testLoginURL()
   {
     $helper = new FacebookRedirectLoginHelper(
-      self::REDIRECT_URL,
+      static::REDIRECT_URL,
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
@@ -30,7 +30,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     $state = $_SESSION['FBRLH_state'];
     $params = array(
       'client_id' => FacebookTestCredentials::$appId,
-      'redirect_uri' => self::REDIRECT_URL,
+      'redirect_uri' => static::REDIRECT_URL,
       'state' => $state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', array())
@@ -47,15 +47,15 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
   public function testLogoutURL()
   {
     $helper = new FacebookRedirectLoginHelper(
-      self::REDIRECT_URL,
+      static::REDIRECT_URL,
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
     $logoutUrl = $helper->getLogoutUrl(
-      FacebookTestHelper::$testSession, self::REDIRECT_URL
+      FacebookTestHelper::$testSession, static::REDIRECT_URL
     );
     $params = array(
-      'next' => self::REDIRECT_URL,
+      'next' => static::REDIRECT_URL,
       'access_token' => FacebookTestHelper::$testSession->getToken()
     );
     $expectedUrl = 'https://www.facebook.com/logout.php?';
