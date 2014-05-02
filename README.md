@@ -50,8 +50,9 @@ Complete documentation, installation instructions, and examples are available at
 Tests
 -----
 
-Create a test app on [Facebook Developers](https://developers.facebook.com) and add
-your credentials to `tests/FacebookTestCredentials.php`.
+Create a test app on [Facebook Developers](https://developers.facebook.com), then
+create `tests/FacebookTestCredentials.php` from `tests/FacebookTestCredentials.php.dist`
+and edit it to add your credentials.
 
 The tests can be executed by running this command from the tests directory:
 
