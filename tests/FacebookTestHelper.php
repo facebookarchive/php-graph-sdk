@@ -4,8 +4,6 @@ use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSDKException;
 
-require('FacebookTestCredentials.php');
-
 class FacebookTestHelper
 {
 
