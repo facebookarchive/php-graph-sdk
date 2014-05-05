@@ -29,7 +29,7 @@ namespace Facebook;
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class FacebookRequestException extends \Exception
+class FacebookRequestException extends FacebookSDKException
 {
 
   /**
