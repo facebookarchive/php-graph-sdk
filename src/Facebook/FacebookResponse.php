@@ -126,9 +126,9 @@ class FacebookResponse
    *
    * @return FacebookRequest|null
    */
-  public function getRequestForNextPage($field=null)
+  public function getRequestForNextPage()
   {
-    return $this->handlePagination('next',$field);
+    return $this->handlePagination('next');
   }
 
   /**
@@ -137,23 +137,23 @@ class FacebookResponse
    *
    * @return FacebookRequest|null
    */
-  public function getRequestForPreviousPage($field=null)
+  public function getRequestForPreviousPage()
   {
-    return $this->handlePagination('previous',$field);
+    return $this->handlePagination('previous');
   }
 
-  private function handlePagination($direction, $field) {
-    if((isset($field) && !isset($this->responseData->$field->paging->$direction)) || !isset($this->responseData->paging->$direction)) {
-        return null;
+  private function handlePagination($direction) {
+    if (isset($this->responseData['pagination'][$direction])) {
+      $url = parse_url($this->responseData['pagination'][$direction]);
+      return new FacebookRequest(
+        $this->request->getSession(),
+        $this->request->getMethod(),
+        $url['path'],
+        $this->request->getParameters()
+      );
+    } else {
+      return null;
     }
-
-    $url = isset($field) ? parse_url($this->responseData->$field->paging->$direction) : parse_url($this->responseData->paging->$direction);
-    return new FacebookRequest(
-      $this->request->getSession(),
-      $this->request->getMethod(),
-      $url['path'],
-      $this->request->getParameters()
-    );
   }
 
 }
