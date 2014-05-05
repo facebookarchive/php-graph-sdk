@@ -279,6 +279,10 @@ class FacebookSession
           'Invalid signed request, using wrong algorithm.'
         );
       }
+    } else {
+      throw new FacebookSDKException(
+        'Malformed signed request.'
+      );
     }
   }
 
