@@ -48,7 +48,7 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
       'oauth_token' => 'fjm',
       'state' => 'wow'
     );
-    $signedRequest = self::makeSignedRequest($data);
+    $signedRequest = static::makeSignedRequest($data);
 
     $session = FacebookSession::newSessionFromSignedRequest(
       $signedRequest, 'wow'

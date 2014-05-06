@@ -172,7 +172,7 @@ class FacebookRequest
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_TIMEOUT        => 60,
       CURLOPT_ENCODING       => '', // Support all available encodings.
-      CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION
+      CURLOPT_USERAGENT      => 'fb-php-' . static::VERSION
     );
     if ($this->method === "GET") {
       $url = $url . "?" . http_build_query($params);
