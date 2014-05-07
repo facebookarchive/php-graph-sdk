@@ -56,11 +56,21 @@ class FacebookJavaScriptLoginHelper
    */
   public function getSession()
   {
-    $cookieName = 'fbsr_' . $this->appId;
-    if (isset($_COOKIE[$cookieName])) {
-      return FacebookSession::newSessionFromSignedRequest(
-        $_COOKIE[$cookieName]
-      );
+    if ($signedRequest = $this->getSignedRequest()) {
+      return FacebookSession::newSessionFromSignedRequest($signedRequest);
+    }
+    return null;
+  }
+
+  /**
+   * Get signed request
+   *
+   * @return string|null
+   */
+  protected function getSignedRequest()
+  {
+    if (isset($_COOKIE['fbsr_' . $this->appId])) {
+      return $_COOKIE['fbsr_' . $this->appId];
     }
     return null;
   }

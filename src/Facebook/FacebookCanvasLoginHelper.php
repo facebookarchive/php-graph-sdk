@@ -36,18 +36,28 @@ class FacebookCanvasLoginHelper
    * Gets a FacebookSession from the parameters passed by Facebook to a
    *   Canvas POST request.
    *
-   * @return FacebookSession
+   * @return FacebookSession|null
    */
   public function getSession()
   {
+    if ($signedRequest = $this->getSignedRequest()) {
+      return FacebookSession::newSessionFromSignedRequest($signedRequest);
+    }
+    return null;
+  }
 
+  /**
+   * Get signed request.
+   *
+   * @return string|null
+   */
+  protected function getSignedRequest()
+  {
     /**
      * v2.0 apps use GET for Canvas signed requests.
      */
     if (isset($_GET['signed_request'])) {
-      return FacebookSession::newSessionFromSignedRequest(
-        $_GET['signed_request']
-      );
+      return $_GET['signed_request'];
     }
 
     /**
@@ -55,13 +65,10 @@ class FacebookCanvasLoginHelper
      * deprecated.
      */
     if (isset($_POST['signed_request'])) {
-      return FacebookSession::newSessionFromSignedRequest(
-        $_POST['signed_request']
-      );
+      return $_POST['signed_request'];
     }
 
     return null;
-
   }
 
 }
