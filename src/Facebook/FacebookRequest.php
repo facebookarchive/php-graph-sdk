@@ -83,6 +83,11 @@ class FacebookRequest
   private $version;
 
   /**
+   * @var string ETag sent with the request
+   */
+  private $etag;
+
+  /**
    * getSession - Returns the associated FacebookSession.
    *
    * @return FacebookSession
@@ -123,6 +128,16 @@ class FacebookRequest
   }
 
   /**
+   * getETag - Returns the ETag sent with the request.
+   *
+   * @return string
+   */
+  public function getETag()
+  {
+    return $this->etag;
+  }
+
+  /**
    * FacebookRequest - Returns a new request using the given session.  optional
    *   parameters hash will be sent with the request.  This object is
    *   immutable.
@@ -132,11 +147,12 @@ class FacebookRequest
    * @param string $path
    * @param array|null $parameters
    * @param string|null $version
+   * @param string|null $etag
    *
    * @return FacebookRequest
    */
   public function __construct(
-    $session, $method, $path, $parameters = null, $version = null
+    $session, $method, $path, $parameters = null, $version = null, $etag = null
   ) {
     $this->session = $session;
     $this->method = $method;
@@ -146,6 +162,7 @@ class FacebookRequest
     } else {
       $this->version = static::GRAPH_API_VERSION;
     }
+    $this->etag = $etag;
 
     $params = ($parameters ?: array());
     if ($session
@@ -177,7 +194,8 @@ class FacebookRequest
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_TIMEOUT        => 60,
       CURLOPT_ENCODING       => '', // Support all available encodings.
-      CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION
+      CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION,
+      CURLOPT_HEADER         => true // Enable header processing
     );
     if ($this->method === "GET") {
       $url = self::appendParamsToUrl($url, $params);
@@ -188,6 +206,11 @@ class FacebookRequest
       $options[CURLOPT_CUSTOMREQUEST] = $this->method;
     }
     $options[CURLOPT_URL] = $url;
+
+    // ETag
+    if ($this->etag != null) {
+      $options[CURLOPT_HTTPHEADER] = array('If-None-Match: '.$this->etag);
+    }
     curl_setopt_array($curl, $options);
 
     $result = curl_exec($curl);
@@ -219,6 +242,23 @@ class FacebookRequest
           $error = curl_errno($curl);
         }
       }
+    } else {
+      $info = curl_getinfo($curl);
+      if ($info['http_code'] == 304) {
+        $etagHit = true;
+      } else {
+        $etagHit = false;
+      }
+      $headers = mb_substr($result, 0, $info['header_size']);
+      $result = mb_substr($result, $info['header_size']);
+
+      if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
+        $etagPos += strlen('ETag: ');
+        $etagReceived = substr($headers, $etagPos,
+                              strpos($headers, chr(10), $etagPos)-$etagPos-1);
+      } else {
+        $etagReceived = null;
+      }
     }
 
     $errorMessage = curl_error($curl);
@@ -233,7 +273,7 @@ class FacebookRequest
     if ($decodedResult === null) {
       $out = array();
       parse_str($result, $out);
-      return new FacebookResponse($this, $out, $result);
+      return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
     }
     if (isset($decodedResult->error)) {
       throw FacebookRequestException::create(
@@ -241,7 +281,7 @@ class FacebookRequest
       );
     }
 
-    return new FacebookResponse($this, $decodedResult, $result);
+    return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
   }
 
   /**

@@ -48,17 +48,31 @@ class FacebookResponse
   private $rawResponse;
 
   /**
+   * @var bool Indicates whether sent ETag matched the one on the FB side
+   */
+  private $etagHit;
+
+  /**
+   * @var string ETag received with the response. `null` in case of ETag hit.
+   */
+  private $etag;
+
+  /**
    * Creates a FacebookResponse object for a given request and response.
    *
    * @param FacebookRequest $request
    * @param array $responseData JSON Decoded response data
    * @param string $rawResponse Raw string response
+   * @param bool $etagHit Indicates whether sent ETag matched the one on the FB side
+   * @param string|null $etag ETag received with the response. `null` in case of ETag hit.
    */
-  public function __construct($request, $responseData, $rawResponse)
+  public function __construct($request, $responseData, $rawResponse, $etagHit = false, $etag = null)
   {
     $this->request = $request;
     $this->responseData = $responseData;
     $this->rawResponse = $rawResponse;
+    $this->etagHit = $etagHit;
+    $this->etag = $etag;
   }
 
   /**
@@ -89,6 +103,26 @@ class FacebookResponse
   public function getRawResponse()
   {
     return $this->rawResponse;
+  }
+
+  /**
+   * Returns true if ETag matched the one sent with a request
+   *
+   * @return bool
+   */
+  public function isETagHit()
+  {
+    return $this->etagHit;
+  }
+
+  /**
+   * Returns the ETag
+   *
+   * @return string
+   */
+  public function getETag()
+  {
+    return $this->etag;
   }
 
   /**
