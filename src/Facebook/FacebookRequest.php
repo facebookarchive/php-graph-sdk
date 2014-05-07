@@ -131,6 +131,7 @@ class FacebookRequest
    * @param string $method
    * @param string $path
    * @param array|null $parameters
+   * @param string|null $version
    *
    * @return FacebookRequest
    */
@@ -147,7 +148,8 @@ class FacebookRequest
     }
 
     $params = ($parameters ?: array());
-    if ($session) {
+    if ($session
+      && !isset($params["access_token"])) {
       $params["access_token"] = $session->getToken();
     }
     $this->params = $params;
@@ -162,6 +164,9 @@ class FacebookRequest
    * execute - Makes the request to Facebook and returns the result.
    *
    * @return FacebookResponse
+   *
+   * @throws FacebookSDKException
+   * @throws FacebookRequestException
    */
   public function execute() {
     $url = $this->getRequestURL();
@@ -175,7 +180,7 @@ class FacebookRequest
       CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION
     );
     if ($this->method === "GET") {
-      $url = $url . "?" . http_build_query($params);
+      $url = self::appendParamsToUrl($url, $params);
     } else {
       $options[CURLOPT_POSTFIELDS] = $params;
     }
@@ -234,6 +239,32 @@ class FacebookRequest
     }
 
     return new FacebookResponse($this, $decodedResult, $result);
+  }
+
+  /**
+   * appendParamsToUrl - Gracefully appends params to the URL.
+   *
+   * @param string $url
+   * @param array $params
+   * @return string
+   */
+  public static function appendParamsToUrl($url, $params = array())
+  {
+    if (!$params) {
+      return $url;
+    }
+
+    if (strpos($url, '?') === false) {
+      return $url . '?' . http_build_query($params);
+    }
+
+    list($path, $query_string) = explode('?', $url, 2);
+    parse_str($query_string, $query_array);
+
+    // Favor params from the original URL over $params
+    $params = array_merge($params, $query_array);
+
+    return $path . '?' . http_build_query($params);
   }
 
 }
