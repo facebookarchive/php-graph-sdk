@@ -184,6 +184,9 @@ class FacebookRequest
     } else {
       $options[CURLOPT_POSTFIELDS] = $params;
     }
+    if ($this->method === 'DELETE' || $this->method === 'PUT') {
+      $options[CURLOPT_CUSTOMREQUEST] = $this->method;
+    }
     $options[CURLOPT_URL] = $url;
     curl_setopt_array($curl, $options);
 
