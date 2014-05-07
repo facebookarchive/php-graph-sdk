@@ -126,14 +126,13 @@ class FacebookRedirectLoginHelper
   public function getSessionFromRedirect()
   {
     $this->loadState();
-    if (isset($_GET['code']) && isset($_GET['state'])
-        && $_GET['state'] == $this->state) {
+    if ($this->isValidRedirect()) {
       $params = array(
         'client_id' => FacebookSession::_getTargetAppId($this->appId),
         'redirect_uri' => $this->redirectUrl,
         'client_secret' =>
           FacebookSession::_getTargetAppSecret($this->appSecret),
-        'code' => $_GET['code']
+        'code' => $this->getCode()
       );
       $response = (new FacebookRequest(
         FacebookSession::newAppSession($this->appId, $this->appSecret),
@@ -146,6 +145,27 @@ class FacebookRedirectLoginHelper
       }
     }
     return null;
+  }
+
+  /**
+   * Check if a redirect has a valid state.
+   *
+   * @return bool
+   */
+  protected function isValidRedirect()
+  {
+    return $this->getCode() && isset($_GET['state'])
+        && $_GET['state'] == $this->state;
+  }
+
+  /**
+   * Return the code.
+   *
+   * @return string|null
+   */
+  protected function getCode()
+  {
+    return isset($_GET['code']) ? $_GET['code'] : null;
   }
 
   /**
