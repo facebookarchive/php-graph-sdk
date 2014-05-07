@@ -10,13 +10,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
 
   public static function setUpBeforeClass()
   {
-    session_start();
     FacebookTestHelper::setUpBeforeClass();
-  }
-
-  public static function tearDownAfterClass()
-  {
-    session_destroy();
   }
 
   public function testLoginURL()
