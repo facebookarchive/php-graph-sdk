@@ -57,7 +57,6 @@ class FacebookRedirectLoginHelper
    */
   protected $state;
 
-
   /**
    * Constructs a RedirectLoginHelper for a given appId and redirectUrl.
    *
@@ -173,8 +172,9 @@ class FacebookRedirectLoginHelper
    * Developers should subclass and override this method if they want to store
    *   this state in a different location.
    *
-   * @throws FacebookSDKException
    * @param string $state
+   *
+   * @throws FacebookSDKException
    */
   protected function storeState($state)
   {
@@ -191,8 +191,9 @@ class FacebookRedirectLoginHelper
    *   null if no object exists.  Developers should subclass and override this
    *   method if they want to load the state from a different location.
    *
-   * @throws FacebookSDKException
    * @return string|null
+   *
+   * @throws FacebookSDKException
    */
   protected function loadState()
   {

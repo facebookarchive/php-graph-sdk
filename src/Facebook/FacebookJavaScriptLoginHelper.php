@@ -37,6 +37,10 @@ class FacebookJavaScriptLoginHelper
   /**
    * Creates a JavaScript Login Helper for the given application id, or the
    *   default if not provided.
+   *
+   * @param string $appId
+   *
+   * @throws FacebookSDKException
    */
   public function __construct($appId = null)
   {

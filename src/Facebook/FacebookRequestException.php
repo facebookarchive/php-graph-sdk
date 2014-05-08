@@ -112,6 +112,11 @@ class FacebookRequestException extends FacebookSDKException
 
   /**
    * Checks isset and returns that or a default value.
+   *
+   * @param string $key
+   * @param mixed $default
+   *
+   * @return mixed
    */
   private function get($key, $default = null)
   {
@@ -128,7 +133,6 @@ class FacebookRequestException extends FacebookSDKException
    */
   public function getHttpStatusCode()
   {
-
     return $this->statusCode;
   }
 
@@ -164,12 +168,21 @@ class FacebookRequestException extends FacebookSDKException
 
   /**
    * Returns the decoded response used to create the exception.
+   *
+   * @return array
    */
   public function getResponse()
   {
     return $this->responseData;
   }
 
+  /**
+   * Converts a stdClass object to an array
+   *
+   * @param mixed $object
+   *
+   * @return array
+   */
   private static function convertToArray($object)
   {
     if ($object instanceof \stdClass) {

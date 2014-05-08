@@ -176,6 +176,13 @@ class FacebookResponse
     return $this->handlePagination('previous');
   }
 
+  /**
+   * Returns the FacebookRequest for the previous or next page, or null.
+   *
+   * @param string $direction
+   *
+   * @return FacebookRequest|null
+   */
   private function handlePagination($direction) {
     if (isset($this->responseData['pagination'][$direction])) {
       $url = parse_url($this->responseData['pagination'][$direction]);

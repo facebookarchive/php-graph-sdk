@@ -61,6 +61,8 @@ class GraphObject
    * @param string $type The GraphObject subclass to cast to
    *
    * @return GraphObject
+   *
+   * @throws FacebookSDKException
    */
   public function cast($type)
   {
