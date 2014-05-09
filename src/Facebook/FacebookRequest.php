@@ -53,6 +53,16 @@ class FacebookRequest
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
 
   /**
+   * @const Curl Version which is unaffected by the proxy header length error.
+   */
+  const CURL_PROXY_QUIRK_VER = 0x071E00;
+
+  /**
+   * @const "Connection Established" header text
+   */
+  const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
+
+  /**
    * @var FacebookSession The session used for this request
    */
   private $session;
@@ -250,6 +260,14 @@ class FacebookRequest
       throw new FacebookSDKException($errorMessage, $error);
     }
 
+    // This corrects a Curl bug where header size does not account
+    // for additional Proxy headers.
+    if ( self::needsCurlProxyFix() ) {
+      if ( stripos($rawResult, self::CONNECTION_ESTABLISHED) !== false ) {
+        $headerSize += strlen(self::CONNECTION_ESTABLISHED);
+      }
+    }
+
     $etagHit = 304 == $httpStatus;
     $headers = mb_substr($rawResult, 0, $headerSize);
     $result = mb_substr($rawResult, $headerSize);
@@ -303,4 +321,16 @@ class FacebookRequest
     return $path . '?' . http_build_query($params);
   }
 
+  /**
+   * needsCurlProxyFix - Detect versions of Curl which report
+   *   incorrect header lengths when using Proxies.
+   *
+   * @return boolean
+   */
+  private static function needsCurlProxyFix() {
+    $ver = curl_version();
+    $version = $ver['version_number'];
+
+    return $version < self::CURL_PROXY_QUIRK_VER;
+  }
 }
