@@ -158,13 +158,16 @@ class FacebookSession
    *
    * @param string|null $appId Application ID to use
    * @param string|null $appSecret App secret value to use
+   * @param GraphSessionInfo|null $info User provided session info
    * @throws FacebookRequestException
    */
-  public function validate($appId = null, $appSecret = null)
+  public function validate($appId = null, $appSecret = null, GraphSessionInfo $info = null)
   {
     $targetAppId = static::_getTargetAppId($appId);
     $targetAppSecret = static::_getTargetAppSecret($appSecret);
-    $info = $this->getSessionInfo($targetAppId, $targetAppSecret);
+    if (null === $info) {
+      $info = $this->getSessionInfo($targetAppId, $targetAppSecret);
+    }
     return self::validateSessionInfo($info, $targetAppId, $targetAppSecret);
   }
 
