@@ -53,11 +53,6 @@ class FacebookRequest
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
 
   /**
-   * @var array Default options for CURL
-   */
-  private $curlOptions;
-
-  /**
    * @var FacebookSession The session used for this request
    */
   private $session;
@@ -148,8 +143,6 @@ class FacebookRequest
    * @param array|null $parameters
    * @param string|null $version
    * @param string|null $etag
-   *
-   * @return FacebookRequest
    */
   public function __construct(
     $session, $method, $path, $parameters = null, $version = null, $etag = null
@@ -170,9 +163,13 @@ class FacebookRequest
       $params["access_token"] = $session->getToken();
     }
     $this->params = $params;
-    return $this;
   }
 
+  /**
+   * Returns the base Graph URL.
+   *
+   * @return string
+   */
   protected function getRequestURL() {
     return static::BASE_GRAPH_URL . '/' . $this->version . $this->path;
   }
@@ -289,6 +286,7 @@ class FacebookRequest
    *
    * @param string $url
    * @param array $params
+   *
    * @return string
    */
   public static function appendParamsToUrl($url, $params = array())

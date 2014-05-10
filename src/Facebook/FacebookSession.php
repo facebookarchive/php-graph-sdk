@@ -33,17 +33,17 @@ class FacebookSession
 {
 
   /**
-   * @var String
+   * @var string
    */
   private static $defaultAppId;
 
   /**
-   * @var String
+   * @var string
    */
   private static $defaultAppSecret;
 
   /**
-   * @var String The token string for the session
+   * @var string The token string for the session
    */
   private $token;
 
@@ -53,13 +53,18 @@ class FacebookSession
    * This will validate the token and provide a Session object ready for use.
    * It will throw a SessionException in case of error.
    *
-   * @param String $accessToken
+   * @param string $accessToken
    */
   public function __construct($accessToken)
   {
     $this->token = $accessToken;
   }
 
+  /**
+   * Returns the access token
+   *
+   * @return string
+   */
   public function getToken()
   {
     return $this->token;
@@ -71,7 +76,6 @@ class FacebookSession
    *
    * @param string|null $appId
    * @param string|null $appSecret
-   * @throws FacebookRequestException
    *
    * @return GraphSessionInfo
    */
@@ -158,7 +162,8 @@ class FacebookSession
    *
    * @param string|null $appId Application ID to use
    * @param string|null $appSecret App secret value to use
-   * @throws FacebookRequestException
+   *
+   * @return boolean
    */
   public function validate($appId = null, $appSecret = null)
   {
@@ -176,7 +181,9 @@ class FacebookSession
    * @param GraphSessionInfo $tokenInfo
    * @param string|null $appId Application ID to use
    *
-   * @throws FacebookRequestException
+   * @return boolean
+   *
+   * @throws FacebookSDKException
    */
   public static function validateSessionInfo(GraphSessionInfo $tokenInfo,
                                            $appId = null)
@@ -199,8 +206,6 @@ class FacebookSession
    * @param string $signedRequest
    * @param string $state
    *
-   * @throws FacebookRequestException|FacebookSDKException
-   *
    * @return FacebookSession
    */
   public static function newSessionFromSignedRequest($signedRequest,
@@ -213,6 +218,16 @@ class FacebookSession
     return new FacebookSession($parsedRequest['oauth_token']);
   }
 
+  /**
+   * newSessionAfterValidation - Returns a FacebookSession for a
+   *   validated & parsed signed request.
+   *
+   * @param array $parsedSignedRequest
+   *
+   * @return FacebookSession
+   *
+   * @throws FacebookRequestException
+   */
   private static function newSessionAfterValidation($parsedSignedRequest)
   {
     $params = array(
@@ -239,6 +254,16 @@ class FacebookSession
     );
   }
 
+  /**
+   * Parses a signed request.
+   *
+   * @param string $signedRequest
+   * @param string $state
+   *
+   * @return array
+   *
+   * @throws FacebookSDKException
+   */
   private static function parseSignedRequest($signedRequest, $state)
   {
     if (strpos($signedRequest, '.') !== false) {
@@ -293,7 +318,6 @@ class FacebookSession
    *
    * @param string|null $appId Application ID to use
    * @param string|null $appSecret App secret value to use
-   * @throws FacebookRequestException
    *
    * @return FacebookSession
    */
@@ -326,6 +350,8 @@ class FacebookSession
    * @param string $appId
    *
    * @return string
+   *
+   * @throws FacebookSDKException
    */
   public static function _getTargetAppId($appId = null) {
     $target = ($appId ?: static::$defaultAppId);
@@ -344,6 +370,8 @@ class FacebookSession
    * @param string $appSecret
    *
    * @return string
+   *
+   * @throws FacebookSDKException
    */
   public static function _getTargetAppSecret($appSecret = null) {
     $target = ($appSecret ?: static::$defaultAppSecret);
@@ -359,7 +387,7 @@ class FacebookSession
    * Base64 decoding which replaces characters:
    *   + instead of -
    *   / instead of _
-   * See: http://en.wikipedia.org/wiki/Base64#URL_applications
+   * @link http://en.wikipedia.org/wiki/Base64#URL_applications
    *
    * @param string $input base64 url encoded input
    *
