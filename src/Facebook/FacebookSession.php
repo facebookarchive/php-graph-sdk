@@ -143,6 +143,7 @@ class FacebookSession
     $targetAppSecret = static::_getTargetAppSecret($appSecret);
     // Redirect URI is being removed as a requirement.  Passing an empty string.
     $params = array(
+      'client_id' => $targetAppId,
       'access_token' => $this->getToken(),
       'client_secret' => $targetAppSecret,
       'redirect_uri' => ''
