@@ -10,9 +10,9 @@
  *  - Download and extract the latest release of SDK (https://github.com/facebook/facebook-php-sdk-v4/releases)
  *    on a public folder of your web server.
  * 
- *  - Create a subfolder (e.g. 'examples') and place this script there
+ *  - This script should be on the 'examples' subfolder of the project
  * 
- *  - Before running this example you must install the vendor dependencies using composer (http://getcomposer.org)
+ *  - Before running this script you must install the vendor dependencies using composer (http://getcomposer.org)
  * 
  *    To do so, you can run these commands on the SDK deployment's main directory (e.g. facebook-php-sdk-v4):
  * 
@@ -57,6 +57,8 @@ $logoutRedirectUrl = 'http://whatever.myappdomain.com/path/to/fbsdkexample.php?l
 $appId = '';
 // your app secret
 $appSecret = '';
+// comma separated list of requested permissions (on top of public profile)
+$scope = 'email';
 
 FacebookSession::setDefaultApplication($appId, $appSecret);
 $out = '';
@@ -105,7 +107,7 @@ try {
             . $helper->getLoginUrl(
                 array(
                     'scope' => 
-                        'email' // scope contains a comma separated list of permissions to be requested
+                        $scope
                     )
                 )
             . ">login</a></p>";
@@ -126,7 +128,7 @@ try {
             . $helper->getLoginUrl(
                 array(
                     'scope' => 
-                        'email' // scope contains a comma separated list of permissions to be requested
+                        $scope
                     )
                 )
             . ">login</a></p>";
@@ -145,7 +147,7 @@ try {
             . $helper->getLoginUrl(
                 array(
                     'scope' => 
-                        'email' // scope contains a comma separated list of permissions to be requested
+                        $scope
                     )
                 )
             . ">login</a></p>";
