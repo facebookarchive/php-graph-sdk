@@ -61,7 +61,8 @@ class GraphSessionInfo extends GraphObject
   {
     $stamp = $this->getProperty('expires_at');
     if ($stamp) {
-      return (new \DateTime())->setTimestamp($stamp);
+      $instance = new \DateTime();
+      return $instance->setTimestamp($stamp);
     } else {
       return null;
     }
@@ -86,7 +87,8 @@ class GraphSessionInfo extends GraphObject
   {
     $stamp = $this->getProperty('issued_at');
     if ($stamp) {
-      return (new \DateTime())->setTimestamp($stamp);
+      $instance = new \DateTime();
+      return $instance->setTimestamp($stamp);
     } else {
       return null;
     }
