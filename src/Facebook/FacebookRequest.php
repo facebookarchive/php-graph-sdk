@@ -250,22 +250,15 @@ class FacebookRequest
       throw new FacebookSDKException($errorMessage, $error);
     }
 
-    $etagHit = 304 == $httpStatus;
     $headers = mb_substr($rawResult, 0, $headerSize);
     $result = mb_substr($rawResult, $headerSize);
 
-    $etagReceived = null;
-    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
-      $etagPos += strlen('ETag: ');
-      $etagReceived = substr($headers, $etagPos,
-                            strpos($headers, chr(10), $etagPos)-$etagPos-1);
-    }
-
     $decodedResult = json_decode($result);
+    $decodedHeaders = $this->handleRawHeaders($headers);
     if ($decodedResult === null) {
       $out = array();
       parse_str($result, $out);
-      return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
+      return new FacebookResponse($this, $out, $result, $decodedHeaders, $httpStatus);
     }
     if (isset($decodedResult->error)) {
       throw FacebookRequestException::create(
@@ -273,7 +266,7 @@ class FacebookRequest
       );
     }
 
-    return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
+    return new FacebookResponse($this, $decodedResult, $result, $decodedHeaders, $httpStatus);
   }
 
   /**
@@ -301,6 +294,27 @@ class FacebookRequest
     $params = array_merge($params, $query_array);
 
     return $path . '?' . http_build_query($params);
+  }
+
+  /**
+   * handleRawHeaders - Convert raw HTTP headers to an array
+   *
+   * @param string $rawHeaders Raw string response headers
+   *
+   * @return array
+   */
+  protected function handleRawHeaders($rawHeaders)
+  {
+    $headers = array();
+    $headerLines = explode("\r\n", $rawHeaders);
+    foreach ($headerLines as $line) {
+      if (false === strpos($line, ': ')) {
+        continue;
+      }
+      list($name, $value) = explode(': ', $line, 2);
+      $headers[$name] = $value;
+    }
+    return $headers;
   }
 
 }

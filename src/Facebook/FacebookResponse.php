@@ -48,14 +48,14 @@ class FacebookResponse
   private $rawResponse;
 
   /**
-   * @var bool Indicates whether sent ETag matched the one on the FB side
+   * @var array $array Response headers
    */
-  private $etagHit;
+  private $headersData;
 
   /**
-   * @var string ETag received with the response. `null` in case of ETag hit.
+   * @var int $code HTTP response code
    */
-  private $etag;
+  private $code;
 
   /**
    * Creates a FacebookResponse object for a given request and response.
@@ -63,16 +63,16 @@ class FacebookResponse
    * @param FacebookRequest $request
    * @param array $responseData JSON Decoded response data
    * @param string $rawResponse Raw string response
-   * @param bool $etagHit Indicates whether sent ETag matched the one on the FB side
-   * @param string|null $etag ETag received with the response. `null` in case of ETag hit.
+   * @param array $headersData Response headers
+   * @param int $code HTTP response code
    */
-  public function __construct($request, $responseData, $rawResponse, $etagHit = false, $etag = null)
+  public function __construct($request, $responseData, $rawResponse, $headersData = array(), $code = null)
   {
     $this->request = $request;
     $this->responseData = $responseData;
     $this->rawResponse = $rawResponse;
-    $this->etagHit = $etagHit;
-    $this->etag = $etag;
+    $this->headersData = $headersData;
+    $this->code = $code;
   }
 
   /**
@@ -106,13 +106,33 @@ class FacebookResponse
   }
 
   /**
+   * Returns the decoded response headers.
+   *
+   * @return array
+   */
+  public function getResponseHeaders()
+  {
+    return $this->headersData;
+  }
+
+  /**
+   * Returns the response code status.
+   *
+   * @return int
+   */
+  public function getResponseCode()
+  {
+    return $this->code;
+  }
+
+  /**
    * Returns true if ETag matched the one sent with a request
    *
    * @return bool
    */
   public function isETagHit()
   {
-    return $this->etagHit;
+    return 304 == $this->getResponseCode();
   }
 
   /**
@@ -122,7 +142,10 @@ class FacebookResponse
    */
   public function getETag()
   {
-    return $this->etag;
+    if (!isset($this->headersData['ETag'])) {
+      return null;
+    }
+    return $this->headersData['ETag'];
   }
 
   /**
@@ -199,6 +222,5 @@ class FacebookResponse
         return null;
     }
   }
-  
 
 }
