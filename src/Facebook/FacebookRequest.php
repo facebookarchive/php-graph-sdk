@@ -210,13 +210,13 @@ class FacebookRequest
     }
     curl_setopt_array($curl, $options);
 
-    $result = curl_exec($curl);
+    $rawResult = curl_exec($curl);
     $error = curl_errno($curl);
 
     if ($error == 60 || $error == 77) {
       curl_setopt($curl, CURLOPT_CAINFO,
         dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
-      $result = curl_exec($curl);
+      $rawResult = curl_exec($curl);
       $error = curl_errno($curl);
     }
 
@@ -225,7 +225,7 @@ class FacebookRequest
     // the case, curl will try IPv4 first and if that fails, then it will
     // fall back to IPv6 and the error EHOSTUNREACH is returned by the
     // operating system.
-    if ($result === false && empty($opts[CURLOPT_IPRESOLVE])) {
+    if ($rawResult === false && empty($opts[CURLOPT_IPRESOLVE])) {
       $matches = array();
       $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
       if (preg_match($regex, curl_error($curl), $matches)) {
@@ -235,35 +235,30 @@ class FacebookRequest
             'Please disable or get native IPv6 on your server.'
           );
           curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-          $result = curl_exec($curl);
+          $rawResult = curl_exec($curl);
           $error = curl_errno($curl);
         }
-      }
-    } else {
-      $info = curl_getinfo($curl);
-      if ($info['http_code'] == 304) {
-        $etagHit = true;
-      } else {
-        $etagHit = false;
-      }
-      $headers = mb_substr($result, 0, $info['header_size']);
-      $result = mb_substr($result, $info['header_size']);
-
-      if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
-        $etagPos += strlen('ETag: ');
-        $etagReceived = substr($headers, $etagPos,
-                              strpos($headers, chr(10), $etagPos)-$etagPos-1);
-      } else {
-        $etagReceived = null;
       }
     }
 
     $errorMessage = curl_error($curl);
     $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
     curl_close($curl);
 
-    if ($result === false) {
+    if ($rawResult === false) {
       throw new FacebookSDKException($errorMessage, $error);
+    }
+
+    $etagHit = 304 == $httpStatus;
+    $headers = mb_substr($rawResult, 0, $headerSize);
+    $result = mb_substr($rawResult, $headerSize);
+
+    $etagReceived = null;
+    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
+      $etagPos += strlen('ETag: ');
+      $etagReceived = substr($headers, $etagPos,
+                            strpos($headers, chr(10), $etagPos)-$etagPos-1);
     }
 
     $decodedResult = json_decode($result);
