@@ -50,11 +50,15 @@ Complete documentation, installation instructions, and examples are available at
 Tests
 -----
 
-Create a test app on [Facebook Developers](https://developers.facebook.com), then
+1) [Composer](https://getcomposer.org/) is a prerequisite for running the tests.
+
+Install composer globally, then run `composer install` to install required files.
+
+2) Create a test app on [Facebook Developers](https://developers.facebook.com), then
 create `tests/FacebookTestCredentials.php` from `tests/FacebookTestCredentials.php.dist`
 and edit it to add your credentials.
 
-The tests can be executed by running this command from the tests directory:
+3) The tests can be executed by running this command from the tests directory:
 
 ```bash
 ../vendor/bin/phpunit --stderr .
