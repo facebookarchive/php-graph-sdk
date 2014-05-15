@@ -185,20 +185,18 @@ class FacebookResponse
    */
   private function handlePagination($direction) {
     if (isset($this->responseData->paging->$direction)) {
-        
-        $url = parse_url($this->responseData->paging->$direction);
-        parse_str($url['query'], $params);
+      $url = parse_url($this->responseData->paging->$direction);
+      parse_str($url['query'], $params);
 
-        return new FacebookRequest(
-            $this->request->getSession(),
-            $this->request->getMethod(),
-            $this->request->getPath(),
-            $params
-        );
+      return new FacebookRequest(
+        $this->request->getSession(),
+        $this->request->getMethod(),
+        $this->request->getPath(),
+        $params
+      );
     } else {
-        return null;
+      return null;
     }
   }
-  
 
 }
