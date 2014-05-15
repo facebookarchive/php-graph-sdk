@@ -82,19 +82,45 @@ class FacebookRequestException extends FacebookSDKException
     }
     $code = (isset($data['error']['code']) ? $data['error']['code'] : null);
 
-    // Login status or token expired, revoked, or invalid
-    if ($code == 102 || $code == 190 || $code == 100) {
-      return new FacebookAuthorizationException($raw, $data, $statusCode);
+    if (isset($data['error']['error_subcode'])) {
+      switch ($data['error']['error_subcode']) {
+        // Other authentication issues
+        case 458:
+        case 459:
+        case 460:
+        case 463:
+        case 464:
+        case 467:
+          return new FacebookAuthorizationException($raw, $data, $statusCode);
+          break;
+      }
     }
 
-    // Server issue, possible downtime
-    if ($code == 1 || $code == 2) {
-      return new FacebookServerException($raw, $data, $statusCode);
-    }
+    switch ($code) {
+      // Login status or token expired, revoked, or invalid
+      case 100:
+      case 102:
+      case 190:
+        return new FacebookAuthorizationException($raw, $data, $statusCode);
+        break;
 
-    // API Throttling
-    if ($code == 4 || $code == 17 || $code == 341) {
-      return new FacebookThrottleException($raw, $data, $statusCode);
+      // Server issue, possible downtime
+      case 1:
+      case 2:
+        return new FacebookServerException($raw, $data, $statusCode);
+        break;
+
+      // API Throttling
+      case 4:
+      case 17:
+      case 341:
+        return new FacebookThrottleException($raw, $data, $statusCode);
+        break;
+
+      // Duplicate Post
+      case 506:
+        return new FacebookClientException($raw, $data, $statusCode);
+        break;
     }
 
     // Missing Permissions
@@ -102,10 +128,12 @@ class FacebookRequestException extends FacebookSDKException
       return new FacebookPermissionException($raw, $data, $statusCode);
     }
 
-    // Duplicate Post
-    if ($code == 506) {
-      return new FacebookClientException($raw, $data, $statusCode);
+    // OAuth authentication error
+    if (isset($data['error']['type'])
+      and $data['error']['type'] === 'OAuthException') {
+      return new FacebookAuthorizationException($raw, $data, $statusCode);
     }
+
     // All others
     return new FacebookOtherException($raw, $data, $statusCode);
   }

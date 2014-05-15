@@ -48,6 +48,38 @@ class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
     $exception = FacebookRequestException::create($json, $params, 401);
     $this->assertTrue($exception instanceof FacebookAuthorizationException);
     $this->assertEquals(190, $exception->getCode());
+
+    $params['error']['type'] = 'OAuthException';
+    $params['error']['code'] = 0;
+    $params['error']['error_subcode'] = 458;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(458, $exception->getSubErrorCode());
+
+    $params['error']['error_subcode'] = 460;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(460, $exception->getSubErrorCode());
+
+    $params['error']['error_subcode'] = 463;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(463, $exception->getSubErrorCode());
+
+    $params['error']['error_subcode'] = 467;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(467, $exception->getSubErrorCode());
+
+    $params['error']['error_subcode'] = 0;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(0, $exception->getSubErrorCode());
   }
 
   public function testServerExceptions()
@@ -108,6 +140,33 @@ class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
     $exception = FacebookRequestException::create($json, $params, 401);
     $this->assertTrue($exception instanceof FacebookThrottleException);
     $this->assertEquals(341, $exception->getCode());
+  }
+
+  public function testUserIssueExceptions()
+  {
+    $params = array(
+      'error' => array(
+        'code' => 230,
+        'message' => 'errmsg',
+        'error_subcode' => 459,
+        'type' => 'exception'
+      )
+    );
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(230, $exception->getCode());
+    $this->assertEquals(459, $exception->getSubErrorCode());
+    $this->assertEquals('exception', $exception->getErrorType());
+    $this->assertEquals('errmsg', $exception->getMessage());
+    $this->assertEquals($json, $exception->getRawResponse());
+    $this->assertEquals(401, $exception->getHttpStatusCode());
+
+    $params['error']['error_subcode'] = 464;
+    $json = json_encode($params);
+    $exception = FacebookRequestException::create($json, $params, 401);
+    $this->assertTrue($exception instanceof FacebookAuthorizationException);
+    $this->assertEquals(464, $exception->getSubErrorCode());
   }
 
   public function testPermissionExceptions()
