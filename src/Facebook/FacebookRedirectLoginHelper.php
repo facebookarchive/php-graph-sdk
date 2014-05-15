@@ -48,11 +48,6 @@ class FacebookRedirectLoginHelper
   private $redirectUrl;
 
   /**
-   * @var string Prefix to use for session variables
-   */
-  private $sessionPrefix = 'FBRLH_';
-
-  /**
    * @var string State token for CSRF validation
    */
   protected $state;
@@ -178,12 +173,7 @@ class FacebookRedirectLoginHelper
    */
   protected function storeState($state)
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not store state.'
-      );
-    }
-    $_SESSION[$this->sessionPrefix . 'state'] = $state;
+    FacebookContainer::getPersistentDataHandler()->setPersistentData('state', $state);
   }
 
   /**
@@ -197,16 +187,7 @@ class FacebookRedirectLoginHelper
    */
   protected function loadState()
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not load state.'
-      );
-    }
-    if (isset($_SESSION[$this->sessionPrefix . 'state'])) {
-      $this->state = $_SESSION[$this->sessionPrefix . 'state'];
-      return $this->state;
-    }
-    return null;
+    return FacebookContainer::getPersistentDataHandler()->getPersistentData('state');
   }
 
 }

@@ -3,6 +3,8 @@
 use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSDKException;
+use Facebook\FacebookContainer;
+use Facebook\FacebookPersistable;
 
 class FacebookTestHelper
 {
@@ -20,6 +22,9 @@ class FacebookTestHelper
     }
     FacebookSession::setDefaultApplication(
       FacebookTestCredentials::$appId, FacebookTestCredentials::$appSecret
+    );
+    FacebookContainer::setPersistentDataHandler(
+      new FacebookPersistentDataHandlerTestHelper()
     );
     if (!(static::$testSession instanceof FacebookSession)) {
       static::$testSession = static::createTestSession();
@@ -57,6 +62,31 @@ class FacebookTestHelper
       $testUserPath,
       $params))->execute()->getGraphObject();
     return new FacebookSession($response->getProperty('access_token'));
+  }
+
+}
+
+/**
+ * Class FacebookTestPersistentDataHandler
+ * An in-memory persistent data handler for testing
+ */
+class FacebookPersistentDataHandlerTestHelper implements FacebookPersistable
+{
+
+  protected $session = array();
+
+  public function setPersistentData($key, $value)
+  {
+    $this->session[$key] = $value;
+  }
+
+  public function getPersistentData($key, $default = null)
+  {
+    if (isset($this->session[$key])) {
+      return $this->session[$key];
+    }
+
+    return $default;
   }
 
 }
