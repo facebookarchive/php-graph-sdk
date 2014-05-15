@@ -213,7 +213,8 @@ class FacebookSession
                                                      $state = null)
   {
     $parsedRequest = self::parseSignedRequest($signedRequest, $state);
-    if (isset($parsedRequest['code'])) {
+    if (isset($parsedRequest['code'])
+      && !isset($parsedRequest['oauth_token'])) {
       return self::newSessionAfterValidation($parsedRequest);
     }
     return new FacebookSession($parsedRequest['oauth_token']);
