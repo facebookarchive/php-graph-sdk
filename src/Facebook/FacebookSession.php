@@ -48,6 +48,11 @@ class FacebookSession
   private $token;
 
   /**
+   * @var string the ID for the user as a string if present
+   */
+  private $userId;
+
+  /**
    * When creating a Session from an access_token, use:
    *   var $session = new FacebookSession($accessToken);
    * This will validate the token and provide a Session object ready for use.
@@ -68,6 +73,17 @@ class FacebookSession
   public function getToken()
   {
     return $this->token;
+  }
+
+  /**
+   * Returns the login id of the user associated with the token.
+   *
+   * @return string|null
+   */
+  public function getUserId()
+  {
+    if ($this->userId) return $this->userId;
+    return $this->getSessionInfo()->getId();
   }
 
   /**
@@ -216,7 +232,11 @@ class FacebookSession
     if (isset($parsedRequest['code'])) {
       return self::newSessionAfterValidation($parsedRequest);
     }
-    return new FacebookSession($parsedRequest['oauth_token']);
+    $session = new FacebookSession($parsedRequest['oauth_token']);
+    if (isset($parsedRequest['user_id'])) {
+      $session->userId = $parsedRequest['user_id'];
+    }
+    return $session;
   }
 
   /**
