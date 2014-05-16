@@ -47,7 +47,7 @@ class FacebookJavaScriptLoginHelper
     $this->appId = FacebookSession::_getTargetAppId($appId);
     if (!$this->appId) {
       throw new FacebookSDKException(
-        'You must provide or set a default application id.'
+        'You must provide or set a default application id.', 700
       );
     }
   }

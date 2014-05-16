@@ -180,7 +180,7 @@ class FacebookRedirectLoginHelper
   {
     if (session_status() !== PHP_SESSION_ACTIVE) {
       throw new FacebookSDKException(
-        'Session not active, could not store state.'
+        'Session not active, could not store state.', 720
       );
     }
     $_SESSION[$this->sessionPrefix . 'state'] = $state;
@@ -199,7 +199,7 @@ class FacebookRedirectLoginHelper
   {
     if (session_status() !== PHP_SESSION_ACTIVE) {
       throw new FacebookSDKException(
-        'Session not active, could not load state.'
+        'Session not active, could not load state.', 721
       );
     }
     if (isset($_SESSION[$this->sessionPrefix . 'state'])) {

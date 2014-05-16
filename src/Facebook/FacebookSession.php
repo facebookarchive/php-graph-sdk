@@ -194,7 +194,7 @@ class FacebookSession
       || !$tokenInfo->isValid() || $tokenInfo->getExpiresAt() === null
       || $tokenInfo->getExpiresAt()->getTimestamp() < time()) {
       throw new FacebookSDKException(
-        'Session has expired, or is not valid for this app.'
+        'Session has expired, or is not valid for this app.', 601
       );
     }
     return true;
@@ -278,7 +278,7 @@ class FacebookSession
         );
         if (strlen($sig) !== strlen($expectedSig)) {
           throw new FacebookSDKException(
-            'Invalid signature on signed request.'
+            'Invalid signature on signed request.', 602
           );
         }
         $validate = 0;
@@ -287,28 +287,28 @@ class FacebookSession
         }
         if ($validate !== 0) {
           throw new FacebookSDKException(
-            'Invalid signature on signed request.'
+            'Invalid signature on signed request.', 602
           );
         }
         if (!isset($data['oauth_token']) && !isset($data['code'])) {
           throw new FacebookSDKException(
-            'Invalid signed request, missing OAuth data.'
+            'Invalid signed request, missing OAuth data.', 603
           );
         }
         if ($state && (!isset($data['state']) || $data['state'] != $state)) {
           throw new FacebookSDKException(
-            'Signed request did not pass CSRF validation.'
+            'Signed request did not pass CSRF validation.', 604
           );
         }
         return $data;
       } else {
         throw new FacebookSDKException(
-          'Invalid signed request, using wrong algorithm.'
+          'Invalid signed request, using wrong algorithm.', 605
         );
       }
     } else {
       throw new FacebookSDKException(
-        'Malformed signed request.'
+        'Malformed signed request.', 606
       );
     }
   }
@@ -359,7 +359,7 @@ class FacebookSession
     $target = ($appId ?: static::$defaultAppId);
     if (!$target) {
       throw new FacebookSDKException(
-        'You must provide or set a default application id.'
+        'You must provide or set a default application id.', 700
       );
     }
     return $target;
@@ -379,7 +379,7 @@ class FacebookSession
     $target = ($appSecret ?: static::$defaultAppSecret);
     if (!$target) {
       throw new FacebookSDKException(
-        'You must provide or set a default application secret.'
+        'You must provide or set a default application secret.', 701
       );
     }
     return $target;

@@ -73,7 +73,7 @@ class GraphObject
       return new $type($this->backingData);
     } else {
       throw new FacebookSDKException(
-        'Cannot cast to an object that is not a GraphObject subclass'
+        'Cannot cast to an object that is not a GraphObject subclass', 620
       );
     }
   }
