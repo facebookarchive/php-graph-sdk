@@ -3,12 +3,12 @@
     "description": "Facebook SDK for PHP",
     "keywords": ["facebook", "sdk"],
     "type": "library",
-    "homepage": "https://github.com/facebook/facebook-php-sdk-v4",
+    "homepage": "https://github.com/francimedia/facebook-php-sdk-v4",
     "license": "Facebook Platform",
     "authors": [
         {
             "name": "Facebook",
-            "homepage": "https://github.com/facebook/facebook-php-sdk-v4/contributors"
+            "homepage": "https://github.com/francimedia/facebook-php-sdk-v4/contributors"
         }
     ],
     "require": {
