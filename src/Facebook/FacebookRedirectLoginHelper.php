@@ -77,7 +77,7 @@ class FacebookRedirectLoginHelper
    *   in order to continue the login process with Facebook.  The
    *   provided redirectUrl should invoke the handleRedirect method.
    *
-   * @param array $scope List of permissions to request during login
+   * @param array|string $scope List of permissions to request during login
    * @param string $version Optional Graph API version if not default (v2.0)
    *
    * @return string
@@ -85,6 +85,7 @@ class FacebookRedirectLoginHelper
   public function getLoginUrl($scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $scope = is_array($scope)?implode(',', $scope):$scope;
     $this->state = md5(uniqid(mt_rand(), true));
     $this->storeState($this->state);
     $params = array(
@@ -92,7 +93,7 @@ class FacebookRedirectLoginHelper
       'redirect_uri' => $this->redirectUrl,
       'state' => $this->state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
-      'scope' => implode(',', $scope)
+      'scope' => $scope
     );
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params);
