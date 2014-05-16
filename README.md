@@ -11,6 +11,8 @@ Platform from your PHP app.
 Usage
 -----
 
+This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
+
 Minimal example:
 
 ```php
