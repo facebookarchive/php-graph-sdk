@@ -257,6 +257,19 @@ class FacebookSession
   }
 
   /**
+   * Get the signed request from $_POST
+   *
+   *
+   * @return array
+   *
+   * @throws FacebookSDKException
+   */
+  public static function parseSignedRequestFromPost()
+  {
+    return isset($_POST['signed_request']) && $_POST['signed_request'] ? self::parseSignedRequest($_POST['signed_request'], false) : array();
+  }
+
+  /**
    * Parses a signed request.
    *
    * @param string $signedRequest
