@@ -186,22 +186,67 @@ class FacebookRequest
 
   /**
    * execute - Makes the request to Facebook and returns the result.
+   * If Curl is not available, falls back to use Stream
    *
    * @return FacebookResponse
    *
-   * @throws FacebookSDKException
    * @throws FacebookRequestException
    */
   public function execute() {
+    $commonOptions = array(
+      'timeout' => 60,
+      'useragent' => 'fb-php-' . self::VERSION,
+      'cafile' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt',
+    );
+
+    if (function_exists('curl_init')) {
+      list($httpStatus, $headers, $result) = $this->executeCurl($commonOptions);
+    } else {
+      list($httpStatus, $headers, $result) = $this->executeStream($commonOptions);
+    }
+
+    $etagHit = 304 == $httpStatus;
+    $etagReceived = null;
+    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
+      $etagPos += strlen('ETag: ');
+      $etagReceived = substr($headers, $etagPos,
+        strpos($headers, chr(10), $etagPos)-$etagPos-1);
+    }
+
+    $decodedResult = json_decode($result);
+    if ($decodedResult === null) {
+      $out = array();
+      parse_str($result, $out);
+      return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
+    }
+
+    if (isset($decodedResult->error)) {
+      throw FacebookRequestException::create(
+        $result, $decodedResult->error, $httpStatus
+      );
+    }
+
+    return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
+
+  }
+
+  /**
+   * Makes the request to Facebook using Curl
+   *
+   * @param array $commonOptions
+   * @return array
+   * @throws FacebookSDKException
+   */
+  private function executeCurl($commonOptions) {
     $url = $this->getRequestURL();
     $params = $this->getParameters();
     $curl = curl_init();
     $options = array(
       CURLOPT_CONNECTTIMEOUT => 10,
       CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_TIMEOUT        => 60,
+      CURLOPT_TIMEOUT        => $commonOptions['timeout'],
       CURLOPT_ENCODING       => '', // Support all available encodings.
-      CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION,
+      CURLOPT_USERAGENT      => $commonOptions['useragent'],
       CURLOPT_HEADER         => true // Enable header processing
     );
     if ($this->method === "GET") {
@@ -268,30 +313,59 @@ class FacebookRequest
       }
     }
 
-    $etagHit = 304 == $httpStatus;
     $headers = mb_substr($rawResult, 0, $headerSize);
     $result = mb_substr($rawResult, $headerSize);
 
-    $etagReceived = null;
-    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
-      $etagPos += strlen('ETag: ');
-      $etagReceived = substr($headers, $etagPos,
-                            strpos($headers, chr(10), $etagPos)-$etagPos-1);
+    return array($httpStatus, $headers, $result);
+  }
+
+  /**
+   * Makes the request to Facebook using Streams
+   *
+   * @param $commonOptions
+   * @return array
+   * @throws FacebookSDKException
+   */
+  private function executeStream($commonOptions) {
+    $url = $this->getRequestURL();
+    $params = $this->getParameters();
+
+    $options = array(
+      'http'=>array(
+        'method'=> $this->method,
+        'user-agent'=> $commonOptions['useragent'],
+        'timeout'=> $commonOptions['timeout'],
+        'ignore_errors' => true
+      ),
+      'ssl'=>array(
+        'verify_peer'=> true,
+        'cafile' => $commonOptions['cafile'],
+      )
+    );
+
+    if ($this->method === "GET") {
+      $url = self::appendParamsToUrl($url, $params);
+    } else {
+      $options['http']['content'] = http_build_query($params);
     }
 
-    $decodedResult = json_decode($result);
-    if ($decodedResult === null) {
-      $out = array();
-      parse_str($result, $out);
-      return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
-    }
-    if (isset($decodedResult->error)) {
-      throw FacebookRequestException::create(
-        $result, $decodedResult->error, $httpStatus
-      );
+    // ETag
+    if ($this->etag != null) {
+      $options['http']['header'] = 'If-None-Match: '.$this->etag;
     }
 
-    return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    if ($result === false || empty($http_response_header)) {
+      throw new FacebookSDKException('STREAM_GOT_NOTHING', 52);
+    }
+
+    $httpHeader = explode(' ', $http_response_header[0], 3);
+    $httpStatus = $httpHeader[1];
+    $headers = implode("\r\n", $http_response_header);
+
+    return array($httpStatus, $headers, $result);
   }
 
   /**
