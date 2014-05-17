@@ -1,8 +1,17 @@
-Facebook SDK for PHP
-====================
+Facebook SDK for PHP (falls back to use Stream if PHP Curl module not enabled)
+================================================================================
+This is a fork of the official Facebook SDK for PHP, version 4. The official SDK
+uses Curl to make all the API calls, making it unusable in environments that doesn't
+have the PHP Curl module enabled (example: Google App Engine)
 
-[![Latest Stable Version](http://img.shields.io/packagist/v/facebook/php-sdk-v4.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
+This fork checks if PHP Curl module is enabled. If not, it falls back to using
+Stream (via file_get_contents()). If Curl is detected, it uses Curl just like
+the official SDK.
 
+
+
+Facebook SDK for PHP (Official Documentation)
+=============================================
 
 This repository contains the open source PHP SDK that allows you to access Facebook
 Platform from your PHP app.
