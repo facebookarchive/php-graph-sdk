@@ -1,4 +1,4 @@
-Facebook SDK for PHP (falls back to use Stream if PHP Curl module not enabled)
+Facebook SDK for PHP (works without Curl)
 ================================================================================
 This is a fork of the official Facebook SDK for PHP, version 4. The official SDK
 uses Curl to make all the API calls, making it unusable in environments that doesn't
