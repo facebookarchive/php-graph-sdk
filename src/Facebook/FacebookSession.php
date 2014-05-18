@@ -48,16 +48,23 @@ class FacebookSession
   private $token;
 
   /**
+   * @var array
+   */
+  private $signedRequestData;
+
+  /**
    * When creating a Session from an access_token, use:
    *   var $session = new FacebookSession($accessToken);
    * This will validate the token and provide a Session object ready for use.
    * It will throw a SessionException in case of error.
    *
    * @param string $accessToken
+   * @param array $parsedSignedRequest The signed request data if available
    */
-  public function __construct($accessToken)
+  public function __construct($accessToken, $parsedSignedRequest = null)
   {
     $this->token = $accessToken;
+    $this->signedRequestData = $parsedSignedRequest;
   }
 
   /**
@@ -68,6 +75,41 @@ class FacebookSession
   public function getToken()
   {
     return $this->token;
+  }
+
+  /**
+   * Returns the signed request data from the sessions creation
+   *
+   * @return null|array
+   */
+  public function getSignedRequestData()
+  {
+    return $this->signedRequestData;
+  }
+
+  /**
+   * Returns a property from the signed request data if available
+   *
+   * @param string $keyname
+   *
+   * @return null|mixed
+   */
+  public function getSignedRequestProperty($keyname)
+  {
+    if (isset($this->signedRequestData[$keyname])) {
+      return $this->signedRequestData[$keyname];
+    }
+    return null;
+  }
+
+  /**
+   * Returns user_id from signed request data if available
+   *
+   * @return null|string
+   */
+  public function getUserId()
+  {
+    return $this->getSignedRequestProperty('user_id');
   }
 
   /**
@@ -217,7 +259,7 @@ class FacebookSession
       && !isset($parsedRequest['oauth_token'])) {
       return self::newSessionAfterValidation($parsedRequest);
     }
-    return new FacebookSession($parsedRequest['oauth_token']);
+    return new FacebookSession($parsedRequest['oauth_token'], $parsedRequest);
   }
 
   /**
@@ -247,7 +289,9 @@ class FacebookSession
       $params
     ))->execute()->getResponse();
     if (isset($response['access_token'])) {
-      return new FacebookSession($response['access_token']);
+      return new FacebookSession(
+        $response['access_token'], $parsedSignedRequest
+      );
     }
     throw FacebookRequestException::create(
       json_encode($parsedSignedRequest),

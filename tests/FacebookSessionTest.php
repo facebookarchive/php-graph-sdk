@@ -55,6 +55,7 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
     );
     $this->assertTrue($session instanceof FacebookSession);
     $this->assertEquals('fjm', $session->getToken());
+    $this->assertEquals(4, $session->getUserId());
   }
 
   public static function makeSignedRequest($data)
