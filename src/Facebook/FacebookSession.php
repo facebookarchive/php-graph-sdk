@@ -109,10 +109,7 @@ class FacebookSession
    */
   public function getUserId()
   {
-    if (isset($this->signedRequestData['user_id'])) {
-      return $this->signedRequestData['user_id'];
-    }
-    return null;
+    return $this->getSignedRequestProperty('user_id');
   }
 
   /**
