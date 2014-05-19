@@ -213,7 +213,7 @@ class FacebookSession
     $targetAppId = static::_getTargetAppId($appId);
     $targetAppSecret = static::_getTargetAppSecret($appSecret);
     $info = $this->getSessionInfo($targetAppId, $targetAppSecret);
-    return self::validateSessionInfo($info, $targetAppId, $targetAppSecret);
+    return self::validateSessionInfo($info, $targetAppId);
   }
 
   /**
@@ -318,7 +318,7 @@ class FacebookSession
       $data = json_decode(self::_base64UrlDecode($encodedData), true);
       if (isset($data['algorithm']) && $data['algorithm'] === 'HMAC-SHA256') {
         $expectedSig = hash_hmac(
-          'sha256', $encodedData, static::$defaultAppSecret, true
+          'sha256', $encodedData, self::$defaultAppSecret, true
         );
         if (strlen($sig) !== strlen($expectedSig)) {
           throw new FacebookSDKException(
@@ -385,8 +385,8 @@ class FacebookSession
    */
   public static function setDefaultApplication($appId, $appSecret)
   {
-    static::$defaultAppId = $appId;
-    static::$defaultAppSecret = $appSecret;
+    self::$defaultAppId = $appId;
+    self::$defaultAppSecret = $appSecret;
   }
 
   /**
@@ -400,7 +400,7 @@ class FacebookSession
    * @throws FacebookSDKException
    */
   public static function _getTargetAppId($appId = null) {
-    $target = ($appId ?: static::$defaultAppId);
+    $target = ($appId ?: self::$defaultAppId);
     if (!$target) {
       throw new FacebookSDKException(
         'You must provide or set a default application id.', 700
@@ -420,7 +420,7 @@ class FacebookSession
    * @throws FacebookSDKException
    */
   public static function _getTargetAppSecret($appSecret = null) {
-    $target = ($appSecret ?: static::$defaultAppSecret);
+    $target = ($appSecret ?: self::$defaultAppSecret);
     if (!$target) {
       throw new FacebookSDKException(
         'You must provide or set a default application secret.', 701
