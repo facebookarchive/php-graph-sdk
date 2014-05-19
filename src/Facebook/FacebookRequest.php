@@ -358,7 +358,7 @@ class FacebookRequest
     $result = file_get_contents($url, false, $context);
 
     if ($result === false || empty($http_response_header)) {
-      throw new FacebookSDKException('STREAM_GOT_NOTHING', 52);
+      throw new FacebookSDKException('Stream returned an empty response', 660);
     }
 
     $httpHeader = explode(' ', $http_response_header[0], 3);
