@@ -46,7 +46,7 @@ class GraphAlbum extends GraphObject
      *
      * @return boolean|null
      */
-    public function canUpload()
+    public function getCanUpload()
     {
         return $this->getProperty('can_upload');
     }
@@ -56,7 +56,7 @@ class GraphAlbum extends GraphObject
      *
      * @return int|null
      */
-    public function count()
+    public function getCount()
     {
         return$this->getProperty('count');
     }

@@ -2,7 +2,6 @@
 
 use Facebook\FacebookRequest;
 use Facebook\GraphAlbum;
-//use Facebook\FacebookSession;
 
 class GraphAlbumTest extends PHPUnit_Framework_TestCase
 {
@@ -40,8 +39,8 @@ class GraphAlbumTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($response instanceof GraphAlbum);
     $this->assertEquals($albumId, $response->getId());
     $this->assertTrue($response->getFrom() instanceof \Facebook\GraphUser);
-    $this->assertTrue($response->canUpload());
-    $this->assertEquals(0, $response->count());
+    $this->assertTrue($response->getCanUpload());
+    $this->assertEquals(0, $response->getCount());
     $this->assertEquals(self::ALBUM_NAME, $response->getName());
     $this->assertEquals(self::ALBUM_DESCRIPTION, $response->getDescription());
     $this->assertNotNull($response->getLink());
