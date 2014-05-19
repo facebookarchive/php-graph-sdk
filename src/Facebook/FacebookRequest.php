@@ -43,24 +43,9 @@ class FacebookRequest
   const GRAPH_API_VERSION = 'v2.0';
 
   /**
-   * @const string Signed Request Algorithm
-   */
-  const SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
-
-  /**
    * @const string Graph API URL
    */
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
-
-  /**
-   * @const Curl Version which is unaffected by the proxy header length error.
-   */
-  const CURL_PROXY_QUIRK_VER = 0x071E00;
-
-  /**
-   * @const "Connection Established" header text
-   */
-  const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
 
   /**
    * @var FacebookSession The session used for this request
@@ -91,6 +76,11 @@ class FacebookRequest
    * @var string ETag sent with the request
    */
   private $etag;
+
+  /**
+   * @var FacebookHttpable HTTP client handler
+   */
+  private static $httpClientHandler;
 
   /**
    * getSession - Returns the associated FacebookSession.
@@ -140,6 +130,28 @@ class FacebookRequest
   public function getETag()
   {
     return $this->etag;
+  }
+
+  /**
+   * setHttpClientHandler - Returns an instance of the HTTP client
+   * handler
+   *
+   * @param FacebookHttpable
+   */
+  public static function setHttpClientHandler(FacebookHttpable $handler)
+  {
+    static::$httpClientHandler = $handler;
+  }
+
+  /**
+   * getHttpClientHandler - Returns an instance of the HTTP client
+   * data handler
+   *
+   * @return FacebookHttpable
+   */
+  public static function getHttpClientHandler()
+  {
+    return static::$httpClientHandler ?: static::$httpClientHandler = new FacebookCurlHttpClient();
   }
 
   /**
@@ -195,89 +207,32 @@ class FacebookRequest
   public function execute() {
     $url = $this->getRequestURL();
     $params = $this->getParameters();
-    $curl = curl_init();
-    $options = array(
-      CURLOPT_CONNECTTIMEOUT => 10,
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_TIMEOUT        => 60,
-      CURLOPT_ENCODING       => '', // Support all available encodings.
-      CURLOPT_USERAGENT      => 'fb-php-' . self::VERSION,
-      CURLOPT_HEADER         => true // Enable header processing
-    );
+
     if ($this->method === "GET") {
       $url = self::appendParamsToUrl($url, $params);
-    } else {
-      $options[CURLOPT_POSTFIELDS] = $params;
+      $params = array();
     }
-    if ($this->method === 'DELETE' || $this->method === 'PUT') {
-      $options[CURLOPT_CUSTOMREQUEST] = $this->method;
-    }
-    $options[CURLOPT_URL] = $url;
+
+    $connection = self::getHttpClientHandler();
+    $connection->addRequestHeader('User-Agent', 'fb-php-' . self::VERSION);
+    $connection->addRequestHeader('Accept-Encoding', '*'); // Support all available encodings.
 
     // ETag
-    if ($this->etag != null) {
-      $options[CURLOPT_HTTPHEADER] = array('If-None-Match: '.$this->etag);
-    }
-    curl_setopt_array($curl, $options);
-
-    $rawResult = curl_exec($curl);
-    $error = curl_errno($curl);
-
-    if ($error == 60 || $error == 77) {
-      curl_setopt($curl, CURLOPT_CAINFO,
-        dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
-      $rawResult = curl_exec($curl);
-      $error = curl_errno($curl);
+    if (isset($this->etag)) {
+      $connection->addRequestHeader('If-None-Match', $this->etag);
     }
 
-    // With dual stacked DNS responses, it's possible for a server to
-    // have IPv6 enabled but not have IPv6 connectivity.  If this is
-    // the case, curl will try IPv4 first and if that fails, then it will
-    // fall back to IPv6 and the error EHOSTUNREACH is returned by the
-    // operating system.
-    if ($rawResult === false && empty($opts[CURLOPT_IPRESOLVE])) {
-      $matches = array();
-      $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
-      if (preg_match($regex, curl_error($curl), $matches)) {
-        if (strlen(@inet_pton($matches[1])) === 16) {
-          error_log(
-            'Invalid IPv6 configuration on server, ' .
-            'Please disable or get native IPv6 on your server.'
-          );
-          curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-          $rawResult = curl_exec($curl);
-          $error = curl_errno($curl);
-        }
-      }
+    $result = $connection->send($url, $this->method, $params);
+
+    // Client error
+    if ($result === false) {
+      throw new FacebookSDKException($connection->getErrorMessage(), $connection->getErrorCode());
     }
 
-    $errorMessage = curl_error($curl);
-    $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-    curl_close($curl);
+    $etagHit = 304 == $connection->getResponseHttpStatusCode();
 
-    if ($rawResult === false) {
-      throw new FacebookSDKException($errorMessage, $error);
-    }
-
-    // This corrects a Curl bug where header size does not account
-    // for additional Proxy headers.
-    if ( self::needsCurlProxyFix() ) {
-      if ( stripos($rawResult, self::CONNECTION_ESTABLISHED) !== false ) {
-        $headerSize += strlen(self::CONNECTION_ESTABLISHED);
-      }
-    }
-
-    $etagHit = 304 == $httpStatus;
-    $headers = mb_substr($rawResult, 0, $headerSize);
-    $result = mb_substr($rawResult, $headerSize);
-
-    $etagReceived = null;
-    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
-      $etagPos += strlen('ETag: ');
-      $etagReceived = substr($headers, $etagPos,
-                            strpos($headers, chr(10), $etagPos)-$etagPos-1);
-    }
+    $headers = $connection->getResponseHeaders();
+    $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
 
     $decodedResult = json_decode($result);
     if ($decodedResult === null) {
@@ -287,7 +242,9 @@ class FacebookRequest
     }
     if (isset($decodedResult->error)) {
       throw FacebookRequestException::create(
-        $result, $decodedResult->error, $httpStatus
+        $result,
+        $decodedResult->error,
+        $connection->getResponseHttpStatusCode()
       );
     }
 
@@ -321,16 +278,4 @@ class FacebookRequest
     return $path . '?' . http_build_query($params);
   }
 
-  /**
-   * needsCurlProxyFix - Detect versions of Curl which report
-   *   incorrect header lengths when using Proxies.
-   *
-   * @return boolean
-   */
-  private static function needsCurlProxyFix() {
-    $ver = curl_version();
-    $version = $ver['version_number'];
-
-    return $version < self::CURL_PROXY_QUIRK_VER;
-  }
 }

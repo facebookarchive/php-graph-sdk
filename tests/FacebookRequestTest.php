@@ -1,6 +1,7 @@
 <?php
 
 use Facebook\FacebookRequest;
+use Facebook\FacebookSession;
 
 class FacebookRequestTest extends PHPUnit_Framework_TestCase
 {
@@ -10,7 +11,7 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
     FacebookTestHelper::setUpBeforeClass();
   }
 
-  public function testMe()
+  public function testGetsTheLoggedInUsersProfile()
   {
     $response = (
       new FacebookRequest(
@@ -20,6 +21,71 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
       ))->execute()->getGraphObject();
     $this->assertNotNull($response->getProperty('id'));
     $this->assertNotNull($response->getProperty('name'));
+  }
+
+  public function testCanPostAndDelete()
+  {
+    // Create a test user
+    $params = array(
+      'name' => 'Foo User',
+    );
+    $response = (
+      new FacebookRequest(
+        new FacebookSession(FacebookTestCredentials::$appToken),
+        'POST',
+        '/' . FacebookTestCredentials::$appId . '/accounts/test-users',
+        $params
+      ))->execute()->getGraphObject();
+    $user_id = $response->getProperty('id');
+    $this->assertNotNull($user_id);
+
+    // Delete test user
+    $response = (
+    new FacebookRequest(
+      new FacebookSession(FacebookTestCredentials::$appToken),
+      'DELETE',
+      '/' . $user_id
+    ))->execute()->getGraphObject()->asArray();
+    $this->assertTrue($response);
+  }
+
+  public function testETagHit()
+  {
+    $response = (
+    new FacebookRequest(
+      FacebookTestHelper::$testSession,
+      'GET',
+      '/104048449631599'
+    ))->execute();
+
+    $response = (
+    new FacebookRequest(
+      FacebookTestHelper::$testSession,
+      'GET',
+      '/104048449631599',
+      null,
+      null,
+      $response->getETag()
+    ))->execute();
+
+    $this->assertTrue($response->isETagHit());
+    $this->assertNull($response->getETag());
+  }
+
+  public function testETagMiss()
+  {
+    $response = (
+    new FacebookRequest(
+      FacebookTestHelper::$testSession,
+      'GET',
+      '/104048449631599',
+      null,
+      null,
+      'someRandomValue'
+    ))->execute();
+
+    $this->assertFalse($response->isETagHit());
+    $this->assertNotNull($response->getETag());
   }
 
   public function testGracefullyHandlesUrlAppending()
