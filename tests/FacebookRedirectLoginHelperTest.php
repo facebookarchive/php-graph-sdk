@@ -10,13 +10,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
 
   public static function setUpBeforeClass()
   {
-    session_start();
     FacebookTestHelper::setUpBeforeClass();
-  }
-
-  public static function tearDownAfterClass()
-  {
-    session_destroy();
   }
 
   public function testLoginURL()
@@ -26,6 +20,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
+    $helper->disableSessionStatusCheck();
     $loginUrl = $helper->getLoginUrl();
     $state = $_SESSION['FBRLH_state'];
     $params = array(
@@ -51,6 +46,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
+    $helper->disableSessionStatusCheck();
     $logoutUrl = $helper->getLogoutUrl(
       FacebookTestHelper::$testSession, self::REDIRECT_URL
     );
