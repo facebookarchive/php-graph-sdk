@@ -48,7 +48,7 @@ class FacebookTestHelper
       'installed' => true,
       'name' => 'PHPUnitTestUser',
       'locale' => 'en_US',
-      'permissions' => 'read_stream',
+      'permissions' => 'read_stream, user_photos',
       'method' => 'post'
     );
     $response = (new FacebookRequest(
