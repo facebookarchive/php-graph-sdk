@@ -41,7 +41,15 @@ class FacebookCanvasLoginHelper
   public function getSession()
   {
     if ($signedRequest = $this->getSignedRequest()) {
-      return FacebookSession::newSessionFromSignedRequest($signedRequest);
+      try {
+        return FacebookSession::newSessionFromSignedRequest($signedRequest);
+      } catch (FacebookSDKException $ex) {
+        // Signed request is valid but user is not logged in.
+        if ($ex->getCode() == 603) {
+          return null;
+        }
+        throw $ex;
+      }
     }
     return null;
   }
