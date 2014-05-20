@@ -18,7 +18,7 @@ class GraphSessionInfoTest extends PHPUnit_Framework_TestCase
       'input_token' => FacebookTestHelper::$testSession->getToken()
     );
     $response = (new FacebookRequest(
-      new FacebookSession(FacebookTestCredentials::$appToken),
+      new FacebookSession(FacebookTestHelper::getAppToken()),
       'GET',
       '/debug_token',
       $params
