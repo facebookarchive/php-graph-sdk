@@ -31,7 +31,7 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
     );
     $response = (
       new FacebookRequest(
-        new FacebookSession(FacebookTestCredentials::$appToken),
+        new FacebookSession(FacebookTestHelper::getAppToken()),
         'POST',
         '/' . FacebookTestCredentials::$appId . '/accounts/test-users',
         $params
@@ -42,7 +42,7 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
     // Delete test user
     $response = (
     new FacebookRequest(
-      new FacebookSession(FacebookTestCredentials::$appToken),
+      new FacebookSession(FacebookTestHelper::getAppToken()),
       'DELETE',
       '/' . $user_id
     ))->execute()->getGraphObject()->asArray();

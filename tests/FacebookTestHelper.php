@@ -12,8 +12,7 @@ class FacebookTestHelper
   public static function setUpBeforeClass()
   {
     if (!strlen(FacebookTestCredentials::$appId) ||
-      !strlen(FacebookTestCredentials::$appSecret) ||
-      !strlen(FacebookTestCredentials::$appToken)) {
+      !strlen(FacebookTestCredentials::$appSecret)) {
       throw new FacebookSDKException(
         'You must fill out FacebookTestCredentials.php'
       );
@@ -52,11 +51,16 @@ class FacebookTestHelper
       'method' => 'post'
     );
     $response = (new FacebookRequest(
-      new FacebookSession(FacebookTestCredentials::$appToken),
+      new FacebookSession(FacebookTestHelper::getAppToken()),
       'GET',
       $testUserPath,
       $params))->execute()->getGraphObject();
     return new FacebookSession($response->getProperty('access_token'));
+  }
+
+  public static function getAppToken()
+  {
+    return FacebookTestCredentials::$appId . '|' . FacebookTestCredentials::$appSecret;
   }
 
 }

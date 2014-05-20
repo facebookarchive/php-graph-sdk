@@ -13,9 +13,9 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
 
   public function testSessionToken()
   {
-    $session = new FacebookSession(FacebookTestCredentials::$appToken);
+    $session = new FacebookSession(FacebookTestHelper::getAppToken());
     $this->assertEquals(
-      FacebookTestCredentials::$appToken, $session->getToken()
+      FacebookTestHelper::getAppToken(), $session->getToken()
     );
   }
 
