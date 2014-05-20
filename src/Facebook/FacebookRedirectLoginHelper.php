@@ -218,8 +218,6 @@ class FacebookRedirectLoginHelper
 
   /**
    * Disables the session_status() check when using $_SESSION
-   *
-   * @return void
    */
   public function disableSessionStatusCheck()
   {

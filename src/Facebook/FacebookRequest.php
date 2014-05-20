@@ -43,24 +43,9 @@ class FacebookRequest
   const GRAPH_API_VERSION = 'v2.0';
 
   /**
-   * @const string Signed Request Algorithm
-   */
-  const SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
-
-  /**
    * @const string Graph API URL
    */
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
-
-  /**
-   * @const Curl Version which is unaffected by the proxy header length error.
-   */
-  const CURL_PROXY_QUIRK_VER = 0x071E00;
-
-  /**
-   * @const "Connection Established" header text
-   */
-  const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
 
   /**
    * @var FacebookSession The session used for this request
@@ -91,6 +76,11 @@ class FacebookRequest
    * @var string ETag sent with the request
    */
   private $etag;
+
+  /**
+   * @var FacebookHttpable HTTP client handler
+   */
+  private static $httpClientHandler;
 
   /**
    * getSession - Returns the associated FacebookSession.
@@ -143,6 +133,28 @@ class FacebookRequest
   }
 
   /**
+   * setHttpClientHandler - Returns an instance of the HTTP client
+   * handler
+   *
+   * @param FacebookHttpable
+   */
+  public static function setHttpClientHandler(FacebookHttpable $handler)
+  {
+    static::$httpClientHandler = $handler;
+  }
+
+  /**
+   * getHttpClientHandler - Returns an instance of the HTTP client
+   * data handler
+   *
+   * @return FacebookHttpable
+   */
+  public static function getHttpClientHandler()
+  {
+    return static::$httpClientHandler ?: static::$httpClientHandler = new FacebookCurlHttpClient();
+  }
+
+  /**
    * FacebookRequest - Returns a new request using the given session.  optional
    *   parameters hash will be sent with the request.  This object is
    *   immutable.
@@ -186,32 +198,41 @@ class FacebookRequest
 
   /**
    * execute - Makes the request to Facebook and returns the result.
-   * If Curl is not available, falls back to use Stream
    *
    * @return FacebookResponse
    *
+   * @throws FacebookSDKException
    * @throws FacebookRequestException
    */
   public function execute() {
-    $commonOptions = array(
-      'timeout' => 60,
-      'useragent' => 'fb-php-' . self::VERSION,
-      'cafile' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt',
-    );
+    $url = $this->getRequestURL();
+    $params = $this->getParameters();
 
-    if (function_exists('curl_init')) {
-      list($httpStatus, $headers, $result) = $this->executeCurl($commonOptions);
-    } else {
-      list($httpStatus, $headers, $result) = $this->executeStream($commonOptions);
+    if ($this->method === "GET") {
+      $url = self::appendParamsToUrl($url, $params);
+      $params = array();
     }
 
-    $etagHit = 304 == $httpStatus;
-    $etagReceived = null;
-    if (($etagPos = strpos($headers, 'ETag: ')) !== FALSE) {
-      $etagPos += strlen('ETag: ');
-      $etagReceived = substr($headers, $etagPos,
-        strpos($headers, chr(10), $etagPos)-$etagPos-1);
+    $connection = self::getHttpClientHandler();
+    $connection->addRequestHeader('User-Agent', 'fb-php-' . self::VERSION);
+    $connection->addRequestHeader('Accept-Encoding', '*'); // Support all available encodings.
+
+    // ETag
+    if (isset($this->etag)) {
+      $connection->addRequestHeader('If-None-Match', $this->etag);
     }
+
+    $result = $connection->send($url, $this->method, $params);
+
+    // Client error
+    if ($result === false) {
+      throw new FacebookSDKException($connection->getErrorMessage(), $connection->getErrorCode());
+    }
+
+    $etagHit = 304 == $connection->getResponseHttpStatusCode();
+
+    $headers = $connection->getResponseHeaders();
+    $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
 
     $decodedResult = json_decode($result);
     if ($decodedResult === null) {
@@ -219,153 +240,15 @@ class FacebookRequest
       parse_str($result, $out);
       return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
     }
-
     if (isset($decodedResult->error)) {
       throw FacebookRequestException::create(
-        $result, $decodedResult->error, $httpStatus
+        $result,
+        $decodedResult->error,
+        $connection->getResponseHttpStatusCode()
       );
     }
 
     return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
-
-  }
-
-  /**
-   * Makes the request to Facebook using Curl
-   *
-   * @param array $commonOptions
-   * @return array
-   * @throws FacebookSDKException
-   */
-  private function executeCurl($commonOptions) {
-    $url = $this->getRequestURL();
-    $params = $this->getParameters();
-    $curl = curl_init();
-    $options = array(
-      CURLOPT_CONNECTTIMEOUT => 10,
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_TIMEOUT        => $commonOptions['timeout'],
-      CURLOPT_ENCODING       => '', // Support all available encodings.
-      CURLOPT_USERAGENT      => $commonOptions['useragent'],
-      CURLOPT_HEADER         => true // Enable header processing
-    );
-    if ($this->method === "GET") {
-      $url = self::appendParamsToUrl($url, $params);
-    } else {
-      $options[CURLOPT_POSTFIELDS] = $params;
-    }
-    if ($this->method === 'DELETE' || $this->method === 'PUT') {
-      $options[CURLOPT_CUSTOMREQUEST] = $this->method;
-    }
-    $options[CURLOPT_URL] = $url;
-
-    // ETag
-    if ($this->etag != null) {
-      $options[CURLOPT_HTTPHEADER] = array('If-None-Match: '.$this->etag);
-    }
-    curl_setopt_array($curl, $options);
-
-    $rawResult = curl_exec($curl);
-    $error = curl_errno($curl);
-
-    if ($error == 60 || $error == 77) {
-      curl_setopt($curl, CURLOPT_CAINFO,
-        dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
-      $rawResult = curl_exec($curl);
-      $error = curl_errno($curl);
-    }
-
-    // With dual stacked DNS responses, it's possible for a server to
-    // have IPv6 enabled but not have IPv6 connectivity.  If this is
-    // the case, curl will try IPv4 first and if that fails, then it will
-    // fall back to IPv6 and the error EHOSTUNREACH is returned by the
-    // operating system.
-    if ($rawResult === false && empty($options[CURLOPT_IPRESOLVE])) {
-      $matches = array();
-      $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
-      if (preg_match($regex, curl_error($curl), $matches)) {
-        if (strlen(@inet_pton($matches[1])) === 16) {
-          error_log(
-            'Invalid IPv6 configuration on server, ' .
-            'Please disable or get native IPv6 on your server.'
-          );
-          curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-          $rawResult = curl_exec($curl);
-          $error = curl_errno($curl);
-        }
-      }
-    }
-
-    $errorMessage = curl_error($curl);
-    $httpStatus = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-    curl_close($curl);
-
-    if ($rawResult === false) {
-      throw new FacebookSDKException($errorMessage, $error);
-    }
-
-    // This corrects a Curl bug where header size does not account
-    // for additional Proxy headers.
-    if ( self::needsCurlProxyFix() ) {
-      if ( stripos($rawResult, self::CONNECTION_ESTABLISHED) !== false ) {
-        $headerSize += strlen(self::CONNECTION_ESTABLISHED);
-      }
-    }
-
-    $headers = mb_substr($rawResult, 0, $headerSize);
-    $result = mb_substr($rawResult, $headerSize);
-
-    return array($httpStatus, $headers, $result);
-  }
-
-  /**
-   * Makes the request to Facebook using Streams
-   *
-   * @param $commonOptions
-   * @return array
-   * @throws FacebookSDKException
-   */
-  private function executeStream($commonOptions) {
-    $url = $this->getRequestURL();
-    $params = $this->getParameters();
-
-    $options = array(
-      'http'=>array(
-        'method'=> $this->method,
-        'user-agent'=> $commonOptions['useragent'],
-        'timeout'=> $commonOptions['timeout'],
-        'ignore_errors' => true
-      ),
-      'ssl'=>array(
-        'verify_peer'=> true,
-        'cafile' => $commonOptions['cafile'],
-      )
-    );
-
-    if ($this->method === "GET") {
-      $url = self::appendParamsToUrl($url, $params);
-    } else {
-      $options['http']['content'] = http_build_query($params);
-    }
-
-    // ETag
-    if ($this->etag != null) {
-      $options['http']['header'] = 'If-None-Match: '.$this->etag;
-    }
-
-    $context = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-
-    if ($result === false || empty($http_response_header)) {
-      throw new FacebookSDKException('Stream returned an empty response', 660);
-    }
-
-    $httpHeader = explode(' ', $http_response_header[0], 3);
-    $httpStatus = $httpHeader[1];
-    $headers = implode("\r\n", $http_response_header);
-
-    return array($httpStatus, $headers, $result);
   }
 
   /**
@@ -387,7 +270,6 @@ class FacebookRequest
     }
 
     list($path, $query_string) = explode('?', $url, 2);
-    $query_array = array();
     parse_str($query_string, $query_array);
 
     // Favor params from the original URL over $params
@@ -396,16 +278,4 @@ class FacebookRequest
     return $path . '?' . http_build_query($params);
   }
 
-  /**
-   * needsCurlProxyFix - Detect versions of Curl which report
-   *   incorrect header lengths when using Proxies.
-   *
-   * @return boolean
-   */
-  private static function needsCurlProxyFix() {
-    $ver = curl_version();
-    $version = $ver['version_number'];
-
-    return $version < self::CURL_PROXY_QUIRK_VER;
-  }
 }
