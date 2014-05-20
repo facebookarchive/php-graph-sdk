@@ -37,4 +37,13 @@ class FacebookCanvasLoginHelperTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($session instanceof FacebookSession);
     $this->assertTrue($session->getToken() == 'token');
   }
+
+  public function testLoggedOutCanvasSession() {
+    $helper = new FacebookCanvasLoginHelper();
+    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
+      'ship' => 'love'
+    ));
+    $_GET['signed_request'] = $signedRequest;
+    $this->assertNull($helper->getSession());
+  }
 }
