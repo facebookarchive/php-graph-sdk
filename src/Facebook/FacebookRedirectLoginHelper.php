@@ -58,6 +58,11 @@ class FacebookRedirectLoginHelper
   protected $state;
 
   /**
+   * @var boolean Toggle for PHP session status check
+   */
+  protected $checkForSessionStatus = true;
+
+  /**
    * Constructs a RedirectLoginHelper for a given appId and redirectUrl.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
@@ -178,7 +183,8 @@ class FacebookRedirectLoginHelper
    */
   protected function storeState($state)
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
+    if ($this->checkForSessionStatus === true
+      && session_status() !== PHP_SESSION_ACTIVE) {
       throw new FacebookSDKException(
         'Session not active, could not store state.', 720
       );
@@ -197,7 +203,8 @@ class FacebookRedirectLoginHelper
    */
   protected function loadState()
   {
-    if (session_status() !== PHP_SESSION_ACTIVE) {
+    if ($this->checkForSessionStatus === true
+      && session_status() !== PHP_SESSION_ACTIVE) {
       throw new FacebookSDKException(
         'Session not active, could not load state.', 721
       );
@@ -207,6 +214,14 @@ class FacebookRedirectLoginHelper
       return $this->state;
     }
     return null;
+  }
+
+  /**
+   * Disables the session_status() check when using $_SESSION
+   */
+  public function disableSessionStatusCheck()
+  {
+    $this->checkForSessionStatus = false;
   }
 
 }

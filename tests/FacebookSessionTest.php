@@ -27,7 +27,7 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($response->isValid());
     $scopes = $response->getPropertyAsArray('scopes');
     $this->assertTrue(is_array($scopes));
-    $this->assertEquals(4, count($scopes));
+    $this->assertEquals(5, count($scopes));
   }
 
   public function testExtendAccessToken()

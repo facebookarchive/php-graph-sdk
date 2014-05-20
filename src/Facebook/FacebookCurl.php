@@ -39,8 +39,6 @@ class FacebookCurl
 
   /**
    * Make a new curl reference instance
-   *
-   * @return void
    */
   public function init() {
     $this->curl = curl_init();
@@ -51,8 +49,6 @@ class FacebookCurl
    *
    * @param $key
    * @param $value
-   *
-   * @return void
    */
   public function setopt($key, $value) {
     curl_setopt($this->curl, $key, $value);
@@ -62,8 +58,6 @@ class FacebookCurl
    * Set an array of options to a curl resource
    *
    * @param array $options
-   *
-   * @return void
    */
   public function setopt_array(array $options) {
     curl_setopt_array($this->curl, $options);
@@ -118,8 +112,6 @@ class FacebookCurl
 
   /**
    * Close the resource connection to curl
-   *
-   * @return void
    */
   public function close() {
     curl_close($this->curl);

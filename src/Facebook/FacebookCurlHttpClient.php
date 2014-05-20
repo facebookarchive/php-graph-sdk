@@ -78,7 +78,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
   /**
    * @param FacebookCurl|null Procedural curl as object
    */
-  public function __construct($facebookCurl = null)
+  public function __construct(FacebookCurl $facebookCurl = null)
   {
     self::$facebookCurl = $facebookCurl ?: new FacebookCurl();
   }
@@ -170,8 +170,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
    * @param string $url The endpoint to send the request to
    * @param string $method The request method
    * @param array  $parameters The key value pairs to be sent in the body
-   *
-   * @return void
    */
   public function openConnection($url, $method = 'GET', $parameters = array()) {
     $options = array(
@@ -199,8 +197,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
   /**
    * Add a bundled cert to the connection
-   *
-   * @return void
    */
   public function addBundledCert() {
     self::$facebookCurl->setopt(CURLOPT_CAINFO,
@@ -209,8 +205,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
   /**
    * Closes an existing curl connection
-   *
-   * @return void
    */
   public function closeConnection() {
     self::$facebookCurl->close();
@@ -218,8 +212,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
   /**
    * Try to send the request
-   *
-   * @return void
    */
   public function tryToSendRequest() {
     $this->sendRequest();
@@ -230,8 +222,6 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
   /**
    * Send the request and get the raw response from curl
-   *
-   * @return void
    */
   public function sendRequest() {
     $this->rawResponse = self::$facebookCurl->exec();
@@ -287,12 +277,9 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
     $headerComponents = explode("\n", $rawHeader);
     foreach ($headerComponents as $line) {
-      if (strpos($line, ':') === false)
-      {
+      if (strpos($line, ': ') === false) {
         $headers['http_code'] = $line;
-      }
-      else
-      {
+      } else {
         list ($key, $value) = explode(': ', $line);
         $headers[$key] = $value;
       }
