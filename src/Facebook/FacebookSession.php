@@ -53,6 +53,11 @@ class FacebookSession
   private $signedRequestData;
 
   /**
+   * @var bool
+   */
+  private static $useAppSecretProof = false;
+
+  /**
    * When creating a Session from an access_token, use:
    *   var $session = new FacebookSession($accessToken);
    * This will validate the token and provide a Session object ready for use.
@@ -441,6 +446,26 @@ class FacebookSession
    */
   public static function _base64UrlDecode($input) {
     return base64_decode(strtr($input, '-_', '+/'));
+  }
+
+  /**
+   * Enable or disable sending the appsecret_proof with requests.
+   *
+   * @param bool $on
+   */
+  public static function enableAppSecretProof($on = true)
+  {
+    static::$useAppSecretProof = ($on ? true : false);
+  }
+
+  /**
+   * Get whether or not appsecret_proof should be sent with requests.
+   *
+   * @return bool
+   */
+  public static function useAppSecretProof()
+  {
+    return static::$useAppSecretProof;
   }
 
 }
