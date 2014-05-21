@@ -118,4 +118,24 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('https://www.foo.com/?access_token=bar&foo=bar', $processed_url);
   }
 
+  public function testAppSecretProof()
+  {
+    FacebookSession::enableAppSecretProof(true);
+    $request = new FacebookRequest(
+      FacebookTestHelper::$testSession,
+      'GET',
+      '/me'
+    );
+    $this->assertTrue(isset($request->getParameters()['appsecret_proof']));
+
+
+    FacebookSession::enableAppSecretProof(false);
+    $request = new FacebookRequest(
+      FacebookTestHelper::$testSession,
+      'GET',
+      '/me'
+    );
+    $this->assertTrue(!isset($request->getParameters()['appsecret_proof']));
+  }
+
 }

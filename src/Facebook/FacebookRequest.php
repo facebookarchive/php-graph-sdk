@@ -184,6 +184,12 @@ class FacebookRequest
       && !isset($params["access_token"])) {
       $params["access_token"] = $session->getToken();
     }
+    if (FacebookSession::useAppSecretProof()
+      && !isset($params["appsecret_proof"])) {
+      $params["appsecret_proof"] = $this->getAppSecretProof(
+        $params["access_token"]
+      );
+    }
     $this->params = $params;
   }
 
@@ -249,6 +255,19 @@ class FacebookRequest
     }
 
     return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
+  }
+
+
+  /**
+   * Generate and return the appsecret_proof value for an access_token
+   *
+   * @param string $token
+   *
+   * @return string
+   */
+  public function getAppSecretProof($token)
+  {
+    return hash_hmac('sha256', $token, FacebookSession::_getTargetAppSecret());
   }
 
   /**
