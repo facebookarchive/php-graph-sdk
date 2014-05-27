@@ -4,6 +4,18 @@ use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSDKException;
 
+// Uncomment two lines to force functional test curl implementation
+//use Facebook\HttpClients\FacebookCurlHttpClient;
+//FacebookRequest::setHttpClientHandler(new FacebookCurlHttpClient());
+
+// Uncomment two lines to force functional test stream wrapper implementation
+//use Facebook\HttpClients\FacebookStreamHttpClient;
+//FacebookRequest::setHttpClientHandler(new FacebookStreamHttpClient());
+
+// Uncomment two lines to force functional test Guzzle implementation
+//use Facebook\HttpClients\FacebookGuzzleHttpClient;
+//FacebookRequest::setHttpClientHandler(new FacebookGuzzleHttpClient());
+
 class FacebookTestHelper
 {
 

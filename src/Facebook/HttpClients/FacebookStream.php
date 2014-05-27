@@ -21,60 +21,59 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook;
+namespace Facebook\HttpClients;
 
 /**
- * Interface FacebookHttpable
+ * Class FacebookStream
+ * Abstraction for the procedural stream elements so that the functions can be
+ * mocked and the implementation can be tested.
  * @package Facebook
  */
-interface FacebookHttpable
+class FacebookStream
 {
 
   /**
-   * The headers we want to send with the request
-   *
-   * @param string $key
-   * @param string $value
+   * @var resource Context stream resource instance
    */
-  public function addRequestHeader($key, $value);
+  protected $stream;
 
   /**
-   * The headers returned in the response
-   *
-   * @return array
+   * @var array Response headers from the stream wrapper
    */
-  public function getResponseHeaders();
+  protected $responseHeaders;
 
   /**
-   * The HTTP status response code
+   * Make a new context stream reference instance
    *
-   * @return int
+   * @param array $options
    */
-  public function getResponseHttpStatusCode();
+  public function streamContextCreate(array $options)
+  {
+    $this->stream = stream_context_create($options);
+  }
 
   /**
-   * The error message returned from the client
+   * The response headers from the stream wrapper
    *
-   * @return string
+   * @return array|null
    */
-  public function getErrorMessage();
+  public function getResponseHeaders()
+  {
+    return $this->responseHeaders;
+  }
 
   /**
-   * The error code returned by the client
+   * Send a stream wrapped request
    *
-   * @return int
+   * @param string $url
+   *
+   * @return mixed
    */
-  public function getErrorCode();
-
-  /**
-   * Sends a request to the server
-   *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
-   *
-   * @return string|boolean Raw response from the server or false on fail
-   */
-  public function send($url, $method = 'GET', $parameters = array());
+  public function fileGetContents($url)
+  {
+    $rawResponse = file_get_contents($url, false, $this->stream);
+    $this->responseHeaders = $http_response_header;
+    return $rawResponse;
+  }
 
 }

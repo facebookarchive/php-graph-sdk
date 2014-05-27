@@ -23,6 +23,10 @@
  */
 namespace Facebook;
 
+use Facebook\HttpClients\FacebookHttpable;
+use Facebook\HttpClients\FacebookCurlHttpClient;
+use Facebook\HttpClients\FacebookStreamHttpClient;
+
 /**
  * Class FacebookRequest
  * @package Facebook
@@ -136,7 +140,7 @@ class FacebookRequest
    * setHttpClientHandler - Returns an instance of the HTTP client
    * handler
    *
-   * @param FacebookHttpable
+   * @param \Facebook\HttpClients\FacebookHttpable
    */
   public static function setHttpClientHandler(FacebookHttpable $handler)
   {
@@ -151,7 +155,10 @@ class FacebookRequest
    */
   public static function getHttpClientHandler()
   {
-    return static::$httpClientHandler ?: static::$httpClientHandler = new FacebookCurlHttpClient();
+    if (static::$httpClientHandler) {
+      return static::$httpClientHandler;
+    }
+    return function_exists('curl_init') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
   }
 
   /**
@@ -168,7 +175,8 @@ class FacebookRequest
    */
   public function __construct(
     $session, $method, $path, $parameters = null, $version = null, $etag = null
-  ) {
+  )
+  {
     $this->session = $session;
     $this->method = $method;
     $this->path = $path;
@@ -198,7 +206,8 @@ class FacebookRequest
    *
    * @return string
    */
-  protected function getRequestURL() {
+  protected function getRequestURL()
+  {
     return static::BASE_GRAPH_URL . '/' . $this->version . $this->path;
   }
 
@@ -210,7 +219,8 @@ class FacebookRequest
    * @throws FacebookSDKException
    * @throws FacebookRequestException
    */
-  public function execute() {
+  public function execute()
+  {
     $url = $this->getRequestURL();
     $params = $this->getParameters();
 
@@ -228,12 +238,9 @@ class FacebookRequest
       $connection->addRequestHeader('If-None-Match', $this->etag);
     }
 
+    // Should throw `FacebookSDKException` exception on HTTP client error.
+    // Don't catch to allow it to bubble up.
     $result = $connection->send($url, $this->method, $params);
-
-    // Client error
-    if ($result === false) {
-      throw new FacebookSDKException($connection->getErrorMessage(), $connection->getErrorCode());
-    }
 
     $etagHit = 304 == $connection->getResponseHttpStatusCode();
 
@@ -256,7 +263,6 @@ class FacebookRequest
 
     return new FacebookResponse($this, $decodedResult, $result, $etagHit, $etagReceived);
   }
-
 
   /**
    * Generate and return the appsecret_proof value for an access_token
