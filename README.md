@@ -60,10 +60,10 @@ Install composer globally, then run `composer install` to install required files
 create `tests/FacebookTestCredentials.php` from `tests/FacebookTestCredentials.php.dist`
 and edit it to add your credentials.
 
-3) The tests can be executed by running this command from the tests directory:
+3) The tests can be executed by running this command from the root directory:
 
 ```bash
-../vendor/bin/phpunit --stderr .
+./vendor/bin/phpunit
 ```
 
 

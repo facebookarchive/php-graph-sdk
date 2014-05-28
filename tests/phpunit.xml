@@ -1,8 +1,0 @@
-<phpunit bootstrap="bootstrap.php"
-         stopOnFailure="true">
-    <testsuites>
-        <testsuite name="Facebook">
-            <directory>.</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>
