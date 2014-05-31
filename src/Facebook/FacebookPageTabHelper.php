@@ -61,33 +61,11 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
   }
 
   /**
-   * Gets a FacebookSession from the parameters passed by Facebook to a
-   *   Canvas POST request.
-   *
-   * @return FacebookSession|null
-   */
-  public function getSession()
-  {
-    if ($signedRequest = $this->getSignedRequest()) {
-      try {
-        return FacebookSession::newSessionFromSignedRequest($signedRequest);
-      } catch (FacebookSDKException $ex) {
-        // Signed request is valid but user is not logged in.
-        if ($ex->getCode() == 603) {
-          return null;
-        }
-        throw $ex;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Returns true if the page is liked by the user.
    *
    * @return bool
    */
-  public function liked()
+  public function isLiked()
   {
     if (isset($this->pageData['liked']) && $this->pageData['liked'] == 'true') {
       return true;
@@ -113,7 +91,7 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
    *
    * @return int|null
    */
-  public function pageId()
+  public function getPageId()
   {
     if (isset($this->pageData['id'])) {
       return $this->pageData['id'];
@@ -131,53 +109,6 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
     if (isset($this->parsedSignedRequest['user_id'])) {
       return $this->parsedSignedRequest['user_id'];
     }
-    return null;
-  }
-
-  /**
-   * Gets a FacebookSession from the parameters passed by Facebook to a
-   *   Canvas POST request.
-   *
-   * @return FacebookSession|null
-   */
-  private function getSessionFromSignedRequest()
-  {
-    if ($this->signedRequest) {
-      try {
-        return FacebookSession::newSessionFromSignedRequest($this->signedRequest);
-      } catch (FacebookSDKException $ex) {
-        // Signed request is valid but user is not logged in.
-        if ($ex->getCode() == 603) {
-          return null;
-        }
-        throw $ex;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Get signed request.
-   *
-   * @return string|null
-   */
-  protected function getSignedRequest()
-  {
-    /**
-     * v2.0 apps use GET for Canvas signed requests.
-     */
-    if (isset($_GET['signed_request'])) {
-      return $_GET['signed_request'];
-    }
-
-    /**
-     * v1.0 apps use POST for Canvas signed requests, will eventually be
-     * deprecated.
-     */
-    if (isset($_POST['signed_request'])) {
-      return $_POST['signed_request'];
-    }
-
     return null;
   }
 

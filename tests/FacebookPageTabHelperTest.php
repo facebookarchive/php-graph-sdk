@@ -31,9 +31,9 @@ class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
     $session = $helper->getSession();
     $this->assertTrue($session instanceof FacebookSession);
     $this->assertTrue($session->getToken() == 'token');
-    $this->assertTrue($helper->liked());
+    $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());
-    $this->assertEquals(42, $helper->pageId());
+    $this->assertEquals(42, $helper->getPageId());
     $this->assertEquals('42', $helper->getUserId());
   }
 
@@ -50,9 +50,9 @@ class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
     $session = $helper->getSession();
     $this->assertTrue($session instanceof FacebookSession);
     $this->assertTrue($session->getToken() == 'token');
-    $this->assertTrue($helper->liked());
+    $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());
-    $this->assertEquals(42, $helper->pageId());
+    $this->assertEquals(42, $helper->getPageId());
   }
 
   public function testLoggedOutPageTab() {
@@ -67,9 +67,9 @@ class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
     $helper = new FacebookPageTabHelper();
     $session = $helper->getSession();
     $this->assertNull($session);
-    $this->assertFalse($helper->liked());
+    $this->assertFalse($helper->isLiked());
     $this->assertTrue($helper->isAdmin());
-    $this->assertEquals(42, $helper->pageId());
+    $this->assertEquals(42, $helper->getPageId());
   }
 
 }
