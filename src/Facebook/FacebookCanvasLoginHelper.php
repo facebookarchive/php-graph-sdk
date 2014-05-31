@@ -36,6 +36,7 @@ class FacebookCanvasLoginHelper
    * Gets a FacebookSession from the parameters passed by Facebook to a
    *   Canvas POST request.
    *
+   * @throws FacebookSDKException
    * @return FacebookSession|null
    */
   public function getSession()
