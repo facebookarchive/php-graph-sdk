@@ -238,8 +238,12 @@ class FacebookSession
   {
     $targetAppId = static::_getTargetAppId($appId);
     if ($tokenInfo->getAppId() !== $targetAppId
-      || !$tokenInfo->isValid() || $tokenInfo->getExpiresAt() === null
-      || $tokenInfo->getExpiresAt()->getTimestamp() < time()) {
+      || !$tokenInfo->isValid()
+      || (
+        $tokenInfo->getExpiresAt() !== null
+        && $tokenInfo->getExpiresAt()->getTimestamp() < time()
+        )
+      ) {
       throw new FacebookSDKException(
         'Session has expired, or is not valid for this app.', 601
       );
