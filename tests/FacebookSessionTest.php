@@ -58,6 +58,16 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(4, $session->getUserId());
   }
 
+  public function testAppSessionValidates()
+  {
+    $session = FacebookSession::newAppSession();
+    try {
+      $session->validate();
+    } catch (\Facebook\FacebookSDKException $ex) {
+      $this->fail('Exception thrown validating app session.');
+    }
+  }
+  
   public static function makeSignedRequest($data)
   {
     if (!is_array($data)) {
