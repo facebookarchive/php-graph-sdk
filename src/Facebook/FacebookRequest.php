@@ -293,8 +293,8 @@ class FacebookRequest
     }
 
     $request = new FacebookRequest($session, 'POST', '/', $params);
-    $response = $request->execute();
-    $responseList = $response->getResponse();
+    $responseList = $request->execute()->getResponse();
+
     $responses = array();
     for ($i = 0; $i < count($responseList); $i++) {
       $item = $responseList[$i];
