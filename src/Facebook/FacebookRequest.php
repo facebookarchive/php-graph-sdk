@@ -203,6 +203,26 @@ class FacebookRequest
   }
 
   /**
+   * getParamsForBatch - returns the request encoded for batch requests
+   */
+  private function getParamsForBatch()
+  {
+    $relativeUrl = $this->version . $this->path;
+    $method = $this->method;
+    $params = array();
+    foreach ($this->params as $key => $value) {
+      if ($key != 'access_token') {
+        $params[$key] = $value;
+      }
+    }
+    return array(
+      'method' => $method,
+      'relative_url' => $relativeUrl,
+      'body' => $params
+    );
+  }
+
+  /**
    * execute - Makes the request to Facebook and returns the result.
    *
    * @return FacebookResponse
@@ -210,7 +230,8 @@ class FacebookRequest
    * @throws FacebookSDKException
    * @throws FacebookRequestException
    */
-  public function execute() {
+  public function execute()
+  {
     $url = $this->getRequestURL();
     $params = $this->getParameters();
 
@@ -229,7 +250,74 @@ class FacebookRequest
     }
 
     $result = $connection->send($url, $this->method, $params);
+    return $this->handleResult($result, $connection);
+  }
 
+  /**
+   * Takes an array of FacebookRequests and executes them in a batch
+   *
+   * @param FacebookSession $session The FacebookSession to use for the batch
+   * @param array $requests The FacebookRequests to run
+   *
+   * @return array of FacebookResponse
+   *
+   * @throws FacebookSDKException
+   * @throws FacebookRequestException
+   */
+  public static function batch($session, $requests)
+  {
+    if (!$session || !($session instanceof FacebookSession)) {
+      throw new FacebookSDKException(
+        'You must provide a FacebookSession to use for all requests.', 720
+      );
+    }
+    if (!$requests || !count($requests)) {
+      return array();
+    }
+
+    $batch = array();
+
+    foreach ($requests as $request) {
+      $batch[] = $request->getParamsForBatch();
+    }
+
+    $params = array(
+      'access_token' => $session->getToken(),
+      'batch' => json_encode($batch)
+    );
+
+    if (FacebookSession::useAppSecretProof()) {
+      $params["appsecret_proof"] = $session->getAppSecretProof(
+        $params["access_token"]
+      );
+    }
+
+    $request = new FacebookRequest($session, 'POST', '/', $params);
+    $responseList = $request->execute()->getResponse();
+
+    $responses = array();
+    for ($i = 0; $i < count($responseList); $i++) {
+      $item = $responseList[$i];
+      $req = $requests[$i];
+      $connection = new FacebookBatchConnection($item);
+      $responses[] = $req->handleResult($connection->getBody(), $connection);
+    }
+
+    return $responses;
+
+  }
+
+  /**
+   * handleResult - called with the response from the Graph API
+   *
+   * @param string $result body of the http response
+   * @param FacebookHttpable $connection the http client handler
+   *
+   * @throws FacebookSDKException
+   * @throws FacebookRequestException
+   */
+  private function handleResult($result, $connection)
+  {
     // Client error
     if ($result === false) {
       throw new FacebookSDKException($connection->getErrorMessage(), $connection->getErrorCode());
