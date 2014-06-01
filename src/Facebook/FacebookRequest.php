@@ -205,7 +205,7 @@ class FacebookRequest
   /**
    * getParamsForBatch - returns the request encoded for batch requests
    */
-  public function getParamsForBatch()
+  private function getParamsForBatch()
   {
     $relativeUrl = $this->version . $this->path;
     $method = $this->method;

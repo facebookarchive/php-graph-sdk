@@ -25,6 +25,7 @@ namespace Facebook;
 
 /**
  * Class FacebookBatchConnection
+ * @author Fosco Marotto <fjm@fb.com>
  * @package Facebook
  */
 class FacebookBatchConnection implements FacebookHttpable
