@@ -179,7 +179,7 @@ class FacebookRequest
     }
     $this->etag = $etag;
 
-    $params = ($parameters ?: array());
+    $params = ($parameters ? $parameters : array());
     if ($session
       && !isset($params["access_token"])) {
       $params["access_token"] = $session->getToken();
