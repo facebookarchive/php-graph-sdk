@@ -147,7 +147,7 @@ class FacebookResponse
    */
   public function getGraphObjectList($type = 'Facebook\GraphObject') {
     $out = array();
-    $data = $this->responseData->data;
+    $data = $this->responseData['data'];
     for ($i = 0; $i < count($data); $i++) {
       $out[] = (new GraphObject($data[$i]))->cast($type);
     }
@@ -184,8 +184,8 @@ class FacebookResponse
    * @return FacebookRequest|null
    */
   private function handlePagination($direction) {
-    if (isset($this->responseData->paging->$direction)) {
-      $url = parse_url($this->responseData->paging->$direction);
+    if (isset($this->responseData['paging'][$direction])) {
+      $url = parse_url($this->responseData['paging'][$direction]);
       parse_str($url['query'], $params);
 
       return new FacebookRequest(

@@ -240,16 +240,16 @@ class FacebookRequest
     $headers = $connection->getResponseHeaders();
     $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
 
-    $decodedResult = json_decode($result);
+    $decodedResult = json_decode($result, true);
     if ($decodedResult === null) {
       $out = array();
       parse_str($result, $out);
       return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
     }
-    if (isset($decodedResult->error)) {
+    if (isset($decodedResult['error'])) {
       throw FacebookRequestException::create(
         $result,
-        $decodedResult->error,
+        $decodedResult['error'],
         $connection->getResponseHttpStatusCode()
       );
     }
