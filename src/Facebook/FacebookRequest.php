@@ -39,7 +39,7 @@ class FacebookRequest
   /**
    * @const string Version number of the Facebook PHP SDK.
    */
-  const VERSION = '4.0.7';
+  const VERSION = '4.0.8';
 
   /**
    * @const string Default Graph API version for requests
