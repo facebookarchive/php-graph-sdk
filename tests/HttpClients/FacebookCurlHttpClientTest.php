@@ -1,9 +1,11 @@
 <?php
 
-use Mockery as m;
-use Facebook\FacebookCurlHttpClient;
+require_once __DIR__ . '/AbstractTestHttpClient.php';
 
-class FacebookCurlHttpClientTest extends PHPUnit_Framework_TestCase
+use Mockery as m;
+use Facebook\HttpClients\FacebookCurlHttpClient;
+
+class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
 
   protected $curlMock;
@@ -12,41 +14,9 @@ class FacebookCurlHttpClientTest extends PHPUnit_Framework_TestCase
   const CURL_VERSION_STABLE = 0x072400;
   const CURL_VERSION_BUGGY = 0x071400;
 
-  protected $fakeRawRedirectHeader = "HTTP/1.1 302 Found
-Content-Type: text/html; charset=utf-8
-Location: https://foobar.com/\r\n\r\n";
-  protected $fakeRawProxyHeader = "HTTP/1.0 200 Connection established\r\n\r\n";
-  protected $fakeRawHeader = "HTTP/1.1 200 OK
-Etag: \"9d86b21aa74d74e574bbb35ba13524a52deb96e3\"
-Content-Type: text/javascript; charset=UTF-8
-X-FB-Rev: 9244768
-Pragma: no-cache
-Expires: Sat, 01 Jan 2000 00:00:00 GMT
-Connection: close
-Date: Mon, 19 May 2014 18:37:17 GMT
-X-FB-Debug: 02QQiffE7JG2rV6i/Agzd0gI2/OOQ2lk5UW0=
-Content-Length: 29
-Cache-Control: private, no-cache, no-store, must-revalidate
-Access-Control-Allow-Origin: *\r\n\r\n";
-  protected $fakeRawBody = "{\"id\":\"123\",\"name\":\"Foo Bar\"}";
-  protected $fakeHeadersAsArray = array(
-    'http_code' => 'HTTP/1.1 200 OK',
-    'Etag' => '"9d86b21aa74d74e574bbb35ba13524a52deb96e3"',
-    'Content-Type' => 'text/javascript; charset=UTF-8',
-    'X-FB-Rev' => '9244768',
-    'Pragma' => 'no-cache',
-    'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT',
-    'Connection' => 'close',
-    'Date' => 'Mon, 19 May 2014 18:37:17 GMT',
-    'X-FB-Debug' => '02QQiffE7JG2rV6i/Agzd0gI2/OOQ2lk5UW0=',
-    'Content-Length' => '29',
-    'Cache-Control' => 'private, no-cache, no-store, must-revalidate',
-    'Access-Control-Allow-Origin' => '*',
-  );
-
   public function setUp()
   {
-    $this->curlMock = m::mock('Facebook\FacebookCurl');
+    $this->curlMock = m::mock('Facebook\HttpClients\FacebookCurl');
     $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
   }
 
@@ -401,6 +371,41 @@ Access-Control-Allow-Origin: *\r\n\r\n";
 
     $this->assertEquals($responseBody, $this->fakeRawBody);
     $this->assertEquals($this->curlClient->getResponseHeaders(), $this->fakeHeadersAsArray);
+    $this->assertEquals(200, $this->curlClient->getResponseHttpStatusCode());
+  }
+
+  /**
+   * @expectedException \Facebook\FacebookSDKException
+   */
+  public function testThrowsExceptionOnClientError()
+  {
+    $this->curlMock
+      ->shouldReceive('init')
+      ->once()
+      ->andReturn(null);
+    $this->curlMock
+      ->shouldReceive('setopt_array')
+      ->once()
+      ->andReturn(null);
+    $this->curlMock
+      ->shouldReceive('exec')
+      ->once()
+      ->andReturn(false);
+    $this->curlMock
+      ->shouldReceive('errno')
+      ->once()
+      ->andReturn(123);
+    $this->curlMock
+      ->shouldReceive('error')
+      ->once()
+      ->andReturn('Foo error');
+    $this->curlMock
+      ->shouldReceive('getinfo')
+      ->with(CURLINFO_HTTP_CODE)
+      ->once()
+      ->andReturn(null);
+
+    $this->curlClient->send('http://foo.com/');
   }
 
 }
