@@ -120,6 +120,8 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
 
   public function testAppSecretProof()
   {
+    $enableAppSecretProof = FacebookSession::useAppSecretProof();
+
     FacebookSession::enableAppSecretProof(true);
     $request = new FacebookRequest(
       FacebookTestHelper::$testSession,
@@ -135,7 +137,9 @@ class FacebookRequestTest extends PHPUnit_Framework_TestCase
       'GET',
       '/me'
     );
-    $this->assertTrue(!isset($request->getParameters()['appsecret_proof']));
+    $this->assertFalse(isset($request->getParameters()['appsecret_proof']));
+
+    FacebookSession::enableAppSecretProof($enableAppSecretProof);
   }
 
 }

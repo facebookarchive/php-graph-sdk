@@ -55,7 +55,7 @@ class FacebookSession
   /**
    * @var bool
    */
-  private static $useAppSecretProof = false;
+  private static $useAppSecretProof = true;
 
   /**
    * When creating a Session from an access_token, use:
