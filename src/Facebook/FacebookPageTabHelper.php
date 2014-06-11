@@ -111,6 +111,19 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
     }
     return null;
   }
+  
+  /**
+   * Returns the app_data if available.
+   *
+   * @return object|null
+   */
+  public function getAppData()
+  {
+    if (isset($this->parsedSignedRequest['app_data'])) {
+      return $this->parsedSignedRequest['app_data'];
+    }
+    return null;
+  }
 
   /**
    * Parses a signed request.
