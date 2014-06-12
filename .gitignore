@@ -5,3 +5,4 @@ composer.phar
 .idea/
 tests/FacebookTestCredentials.php
 
+/nbproject
