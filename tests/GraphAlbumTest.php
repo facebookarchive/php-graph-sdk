@@ -5,13 +5,9 @@ use Facebook\GraphAlbum;
 
 class GraphAlbumTest extends PHPUnit_Framework_TestCase
 {
+
   const ALBUM_DESCRIPTION = "Album Description";
   const ALBUM_NAME = "Album Name";
-
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
 
   public function testMeReturnsGraphAlbum()
   {
@@ -53,4 +49,5 @@ class GraphAlbumTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($response->getCreatedTime() instanceof DateTime);
     $this->assertTrue($response->getUpdatedTime() instanceof DateTime);
   }
+
 }

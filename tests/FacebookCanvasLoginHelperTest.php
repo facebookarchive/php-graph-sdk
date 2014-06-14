@@ -6,16 +6,6 @@ use Facebook\FacebookSession;
 class FacebookCanvasLoginHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
-  public static function tearDownAfterClass()
-  {
-
-  }
-
   public function testGetSessionFromCanvasGET() {
     $helper = new FacebookCanvasLoginHelper();
     $signedRequest = FacebookSessionTest::makeSignedRequest(array(

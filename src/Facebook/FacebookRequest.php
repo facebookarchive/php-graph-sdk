@@ -87,6 +87,11 @@ class FacebookRequest
   private static $httpClientHandler;
 
   /**
+   * @var int The number of calls that have been made to Graph.
+   */
+  public static $requestCount = 0;
+
+  /**
    * getSession - Returns the associated FacebookSession.
    *
    * @return FacebookSession
@@ -241,6 +246,8 @@ class FacebookRequest
     // Should throw `FacebookSDKException` exception on HTTP client error.
     // Don't catch to allow it to bubble up.
     $result = $connection->send($url, $this->method, $params);
+
+    static::$requestCount++;
 
     $etagHit = 304 == $connection->getResponseHttpStatusCode();
 

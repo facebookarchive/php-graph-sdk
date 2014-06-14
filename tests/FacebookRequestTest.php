@@ -6,11 +6,6 @@ use Facebook\FacebookSession;
 class FacebookRequestTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testGetsTheLoggedInUsersProfile()
   {
     $response = (

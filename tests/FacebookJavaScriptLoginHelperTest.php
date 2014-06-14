@@ -6,16 +6,6 @@ use Facebook\FacebookSession;
 class FacebookJavaScriptLoginHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
-  public static function tearDownAfterClass()
-  {
-
-  }
-
   public function testGetSessionFromCookie() {
     $helper = new FacebookJavaScriptLoginHelper(
       FacebookTestCredentials::$appId
@@ -28,4 +18,5 @@ class FacebookJavaScriptLoginHelperTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($session instanceof FacebookSession);
     $this->assertTrue($session->getToken() == 'token');
   }
+
 }

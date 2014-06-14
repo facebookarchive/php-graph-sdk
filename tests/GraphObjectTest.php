@@ -8,11 +8,6 @@ use Facebook\GraphUser;
 class GraphObjectTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testFriends()
   {
     $response = (
