@@ -270,7 +270,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     $this->assertEquals($headers, $this->fakeHeadersAsArray);
   }
 
-  public function testProperlyHandlesProxyHeadAdersWithCurlBug()
+  public function testProperlyHandlesProxyHeadersWithCurlBug()
   {
     $rawHeader = $this->fakeRawProxyHeader . $this->fakeRawHeader;
     $this->curlMock
