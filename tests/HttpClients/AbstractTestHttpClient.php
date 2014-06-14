@@ -7,6 +7,8 @@ abstract class AbstractTestHttpClient extends PHPUnit_Framework_TestCase
 Content-Type: text/html; charset=utf-8
 Location: https://foobar.com/\r\n\r\n";
   protected $fakeRawProxyHeader = "HTTP/1.0 200 Connection established\r\n\r\n";
+  protected $fakeRawProxyHeader2 = "HTTP/1.0 200 Connection established
+Proxy-agent: Kerio Control/7.1.1 build 1971\r\n\r\n";
   protected $fakeRawHeader = "HTTP/1.1 200 OK
 Etag: \"9d86b21aa74d74e574bbb35ba13524a52deb96e3\"
 Content-Type: text/javascript; charset=UTF-8
