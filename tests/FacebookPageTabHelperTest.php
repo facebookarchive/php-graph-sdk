@@ -1,65 +1,22 @@
 <?php
 
 use Facebook\FacebookPageTabHelper;
-use Facebook\FacebookSession;
 
 class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testGetSessionFromPageTabGET() {
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'oauth_token' => 'token',
-      'page' => array(
-        'liked' => 'true',
-        'admin' => 'false',
-        'id' => 42
-      ),
-      'user_id' => '42'
-    ));
-    $_GET['signed_request'] = $signedRequest;
-    $helper = new FacebookPageTabHelper();
-    $session = $helper->getSession();
-    $this->assertTrue($session instanceof FacebookSession);
-    $this->assertTrue($session->getToken() == 'token');
+  protected $rawSignedRequestAuthorized = '6Hi26ECjkj347belC0O8b8H5lwiIz5eA6V9VVjTg-HU=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MzIxLCJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsInVzZXJfaWQiOiIxMjMiLCJwYWdlIjp7ImlkIjoiNDIiLCJsaWtlZCI6dHJ1ZSwiYWRtaW4iOmZhbHNlfX0=';
+
+  public function testPageDataCanBeAccessed()
+  {
+    $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
+    $helper = new FacebookPageTabHelper('123', 'foo_app_secret');
+
     $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());
-    $this->assertEquals(42, $helper->getPageId());
-    $this->assertEquals('42', $helper->getUserId());
-  }
-
-  public function testGetSessionFromPageTabPOST() {
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'oauth_token' => 'token',
-      'page' => array(
-        'liked' => 'true',
-        'admin' => 'false',
-        'id' => 42
-      )    ));
-    $_POST['signed_request'] = $signedRequest;
-    $helper = new FacebookPageTabHelper();
-    $session = $helper->getSession();
-    $this->assertTrue($session instanceof FacebookSession);
-    $this->assertTrue($session->getToken() == 'token');
-    $this->assertTrue($helper->isLiked());
-    $this->assertFalse($helper->isAdmin());
-    $this->assertEquals(42, $helper->getPageId());
-  }
-
-  public function testLoggedOutPageTab() {
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'page' => array(
-        'liked' => 'false',
-        'admin' => 'true',
-        'id' => 42
-      )
-    ));
-    $_POST['signed_request'] = $signedRequest;
-    $helper = new FacebookPageTabHelper();
-    $session = $helper->getSession();
-    $this->assertNull($session);
-    $this->assertFalse($helper->isLiked());
-    $this->assertTrue($helper->isAdmin());
-    $this->assertEquals(42, $helper->getPageId());
+    $this->assertEquals('42', $helper->getPageId());
+    $this->assertEquals('42', $helper->getPageData('id'));
+    $this->assertEquals('default', $helper->getPageData('foo', 'default'));
   }
 
 }
