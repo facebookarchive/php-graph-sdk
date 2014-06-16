@@ -1,39 +1,34 @@
 <?php
 
 use Facebook\FacebookCanvasLoginHelper;
-use Facebook\FacebookSession;
 
 class FacebookCanvasLoginHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testGetSessionFromCanvasGET() {
-    $helper = new FacebookCanvasLoginHelper();
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'oauth_token' => 'token'
-    ));
-    $_GET['signed_request'] = $signedRequest;
-    $session = $helper->getSession();
-    $this->assertTrue($session instanceof FacebookSession);
-    $this->assertTrue($session->getToken() == 'token');
+  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+  protected $helper;
+
+  public function setUp()
+  {
+    $this->helper = new FacebookCanvasLoginHelper('123', 'foo_app_secret');
   }
 
-  public function testGetSessionFromCanvasPOST() {
-    $helper = new FacebookCanvasLoginHelper();
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'oauth_token' => 'token'
-    ));
-    $_POST['signed_request'] = $signedRequest;
-    $session = $helper->getSession();
-    $this->assertTrue($session instanceof FacebookSession);
-    $this->assertTrue($session->getToken() == 'token');
+  public function testSignedRequestDataCanBeRetrievedFromGetData()
+  {
+    $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
+
+    $rawSignedRequest = $this->helper->getRawSignedRequest();
+
+    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
   }
 
-  public function testLoggedOutCanvasSession() {
-    $helper = new FacebookCanvasLoginHelper();
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'ship' => 'love'
-    ));
-    $_GET['signed_request'] = $signedRequest;
-    $this->assertNull($helper->getSession());
+  public function testSignedRequestDataCanBeRetrievedFromPostData()
+  {
+    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
+
+    $rawSignedRequest = $this->helper->getRawSignedRequest();
+
+    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
   }
+
 }

@@ -29,52 +29,41 @@ namespace Facebook;
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class FacebookCanvasLoginHelper
+class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
 {
 
   /**
-   * Gets a FacebookSession from the parameters passed by Facebook to a
-   *   Canvas POST request.
+   * Returns the app data value.
    *
-   * @throws FacebookSDKException
-   * @return FacebookSession|null
+   * @return mixed|null
    */
-  public function getSession()
+  public function getAppData()
   {
-    if ($signedRequest = $this->getSignedRequest()) {
-      try {
-        return FacebookSession::newSessionFromSignedRequest($signedRequest);
-      } catch (FacebookSDKException $ex) {
-        // Signed request is valid but user is not logged in.
-        if ($ex->getCode() == 603) {
-          return null;
-        }
-        throw $ex;
-      }
-    }
-    return null;
+    return $this->signedRequest ? $this->signedRequest->get('app_data') : null;
   }
 
   /**
-   * Get signed request.
+   * Get raw signed request from either GET or POST.
    *
    * @return string|null
    */
-  protected function getSignedRequest()
+  public function getRawSignedRequest()
   {
     /**
      * v2.0 apps use GET for Canvas signed requests.
      */
-    if (isset($_GET['signed_request'])) {
-      return $_GET['signed_request'];
+    $rawSignedRequest = $this->getRawSignedRequestFromGet();
+    if ($rawSignedRequest) {
+      return $rawSignedRequest;
     }
 
     /**
      * v1.0 apps use POST for Canvas signed requests, will eventually be
      * deprecated.
      */
-    if (isset($_POST['signed_request'])) {
-      return $_POST['signed_request'];
+    $rawSignedRequest = $this->getRawSignedRequestFromPost();
+    if ($rawSignedRequest) {
+      return $rawSignedRequest;
     }
 
     return null;

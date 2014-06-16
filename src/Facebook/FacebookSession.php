@@ -23,6 +23,8 @@
  */
 namespace Facebook;
 
+use Facebook\Entities\SignedRequest;
+
 /**
  * Class FacebookSession
  * @package Facebook
@@ -48,9 +50,9 @@ class FacebookSession
   private $token;
 
   /**
-   * @var array
+   * @var SignedRequest
    */
-  private $signedRequestData;
+  private $signedRequest;
 
   /**
    * @var bool
@@ -64,12 +66,12 @@ class FacebookSession
    * It will throw a SessionException in case of error.
    *
    * @param string $accessToken
-   * @param array $parsedSignedRequest The signed request data if available
+   * @param SignedRequest $signedRequest The SignedRequest entity
    */
-  public function __construct($accessToken, $parsedSignedRequest = null)
+  public function __construct($accessToken, SignedRequest $signedRequest = null)
   {
     $this->token = $accessToken;
-    $this->signedRequestData = $parsedSignedRequest;
+    $this->signedRequest = $signedRequest;
   }
 
   /**
@@ -83,38 +85,45 @@ class FacebookSession
   }
 
   /**
-   * Returns the signed request data from the sessions creation
+   * Returns the SignedRequest entity.
+   *
+   * @return SignedRequest
+   */
+  public function getSignedRequest()
+  {
+    return $this->signedRequest;
+  }
+
+  /**
+   * Returns the signed request payload.
    *
    * @return null|array
    */
   public function getSignedRequestData()
   {
-    return $this->signedRequestData;
+    return $this->signedRequest ? $this->signedRequest->getPayload() : null;
   }
 
   /**
-   * Returns a property from the signed request data if available
+   * Returns a property from the signed request data if available.
    *
-   * @param string $keyname
+   * @param string $key
    *
    * @return null|mixed
    */
-  public function getSignedRequestProperty($keyname)
+  public function getSignedRequestProperty($key)
   {
-    if (isset($this->signedRequestData[$keyname])) {
-      return $this->signedRequestData[$keyname];
-    }
-    return null;
+    return $this->signedRequest ? $this->signedRequest->get($key) : null;
   }
 
   /**
-   * Returns user_id from signed request data if available
+   * Returns user_id from signed request data if available.
    *
    * @return null|string
    */
   public function getUserId()
   {
-    return $this->getSignedRequestProperty('user_id');
+    return $this->signedRequest ? $this->signedRequest->getUserId() : null;
   }
 
   /**
@@ -128,10 +137,8 @@ class FacebookSession
    */
   public function getSessionInfo($appId = null, $appSecret = null)
   {
-    $targetAppId = static::_getTargetAppId($appId);
-    $targetAppSecret = static::_getTargetAppSecret($appSecret);
     return (new FacebookRequest(
-      static::newAppSession($targetAppId, $targetAppSecret),
+      static::newAppSession($appId, $appSecret),
       'GET',
       '/debug_token',
       array(
@@ -255,115 +262,51 @@ class FacebookSession
    * newSessionFromSignedRequest - Returns a FacebookSession for a
    *   given signed request.
    *
-   * @param string $signedRequest
-   * @param string $state
+   * @param SignedRequest $signedRequest
    *
    * @return FacebookSession
    */
-  public static function newSessionFromSignedRequest($signedRequest,
-                                                     $state = null)
+  public static function newSessionFromSignedRequest(SignedRequest $signedRequest)
   {
-    $parsedRequest = self::parseSignedRequest($signedRequest, $state);
-    if (isset($parsedRequest['code'])
-      && !isset($parsedRequest['oauth_token'])) {
-      return self::newSessionAfterValidation($parsedRequest);
+    if ($signedRequest->get('code')
+      && !$signedRequest->get('oauth_token')) {
+      return self::newSessionAfterValidation($signedRequest);
     }
-    return new FacebookSession($parsedRequest['oauth_token'], $parsedRequest);
+    return new static($signedRequest->get('oauth_token'), $signedRequest);
   }
 
   /**
    * newSessionAfterValidation - Returns a FacebookSession for a
    *   validated & parsed signed request.
    *
-   * @param array $parsedSignedRequest
+   * @param SignedRequest $signedRequest
    *
    * @return FacebookSession
    *
    * @throws FacebookRequestException
    */
-  private static function newSessionAfterValidation($parsedSignedRequest)
+  protected static function newSessionAfterValidation(SignedRequest $signedRequest)
   {
     $params = array(
       'client_id' => self::$defaultAppId,
       'redirect_uri' => '',
-      'client_secret' =>
-        self::$defaultAppSecret,
-      'code' => $parsedSignedRequest['code']
+      'client_secret' => self::$defaultAppSecret,
+      'code' => $signedRequest->get('code'),
     );
     $response = (new FacebookRequest(
-      self::newAppSession(
-        self::$defaultAppId, self::$defaultAppSecret),
+      self::newAppSession(),
       'GET',
       '/oauth/access_token',
       $params
     ))->execute()->getResponse();
     if (isset($response['access_token'])) {
-      return new FacebookSession(
-        $response['access_token'], $parsedSignedRequest
-      );
+      return new static($response['access_token'], $signedRequest);
     }
     throw FacebookRequestException::create(
-      json_encode($parsedSignedRequest),
-      $parsedSignedRequest,
+      json_encode($signedRequest->getRawSignedRequest()),
+      $signedRequest->getPayload(),
       401
     );
-  }
-
-  /**
-   * Parses a signed request.
-   *
-   * @param string $signedRequest
-   * @param string $state
-   *
-   * @return array
-   *
-   * @throws FacebookSDKException
-   */
-  private static function parseSignedRequest($signedRequest, $state)
-  {
-    if (strpos($signedRequest, '.') !== false) {
-      list($encodedSig, $encodedData) = explode('.', $signedRequest, 2);
-      $sig = self::_base64UrlDecode($encodedSig);
-      $data = json_decode(self::_base64UrlDecode($encodedData), true);
-      if (isset($data['algorithm']) && $data['algorithm'] === 'HMAC-SHA256') {
-        $expectedSig = hash_hmac(
-          'sha256', $encodedData, self::$defaultAppSecret, true
-        );
-        if (strlen($sig) !== strlen($expectedSig)) {
-          throw new FacebookSDKException(
-            'Invalid signature on signed request.', 602
-          );
-        }
-        $validate = 0;
-        for ($i = 0; $i < strlen($sig); $i++) {
-          $validate |= ord($expectedSig[$i]) ^ ord($sig[$i]);
-        }
-        if ($validate !== 0) {
-          throw new FacebookSDKException(
-            'Invalid signature on signed request.', 602
-          );
-        }
-        if (!isset($data['oauth_token']) && !isset($data['code'])) {
-          throw new FacebookSDKException(
-            'Invalid signed request, missing OAuth data.', 603
-          );
-        }
-        if ($state && (!isset($data['state']) || $data['state'] != $state)) {
-          throw new FacebookSDKException(
-            'Signed request did not pass CSRF validation.', 604
-          );
-        }
-        return $data;
-      } else {
-        throw new FacebookSDKException(
-          'Invalid signed request, using wrong algorithm.', 605
-        );
-      }
-    } else {
-      throw new FacebookSDKException(
-        'Malformed signed request.', 606
-      );
-    }
   }
 
   /**
@@ -436,20 +379,6 @@ class FacebookSession
       );
     }
     return $target;
-  }
-
-  /**
-   * Base64 decoding which replaces characters:
-   *   + instead of -
-   *   / instead of _
-   * @link http://en.wikipedia.org/wiki/Base64#URL_applications
-   *
-   * @param string $input base64 url encoded input
-   *
-   * @return string The decoded string
-   */
-  public static function _base64UrlDecode($input) {
-    return base64_decode(strtr($input, '-_', '+/'));
   }
 
   /**

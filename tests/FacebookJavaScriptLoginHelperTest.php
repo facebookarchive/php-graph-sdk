@@ -1,22 +1,23 @@
 <?php
 
 use Facebook\FacebookJavaScriptLoginHelper;
-use Facebook\FacebookSession;
 
 class FacebookJavaScriptLoginHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testGetSessionFromCookie() {
-    $helper = new FacebookJavaScriptLoginHelper(
-      FacebookTestCredentials::$appId
-    );
-    $signedRequest = FacebookSessionTest::makeSignedRequest(array(
-      'oauth_token' => 'token'
-    ));
-    $_COOKIE['fbsr_' . FacebookTestCredentials::$appId] = $signedRequest;
-    $session = $helper->getSession();
-    $this->assertTrue($session instanceof FacebookSession);
-    $this->assertTrue($session->getToken() == 'token');
+  public $appId = '123';
+  public $appSecret = 'foo_app_secret';
+  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+
+  public function testARawSignedRequestCanBeRetrievedFromCookieData()
+  {
+    $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
+
+    $helper = new FacebookJavaScriptLoginHelper($this->appId, $this->appSecret);
+
+    $rawSignedRequest = $helper->getRawSignedRequest();
+
+    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
   }
 
 }
