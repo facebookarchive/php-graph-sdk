@@ -8,11 +8,6 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
 
   const REDIRECT_URL = 'http://invalid.zzz';
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testLoginURL()
   {
     $helper = new FacebookRedirectLoginHelper(

@@ -12,11 +12,6 @@ use Facebook\FacebookSession;
 class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testAuthorizationExceptions()
   {
     $params = array(

@@ -2,15 +2,9 @@
 
 use Facebook\FacebookRequest;
 use Facebook\GraphUser;
-use Facebook\FacebookSession;
 
 class GraphUserTest extends PHPUnit_Framework_TestCase
 {
-
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
 
   public function testMeReturnsGraphUser()
   {

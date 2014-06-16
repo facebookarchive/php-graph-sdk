@@ -3,15 +3,9 @@
 use Facebook\FacebookRequest;
 use Facebook\GraphLocation;
 use Facebook\GraphObject;
-use Facebook\FacebookSession;
 
 class GraphLocationTest extends PHPUnit_Framework_TestCase
 {
-
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
 
   public function testLocation()
   {

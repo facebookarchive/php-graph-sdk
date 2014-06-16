@@ -6,16 +6,6 @@ use Facebook\FacebookSession;
 class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
-  public static function tearDownAfterClass()
-  {
-
-  }
-
   public function testGetSessionFromPageTabGET() {
     $signedRequest = FacebookSessionTest::makeSignedRequest(array(
       'oauth_token' => 'token',

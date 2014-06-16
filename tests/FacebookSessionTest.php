@@ -6,11 +6,6 @@ use Facebook\GraphSessionInfo;
 class FacebookSessionTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testSessionToken()
   {
     $session = new FacebookSession(FacebookTestHelper::getAppToken());

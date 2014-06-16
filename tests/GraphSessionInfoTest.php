@@ -7,11 +7,6 @@ use Facebook\FacebookSession;
 class GraphSessionInfoTest extends PHPUnit_Framework_TestCase
 {
 
-  public static function setUpBeforeClass()
-  {
-    FacebookTestHelper::setUpBeforeClass();
-  }
-
   public function testSessionInfo()
   {
     $params = array(
