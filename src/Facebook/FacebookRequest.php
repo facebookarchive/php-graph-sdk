@@ -179,7 +179,7 @@ class FacebookRequest
    * @param string|null $etag
    */
   public function __construct(
-    $session, $method, $path, $parameters = null, $version = null, $etag = null
+    FacebookSession $session, $method, $path, $parameters = null, $version = null, $etag = null
   )
   {
     $this->session = $session;
