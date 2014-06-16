@@ -112,7 +112,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getLogoutUrl($session, $next)
+  public function getLogoutUrl(FacebookSession $session, $next)
   {
     $params = array(
       'next' => $next,
