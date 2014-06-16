@@ -90,7 +90,7 @@ class GraphObjectTest extends PHPUnit_Framework_TestCase
       )
     );
     $enc = json_encode($backingData);
-    $response = new FacebookResponse(null, json_decode($enc), $enc);
+    $response = new FacebookResponse(null, json_decode($enc, true), $enc);
     $list = $response->getGraphObjectList(GraphUser::className());
     $this->assertEquals(2, count($list));
     $this->assertTrue($list[0] instanceof GraphObject);
