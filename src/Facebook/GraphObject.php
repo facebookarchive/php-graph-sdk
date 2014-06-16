@@ -44,6 +44,7 @@ class GraphObject
    */
   public function __construct($raw)
   {
+    //This one isn't working when pulling EVENT_ID/picture object from the API
     if ($raw instanceof \stdClass) {
       $raw = get_object_vars($raw);
     }
@@ -52,6 +53,12 @@ class GraphObject
     if (isset($this->backingData['data']) && count($this->backingData) === 1) {
       $this->backingData = $this->backingData['data'];
     }
+    
+    //This is the fix that worked for me
+    if(gettype($this->backingData) == "object") {
+        $this->backingData =  get_object_vars($this->backingData);
+    }
+    
   }
 
   /**
