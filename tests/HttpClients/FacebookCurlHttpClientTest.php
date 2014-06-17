@@ -298,6 +298,34 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     $this->assertEquals($headers, $this->fakeHeadersAsArray);
   }
 
+  public function testProperlyHandlesProxyHeadersWithCurlBug2()
+  {
+        $rawHeader = $this->fakeRawProxyHeader2 . $this->fakeRawHeader;
+        $this->curlMock
+            ->shouldReceive('getinfo')
+            ->with(CURLINFO_HEADER_SIZE)
+            ->once()
+            ->andReturn(mb_strlen($this->fakeRawHeader)); // Mimic bug that doesn't count proxy header
+        $this->curlMock
+            ->shouldReceive('version')
+            ->once()
+            ->andReturn(array('version_number' => self::CURL_VERSION_BUGGY));
+        $this->curlMock
+            ->shouldReceive('exec')
+            ->once()
+            ->andReturn($rawHeader . $this->fakeRawBody);
+
+        $this->curlClient->sendRequest();
+        list($rawHeaders, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
+
+        $this->assertEquals($rawHeaders, trim($rawHeader));
+        $this->assertEquals($rawBody, $this->fakeRawBody);
+
+        $headers = FacebookCurlHttpClient::headersToArray($rawHeaders);
+
+        $this->assertEquals($headers, $this->fakeHeadersAsArray);
+  }
+
   public function testProperlyHandlesRedirectHeaders()
   {
     $rawHeader = $this->fakeRawRedirectHeader . $this->fakeRawHeader;
