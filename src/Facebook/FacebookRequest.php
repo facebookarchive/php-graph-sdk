@@ -298,7 +298,7 @@ class FacebookRequest
     }
 
     if (strpos($url, '?') === false) {
-      return $url . '?' . http_build_query($params);
+      return $url . '?' . http_build_query($params, null, '&');
     }
 
     list($path, $query_string) = explode('?', $url, 2);
@@ -307,7 +307,7 @@ class FacebookRequest
     // Favor params from the original URL over $params
     $params = array_merge($params, $query_array);
 
-    return $path . '?' . http_build_query($params);
+    return $path . '?' . http_build_query($params, null, '&');
   }
 
 }
