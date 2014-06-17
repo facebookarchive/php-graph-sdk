@@ -100,7 +100,7 @@ class FacebookRedirectLoginHelper
       'scope' => implode(',', $scope)
     );
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-      http_build_query($params);
+      http_build_query($params, null, '&');
   }
 
   /**
@@ -118,7 +118,7 @@ class FacebookRedirectLoginHelper
       'next' => $next,
       'access_token' => $session->getToken()
     );
-    return 'https://www.facebook.com/logout.php?' . http_build_query($params);
+    return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, '&');
   }
 
   /**

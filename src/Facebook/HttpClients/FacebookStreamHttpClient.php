@@ -112,7 +112,7 @@ class FacebookStreamHttpClient implements FacebookHttpable {
     );
 
     if ($parameters) {
-      $options['http']['content'] = http_build_query($parameters);
+      $options['http']['content'] = http_build_query($parameters, null, '&');
 
       $this->addRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     }
