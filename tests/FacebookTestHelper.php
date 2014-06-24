@@ -8,7 +8,9 @@ class FacebookTestHelper
 {
 
   public static $testSession;
-  protected static $testUserId;
+  public static $testUserId;
+  public static $testUserAccessToken;
+  public static $testUserPermissions = array('read_stream', 'user_photos');
 
   public static function initialize()
   {
@@ -28,8 +30,8 @@ class FacebookTestHelper
 
   public static function createTestSession()
   {
-    $accessToken = static::createTestUserAndGetAccessToken();
-    return new FacebookSession($accessToken);
+    static::createTestUserAndGetAccessToken();
+    return new FacebookSession(static::$testUserAccessToken);
   }
 
   public static function createTestUserAndGetAccessToken()
@@ -39,15 +41,14 @@ class FacebookTestHelper
       'installed' => true,
       'name' => 'Foo Phpunit User',
       'locale' => 'en_US',
-      'permissions' => 'read_stream,user_photos',
+      'permissions' => implode(',', static::$testUserPermissions),
     );
 
     $request = new FacebookRequest(static::getAppSession(), 'POST', $testUserPath, $params);
     $response = $request->execute()->getGraphObject();
 
     static::$testUserId = $response->getProperty('id');
-
-    return $response->getProperty('access_token');
+    static::$testUserAccessToken = $response->getProperty('access_token');
   }
 
   public static function getAppSession()

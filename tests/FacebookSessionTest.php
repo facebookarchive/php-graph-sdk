@@ -56,6 +56,11 @@ class FacebookSessionTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_token');
     $signedRequest
+      ->shouldReceive('get')
+      ->with('expires', 0)
+      ->once()
+      ->andReturn(time() + (60 * 60 * 24));
+    $signedRequest
       ->shouldReceive('getUserId')
       ->once()
       ->andReturn('123');
