@@ -90,7 +90,7 @@ class FacebookRedirectLoginHelper
   public function getLoginUrl($scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $this->state = md5(uniqid(mt_rand(), true));
+    $this->state = $this->random(16);
     $this->storeState($this->state);
     $params = array(
       'client_id' => $this->appId,
@@ -214,6 +214,51 @@ class FacebookRedirectLoginHelper
       return $this->state;
     }
     return null;
+  }
+  
+  /**
+   * Generate a cryptographically secure pseudrandom number
+   * 
+   * @param integer $bytes
+   * 
+   * @return string
+   * @
+   */
+  protected function random($bytes = 16)
+  {
+    if($bytes < 1) {
+      throw new FacebookSDKException(
+        "random() expects an integer greater than zero"
+      );
+    }
+    $buf = '';
+    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
+    // Use /dev/urandom over all other methods
+    if (is_readable('/dev/urandom')) {
+      $fp = fopen('/dev/urandom', 'rb');
+      $buf = fread($fp, $bytes);
+      fclose($fp);
+      if($buf !== FALSE) {
+        return $buf;
+      }
+    }
+    
+    if (function_exists('mcrypt_create_iv')) {
+      $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+      if($buf !== FALSE) {
+        return $buf;
+      }
+    }
+    
+    if (function_exists('openssl_random_pseudo_bytes')) {
+      $strong = false;
+      $buf = openssl_random_pseudo_bytes($bytes, $strong);
+      if ($strong) {
+        return $buf;
+      }
+    }
+    
+    throw new FacebookApiException("No suitable random number generator was found");
   }
 
   /**
