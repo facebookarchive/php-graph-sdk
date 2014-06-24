@@ -90,7 +90,7 @@ class FacebookRedirectLoginHelper
   public function getLoginUrl($scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $this->state = md5(uniqid(mt_rand(), true));
+    $this->state = $this->random(16);
     $this->storeState($this->state);
     $params = array(
       'client_id' => $this->appId,
@@ -214,6 +214,64 @@ class FacebookRedirectLoginHelper
       return $this->state;
     }
     return null;
+  }
+  
+  /**
+   * Generate a cryptographically secure pseudrandom number
+   * 
+   * @param integer $bytes - number of bytes to return
+   * @param boolean $raw - don't hex-encode the output
+   * 
+   * @return string
+   */
+  protected function random($bytes = 16, $raw = false)
+  {
+    if($bytes < 1) {
+      throw new FacebookSDKException(
+        "random() expects an integer greater than zero"
+      );
+    }
+    
+    if (function_exists('mcrypt_create_iv')) {
+      // Mcrypt < 5.3.0 on Windows is unreliable
+      if( version_compare(PHP_VERSION, '5.3.0') >= 0 || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        if($buf !== FALSE) {
+          if($raw) {
+            return $buf;
+          }
+          return bin2hex($raw);
+        }
+      }
+    }
+    
+    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
+    if (is_readable('/dev/urandom')) {
+      $fp = fopen('/dev/urandom', 'rb');
+      if($fp !== FALSE) {
+        $buf = fread($fp, $bytes);
+        fclose($fp);
+        if($buf !== FALSE) {
+          if($raw) {
+            return $buf;
+          }
+          return bin2hex($raw);
+        }
+      }
+    }
+    
+    /*** @todo support Windows CryptoAPI as an option here ***/
+    
+    $buf = '';
+    while(strlen($buf) < $bytes) {
+      $buf .= md5(uniqid(mt_rand(), true), true); 
+      // Append raw binary
+    }
+    $buf = substr($buf, 0, $bytes);
+    if($raw) {
+      return $buf;
+    }
+    return bin2hex($buf);
   }
 
   /**
