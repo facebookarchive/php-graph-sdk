@@ -258,7 +258,7 @@ class FacebookRedirectLoginHelper
       }
     }
     
-    throw new FacebookApiException("No suitable random number generator was found");
+    throw new FacebookSDKException("No suitable random number generator was found");
   }
 
   /**
