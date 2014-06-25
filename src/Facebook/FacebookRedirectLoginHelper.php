@@ -219,46 +219,59 @@ class FacebookRedirectLoginHelper
   /**
    * Generate a cryptographically secure pseudrandom number
    * 
-   * @param integer $bytes
+   * @param integer $bytes - number of bytes to return
+   * @param boolean $raw - don't hex-encode the output
    * 
    * @return string
-   * @
    */
-  protected function random($bytes = 16)
+  protected function random($bytes = 16, $raw = false)
   {
     if($bytes < 1) {
       throw new FacebookSDKException(
         "random() expects an integer greater than zero"
       );
     }
-    $buf = '';
-    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
-    // Use /dev/urandom over all other methods
-    if (is_readable('/dev/urandom')) {
-      $fp = fopen('/dev/urandom', 'rb');
-      $buf = fread($fp, $bytes);
-      fclose($fp);
-      if($buf !== FALSE) {
-        return $buf;
-      }
-    }
     
     if (function_exists('mcrypt_create_iv')) {
-      $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
-      if($buf !== FALSE) {
-        return $buf;
+      // Mcrypt < 5.3.0 on Windows is unreliable
+      if( version_compare(PHP_VERSION, '5.3.0') >= 0 || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        if($buf !== FALSE) {
+          if($raw) {
+            return $buf;
+          }
+          return bin2hex($raw);
+        }
       }
     }
     
-    if (function_exists('openssl_random_pseudo_bytes')) {
-      $strong = false;
-      $buf = openssl_random_pseudo_bytes($bytes, $strong);
-      if ($strong) {
-        return $buf;
+    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
+    if (is_readable('/dev/urandom')) {
+      $fp = fopen('/dev/urandom', 'rb');
+      if($fp !== FALSE) {
+        $buf = fread($fp, $bytes);
+        fclose($fp);
+        if($buf !== FALSE) {
+          if($raw) {
+            return $buf;
+          }
+          return bin2hex($raw);
+        }
       }
     }
     
-    throw new FacebookSDKException("No suitable random number generator was found");
+    /*** @todo support Windows CryptoAPI as an option here ***/
+    
+    $buf = '';
+    while(strlen($buf) < $bytes) {
+      $buf .= md5(uniqid(mt_rand(), true), true); 
+      // Append raw binary
+    }
+    $buf = substr($buf, 0, $bytes);
+    if($raw) {
+      return $buf;
+    }
+    return bin2hex($buf);
   }
 
   /**
