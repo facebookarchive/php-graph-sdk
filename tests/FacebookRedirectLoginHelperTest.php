@@ -57,5 +57,15 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       );
     }
   }
+  
+  public function testCSPRNG()
+  {
+    $helper = new FacebookRedirectLoginHelper(
+      self::REDIRECT_URL,
+      FacebookTestCredentials::$appId,
+      FacebookTestCredentials::$appSecret
+    );
+	$this->assertTrue(preg_match('/^([0-9a-f]+)$/', $helper->random(32)));
+  }
 
 }
