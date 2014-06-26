@@ -90,7 +90,7 @@ class FacebookRedirectLoginHelper
   public function getLoginUrl($scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $this->state = md5(uniqid(mt_rand(), true));
+    $this->state = $this->random(16);
     $this->storeState($this->state);
     $params = array(
       'client_id' => $this->appId,
@@ -214,6 +214,56 @@ class FacebookRedirectLoginHelper
       return $this->state;
     }
     return null;
+  }
+  
+  /**
+   * Generate a cryptographically secure pseudrandom number
+   * 
+   * @param integer $bytes - number of bytes to return
+   * 
+   * @return string
+   * 
+   * @throws FacebookSDKException
+   * 
+   * @todo Support Windows platforms
+   */
+  public function random($bytes)
+  {
+    if (!is_numeric($bytes)) {
+      throw new FacebookSDKException(
+        "random() expects an integer"
+      );
+    }
+    if ($bytes < 1) {
+      throw new FacebookSDKException(
+        "random() expects an integer greater than zero"
+      );
+    }
+    $buf = '';
+    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
+    if (is_readable('/dev/urandom')) {
+      $fp = fopen('/dev/urandom', 'rb');
+      if ($fp !== FALSE) {
+        $buf = fread($fp, $bytes);
+        fclose($fp);
+        if($buf !== FALSE) {
+          return bin2hex($buf);
+        }
+      }
+    }
+	
+    if (function_exists('mcrypt_create_iv')) {
+        $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        if ($buf !== FALSE) {
+          return bin2hex($buf);
+        }
+    }
+    
+    while (strlen($buf) < $bytes) {
+      $buf .= md5(uniqid(mt_rand(), true), true); 
+      // We are appending raw binary
+    }
+    return bin2hex(substr($buf, 0, $bytes));
   }
 
   /**
