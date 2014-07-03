@@ -23,9 +23,10 @@
  */
 namespace Facebook;
 
-use Facebook\HttpClients\FacebookHttpable;
+use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\Exceptions\FacebookRequestException;
 
 /**
  * Class FacebookRequest
@@ -82,7 +83,7 @@ class FacebookRequest
   private $etag;
 
   /**
-   * @var FacebookHttpable HTTP client handler
+   * @var FacebookHttpClientInterface HTTP client handler
    */
   private static $httpClientHandler;
 
@@ -145,9 +146,9 @@ class FacebookRequest
    * setHttpClientHandler - Returns an instance of the HTTP client
    * handler
    *
-   * @param \Facebook\HttpClients\FacebookHttpable
+   * @param FacebookHttpClientInterface
    */
-  public static function setHttpClientHandler(FacebookHttpable $handler)
+  public static function setHttpClientHandler(FacebookHttpClientInterface $handler)
   {
     static::$httpClientHandler = $handler;
   }
@@ -156,7 +157,7 @@ class FacebookRequest
    * getHttpClientHandler - Returns an instance of the HTTP client
    * data handler
    *
-   * @return FacebookHttpable
+   * @return FacebookHttpClientInterface
    */
   public static function getHttpClientHandler()
   {

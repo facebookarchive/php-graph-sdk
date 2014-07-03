@@ -1,7 +1,7 @@
 <?php
 
 use Facebook\FacebookRequest;
-use Facebook\GraphUser;
+use Facebook\GraphNodes\GraphUser;
 
 class GraphUserTest extends PHPUnit_Framework_TestCase
 {

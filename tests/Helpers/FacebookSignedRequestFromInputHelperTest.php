@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\FacebookSignedRequestFromInputHelper;
+use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
   public function getRawSignedRequest() {

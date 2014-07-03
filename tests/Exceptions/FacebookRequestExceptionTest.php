@@ -1,12 +1,12 @@
 <?php
 
-use Facebook\FacebookRequestException;
-use Facebook\FacebookAuthorizationException;
-use Facebook\FacebookOtherException;
-use Facebook\FacebookServerException;
-use Facebook\FacebookPermissionException;
-use Facebook\FacebookClientException;
-use Facebook\FacebookThrottleException;
+use Facebook\Exceptions\FacebookRequestException;
+use Facebook\Exceptions\FacebookAuthorizationException;
+use Facebook\Exceptions\FacebookOtherException;
+use Facebook\Exceptions\FacebookServerException;
+use Facebook\Exceptions\FacebookPermissionException;
+use Facebook\Exceptions\FacebookClientException;
+use Facebook\Exceptions\FacebookThrottleException;
 use Facebook\FacebookSession;
 
 class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
@@ -249,7 +249,7 @@ class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
   {
     $bogusSession = new FacebookSession('invalid-token');
     $this->setExpectedException(
-      'Facebook\\FacebookSDKException', 'Session has expired'
+      'Facebook\\Exceptions\\FacebookSDKException', 'Session has expired'
     );
     $bogusSession->validate();
   }
@@ -258,7 +258,7 @@ class FacebookRequestExceptionTest extends PHPUnit_Framework_TestCase
   {
     $bogusSession = new FacebookSession('invalid-token');
     $this->setExpectedException(
-      'Facebook\\FacebookAuthorizationException', 'Invalid OAuth access token'
+      'Facebook\\Exceptions\\FacebookAuthorizationException', 'Invalid OAuth access token'
     );
     $bogusSession->validate('invalid-app-id', 'invalid-app-secret');
   }

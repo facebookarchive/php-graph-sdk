@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook;
+namespace Facebook\GraphNodes;
 
 /**
  * Class GraphObject
@@ -97,7 +97,7 @@ class GraphObject
    *
    * @return mixed
    */
-  public function getProperty($name, $type = 'Facebook\GraphObject')
+  public function getProperty($name, $type = 'Facebook\GraphNodes\GraphObject')
   {
     if (isset($this->backingData[$name])) {
       $value = $this->backingData[$name];
@@ -124,7 +124,7 @@ class GraphObject
    *
    * @return array
    */
-  public function getPropertyAsArray($name, $type = 'Facebook\GraphObject')
+  public function getPropertyAsArray($name, $type = 'Facebook\GraphNodes\GraphObject')
   {
     $target = array();
     if (isset($this->backingData[$name]['data'])) {

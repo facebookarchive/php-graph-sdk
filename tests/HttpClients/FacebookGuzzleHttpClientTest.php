@@ -66,7 +66,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testThrowsExceptionOnClientError()
   {

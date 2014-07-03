@@ -2,7 +2,7 @@
 
 use Mockery as m;
 use Facebook\FacebookSession;
-use Facebook\GraphSessionInfo;
+use Facebook\GraphNodes\GraphSessionInfo;
 
 class FacebookSessionTest extends PHPUnit_Framework_TestCase
 {

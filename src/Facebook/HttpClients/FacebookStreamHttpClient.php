@@ -23,9 +23,9 @@
  */
 namespace Facebook\HttpClients;
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 
-class FacebookStreamHttpClient implements FacebookHttpable {
+class FacebookStreamHttpClient implements FacebookHttpClientInterface {
 
   /**
    * @var array The headers to be sent with the request
@@ -95,7 +95,7 @@ class FacebookStreamHttpClient implements FacebookHttpable {
    *
    * @return string Raw response from the server
    *
-   * @throws \Facebook\FacebookSDKException
+   * @throws FacebookSDKException
    */
   public function send($url, $method = 'GET', $parameters = array())
   {

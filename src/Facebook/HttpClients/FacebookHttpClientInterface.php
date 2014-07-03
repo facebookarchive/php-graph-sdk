@@ -24,10 +24,10 @@
 namespace Facebook\HttpClients;
 
 /**
- * Interface FacebookHttpable
+ * Interface FacebookHttpClientInterface
  * @package Facebook
  */
-interface FacebookHttpable
+interface FacebookHttpClientInterface
 {
 
   /**
@@ -61,7 +61,7 @@ interface FacebookHttpable
    *
    * @return string Raw response from the server
    *
-   * @throws \Facebook\FacebookSDKException
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
   public function send($url, $method = 'GET', $parameters = array());
 

@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\FacebookPageTabHelper;
+use Facebook\Helpers\FacebookPageTabHelper;
 
 class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
 {

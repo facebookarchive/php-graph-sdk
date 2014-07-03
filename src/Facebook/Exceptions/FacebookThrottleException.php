@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook;
+namespace Facebook\Exceptions;
 
 /**
  * Class FacebookThrottleException

@@ -23,13 +23,13 @@
  */
 namespace Facebook\HttpClients;
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\AdapterException;
 use GuzzleHttp\Exception\RequestException;
 
-class FacebookGuzzleHttpClient implements FacebookHttpable {
+class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
 
   /**
    * @var array The headers to be sent with the request
@@ -99,7 +99,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpable {
    *
    * @return string Raw response from the server
    *
-   * @throws \Facebook\FacebookSDKException
+   * @throws FacebookSDKException
    */
   public function send($url, $method = 'GET', $parameters = array())
   {

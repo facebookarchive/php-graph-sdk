@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\FacebookJavaScriptLoginHelper;
+use Facebook\Helpers\FacebookJavaScriptLoginHelper;
 
 class FacebookJavaScriptLoginHelperTest extends PHPUnit_Framework_TestCase
 {

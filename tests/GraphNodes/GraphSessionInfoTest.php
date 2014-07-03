@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\GraphSessionInfo;
+use Facebook\GraphNodes\GraphSessionInfo;
 use Facebook\FacebookRequest;
 use Facebook\FacebookSession;
 

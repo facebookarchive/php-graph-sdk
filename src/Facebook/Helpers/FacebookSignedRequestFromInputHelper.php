@@ -21,8 +21,9 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook;
+namespace Facebook\Helpers;
 
+use Facebook\FacebookSession;
 use Facebook\Entities\SignedRequest;
 
 /**

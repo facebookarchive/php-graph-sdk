@@ -1,9 +1,9 @@
 <?php
 
 use Facebook\FacebookRequest;
-use Facebook\GraphObject;
+use Facebook\GraphNodes\GraphObject;
 use Facebook\FacebookResponse;
-use Facebook\GraphUser;
+use Facebook\GraphNodes\GraphUser;
 
 class GraphObjectTest extends PHPUnit_Framework_TestCase
 {

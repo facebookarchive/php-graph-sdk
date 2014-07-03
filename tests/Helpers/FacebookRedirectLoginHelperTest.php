@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\FacebookRedirectLoginHelper;
+use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\FacebookRequest;
 
 class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase

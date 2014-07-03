@@ -1,8 +1,8 @@
 <?php
 
 use Facebook\FacebookRequest;
-use Facebook\GraphLocation;
-use Facebook\GraphObject;
+use Facebook\GraphNodes\GraphLocation;
+use Facebook\GraphNodes\GraphObject;
 
 class GraphLocationTest extends PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-use Facebook\FacebookCanvasLoginHelper;
+use Facebook\Helpers\FacebookCanvasLoginHelper;
 
 class FacebookCanvasLoginHelperTest extends PHPUnit_Framework_TestCase
 {

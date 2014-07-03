@@ -23,7 +23,7 @@
  */
 namespace Facebook\Entities;
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookSession;
 
 /**

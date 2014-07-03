@@ -25,6 +25,8 @@ namespace Facebook;
 
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\SignedRequest;
+use Facebook\GraphNodes\GraphSessionInfo;
+use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class FacebookSession
