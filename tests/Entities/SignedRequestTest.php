@@ -26,7 +26,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testInvalidSignedRequestsWillFailFormattingValidation()
   {
@@ -63,7 +63,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testAnImproperlyEncodedSignatureWillThrowAnException()
   {
@@ -78,7 +78,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testAnImproperlyEncodedPayloadWillThrowAnException()
   {
@@ -91,7 +91,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testNonApprovedAlgorithmsWillThrowAnException()
   {
@@ -115,7 +115,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testNonSameBinaryStringsWillThrowAnExceptionForSignatureValidation()
   {
@@ -130,7 +130,7 @@ class SignedRequestTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\FacebookSDKException
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
   public function testASignedRequestWithIncorrectCsrfDataWillThrowAnException()
   {

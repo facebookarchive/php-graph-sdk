@@ -44,7 +44,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $dt = new \DateTime();
     $dt->setTimestamp($aWeek);
 
-    $graphSessionInfoMock = m::mock('Facebook\GraphSessionInfo');
+    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
       ->shouldReceive('getAppId')
       ->once()
@@ -74,7 +74,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $dt = new \DateTime();
     $dt->setTimestamp($aWeek);
 
-    $graphSessionInfoMock = m::mock('Facebook\GraphSessionInfo');
+    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
       ->shouldReceive('getAppId')
       ->once()
@@ -104,7 +104,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $dt = new \DateTime();
     $dt->setTimestamp($aWeek);
 
-    $graphSessionInfoMock = m::mock('Facebook\GraphSessionInfo');
+    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
       ->shouldReceive('getAppId')
       ->once()
@@ -134,7 +134,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $dt = new \DateTime();
     $dt->setTimestamp($aWeek);
 
-    $graphSessionInfoMock = m::mock('Facebook\GraphSessionInfo');
+    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
       ->shouldReceive('getAppId')
       ->once()
@@ -164,7 +164,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $dt = new \DateTime();
     $dt->setTimestamp($lastWeek);
 
-    $graphSessionInfoMock = m::mock('Facebook\GraphSessionInfo');
+    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
       ->shouldReceive('getAppId')
       ->once()

@@ -23,13 +23,13 @@
  */
 namespace Facebook\HttpClients;
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class FacebookCurlHttpClient
  * @package Facebook
  */
-class FacebookCurlHttpClient implements FacebookHttpable
+class FacebookCurlHttpClient implements FacebookHttpClientInterface
 {
 
   /**
@@ -125,7 +125,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
    *
    * @return string Raw response from the server
    *
-   * @throws \Facebook\FacebookSDKException
+   * @throws FacebookSDKException
    */
   public function send($url, $method = 'GET', $parameters = array())
   {

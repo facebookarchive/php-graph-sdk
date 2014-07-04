@@ -23,6 +23,8 @@
  */
 namespace Facebook;
 
+use Facebook\GraphNodes\GraphObject;
+
 /**
  * Class FacebookResponse
  * @package Facebook
@@ -133,7 +135,7 @@ class FacebookResponse
    *
    * @return mixed
    */
-  public function getGraphObject($type = 'Facebook\GraphObject') {
+  public function getGraphObject($type = 'Facebook\GraphNodes\GraphObject') {
     return (new GraphObject($this->responseData))->cast($type);
   }
 
@@ -145,7 +147,7 @@ class FacebookResponse
    *
    * @return mixed
    */
-  public function getGraphObjectList($type = 'Facebook\GraphObject') {
+  public function getGraphObjectList($type = 'Facebook\GraphNodes\GraphObject') {
     $out = array();
     $data = $this->responseData->data;
     for ($i = 0; $i < count($data); $i++) {

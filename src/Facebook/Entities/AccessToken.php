@@ -24,9 +24,9 @@
 namespace Facebook\Entities;
 
 use Facebook\FacebookRequest;
-use Facebook\FacebookRequestException;
+use Facebook\Exceptions\FacebookRequestException;
 use Facebook\FacebookSession;
-use Facebook\GraphSessionInfo;
+use Facebook\GraphNodes\GraphSessionInfo;
 
 /**
  * Class AccessToken
