@@ -47,19 +47,9 @@ class FacebookRedirectLoginHelper
   private $appSecret;
 
   /**
-   * @var string The redirect URL for the application
-   */
-  private $redirectUrl;
-
-  /**
    * @var string Prefix to use for session variables
    */
   private $sessionPrefix = 'FBRLH_';
-
-  /**
-   * @var string State token for CSRF validation
-   */
-  protected $state;
 
   /**
    * @var boolean Toggle for PHP session status check
@@ -67,18 +57,15 @@ class FacebookRedirectLoginHelper
   protected $checkForSessionStatus = true;
 
   /**
-   * Constructs a RedirectLoginHelper for a given appId and redirectUrl.
+   * Constructs a RedirectLoginHelper for a given appId.
    *
-   * @param string $redirectUrl The URL Facebook should redirect users to
-   *                            after login
    * @param string $appId The application id
    * @param string $appSecret The application secret
    */
-  public function __construct($redirectUrl, $appId = null, $appSecret = null)
+  public function __construct($appId = null, $appSecret = null)
   {
     $this->appId = FacebookSession::_getTargetAppId($appId);
     $this->appSecret = FacebookSession::_getTargetAppSecret($appSecret);
-    $this->redirectUrl = $redirectUrl;
   }
 
   /**
@@ -86,20 +73,22 @@ class FacebookRedirectLoginHelper
    *   in order to continue the login process with Facebook.  The
    *   provided redirectUrl should invoke the handleRedirect method.
    *
+   * @param string $redirectUrl The URL Facebook should redirect users to
+   *                            after login
    * @param array $scope List of permissions to request during login
    * @param string $version Optional Graph API version if not default (v2.0)
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null)
+  public function getLoginUrl($redirectUrl, $scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $this->state = $this->random(16);
-    $this->storeState($this->state);
+    $state = $this->random(16);
+    $this->storeState($state);
     $params = array(
       'client_id' => $this->appId,
-      'redirect_uri' => $this->redirectUrl,
-      'state' => $this->state,
+      'redirect_uri' => $redirectUrl,
+      'state' => $state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
     );
@@ -133,11 +122,10 @@ class FacebookRedirectLoginHelper
    */
   public function getSessionFromRedirect()
   {
-    $this->loadState();
     if ($this->isValidRedirect()) {
       $params = array(
         'client_id' => FacebookSession::_getTargetAppId($this->appId),
-        'redirect_uri' => $this->redirectUrl,
+        'redirect_uri' => $this->getCurrentUri(),
         'client_secret' =>
           FacebookSession::_getTargetAppSecret($this->appSecret),
         'code' => $this->getCode()
@@ -163,7 +151,7 @@ class FacebookRedirectLoginHelper
   protected function isValidRedirect()
   {
     return $this->getCode() && isset($_GET['state'])
-        && $_GET['state'] == $this->state;
+        && $_GET['state'] == $this->loadState();
   }
 
   /**
@@ -214,12 +202,52 @@ class FacebookRedirectLoginHelper
       );
     }
     if (isset($_SESSION[$this->sessionPrefix . 'state'])) {
-      $this->state = $_SESSION[$this->sessionPrefix . 'state'];
-      return $this->state;
+      return $_SESSION[$this->sessionPrefix . 'state'];
     }
     return null;
   }
-  
+
+  protected function getCurrentUri()
+  {
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) &&
+        ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)
+        || isset($_SERVER['SERVER_PORT']) &&
+        ($_SERVER['SERVER_PORT'] === '443')) {
+      $protocol = 'https';
+    }
+    $currentUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $parts = parse_url($currentUri);
+
+    $full_query = array();
+    parse_str($parts['query'], $full_query);
+
+    // remove Facebook appended query params
+    $real_query = array_diff_key($full_query, array_flip(array('code', 'state')));
+    $query = '';
+    if (!empty($real_query)) {
+      $query = '?'.http_build_query($real_query, null, '&');
+    }
+    
+    // use port if non default
+    $port =
+      isset($parts['port']) &&
+      (($protocol === 'http' && $parts['port'] !== 80) ||
+       ($protocol === 'https' && $parts['port'] !== 443))
+      ? ':' . $parts['port'] : '';
+
+    // rebuild
+    return $protocol . '://' . $parts['host'] . $port . $parts['path'] . $query;
+  }
+
+  /**
+   * Returns the HTTP Protocol
+   *
+   * @return string The HTTP Protocol
+   */
+  protected function getHttpProtocol() {
+  }
+
   /**
    * Generate a cryptographically secure pseudrandom number
    * 
