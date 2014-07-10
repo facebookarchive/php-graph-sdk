@@ -11,12 +11,11 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
   public function testLoginURL()
   {
     $helper = new FacebookRedirectLoginHelper(
-      self::REDIRECT_URL,
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
     $helper->disableSessionStatusCheck();
-    $loginUrl = $helper->getLoginUrl();
+    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
     $state = $_SESSION['FBRLH_state'];
     $params = array(
       'client_id' => FacebookTestCredentials::$appId,
@@ -37,7 +36,6 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
   public function testLogoutURL()
   {
     $helper = new FacebookRedirectLoginHelper(
-      self::REDIRECT_URL,
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
@@ -58,10 +56,28 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     }
   }
   
+  public function testGetCurrentUriRemoveFacebookQueryParams()
+  {
+    $helper = new FacebookRedirectLoginHelper(
+      FacebookTestCredentials::$appId,
+      FacebookTestCredentials::$appSecret
+    );
+    $helper->disableSessionStatusCheck();
+
+    $class = new ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
+    $method = $class->getMethod('getCurrentUri');
+    $method->setAccessible(true);
+
+    $_SERVER['HTTP_HOST'] = 'localhost';
+    $_SERVER['REQUEST_URI'] = '/something?state=0000&foo=bar&code=abcd';
+
+    $currentUri = $method->invoke($helper);
+    $this->assertEquals('http://localhost/something?foo=bar', $currentUri);
+  }
+  
   public function testCSPRNG()
   {
     $helper = new FacebookRedirectLoginHelper(
-      self::REDIRECT_URL,
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
