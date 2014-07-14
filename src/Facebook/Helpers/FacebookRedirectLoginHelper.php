@@ -80,7 +80,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getLoginUrl($redirectUrl, $scope = array(), $version = null)
+  public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false, $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $state = $this->random(16);
@@ -92,6 +92,10 @@ class FacebookRedirectLoginHelper
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
     );
+	
+    if ($rerequest)
+      $params['auth_type'] = 'rerequest';
+
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params, null, '&');
   }
