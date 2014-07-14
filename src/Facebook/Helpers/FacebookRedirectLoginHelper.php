@@ -296,7 +296,7 @@ class FacebookRedirectLoginHelper
    * 
    * @todo Support Windows platforms
    */
-  public function random($bytes)
+  private function random($bytes)
   {
     if (!is_numeric($bytes)) {
       throw new FacebookSDKException(
