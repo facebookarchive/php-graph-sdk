@@ -39,17 +39,17 @@ class FacebookRedirectLoginHelper
   /**
    * @var string The application id
    */
-  private $appId;
+  protected $appId;
 
   /**
    * @var string The application secret
    */
-  private $appSecret;
+  protected $appSecret;
 
   /**
    * @var string Prefix to use for session variables
    */
-  private $sessionPrefix = 'FBRLH_';
+  protected $sessionPrefix = 'FBRLH_';
 
   /**
    * @var boolean Toggle for PHP session status check
