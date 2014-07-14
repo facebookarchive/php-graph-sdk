@@ -129,7 +129,7 @@ class FacebookRedirectLoginHelper
     if ($this->isValidRedirect()) {
       $params = array(
         'client_id' => FacebookSession::_getTargetAppId($this->appId),
-        'redirect_uri' => $this->getCurrentUri(),
+        'redirect_uri' => $this->getFilteredUri($this->getCurrentUri()),
         'client_secret' =>
           FacebookSession::_getTargetAppSecret($this->appSecret),
         'code' => $this->getCode()
@@ -211,37 +211,42 @@ class FacebookRedirectLoginHelper
     return null;
   }
 
-  protected function getCurrentUri()
+  protected function getFilteredUri($uri)
   {
-    $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) &&
-        ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)
-        || isset($_SERVER['SERVER_PORT']) &&
-        ($_SERVER['SERVER_PORT'] === '443')) {
-      $protocol = 'https';
-    }
-    $currentUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $parts = parse_url($currentUri);
+    $parts = parse_url($uri);
+    $scheme = isset($parts['scheme']) ? $parts['scheme'] : $this->getHttpScheme();
 
-    $full_query = array();
-    parse_str($parts['query'], $full_query);
+    $path = isset($parts['path']) ? $parts['path'] : '';
 
-    // remove Facebook appended query params
-    $real_query = array_diff_key($full_query, array_flip(array('code', 'state')));
     $query = '';
-    if (!empty($real_query)) {
-      $query = '?'.http_build_query($real_query, null, '&');
+    if (isset($parts['query'])) {
+      $full_query = array();
+      parse_str($parts['query'], $full_query);
+
+      // remove Facebook appended query params
+      $real_query = array_diff_key($full_query, array_flip(array('state', 'code')));
+
+      $query = '';
+      if (!empty($real_query)) {
+        $query = '?' . http_build_query($real_query, null, '&');
+      }
     }
-    
+
     // use port if non default
-    $port =
-      isset($parts['port']) &&
-      (($protocol === 'http' && $parts['port'] !== 80) ||
-       ($protocol === 'https' && $parts['port'] !== 443))
-      ? ':' . $parts['port'] : '';
+    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
 
     // rebuild
-    return $protocol . '://' . $parts['host'] . $port . $parts['path'] . $query;
+    return $scheme . '://' . $parts['host'] . $port . $path . $query;
+  }
+
+  /**
+   * Returns the current URI
+   *
+   * @return string
+   */
+  protected function getCurrentUri()
+  {
+    return $this->getHttpScheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
   }
 
   /**
@@ -249,7 +254,15 @@ class FacebookRedirectLoginHelper
    *
    * @return string The HTTP Protocol
    */
-  protected function getHttpProtocol() {
+  protected function getHttpScheme() {
+    $scheme = 'http';
+    if (isset($_SERVER['HTTPS']) &&
+        ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)
+        || isset($_SERVER['SERVER_PORT']) &&
+        ($_SERVER['SERVER_PORT'] === '443')) {
+      $scheme = 'https';
+    }
+    return $scheme;
   }
 
   /**

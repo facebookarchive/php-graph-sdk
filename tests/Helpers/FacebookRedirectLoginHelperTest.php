@@ -56,7 +56,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     }
   }
   
-  public function testGetCurrentUriRemoveFacebookQueryParams()
+  public function testGetFilterdUriRemoveFacebookQueryParams()
   {
     $helper = new FacebookRedirectLoginHelper(
       FacebookTestCredentials::$appId,
@@ -65,13 +65,10 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     $helper->disableSessionStatusCheck();
 
     $class = new ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
-    $method = $class->getMethod('getCurrentUri');
+    $method = $class->getMethod('getFilteredUri');
     $method->setAccessible(true);
 
-    $_SERVER['HTTP_HOST'] = 'localhost';
-    $_SERVER['REQUEST_URI'] = '/something?state=0000&foo=bar&code=abcd';
-
-    $currentUri = $method->invoke($helper);
+    $currentUri = $method->invoke($helper, 'http://localhost/something?state=0000&foo=bar&code=abcd');
     $this->assertEquals('http://localhost/something?foo=bar', $currentUri);
   }
   
