@@ -83,7 +83,7 @@ class FacebookRedirectLoginHelper
   public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false, $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $state = $this->random(16);
+    $state = $this->generateState();
     $this->storeState($state);
     $params = array(
       'client_id' => $this->appId,
@@ -166,6 +166,16 @@ class FacebookRedirectLoginHelper
   protected function getCode()
   {
     return isset($_GET['code']) ? $_GET['code'] : null;
+  }
+
+  /**
+   * Generate a state string for CSRF protection.
+   *
+   * @return string
+   */
+  protected function generateState()
+  {
+    return $this->random(16);
   }
 
   /**
