@@ -56,7 +56,10 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     }
   }
   
-  public function testGetCurrentUriRemoveFacebookQueryParams()
+  /**
+   * @dataProvider provideUris
+   */
+  public function testGetFilterdUriRemoveFacebookQueryParams($uri, $expected)
   {
     $helper = new FacebookRedirectLoginHelper(
       FacebookTestCredentials::$appId,
@@ -65,14 +68,41 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     $helper->disableSessionStatusCheck();
 
     $class = new ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
-    $method = $class->getMethod('getCurrentUri');
+    $method = $class->getMethod('getFilteredUri');
     $method->setAccessible(true);
 
-    $_SERVER['HTTP_HOST'] = 'localhost';
-    $_SERVER['REQUEST_URI'] = '/something?state=0000&foo=bar&code=abcd';
+    $currentUri = $method->invoke($helper, $uri);
+    $this->assertEquals($expected, $currentUri);
+  }
 
-    $currentUri = $method->invoke($helper);
-    $this->assertEquals('http://localhost/something?foo=bar', $currentUri);
+  public function provideUris()
+  {
+    return array(
+      array(
+        'http://localhost/something?state=0000&foo=bar&code=abcd',
+        'http://localhost/something?foo=bar',
+      ),
+      array(
+        'https://localhost/something?state=0000&foo=bar&code=abcd',
+        'https://localhost/something?foo=bar',
+      ),
+      array(
+        'http://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
+        'http://localhost/something?foo=bar',
+      ),
+      array(
+        'https://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
+        'https://localhost/something?foo=bar',
+      ),
+      array(
+        'http://localhost/something?state=0000&foo=bar&error=abcd',
+        'http://localhost/something?state=0000&foo=bar&error=abcd',
+      ),
+      array(
+        'https://localhost/something?state=0000&foo=bar&error=abcd',
+        'https://localhost/something?state=0000&foo=bar&error=abcd',
+      ),
+    );
   }
   
   public function testCSPRNG()
@@ -81,7 +111,12 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
-	$this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $helper->random(32)));
+    
+    $class = new ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
+    $method = $class->getMethod('random');
+    $method->setAccessible(true);
+
+    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $method->invoke($helper, 32)));
   }
 
 }
