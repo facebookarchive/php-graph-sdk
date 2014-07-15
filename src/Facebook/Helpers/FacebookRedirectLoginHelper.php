@@ -25,6 +25,7 @@ namespace Facebook\Helpers;
 
 use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
+use Facebook\Entities\AccessToken;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -128,21 +129,10 @@ class FacebookRedirectLoginHelper
   {
     if ($this->isValidRedirect()) {
       $params = array(
-        'client_id' => FacebookSession::_getTargetAppId($this->appId),
         'redirect_uri' => $this->getFilteredUri($this->getCurrentUri()),
-        'client_secret' =>
-          FacebookSession::_getTargetAppSecret($this->appSecret),
         'code' => $this->getCode()
       );
-      $response = (new FacebookRequest(
-        FacebookSession::newAppSession($this->appId, $this->appSecret),
-        'GET',
-        '/oauth/access_token',
-        $params
-      ))->execute()->getResponse();
-      if (isset($response['access_token'])) {
-        return new FacebookSession($response['access_token']);
-      }
+      return new FacebookSession(AccessToken::requestAccessToken($params, $this->appId, $this->appSecret));
     }
     return null;
   }
