@@ -32,7 +32,7 @@ use Facebook\GraphNodes\GraphSessionInfo;
  * Class AccessToken
  * @package Facebook
  */
-class AccessToken
+class AccessToken implements \Serializable
 {
 
   /**
@@ -365,6 +365,23 @@ class AccessToken
   public function __toString()
   {
     return $this->accessToken;
+  }
+
+  public function serialize()
+  {
+    $expiresAt = null;
+    if ($this->expiresAt instanceof \DateTime) {
+      $expiresAt = $this->expiresAt->getTimestamp();
+    }
+
+    return serialize(array($this->accessToken, $expiresAt, $this->machineId));
+  }
+
+  public function unserialize($serialized)
+  {
+    list($accessToken, $expiresAt, $machineId) = unserialize($serialized);
+
+    $this->__construct($accessToken, $expiresAt, $machineId);
   }
 
 }
