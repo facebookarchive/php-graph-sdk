@@ -244,4 +244,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessTokenFromCode);
   }
 
+  public function testSerialization()
+  {
+    $accessToken = new AccessToken('foo', time(), 'bar');
+    $newAccessToken = unserialize(serialize($accessToken));
+
+    $this->assertEquals((string)$accessToken, (string)$newAccessToken);
+    $this->assertEquals($accessToken->getExpiresAt(), $newAccessToken->getExpiresAt());
+    $this->assertEquals($accessToken->getMachineId(), $newAccessToken->getMachineId());
+  }
 }
