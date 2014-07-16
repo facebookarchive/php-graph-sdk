@@ -253,4 +253,23 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($accessToken->getExpiresAt(), $newAccessToken->getExpiresAt());
     $this->assertEquals($accessToken->getMachineId(), $newAccessToken->getMachineId());
   }
+
+  /**
+   * @dataProvider provideAccessTokenExpiration
+   */
+  public function testIsExpired($expiresAt, $expected)
+  {
+    $accessToken = new AccessToken('foo', $expiresAt);
+
+    $this->assertEquals($expected, $accessToken->isExpired());
+  }
+
+  public function provideAccessTokenExpiration()
+  {
+    return array(
+      array(time()+60, false),
+      array(time()-60, true),
+      array(0, false),
+    );
+  }
 }

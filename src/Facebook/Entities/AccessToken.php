@@ -118,6 +118,21 @@ class AccessToken implements \Serializable
   }
 
   /**
+   * Checks the expiration of the access token.
+   *
+   * @return boolean|null
+   */
+  public function isExpired()
+  {
+    if ($this->getExpiresAt() instanceof \DateTime) {
+      return $this->getExpiresAt()->getTimestamp() < time();
+    }
+
+    // Not all access tokens return an expiration. E.g. an app access token.
+    return false;
+  }
+
+  /**
    * Checks the validity of the access token.
    *
    * @param string|null $appId Application ID to use
