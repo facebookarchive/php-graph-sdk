@@ -21,13 +21,48 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Exceptions;
+namespace Facebook\GraphNodes;
 
 /**
- * Class FacebookServerException
+ * Class GraphList
  * @package Facebook
  */
-class FacebookServerException extends FacebookResponseException
+class GraphList extends Collection
 {
+
+  /**
+   * Init this list of GraphObject's and other GraphList's.
+   *
+   * @param array $data
+   */
+  public function __construct(array $data)
+  {
+    if (!isset($data['data'])) {
+      return;
+    }
+
+    // @TODO: Look for meta data here
+
+    $items = GraphObject::castGraphTypes($data['data']);
+    parent::__construct($items);
+  }
+
+  /**
+   * Get the next page of results of this list of Graph objects.
+   *
+   * @TODO
+   */
+  public function next()
+  {
+  }
+
+  /**
+   * Get the previous page of results of this list of Graph objects.
+   *
+   * @TODO
+   */
+  public function previous()
+  {
+  }
 
 }

@@ -1,8 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-use Facebook\FacebookSDKException;
+// Because PHP is usually misconfigured on this front.
+date_default_timezone_set('UTC');
+
+use Facebook\Exceptions\FacebookSDKException;
 
 if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
   throw new FacebookSDKException(
@@ -10,20 +13,8 @@ if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
   );
 }
 
-require_once __DIR__ . '/FacebookTestCredentials.php';
-require_once __DIR__ . '/FacebookTestHelper.php';
-
-// Uncomment two lines to force functional test curl implementation
-//use Facebook\HttpClients\FacebookCurlHttpClient;
-//FacebookRequest::setHttpClientHandler(new FacebookCurlHttpClient());
-
-// Uncomment two lines to force functional test stream wrapper implementation
-//use Facebook\HttpClients\FacebookStreamHttpClient;
-//FacebookRequest::setHttpClientHandler(new FacebookStreamHttpClient());
-
-// Uncomment two lines to force functional test Guzzle implementation
-//use Facebook\HttpClients\FacebookGuzzleHttpClient;
-//FacebookRequest::setHttpClientHandler(new FacebookGuzzleHttpClient());
+require __DIR__ . '/FacebookTestCredentials.php';
+require __DIR__ . '/FacebookTestHelper.php';
 
 // Create a temp test user to use for testing
 FacebookTestHelper::initialize();

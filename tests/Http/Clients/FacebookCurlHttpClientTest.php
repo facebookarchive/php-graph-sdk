@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
+require __DIR__ . '/AbstractTestHttpClient.php';
 
 use Mockery as m;
-use Facebook\HttpClients\FacebookCurlHttpClient;
+use Facebook\Http\Clients\FacebookCurlHttpClient;
 
 class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
@@ -16,7 +16,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
   public function setUp()
   {
-    $this->curlMock = m::mock('Facebook\HttpClients\FacebookCurl');
+    $this->curlMock = m::mock('Facebook\Http\Clients\FacebookCurl');
     $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
   }
 

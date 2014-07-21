@@ -11,38 +11,33 @@ Platform from your PHP app.
 Usage
 -----
 
-This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
+> **Note:** This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
 
 Minimal example:
 
 ```php
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
-use Facebook\GraphUser;
-use Facebook\FacebookRequestException;
+use Facebook\Facebook;
+use Facebook\Exceptions\FacebookRequestException;
+use Facebook\Exceptions\FacebookSDKException;
 
-FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
+Facebook::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
 
-// Use one of the helper classes to get a FacebookSession object.
-//   FacebookRedirectLoginHelper
-//   FacebookCanvasLoginHelper
-//   FacebookJavaScriptLoginHelper
-// or create a FacebookSession with a valid access token:
-$session = new FacebookSession('access-token-here');
+// Use one of the helper classes to obtain an access token:
+//   Facebook\Helpers\FacebookRedirectLoginHelper
+//   Facebook\Helpers\FacebookCanvasLoginHelper
+//   Facebook\Helpers\FacebookJavaScriptLoginHelper
 
-// Get the GraphUser object for the current user:
+// Get the Facebook\GraphNodes\GraphUser object for the current user:
 
 try {
-  $me = (new FacebookRequest(
-    $session, 'GET', '/me'
-  ))->execute()->getGraphObject(GraphUser::className());
+  $request = Facebook::newRequest('access-token');
+  $me = $request->get('/me')->castAsGraphUser();
   echo $me->getName();
 } catch (FacebookRequestException $e) {
   // The Graph API returned an error
-} catch (\Exception $e) {
+} catch (FacebookSDKException $e) {
   // Some other error occurred
 }
-
 ```
 
 Complete documentation, installation instructions, and examples are available at:

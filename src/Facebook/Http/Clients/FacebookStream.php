@@ -21,64 +21,59 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\GraphNodes;
+namespace Facebook\Http\Clients;
 
 /**
- * Class GraphUserPage
+ * Class FacebookStream
+ * Abstraction for the procedural stream elements so that the functions can be
+ * mocked and the implementation can be tested.
  * @package Facebook
- * @author Artur Luiz <artur@arturluiz.com.br>
  */
-class GraphUserPage extends GraphObject
+class FacebookStream
 {
 
   /**
-   * Returns the ID for the user's page as a string if present.
-   *
-   * @return string|null
+   * @var resource Context stream resource instance
    */
-  public function getId()
+  protected $stream;
+
+  /**
+   * @var array Response headers from the stream wrapper
+   */
+  protected $responseHeaders;
+
+  /**
+   * Make a new context stream reference instance
+   *
+   * @param array $options
+   */
+  public function streamContextCreate(array $options)
   {
-    return $this->getProperty('id');
+    $this->stream = stream_context_create($options);
   }
 
   /**
-   * Returns the Category for the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getCategory()
-  {
-    return $this->getProperty('category');
-  }
-
-  /**
-   * Returns the Name of the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getName()
-  {
-    return $this->getProperty('name');
-  }
-
-  /**
-   * Returns the Access Token used to access the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getAccessToken()
-  {
-    return $this->getProperty('access_token');
-  }
-  
-  /**
-   * Returns the Permissions for the user's page as an array if present.
+   * The response headers from the stream wrapper
    *
    * @return array|null
    */
-  public function getPermissions()
+  public function getResponseHeaders()
   {
-    return $this->getProperty('perms');
+    return $this->responseHeaders;
+  }
+
+  /**
+   * Send a stream wrapped request
+   *
+   * @param string $url
+   *
+   * @return mixed
+   */
+  public function fileGetContents($url)
+  {
+    $rawResponse = file_get_contents($url, false, $this->stream);
+    $this->responseHeaders = $http_response_header;
+    return $rawResponse;
   }
 
 }

@@ -23,9 +23,8 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
 use Facebook\Entities\AccessToken;
+use Facebook\Facebook;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -65,8 +64,8 @@ class FacebookRedirectLoginHelper
    */
   public function __construct($appId = null, $appSecret = null)
   {
-    $this->appId = FacebookSession::_getTargetAppId($appId);
-    $this->appSecret = FacebookSession::_getTargetAppSecret($appSecret);
+    $this->appId = Facebook::getAppId($appId);
+    $this->appSecret = Facebook::getAppSecret($appSecret);
   }
 
   /**
@@ -75,27 +74,29 @@ class FacebookRedirectLoginHelper
    *   provided redirectUrl should invoke the handleRedirect method.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
-   *                            after login
-   * @param array $scope List of permissions to request during login
-   * @param string $version Optional Graph API version if not default (v2.0)
+   *                            after login.
+   * @param array $scope List of permissions to request during login.
+   * @param boolean $rerequest Indicates that this is a rerequest.
+   * @param string $version Optional Graph API version if not default.
    *
    * @return string
    */
-  public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false, $version = null)
+  public function getLoginUrl($redirectUrl, $scope = [], $rerequest = false, $version = null)
   {
-    $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $version = $version ?: Facebook::getDefaultGraphApiVersion();
     $state = $this->generateState();
     $this->storeState($state);
-    $params = array(
+    $params = [
       'client_id' => $this->appId,
       'redirect_uri' => $redirectUrl,
       'state' => $state,
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
       'scope' => implode(',', $scope)
-    );
-	
-    if ($rerequest)
+    ];
+
+    if ($rerequest) {
       $params['auth_type'] = 'rerequest';
+    }
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params, null, '&');
@@ -104,35 +105,37 @@ class FacebookRedirectLoginHelper
   /**
    * Returns the URL to send the user in order to log out of Facebook.
    *
-   * @param FacebookSession $session The session that will be logged out
+   * @param AccessToken|string $accessToken The session that will be logged out
    * @param string $next The url Facebook should redirect the user to after
    *   a successful logout
    *
    * @return string
    */
-  public function getLogoutUrl(FacebookSession $session, $next)
+  public function getLogoutUrl($accessToken, $next)
   {
-    $params = array(
+    $params = [
       'next' => $next,
-      'access_token' => $session->getToken()
-    );
+      'access_token' => (string) $accessToken,
+    ];
     return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, '&');
   }
 
   /**
-   * Handles a response from Facebook, including a CSRF check, and returns a
-   *   FacebookSession.
+   * Takes a valid code from a login redirect, and returns an AccessToken entity.
    *
-   * @return FacebookSession|null
+   * @return AccessToken|null
    */
-  public function getSessionFromRedirect()
+  public function getAccessTokenFromRedirect()
   {
     if ($this->isValidRedirect()) {
-      $params = array(
-        'redirect_uri' => $this->getFilteredUri($this->getCurrentUri()),
-        'code' => $this->getCode()
-      );
-      return new FacebookSession(AccessToken::requestAccessToken($params, $this->appId, $this->appSecret));
+      $code = $this->getCode();
+      $redirectUrl = $this->getFilteredUri($this->getCurrentUri());
+
+      try {
+        return AccessToken::getAccessTokenFromCode($code, $redirectUrl, $this->appId, $this->appSecret);
+      } catch (FacebookSDKException $e) {
+        return null;
+      }
     }
     return null;
   }
@@ -220,19 +223,19 @@ class FacebookRedirectLoginHelper
 
     $query = '';
     if (isset($parts['query'])) {
-      $full_query = array();
+      $full_query = [];
       parse_str($parts['query'], $full_query);
 
       // remove Facebook appended query params
-      $toDrop = array();
+      $toDrop = [];
       if (isset($full_query['state']) && isset($full_query['code'])) {
-        $toDrop = array('state', 'code');
+        $toDrop = ['state', 'code'];
       } elseif (isset($full_query['state'])
           && isset($full_query['error'])
           && isset($full_query['error_reason'])
           && isset($full_query['error_description'])
           && isset($full_query['error_code'])) {
-        $toDrop = array('state', 'error', 'error_reason', 'error_description', 'error_code');
+        $toDrop = ['state', 'error', 'error_reason', 'error_description', 'error_code'];
       }
       $real_query = array_diff_key($full_query, array_flip($toDrop));
 

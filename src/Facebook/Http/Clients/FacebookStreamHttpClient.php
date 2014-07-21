@@ -21,15 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Http\Clients;
 
 use Facebook\Exceptions\FacebookSDKException;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\AdapterException;
-use GuzzleHttp\Exception\RequestException;
-
-class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
+class FacebookStreamHttpClient implements FacebookHttpClientInterface {
 
   /**
    * @var array The headers to be sent with the request
@@ -47,16 +43,16 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
   protected $responseHttpStatusCode = 0;
 
   /**
-   * @var \GuzzleHttp\Client The Guzzle client
+   * @var FacebookStream Procedural stream wrapper as object
    */
-  protected static $guzzleClient;
+  protected static $facebookStream;
 
   /**
-   * @param \GuzzleHttp\Client|null The Guzzle client
+   * @param FacebookStream|null Procedural stream wrapper as object
    */
-  public function __construct(Client $guzzleClient = null)
+  public function __construct(FacebookStream $facebookStream = null)
   {
-    self::$guzzleClient = $guzzleClient ?: new Client();
+    self::$facebookStream = $facebookStream ?: new FacebookStream();
   }
 
   /**
@@ -103,30 +99,90 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
    */
   public function send($url, $method = 'GET', $parameters = array())
   {
-    $options = array();
+    $options = array(
+      'http' => array(
+        'method' => $method,
+        'timeout' => 60,
+        'ignore_errors' => true
+      ),
+      'ssl' => array(
+        'verify_peer' => true,
+        'cafile' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt',
+      ),
+    );
+
     if ($parameters) {
-      $options = array('body' => $parameters);
+      $options['http']['content'] = http_build_query($parameters, null, '&');
+
+      $this->addRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     }
 
-    $request = self::$guzzleClient->createRequest($method, $url, $options);
+    $options['http']['header'] = $this->compileHeader();
 
+    self::$facebookStream->streamContextCreate($options);
+    $rawResponse = self::$facebookStream->fileGetContents($url);
+    $rawHeaders = self::$facebookStream->getResponseHeaders();
+
+    if ($rawResponse === false || !$rawHeaders) {
+      throw new FacebookSDKException('Stream returned an empty response', 660);
+    }
+
+    $this->responseHeaders = self::formatHeadersToArray($rawHeaders);
+    $this->responseHttpStatusCode = self::getStatusCodeFromHeader($this->responseHeaders['http_code']);
+
+    return $rawResponse;
+  }
+
+  /**
+   * Formats the headers for use in the stream wrapper
+   *
+   * @return string
+   */
+  public function compileHeader()
+  {
+    $header = [];
     foreach($this->requestHeaders as $k => $v) {
-      $request->setHeader($k, $v);
+      $header[] = $k . ': ' . $v;
     }
 
-    try {
-      $rawResponse = self::$guzzleClient->send($request);
-    } catch (RequestException $e) {
-      if ($e->getPrevious() instanceof AdapterException) {
-        throw new FacebookSDKException($e->getMessage(), $e->getCode());
+    return implode("\r\n", $header);
+  }
+
+  /**
+   * Converts array of headers returned from the wrapper into
+   * something standard
+   *
+   * @param array $rawHeaders
+   *
+   * @return array
+   */
+  public static function formatHeadersToArray(array $rawHeaders)
+  {
+    $headers = array();
+
+    foreach ($rawHeaders as $line) {
+      if (strpos($line, ':') === false) {
+        $headers['http_code'] = $line;
+      } else {
+        list ($key, $value) = explode(': ', $line);
+        $headers[$key] = $value;
       }
-      $rawResponse = $e->getResponse();
     }
 
-    $this->responseHttpStatusCode = $rawResponse->getStatusCode();
-    $this->responseHeaders = $rawResponse->getHeaders();
+    return $headers;
+  }
 
-    return $rawResponse->getBody();
+  /**
+   * Pulls out the HTTP status code from a response header
+   *
+   * @param string $header
+   *
+   * @return int
+   */
+  public static function getStatusCodeFromHeader($header)
+  {
+    preg_match('|HTTP/\d\.\d\s+(\d+)\s+.*|', $header, $match);
+    return (int) $match[1];
   }
 
 }

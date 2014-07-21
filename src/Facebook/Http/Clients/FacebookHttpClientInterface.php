@@ -21,59 +21,48 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Http\Clients;
 
 /**
- * Class FacebookStream
- * Abstraction for the procedural stream elements so that the functions can be
- * mocked and the implementation can be tested.
+ * Interface FacebookHttpClientInterface
  * @package Facebook
  */
-class FacebookStream
+interface FacebookHttpClientInterface
 {
 
   /**
-   * @var resource Context stream resource instance
+   * The headers we want to send with the request
+   *
+   * @param string $key
+   * @param string $value
    */
-  protected $stream;
+  public function addRequestHeader($key, $value);
 
   /**
-   * @var array Response headers from the stream wrapper
+   * The headers returned in the response
+   *
+   * @return array
    */
-  protected $responseHeaders;
+  public function getResponseHeaders();
 
   /**
-   * Make a new context stream reference instance
+   * The HTTP status response code
    *
-   * @param array $options
+   * @return int
    */
-  public function streamContextCreate(array $options)
-  {
-    $this->stream = stream_context_create($options);
-  }
+  public function getResponseHttpStatusCode();
 
   /**
-   * The response headers from the stream wrapper
+   * Sends a request to the server
    *
-   * @return array|null
+   * @param string $url The endpoint to send the request to
+   * @param string $method The request method
+   * @param array  $parameters The key value pairs to be sent in the body
+   *
+   * @return string Raw response from the server
+   *
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function getResponseHeaders()
-  {
-    return $this->responseHeaders;
-  }
-
-  /**
-   * Send a stream wrapped request
-   *
-   * @param string $url
-   *
-   * @return mixed
-   */
-  public function fileGetContents($url)
-  {
-    $rawResponse = file_get_contents($url, false, $this->stream);
-    $this->responseHeaders = $http_response_header;
-    return $rawResponse;
-  }
+  public function send($url, $method = 'GET', $parameters = array());
 
 }

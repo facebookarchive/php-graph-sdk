@@ -6,6 +6,11 @@ use Facebook\Entities\AccessToken;
 class AccessTokenTest extends PHPUnit_Framework_TestCase
 {
 
+  public function setUp()
+  {
+    FacebookTestHelper::resetTestCredentials();
+  }
+
   public function tearDown()
   {
     m::close();
@@ -46,7 +51,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -55,11 +61,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getProperty')
+      ->with('is_valid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
+      ->shouldReceive('getProperty')
+      ->with('expires_at')
       ->twice()
       ->andReturn($dt);
 
@@ -76,7 +84,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -85,11 +94,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getProperty')
+      ->with('is_valid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
+      ->shouldReceive('getProperty')
+      ->with('expires_at')
       ->twice()
       ->andReturn($dt);
 
@@ -106,7 +117,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -115,11 +127,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getProperty')
+      ->with('is_valid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
+      ->shouldReceive('getProperty')
+      ->with('expires_at')
       ->twice()
       ->andReturn($dt);
 
@@ -136,7 +150,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -145,11 +160,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getProperty')
+      ->with('is_valid')
       ->once()
       ->andReturn(false);
     $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
+      ->shouldReceive('getProperty')
+      ->with('expires_at')
       ->twice()
       ->andReturn($dt);
 
@@ -166,7 +183,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -175,11 +193,13 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getProperty')
+      ->with('is_valid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
+      ->shouldReceive('getProperty')
+      ->with('expires_at')
       ->twice()
       ->andReturn($dt);
 
@@ -188,6 +208,9 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $this->assertFalse($isValid, 'Expected access token to be invalid because it has expired.');
   }
 
+  /**
+   * @group integration
+   */
   public function testInfoAboutAnAccessTokenCanBeObtainedFromGraph()
   {
     $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
@@ -196,19 +219,22 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $accessTokenInfo = $accessToken->getInfo();
 
     $testAppId = FacebookTestCredentials::$appId;
-    $this->assertEquals($testAppId, $accessTokenInfo->getAppId());
+    $this->assertEquals($testAppId, $accessTokenInfo->getProperty('app_id'));
 
     $testUserId = FacebookTestHelper::$testUserId;
-    $this->assertEquals($testUserId, $accessTokenInfo->getId());
+    $this->assertEquals($testUserId, $accessTokenInfo->getProperty('user_id'));
 
     $expectedScopes = FacebookTestHelper::$testUserPermissions;
-    $actualScopes = $accessTokenInfo->getPropertyAsArray('scopes');
+    $actualScopes = $accessTokenInfo->getProperty('scopes')->asArray();
     foreach ($expectedScopes as $scope) {
       $this->assertTrue(in_array($scope, $actualScopes),
         'Expected the following permission to be present: '.$scope);
     }
   }
 
+  /**
+   * @group integration
+   */
   public function testAShortLivedAccessTokenCabBeExtended()
   {
     $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
@@ -219,6 +245,9 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $longLivedAccessToken);
   }
 
+  /**
+   * @group integration
+   */
   public function testALongLivedAccessTokenCanBeUsedToObtainACode()
   {
     $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
@@ -231,6 +260,9 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(is_string($code));
   }
 
+  /**
+   * @group integration
+   */
   public function testACodeCanBeUsedToObtainAnAccessToken()
   {
     $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;

@@ -50,18 +50,18 @@ class FacebookSignedRequestFromInputHelperTest extends PHPUnit_Framework_TestCas
   public function testSessionWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
   {
     $this->helper->instantiateSignedRequest($this->rawSignedRequestUnauthorized);
-    $session = $this->helper->getSession();
+    $accessToken = $this->helper->getAccessToken();
 
-    $this->assertNull($session);
+    $this->assertNull($accessToken);
   }
 
   public function testAFacebookSessionCanBeInstantiatedWhenAUserHasAuthorizedTheApp()
   {
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorized);
-    $session = $this->helper->getSession();
+    $accessToken = $this->helper->getAccessToken();
 
-    $this->assertInstanceOf('Facebook\FacebookSession', $session);
-    $this->assertEquals('foo_token', $session->getToken());
+    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertEquals('foo_token', (string) $accessToken);
   }
 
 }

@@ -1,16 +1,18 @@
 <?php
 
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
-use Facebook\FacebookSDKException;
+use Facebook\Facebook;
+use Facebook\Http\BaseRequest;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Http\Clients\FacebookCurlHttpClient;
+use Facebook\Http\Clients\FacebookStreamHttpClient;
+use Facebook\Http\Clients\FacebookGuzzleHttpClient;
 
 class FacebookTestHelper
 {
 
-  public static $testSession;
   public static $testUserId;
   public static $testUserAccessToken;
-  public static $testUserPermissions = array('read_stream', 'user_photos');
+  public static $testUserPermissions = ['read_stream', 'user_photos'];
 
   public static function initialize()
   {
@@ -20,45 +22,45 @@ class FacebookTestHelper
         'You must fill out FacebookTestCredentials.php'
       );
     }
-    FacebookSession::setDefaultApplication(
-      FacebookTestCredentials::$appId, FacebookTestCredentials::$appSecret
-    );
-    if (!static::$testSession instanceof FacebookSession) {
-      static::$testSession = static::createTestSession();
-    }
+    static::createTestUserAndGetAccessToken();
   }
 
-  public static function createTestSession()
+  public static function resetTestCredentials()
   {
-    static::createTestUserAndGetAccessToken();
-    return new FacebookSession(static::$testUserAccessToken);
+    $httpHandler = BaseRequest::detectHttpClientHandler();
+    BaseRequest::setHttpClientHandler($httpHandler);
+
+    // Uncomment to force functional test curl implementation
+    //BaseRequest::setHttpClientHandler(new FacebookCurlHttpClient());
+
+    // Uncomment to force functional test stream wrapper implementation
+    //BaseRequest::setHttpClientHandler(new FacebookStreamHttpClient());
+
+    // Uncomment to force functional test Guzzle implementation
+    //BaseRequest::setHttpClientHandler(new FacebookGuzzleHttpClient());
+
+    Facebook::setDefaultApplication(
+            FacebookTestCredentials::$appId, FacebookTestCredentials::$appSecret
+    );
   }
 
   public static function createTestUserAndGetAccessToken()
   {
+    static::resetTestCredentials();
+
     $testUserPath = '/' . FacebookTestCredentials::$appId . '/accounts/test-users';
-    $params = array(
+    $params = [
       'installed' => true,
       'name' => 'Foo Phpunit User',
       'locale' => 'en_US',
       'permissions' => implode(',', static::$testUserPermissions),
-    );
+    ];
+    $appAccessToken = Facebook::getAppAccessToken();
 
-    $request = new FacebookRequest(static::getAppSession(), 'POST', $testUserPath, $params);
-    $response = $request->execute()->getGraphObject();
+    $graphObject = Facebook::newRequest($appAccessToken)->post($testUserPath, $params);
 
-    static::$testUserId = $response->getProperty('id');
-    static::$testUserAccessToken = $response->getProperty('access_token');
-  }
-
-  public static function getAppSession()
-  {
-    return new FacebookSession(static::getAppToken());
-  }
-
-  public static function getAppToken()
-  {
-    return FacebookTestCredentials::$appId . '|' . FacebookTestCredentials::$appSecret;
+    static::$testUserId = $graphObject->getId();
+    static::$testUserAccessToken = $graphObject->getAccessToken();
   }
 
   public static function deleteTestUser()
@@ -66,9 +68,14 @@ class FacebookTestHelper
     if (!static::$testUserId) {
       return;
     }
+    static::resetTestCredentials();
+
     $testUserPath = '/' . static::$testUserId;
-    $request = new FacebookRequest(static::getAppSession(), 'DELETE', $testUserPath);
-    $request->execute();
+    $appAccessToken = Facebook::getAppAccessToken();
+
+    Facebook::newRequest($appAccessToken)->delete($testUserPath);
+
+    //echo "\nTotal requests made to Graph: " . BaseRequest::$requestCount . "\n\n";
   }
 
 }
