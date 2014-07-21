@@ -1,0 +1,38 @@
+<card>
+# Retrieve User Profile via the Graph API
+
+This example covers getting profile information for the current user and printing their name, using the Graph API and the Facebook SDK for PHP.
+
+It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).
+
+For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`GraphUser`](/docs/php/GraphObject/#user-instance-methods), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookRequestException`](/docs/php/FacebookRequestException).
+
+</card>
+
+<card>
+
+~~~~
+use Facebook\FacebookRequest;
+use Facebook\GraphUser;
+use Facebook\FacebookRequestException;
+
+if($session) {
+
+  try {
+
+    $user_profile = (new FacebookRequest(
+      $session, 'GET', '/me'
+    ))->execute()->getGraphObject(GraphUser::className());
+
+    echo "Name: " . $user_profile->getName();
+
+  } catch(FacebookRequestException $e) {
+
+    echo "Exception occured, code: " . $e->getCode();
+    echo " with message: " . $e->getMessage();
+
+  }   
+
+}
+~~~~
+</card>

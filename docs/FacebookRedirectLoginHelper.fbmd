@@ -1,0 +1,54 @@
+<card>
+# FacebookRedirectLoginHelper for the Facebook SDK for PHP
+
+A helper class for getting a FacebookSession using the OAuth protocol.
+</card>
+
+<card>
+## Facebook\FacebookRedirectLoginHelper {#overview}
+
+If your web app uses Facebook Login on the back-end, you'll need to redirect your visitors to a URL at Facebook to initiate a login request.  Facebook then redirects the user to your apps callback URL, providing session data.  This helper class will generate the login URL for you, and can process and validate the data from Facebook, returning a `FacebookSession` on success.
+
+This class can be extended, and the `storeState($state)` and `loadState()` methods overridden, to store the state check using another method besides the default `$_SESSION`.
+
+Usage:
+
+~~~~
+
+$helper = new FacebookRedirectLoginHelper($redirect_url, $appId = NULL, $appSecret = NULL);
+echo '<a href="' . $helper->getLoginUrl() . '">Login with Facebook</a>';
+
+~~~~
+
+Then, in your callback page (at the redirect url) when Facebook sends the user back:
+
+~~~~
+
+$helper = new FacebookRedirectLoginHelper($redirect_url);
+try {
+	$session = $helper->getSessionFromRedirect();
+} catch(FacebookRequestException $ex) {
+	// When Facebook returns an error
+} catch(\Exception $ex) {
+	// When validation fails or other local issues
+}
+if ($session) {
+  // Logged in.
+}
+
+~~~~
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getLoginUrl {#getloginurl}
+`getLoginUrl()`  
+Generates the URL to redirect a web visitor to Facebook to login to your app.
+### getLogoutUrl {#getlogouturl}
+`getLogoutUrl($next_url)`  
+Generates the URL to redirect a web visitor to Facebook to logout, with a url to redirect to after.
+### getSessionFromRedirect {#getsessionfromredirect}
+`getSessionFromRedirect()`  
+Processes the redirect data from Facebook, if present.  Returns a `FacebookSession` or `null`.
+</card>

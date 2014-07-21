@@ -1,0 +1,155 @@
+<card>
+# GraphObject for the Facebook SDK for PHP
+
+Represents an object returned by the Graph API.
+
+</card>
+
+<card>
+## Facebook\GraphObject {#overview}
+
+This base class has several subclasses, some are provided by default:
+
+[__GraphUser__](#user-instance-methods)  
+[__GraphLocation__](#location-instance-methods)  
+[__GraphSessionInfo__](#sessioninfo-instance-methods)  
+
+Usage:
+
+~~~~
+// Get the base class GraphObject from the response
+$object = $response->getGraphObject();
+
+// Get the response typed as a GraphUser
+$user = $response->getGraphObject(GraphUser::className());
+// or convert the base object previously accessed
+// $user = $object->cast(GraphUser::className());
+
+// Get the response typed as a GraphLocation
+$loc = $response->getGraphObject(GraphLocation::className());
+// or convert the base object previously accessed
+// $loc = $object->cast(GraphLocation::className());
+
+// User example
+echo $object->getProperty('name');
+echo $user->getName();
+
+// Location example
+echo $object->getProperty('country');
+echo $loc->getCountry();
+
+// SessionInfo example
+$info = $session->getSessionInfo());
+echo $info->getxpiresAt();
+~~~~
+
+</card>
+
+<card>
+## GraphObject Instance Methods {#instance-methods}
+
+### cast {#cast}
+`cast(string $type)`  
+Returns a new instance of a GraphObject subclass with this objects underlying data.
+
+### asArray {#asarray}
+`asArray()`  
+Returns the raw representation (associative arrays, nested) of this objects underlying data.
+
+### getProperty {#getproperty}
+`getProperty(string $name, string $type = 'Facebook\GraphObject')`  
+Gets the value of a named key for this graph object.  If the value is a scalar (string, number, etc.) it will be returned.  If it's an associative array, it will be returned as a GraphObject cast to the appropriate subclass type if provided.
+
+### getPropertyAsArray {#getproparray}
+`getPropertyAsArray()`  
+Gets the contents of a named array property on this graph object.  If the values are scalar (strings, numbers, etc.) they will be returned as-is.  If the values are associative arrays, they will be returned as GraphObjects cast to the appropriate subclass type if provided.
+
+### getPropertyNames
+`getPropertyNames()`  
+Returns an array with the names of all properties present on this graph object.
+</card>
+
+<card>
+## GraphUser Instance Methods {#user-instance-methods}
+
+### getId {#getid}
+`getId()`  
+Returns the `id` property for the user as a string if present.
+### getName {#getname}
+`getName()`  
+Returns the `name` property for the user as a string if present.
+### getFirstName {#getfirstname}
+`getFirstName()`  
+Returns the `first_name` property for the user as a string if present.
+### getMiddleName {#getmiddlename}
+`getMiddleName()`  
+Returns the `middle_name` property for the user as a string if present.
+### getLastName {#getlastname}
+`getLastName()`  
+Returns the `last_name` property for the user as a string if present.
+### getLink {#getlink}
+`getLink()`  
+Returns the `link` property for the user as a string if present.
+### getUsername {#getusername}
+`getUsername()`  
+Returns the `username` property for the user as a string if present.
+### getBirthday {#getbirthday}
+`getBirthday()`  
+Returns the `birthday` property for the user as a `\DateTime` if present.
+### getLocation {#getlocation}
+`getLocation()`  
+Returns the `location` property for the user as a `Facebook\GraphLocation` if present.'
+</card>
+
+<card>
+## GraphLocation Instance Methods {#location-instance-methods}
+
+### getStreet {#getstreet}
+`getStreet()`  
+Returns the `street` property for the location as a string if present.
+### getCity {#getcity}
+`getCity()`  
+Returns the `city` property for the location as a string if present.
+### getState {#getstate}
+`getState()`  
+Returns the `state` property for the location as a string if present.
+### getCountry {#getcountry}
+`getCountry()`  
+Returns the `country` property for the location as a string if present.
+### getZip {#getzip}
+`getZip()`  
+Returns the `zip` property for the user as a location if present.
+### getLatitude {#getlat}
+`getLatitude()`  
+Returns the `latitude` property for the location as a float if present.
+### getLongitude {#getlon}
+`getLongitude()`  
+Returns the `latitude` property for the location as a float if present.
+</card>
+
+<card>
+## GraphSessionInfo Instance Methods {#sessioninfo-instance-methods}
+
+### getAppId {#getappid}
+`getAppId()`  
+Returns the `app_id` property for the session as a string if present.
+### getApplication {#getapp}
+`getApplication()`  
+Returns the `application` property for the session as a string if present.
+### getExpiresAt {#getexpires}
+`getExpiresAt()`  
+Returns the `expires_at` property for the session as a \DateTime if present.
+### getIsValid {#getvalid}
+`getIsValid()`  
+Returns the `is_valid` property for the session as a boolean if present.
+### getIssuedAt {#getissued}
+`getIssuedAt()`  
+Returns the `issued_at` property for the session as a \DateTime if present.
+### getScopes {#getscopes}
+`getScopes()`  
+Returns the `scopes` property for the session as an array if present.
+### getId {#getuid}
+`getId()`  
+Returns the `user_id` property for the session as a string if present.
+</card>
+

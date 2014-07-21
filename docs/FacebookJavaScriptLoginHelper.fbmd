@@ -1,0 +1,39 @@
+<card>
+# FacebookJavaScriptLoginHelper for the Facebook SDK for PHP
+
+A helper class for getting a FacebookSession using the session from the Facebook SDK for JavaScript.
+</card>
+
+<card>
+## Facebook\FacebookJavaScriptLoginHelper {#overview}
+
+If your web app uses the Facebook SDK for JavaScript, you can access that in your PHP code as well.  This helper class will process and validate the cookie data used by the Facebook SDK for JavaScript, returning a `FacebookSession` on success.
+
+Usage:
+
+~~~~
+
+$helper = new FacebookJavaScriptLoginHelper();
+try {
+	$session = $helper->getSession();
+} catch(FacebookRequestException $ex) {
+	// When Facebook returns an error
+} catch(\Exception $ex) {
+	// When validation fails or other local issues
+}
+if ($session) {
+  // Logged in.
+}
+
+~~~~
+
+It's important to note that on first access, or if a session has since expired, these methods will operate on data that is one request-cycle stale.  You will likely want to make an Ajax request when the login state changes in the Facebook SDK for JavaScript.  Information about that here: (FB.event.subscribe)[https://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/#events]
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getSession {#getsession}
+`getSession()`  
+Processes the data available from the Facebook SDK for JavaScript, if present.  Returns a `FacebookSession` or `null`.
+</card>

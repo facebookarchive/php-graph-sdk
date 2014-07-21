@@ -1,0 +1,43 @@
+<card>
+# FacebookRequestException for the Facebook SDK for PHP
+
+Represents an exception thrown by executing a Facebook request.
+</card>
+
+<card>
+## Facebook\FacebookRequestException {#overview}
+
+This base class has several subclasses:
+
+`FacebookAuthorizationException`  
+`FacebookClientException`  
+`FacebookPermissionException`  
+`FacebookServerException`  
+`FacebookThrottleException`  
+`FacebookOtherException`  
+
+Whenever a FacebookRequestException is thrown, it will be one of these types.
+They are derived from the error information here: https://developers.facebook.com/docs/graph-api/using-graph-api/#errors
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+`FacebookRequestException` extends from the base `\Exception` class, so `getCode()` and `getMessage()` are available by default.
+
+### getHttpStatusCode {#gethttpstatus}
+`getHttpStatusCode()`  
+Returns the HTTP status code returned with this exception.
+### getSubErrorCode {#getsuberrorcode}
+`getSubErrorCode()`  
+Returns the numeric sub-error code returned from Facebook.
+### getErrorType {#geterrortype}
+`getErrorType()`  
+Returns the type of error as a string.
+### getResponse {#getresponse}
+`getResponse()`  
+Returns the decoded response used to create the exception.
+### getRawResponse {#getrawresponse}
+`getRawResponse()`  
+Returns the raw response used to create the exception.
+</card>

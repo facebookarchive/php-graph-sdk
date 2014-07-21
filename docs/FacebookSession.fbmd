@@ -1,0 +1,71 @@
+<card>
+# FacebookSession for the Facebook SDK for PHP
+
+Represents a Facebook Session, which is used when making requests to the Graph API.
+</card>
+
+<card>
+## Facebook\FacebookSession {#overview}
+
+Usage:
+
+~~~~
+use Facebook\FacebookSession;
+
+FacebookSession::setDefaultApplication('app-id', 'app-secret');
+
+// If you already have a valid access token:
+$session = new FacebookSession('access-token');
+
+// If you're making app-level requests:
+$session = FacebookSession::newAppSession();
+
+// To validate the session:
+try {
+  $session->validate();
+} catch (FacebookRequestException $ex) {
+  // Session not valid, Graph API returned an exception with the reason.
+  echo $ex->getMessage();
+} catch (\Exception $ex) {
+  // Graph API returned info, but it may mismatch the current app or have expired.
+  echo $ex->getMessage();
+}
+~~~~
+</card>
+
+<card>
+## Static Methods {#static-methods}
+
+### setDefaultApplication {#setdefaultapp}
+`setDefaultApplication(string $appId, string $appSecret)`  
+Configures and app ID and secret that will be used by default throughout the SDK (but can be overridden whenever necessary using parameters to other methods.
+### validate {#validate}
+`validate(Facebook\GraphSessionInfo $sessionInfo, string $appId = NULL, string $appSecret = NULL)`  
+Ensures that the provided GraphSessionInfo is valid, throwing an exception if not.  It does this by ensuring the app ID in the token info matches the given (or default) app ID, ensuring the token itself is valid, and ensuring that the expiration time has not passed.
+### newAppSession {#newappsession}
+`newAppSession(string $appId = NULL, string $appSecret = NULL)`  
+Returns a `Facebook\FacebookSession` configured with a token for the app which can be used for publishing and for requesting app-level information.
+### newSessionFromSignedRequest {#newsessionfromsr}
+`newSessionFromSignedRequest(string $signedRequest)`  
+Returns a `Facebook\FacebookSession` for the given signed request.
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getToken {#gettoken}
+`getToken()`  
+Returns the token string for the session.
+### getSessionInfo {#getsessioninfo}
+`getSessionInfo(string $appId = NULL, string $appSecret = NULL)`  
+Equivalent to calling the /debug_token endpoint of the Graph API to get the details for the access token for this session.  Returns a `Facebook\GraphSessionInfo` object.
+### getLongLivedSession {#getlonglivedsession}
+`getLongLivedSession(string $appId = NULL, string $appSecret = NULL)`  
+Returns a new `Facebook\FacebookSession` resulting from extending a short-lived access token.  This method will make a network request.  If you know you already have a long-lived session, you do not need to call this.  The only time you get a short-lived session as of March 2014 is from the Facebook SDK for JavaScript.  If this session is not short-lived, this method will return `$this`.  A long-lived session is on the order of months.  A short-lived session is on the order of hours.  You can figure out whether a session is short-lived or long-lived by checking the expiration date in the session info, but it's not a precise thing.
+### getExchangeToken {#getexchangetoken}
+`getExchangeToken(string $appId = NULL, string $appSecret = NULL)`  
+Returns an exchange token string which can be sent back to clients and exchanged for a device-linked access token.  You need this when your user did not log in on a particular device, but you want to be able to make Graph API calls from that device as this user.
+### validate {#validatei}
+`validate(string $appId = NULL, string $appSecret = NULL)`  
+Ensures that a session is valid, throwing an exception if not.  It does this by fetching the token info, ensuring the app ID in the token info matches the given (or default) app ID, ensuring the token itself is valid, and ensuring that the expiration time has not passed.
+</card>

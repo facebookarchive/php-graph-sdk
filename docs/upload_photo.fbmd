@@ -1,0 +1,49 @@
+<card>
+# Upload Photos to a User's Profile
+
+This example covers uploading a photo to the current User's profile using the Graph API and the Facebook SDK for PHP.
+
+It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).  You must have requested the `publish_actions` scope when logging in the user for this to work.
+
+For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookRequestException`](/docs/php/FacebookRequestException).
+
+</card>
+
+<card>
+
+~~~~
+use Facebook\FacebookRequest;
+use Facebook\GraphObject;
+use Facebook\FacebookRequestException;
+
+if($session) {
+
+  try {
+
+    // Upload to a user's profile. The photo will be in the
+    // first album in the profile. You can also upload to
+    // a specific album by using /ALBUM_ID as the path     
+    $response = (new FacebookRequest(
+      $session, 'POST', '/me/photos', array(
+      	'source' => new CURLFile('path/to/file.name', 'image/png'),
+      	'message' => 'User provided message'
+      )
+    ))->execute()->getGraphObject();
+
+    // If you're not using PHP 5.5 or later, change the file reference to:
+    // 'source' => '@/path/to/file.name'
+
+    echo "Posted with id: " . $response->getProperty('id');
+
+  } catch(FacebookRequestException $e) {
+
+    echo "Exception occured, code: " . $e->getCode();
+    echo " with message: " . $e->getMessage();
+
+  }   
+
+}
+~~~~
+
+Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
+</card>
