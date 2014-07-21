@@ -1,0 +1,37 @@
+<card>
+# FacebookCanvasLoginHelper for the Facebook SDK for PHP
+
+A helper class for getting a FacebookSession in a Canvas app
+</card>
+
+<card>
+## Facebook\FacebookCanvasLoginHelper {#overview}
+
+If your app is loaded through Canvas, Facebook sends a POST request with a signed request.  This helper class will handle processing and validating that information with Facebook, and returns a `FacebookSession`.
+
+Usage:
+
+~~~~
+
+$helper = new FacebookCanvasLoginHelper();
+try {
+  $session = $helper->getSession();
+} catch (FacebookRequestException $ex) {
+	// When Facebook returns an error
+} catch (\Exception $ex) {
+	// When validation fails or other local issues	
+}
+if ($session) {
+  // Logged in.
+}
+
+~~~~
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getSession {#getsession}
+`getSession()`  
+Processes the POST request from Facebook, if present.  Returns a `FacebookSession` or `null`.
+</card>

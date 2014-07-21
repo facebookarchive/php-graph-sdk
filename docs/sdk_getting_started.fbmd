@@ -1,0 +1,135 @@
+<card>
+# Getting started with the Facebook SDK for PHP
+
+The Facebook SDK for PHP provides developers with a modern, native library for accessing the Graph API and taking advantage of Facebook Login.  Usually this means you're developing with PHP for a Facebook Canvas app, building your own website, or adding server-side functionality to an app that already uses the [Facebook SDK for JavaScript](/docs/reference/javascript/).
+</card>
+
+<card>
+## Download the SDK {#download}
+
+%FB(devsite:markdown-wiki:info-card {
+  content: "The Facebook SDK for PHP v4 requires PHP 5.4 or greater.",
+  type: 'warning',
+})
+
+If you're using [Composer](https://getcomposer.org/) as a package manager for PHP, which we recommend, installing the SDK is as easy as adding a require entry for the Facebook SDK for PHP to the composer.json file in the root of your project:
+
+~~~~
+{
+  "require" : {
+    "facebook/php-sdk-v4" : "4.0.*"
+  }
+}
+~~~~
+
+Then run composer with the install parameter, and it will download the newest version.  If you're using the autoloader as part of Composer, the Facebook namespace will be available for use without adding require statements for all of the files.
+
+If you're not using Composer, you can download the SDK from our GitHub:
+
+%FB(devsite:markdown-wiki:button {
+ text: 'Download the PHP SDK',
+ href: 'https://github.com/facebook/facebook-php-sdk-v4/archive/4.0-dev.zip',
+ size: 'large',
+ use: 'special',
+})
+</card>
+
+<card>
+## Initializing {#init}
+
+You will need to have configured a Facebook App, which you can obtain from the [App Dashboard](http://developers.facebook.com/apps).
+
+Then, initialize the SDK with your app ID and secret:
+
+~~~
+FacebookSession::setDefaultApplication('YOUR_APP_ID', 'YOUR_APP_SECRET');
+~~~
+</card>
+
+<card>
+## Authentication and authorization {#authentication}
+
+The SDK can be used to support login your site using a Facebook account. On the server-side, the SDK provides helper classes for the most common scenarios.
+
+For most websites, you'll use the [FacebookRedirectLoginHelper](/docs/php/FacebookRedirectLoginHelper).  Generate the login URL to redirect visitors to with the `getLoginUrl()` method, redirect them, and then process the response from Facebook with the `getSessionFromRedirect()` method, which returns a `FacebookSession`.
+
+~~~~
+$helper = new FacebookRedirectLoginHelper('your redirect URL here');
+$loginUrl = $helper->getLoginUrl();
+// Use the login url on a link or button to redirect to Facebook for authentication
+~~~~
+
+~~~~
+$helper = new FacebookRedirectLoginHelper();
+try {
+  $session = $helper->getSessionFromRedirect();
+} catch(FacebookRequestException $ex) {
+  // When Facebook returns an error
+} catch(\Exception $ex) {
+  // When validation fails or other local issues
+}
+if ($session) {
+  // Logged in
+}
+~~~~
+
+If your app is on Facebook Canvas, use the `getSession()` method on [FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper) to get a `FacebookSession` for the user.
+
+~~~~
+$helper = new FacebookCanvasLoginHelper();
+try {
+  $session = $helper->getSession();
+} catch(FacebookRequestException $ex) {
+  // When Facebook returns an error
+} catch(\Exception $ex) {
+  // When validation fails or other local issues
+}
+if ($session) {
+  // Logged in
+}
+~~~~
+
+If you're already using the Facebook SDK for JavaScript to authenticate users, you can also log them in on the server side with the [FacebookJavaScriptLoginHelper](/docs/php/FacebookJavaScriptLoginHelper).  The `getSession()` method will return a `FacebookSession`.
+
+~~~~
+$helper = new FacebookJavaScriptLoginHelper();
+try {
+  $session = $helper->getSession();
+} catch(FacebookRequestException $ex) {
+  // When Facebook returns an error
+} catch(\Exception $ex) {
+  // When validation fails or other local issues
+}
+if ($session) {
+  // Logged in
+}
+~~~~
+
+You can also create a `FacebookSession` with an access token you've acquired through some other means, by passing it to the constructor.
+
+~~~~
+$session = new FacebookSession('access token here');
+~~~~
+</card>
+
+<card>
+## Making Requests to the Graph API {#making-requests}
+
+Once you have a `FacebookSession` you can begin making calls to the Graph API with [FacebookRequest](/docs/php/FacebookRequest).
+
+~~~~
+$request = new FacebookRequest($session, 'GET', '/me');
+$response = $request->execute();
+$graphObject = $response->getGraphObject();
+~~~~
+
+You can also chain these methods:
+
+~~~~
+$me = (new FacebookRequest(
+  $session, 'GET', '/me'
+))->execute()->getGraphObject(GraphUser::className());
+~~~~
+
+For more details, see the examples and API reference for all of these classes listed on the [landing page for the Facebook SDK for PHP](/docs/reference/php).
+</card>

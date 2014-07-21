@@ -1,0 +1,45 @@
+<card>
+# Facebook SDK for PHP
+
+The Facebook SDK for PHP provides developers with a modern, native library for accessing the Graph API and taking advantage of Facebook Login.  Usually this means you're developing with PHP for a Facebook Canvas app, building your own website, or adding server-side functionality to an app that already uses the [Facebook SDK for JavaScript](/docs/reference/javascript/).
+
+Take a look through our guide, [Getting Started with the Facebook SDK for PHP](/docs/php/gettingstarted), and then check out some of the examples below.
+</card>
+
+<card>
+## Examples {#examples}
+
+* [Retrieve a users profile](/docs/php/howto/profilewithgraphapi)
+* [Post a link to a users feed](/docs/php/howto/postwithgraphapi)
+* [Upload a photo to a users profile](/docs/php/howto/uploadphoto)
+
+</card>
+
+<card>
+## API Reference - Facebook namespace {#reference}
+
+[Facebook\FacebookSession](/docs/php/FacebookSession)  
+An access token backed session used when making requests against the Graph API.
+
+[Facebook\FacebookRequest](/docs/php/FacebookRequest)  
+Makes requests against the Graph API.
+
+[Facebook\FacebookResponse](/docs/php/FacebookResponse)  
+A successful response from the Graph API resulting from a FacebookRequest.
+
+[Facebook\FacebookRequestException](/docs/php/FacebookRequestException)  
+An error returned by the Graph API during a FacebookRequest.  Subclasses: FacebookClientException, FacebookServerException, FacebookAuthorizationException, FacebookPermissionException, FacebookThrottleException, FacebookOtherException.
+
+[Facebook\GraphObject](/docs/php/GraphObject)  
+Represents an object returned by the Graph API.  Subclasses: GraphUser, GraphLocation, GraphSessionInfo
+
+[Facebook\FacebookRedirectLoginHelper](/docs/php/FacebookRedirectLoginHelper)  
+A helper class for getting a FacebookSession using the OAuth protocol.
+
+[Facebook\FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper)  
+A helper class for getting a FacebookSession from Facebook Canvas.
+
+[Facebook\FacebookJavaScriptLoginHelper](/docs/php/FacebookJavaScriptLoginHelper)  
+A helper class for getting a FacebookSession from the Facebook SDK for JavaScript.
+
+</card>

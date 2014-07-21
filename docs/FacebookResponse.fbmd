@@ -1,0 +1,57 @@
+<card>
+# FacebookResponse for the Facebook SDK for PHP
+
+Represents a response from the Graph API.
+</card>
+
+<card>
+## Facebook\FacebookResponse {#overview}
+
+Usage:
+
+~~~~
+// A FacebookResponse is returned from an executed FacebookRequest
+try {
+  $response = (new FacebookRequest($session, 'GET', '/me'))->execute();
+  // You can get the request back:
+  $request = $response->getRequest();
+  // You can get the response as a GraphObject:
+  $object = $response->getGraphObject();
+  // You can get the response as a subclass of GraphObject:
+  $me = $response->getGraphObject(GraphUser::className());
+  // If this response has multiple pages, you can get a request for the next or previous pages:
+  $nextPageRequest = $response->getRequestForNextPage();
+  $previousPageRequest = $response->getRequestForPreviousPage();
+} catch (FacebookRequestException $ex) {
+  echo $ex->getMessage();
+} catch (\Exception $ex) {
+  echo $ex->getMessage();
+}
+
+// You can also chain the methods together: 
+$me = (new FacebookRequest(
+  $session, 'GET', '/me'
+))->execute()->getGraphObject(GraphUser::className);
+echo $me->getName();
+~~~~
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getGraphObject {#getgraphobject}
+`getGraphObject(string $type = 'Facebook\GraphObject')`  
+Returns the result as a `GraphObject`.  If specified, a strongly-typed subclass of `GraphObject` is returned.
+### getGraphObjectList {#getgraphobjectlist}
+`getGraphObjectList(string $type = 'Facebook\GraphObject')`  
+Returns an array of `GraphObject` returned by this request.  If specified, a strongly-typed subclass of `GraphObject` is returned.
+### getRequest {#getrequest}
+`getRequest()`  
+Returns the `FacebookRequest` that produced this response.
+### getRequestForNextPage {#getnextpage}
+`getRequestForNextPage()`  
+If the response has paginated data, produces a `FacebookRequest` for the next pge of data.
+### getRequestForPreviousPage {#getpreviouspage}
+`getRequestForPreviousPage()`  
+If the response has paginated data, produces a `FacebookRequest` for the previous page of data.
+</card>

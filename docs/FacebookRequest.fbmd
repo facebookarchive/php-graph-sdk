@@ -1,0 +1,59 @@
+<card>
+# FacebookRequest for the Facebook SDK for PHP
+
+Represents a request that will be made against the Graph API.
+</card>
+
+<card>
+## Facebook\FacebookRequest {#overview}
+
+Constructor:
+
+~~~~
+$request = new FacebookRequest(  
+  FacebookSession $session,  
+  string $httpMethod,  
+  string $path, 
+  array $params = NULL,
+  string $version = NULL
+);
+~~~~
+
+Usage:
+
+~~~~
+// Make a new request and execute it.
+try {
+  $response = (new FacebookRequest($session, 'GET', '/me'))->execute();
+  $object = $response->getGraphObject();
+  echo $object->getProperty('name');
+} catch (FacebookRequestException $ex) {
+  echo $ex->getMessage();
+} catch (\Exception $ex) {
+  echo $ex->getMessage();
+}
+
+// You can chain methods together and get a strongly typed GraphUser
+$me = (new FacebookRequest(
+  $session, 'GET', '/me'
+))->execute()->getGraphObject(GraphUser::className);
+echo $me->getName();
+~~~~
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### execute {#execute}
+`execute()`  
+Returns a `Facebook\FacebookResponse` from this request, from which a strongly-typed result can be retrieved.  Throws an exception if the request fails.  If the error is returned from Facebook, as opposed to a networking issue, a `Facebook\FacebookRequestException` is thrown.
+### getPath {#getpath}
+`getPath()`  
+Returns a copy of the path for the request, not including the version.
+### getParameters {#getparams}
+`getParameters()`  
+Returns a copy of the parameters array for the request.
+### getSession {#getsession}
+`getSession()`  
+Returns the `Facebook\FacebookSession` object associated with this request.
+</card>
