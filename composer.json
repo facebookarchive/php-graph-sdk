@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
