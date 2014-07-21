@@ -23,135 +23,95 @@
  */
 namespace Facebook\GraphNodes;
 
+use Facebook\Exceptions\FacebookSDKException;
+
 /**
  * Class GraphObject
  * @package Facebook
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class GraphObject
+class GraphObject extends Collection
 {
 
   /**
-   * @var array - Holds the raw associative data for this object
+   * @var array Maps object key names to Graph object types.
    */
-  protected $backingData;
+  protected $graphObjectMap = [];
 
   /**
-   * Creates a GraphObject using the data provided.
+   * Init this Graph object.
    *
-   * @param array $raw
+   * @param array $data
    */
-  public function __construct($raw)
+  public function __construct(array $data = [])
   {
-    if ($raw instanceof \stdClass) {
-      $raw = get_object_vars($raw);
-    }
-    $this->backingData = $raw;
-
-    if (isset($this->backingData['data']) && count($this->backingData) === 1) {
-      $this->backingData = $this->backingData['data'];
-    }
+    $items = static::castGraphTypes($data, $this->graphObjectMap);
+    parent::__construct($items);
   }
 
   /**
-   * cast - Return a new instance of a FacebookGraphObject subclass for this
-   *   objects underlying data.
+   * Takes a raw response from Graph and determines how to cast each node.
    *
-   * @param string $type The GraphObject subclass to cast to
+   * @param array $data The backing of the GraphObject data.
+   * @param string|null $graphObjectSubClass The sub class to cast.
    *
    * @return GraphObject
-   *
-   * @throws FacebookSDKException
    */
-  public function cast($type)
+  public static function make(array $data, $graphObjectSubClass = null)
   {
-    if ($this instanceof $type) {
-      return $this;
-    }
-    if (is_subclass_of($type, GraphObject::className())) {
-      return new $type($this->backingData);
-    } else {
-      throw new FacebookSDKException(
-        'Cannot cast to an object that is not a GraphObject subclass', 620
-      );
-    }
-  }
-
-  /**
-   * asArray - Return a key-value associative array for the given graph object.
-   *
-   * @return array
-   */
-  public function asArray()
-  {
-    return $this->backingData;
-  }
-
-  /**
-   * getProperty - Gets the value of the named property for this graph object,
-   *   cast to the appropriate subclass type if provided.
-   *
-   * @param string $name The property to retrieve
-   * @param string $type The subclass of GraphObject, optionally
-   *
-   * @return mixed
-   */
-  public function getProperty($name, $type = 'Facebook\GraphNodes\GraphObject')
-  {
-    if (isset($this->backingData[$name])) {
-      $value = $this->backingData[$name];
-      if (is_scalar($value)) {
-        return $value;
-      } else {
-        return (new GraphObject($value))->cast($type);
+    if (isset($data['data'])) {
+      if (static::isCastableAsGraphList($data['data'])) {
+        return new GraphList($data);
       }
-    } else {
-      return null;
+      return static::make($data['data']);
     }
+
+    $graphObjectName = $graphObjectSubClass ?: static::className();
+    return new $graphObjectName($data);
   }
 
   /**
-   * getPropertyAsArray - Get the list value of a named property for this graph
-   *   object, where each item has been cast to the appropriate subclass type
-   *   if provided.
+   * Iterates over a Graph "data" array recursively and detects the types
+   * each node should be cast to and returns all the items as an array.
    *
-   * Calling this for a property that is not an array, the behavior
-   *   is undefined, so don’t do this.
-   *
-   * @param string $name The property to retrieve
-   * @param string $type The subclass of GraphObject, optionally
+   * @param array $data
+   * @param array $graphObjectMap
    *
    * @return array
    */
-  public function getPropertyAsArray($name, $type = 'Facebook\GraphNodes\GraphObject')
+  public static function castGraphTypes(array $data, array $graphObjectMap = [])
   {
-    $target = array();
-    if (isset($this->backingData[$name]['data'])) {
-      $target = $this->backingData[$name]['data'];
-    } else if (isset($this->backingData[$name])
-      && !is_scalar($this->backingData[$name])) {
-      $target = $this->backingData[$name];
-    }
-    $out = array();
-    foreach ($target as $key => $value) {
-      if (is_scalar($value)) {
-        $out[$key] = $value;
+    $items = [];
+
+    foreach ($data as $k => $v) {
+      if (is_array($v)) {
+        $objectSubClass = static::getObjectSubClass($k, $graphObjectMap);
+        $items[$k] = static::make($v, $objectSubClass);
+      } elseif (static::shouldCastAsDateTime($k)) {
+        $items[$k] = static::castToDateTime($v);
       } else {
-        $out[$key] = (new GraphObject($value))->cast($type);
+        $items[$k] = $v;
       }
     }
-    return $out;
+
+    return $items;
   }
 
   /**
-   * getPropertyNames - Returns a list of all properties set on the object.
+   * Returns the name of the GraphObject sub class that a value
+   * should be cast to.
    *
-   * @return array
+   * @param string $key
+   * @param array $graphObjectMap
+   *
+   * @return string
    */
-  public function getPropertyNames()
+  private static function getObjectSubClass($key, array $graphObjectMap)
   {
-    return array_keys($this->backingData);
+    // We default to get_class() instead of get_called_class() so that all
+    // unknown object types get cast as the generic "GraphObject".
+    return isset($graphObjectMap[$key]) ? $graphObjectMap[$key] : get_class();
   }
 
   /**
@@ -162,6 +122,156 @@ class GraphObject
   public static function className()
   {
     return get_called_class();
+  }
+
+  /**
+   * Determines whether or not the data should be cast as a GraphList.
+   *
+   * @param array $data
+   *
+   * @return boolean
+   */
+  public static function isCastableAsGraphList(array $data)
+  {
+    if ($data === []) {
+      return true;
+    }
+    // Checks for a sequential numeric array which would be a GraphList
+    return array_keys($data) === range(0, count($data) - 1);
+  }
+
+  /**
+   * Determines if a value from Graph should be cast to DateTime.
+   *
+   * @param string $key
+   *
+   * @return boolean
+   */
+  public static function shouldCastAsDateTime($key)
+  {
+    return in_array($key, [
+        'created_time',
+        'updated_time',
+        'start_time',
+        'end_time',
+        'backdated_time',
+        'issued_at',
+        'expires_at',
+        'birthday',
+      ], true);
+  }
+
+  /**
+   * Casts a date value from Graph to DateTime.
+   *
+   * @param int|string $value
+   *
+   * @return \DateTime
+   */
+  public static function castToDateTime($value)
+  {
+    if (is_int($value)) {
+      $dt = new \DateTime();
+      $dt->setTimestamp($value);
+    } else {
+      $dt = new \DateTime($value);
+    }
+    return $dt;
+  }
+
+  /**
+   * Gets the value of the named property for this graph object.
+   *
+   * @param string $name The property to retrieve.
+   * @param mixed $default The default to return if the property doesn't exist.
+   *
+   * @return mixed
+   */
+  public function getProperty($name, $default = null)
+  {
+    if (isset($this->items[$name])) {
+      return $this->items[$name];
+    }
+    return $default ?: null;
+  }
+
+  /**
+   * Returns a list of all properties set on the object.
+   *
+   * @return array
+   */
+  public function getPropertyNames()
+  {
+    return array_keys($this->items);
+  }
+
+  /**
+   * Return a new instance of a GraphObject that is cast as $type.
+   *
+   * @param string|null $type The GraphObject subclass to cast to.
+   *
+   * @return GraphObject
+   *
+   * @throws FacebookSDKException
+   */
+  public function cast($type = null)
+  {
+    $type = $type ?: get_class();
+
+    if ($type == get_class() || is_subclass_of($type, get_class())) {
+      return new $type($this->asStrictArray());
+    }
+
+    throw new FacebookSDKException(
+      'Cannot cast to an object that is not a GraphObject subclass', 620
+    );
+  }
+
+  /**
+   * Convert a string to snake case.
+   * Credit: https://github.com/laravel/framework/blob/397045ef988c77e2fb2988798b26e45775906de9/src/Illuminate/Support/Str.php
+   *
+   * @param  string  $value
+   * @param  string  $delimiter
+   * @return string
+   */
+  public static function snake($value, $delimiter = '_')
+  {
+    $replace = '$1'.$delimiter.'$2';
+
+    return ctype_lower($value) ? $value : strtolower(preg_replace('/(.)([A-Z])/', $replace, $value));
+  }
+
+  /**
+   * Magically get properties or cast objects.
+   *
+   * @param string $name The name of the method.
+   * @param array $arguments The arguments sent to the method.
+   *
+   * @return mixed
+   */
+  public function __call($name, array $arguments)
+  {
+    // Dynamically call properties with getPropertyName('default');
+    if (strpos($name, 'get') === 0) {
+      $propertyName = preg_replace('/^get(.*)/', '$1', $name);
+      $propertyName = static::snake($propertyName);
+      $default = isset($arguments[0]) ? $arguments[0] : null;
+
+      return call_user_func_array([$this, 'getProperty'], [$propertyName, $default]);
+    }
+
+    // Dynamically cast GraphObject types with castAsGraphUser();
+    if (strpos($name, 'castAs') === 0) {
+      $subClass = preg_replace('/^castAs(.*)/', '$1', $name);
+
+      $prefix = isset($arguments[0]) && $arguments[0] === false
+        ? ''
+        : '\\Facebook\\GraphNodes\\';
+
+      return call_user_func_array([$this, 'cast'], [$prefix.$subClass]);
+    }
+    return null;
   }
 
 }

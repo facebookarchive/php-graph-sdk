@@ -23,9 +23,9 @@
  */
 namespace Facebook\Entities;
 
-use Facebook\FacebookRequest;
-use Facebook\Exceptions\FacebookRequestException;
-use Facebook\FacebookSession;
+use Facebook\Facebook;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\GraphNodes\GraphObject;
 use Facebook\GraphNodes\GraphSessionInfo;
 
 /**
@@ -163,15 +163,15 @@ class AccessToken implements \Serializable
   public static function validateAccessToken(GraphSessionInfo $tokenInfo,
                                              $appId = null, $machineId = null)
   {
-    $targetAppId = FacebookSession::_getTargetAppId($appId);
+    $targetAppId = Facebook::getAppSecret($appId);
 
-    $appIdIsValid = $tokenInfo->getAppId() == $targetAppId;
+    $appIdIsValid = $tokenInfo->getProperty('app_id') == $targetAppId;
     $machineIdIsValid = $tokenInfo->getProperty('machine_id') == $machineId;
-    $accessTokenIsValid = $tokenInfo->isValid();
+    $accessTokenIsValid = $tokenInfo->getProperty('is_valid');
 
     // Not all access tokens return an expiration. E.g. an app access token.
-    if ($tokenInfo->getExpiresAt() instanceof \DateTime) {
-      $accessTokenIsStillAlive = $tokenInfo->getExpiresAt()->getTimestamp() >= time();
+    if ($tokenInfo->getProperty('expires_at') instanceof \DateTime) {
+      $accessTokenIsStillAlive = $tokenInfo->getProperty('expires_at')->getTimestamp() >= time();
     } else {
       $accessTokenIsStillAlive = true;
     }
@@ -183,18 +183,19 @@ class AccessToken implements \Serializable
    * Get a valid access token from a code.
    *
    * @param string $code
+   * @param string|null $redirectUri
    * @param string|null $appId
    * @param string|null $appSecret
    * @param string|null $machineId
    *
    * @return AccessToken
    */
-  public static function getAccessTokenFromCode($code, $appId = null, $appSecret = null, $machineId = null)
+  public static function getAccessTokenFromCode($code, $redirectUri = '', $appId = null, $appSecret = null, $machineId = null)
   {
-    $params = array(
+    $params = [
       'code' => $code,
-      'redirect_uri' => '',
-    );
+      'redirect_uri' => $redirectUri,
+    ];
 
     if ($machineId) {
       $params['machine_id'] = $machineId;
@@ -216,10 +217,10 @@ class AccessToken implements \Serializable
   {
     $accessToken = (string) $accessToken;
 
-    $params = array(
+    $params = [
       'access_token' => $accessToken,
       'redirect_uri' => '',
-    );
+    ];
 
     return static::requestCode($params, $appId, $appSecret);
   }
@@ -234,10 +235,10 @@ class AccessToken implements \Serializable
    */
   public function extend($appId = null, $appSecret = null)
   {
-    $params = array(
+    $params = [
       'grant_type' => 'fb_exchange_token',
       'fb_exchange_token' => $this->accessToken,
-    );
+    ];
 
     return static::requestAccessToken($params, $appId, $appSecret);
   }
@@ -251,35 +252,32 @@ class AccessToken implements \Serializable
    *
    * @return AccessToken
    *
-   * @throws FacebookRequestException
+   * @throws FacebookSDKException
    */
   public static function requestAccessToken(array $params, $appId = null, $appSecret = null)
   {
-    $response = static::request('/oauth/access_token', $params, $appId, $appSecret);
-    $data = $response->getResponse();
+    $graphObject = static::request('/oauth/access_token', $params, $appId, $appSecret);
+    $data = $graphObject->asArray();
 
-    /**
-     * @TODO fix this malarkey - getResponse() should always return an object
-     * @see https://github.com/facebook/facebook-php-sdk-v4/issues/36
-     */
-    if (is_array($data)) {
-      if (isset($data['access_token'])) {
-        $expiresAt = isset($data['expires']) ? time() + $data['expires'] : 0;
-        return new static($data['access_token'], $expiresAt);
-      }
-    } elseif($data instanceof \stdClass) {
-      if (isset($data->access_token)) {
-        $expiresAt = isset($data->expires_in) ? time() + $data->expires_in : 0;
-        $machineId = isset($data->machine_id) ? (string) $data->machine_id : null;
-        return new static((string) $data->access_token, $expiresAt, $machineId);
-      }
+    if (!isset($data['access_token'])) {
+      throw new FacebookSDKException('Access token was not returned from Graph.', 401);
     }
 
-    throw FacebookRequestException::create(
-      $response->getRawResponse(),
-      $data,
-      401
-    );
+    // Graph returns two different key names for expiration time
+    // on the same endpoint. Doh! :/
+    $expiresAt = 0;
+    if (isset($data['expires'])) {
+      // For exchanging a short lived token with a long lived token.
+      // The expiration time in seconds will be returned as "expires".
+      $expiresAt = time() + $data['expires'];
+    } elseif (isset($data['expires_in'])) {
+      // For exchanging a code for a short lived access token.
+      // The expiration time in seconds will be returned as "expires_in".
+      // See: https://developers.facebook.com/docs/facebook-login/access-tokens#long-via-code
+      $expiresAt = time() + $data['expires_in'];
+    }
+    $machineId = isset($data['machine_id']) ? $data['machine_id'] : null;
+    return new static($data['access_token'], $expiresAt, $machineId);
   }
 
   /**
@@ -291,40 +289,36 @@ class AccessToken implements \Serializable
    *
    * @return string
    *
-   * @throws FacebookRequestException
+   * @throws FacebookSDKException
    */
   public static function requestCode(array $params, $appId = null, $appSecret = null)
   {
-    $response = static::request('/oauth/client_code', $params, $appId, $appSecret);
-    $data = $response->getResponse();
+    $graphObject = static::request('/oauth/client_code', $params, $appId, $appSecret);
+    $data = $graphObject->asArray();
 
-    if (isset($data->code)) {
-      return (string) $data->code;
+    if (isset($data['code'])) {
+      return $data['code'];
     }
 
-    throw FacebookRequestException::create(
-      $response->getRawResponse(),
-      $data,
-      401
-    );
+    throw new FacebookSDKException('Code was not returned from Graph.', 401);
   }
 
   /**
-   * Send a request to Graph with an app access token.
+   * Send a GET request to Graph with an app access token.
    *
    * @param string $endpoint
    * @param array $params
    * @param string|null $appId
    * @param string|null $appSecret
    *
-   * @return \Facebook\FacebookResponse
+   * @return GraphObject
    *
-   * @throws FacebookRequestException
+   * @throws FacebookSDKException
    */
   protected static function request($endpoint, array $params, $appId = null, $appSecret = null)
   {
-    $targetAppId = FacebookSession::_getTargetAppId($appId);
-    $targetAppSecret = FacebookSession::_getTargetAppSecret($appSecret);
+    $targetAppId = Facebook::getAppId($appId);
+    $targetAppSecret = Facebook::getAppSecret($appSecret);
 
     if (!isset($params['client_id'])) {
       $params['client_id'] = $targetAppId;
@@ -333,15 +327,9 @@ class AccessToken implements \Serializable
       $params['client_secret'] = $targetAppSecret;
     }
 
-    // The response for this endpoint is not JSON, so it must be handled
-    //   differently, not as a GraphObject.
-    $request = new FacebookRequest(
-      FacebookSession::newAppSession($targetAppId, $targetAppSecret),
-      'GET',
-      $endpoint,
-      $params
-    );
-    return $request->execute();
+    $appAccessToken = Facebook::getAppAccessToken($appId, $appSecret);
+    $request = Facebook::newRequest($appAccessToken);
+    return $request->withFields($params)->get($endpoint);
   }
 
   /**
@@ -354,22 +342,17 @@ class AccessToken implements \Serializable
    */
   public function getInfo($appId = null, $appSecret = null)
   {
-    $params = array('input_token' => $this->accessToken);
+    $params = ['input_token' => $this->accessToken];
 
-    $request = new FacebookRequest(
-      FacebookSession::newAppSession($appId, $appSecret),
-      'GET',
-      '/debug_token',
-      $params
-    );
-    $response = $request->execute()->getGraphObject(GraphSessionInfo::className());
+    $graphObject = static::request('/debug_token', $params, $appId, $appSecret);
+    $graphObject = $graphObject->castAsGraphSessionInfo();
 
     // Update the data on this token
-    if ($response->getExpiresAt()) {
-      $this->expiresAt = $response->getExpiresAt();
+    if ($graphObject->getProperty('expires_at')) {
+      $this->expiresAt = $graphObject->getProperty('expires_at');
     }
 
-    return $response;
+    return $graphObject;
   }
 
   /**

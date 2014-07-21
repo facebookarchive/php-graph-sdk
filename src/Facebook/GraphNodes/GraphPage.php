@@ -32,33 +32,12 @@ class GraphPage extends GraphObject
 {
 
   /**
-   * Returns the ID for the user's page as a string if present.
-   *
-   * @return string|null
+   * @var array Maps object key names to Graph object types.
    */
-  public function getId()
-  {
-    return $this->getProperty('id');
-  }
-
-  /**
-   * Returns the Category for the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getCategory()
-  {
-    return $this->getProperty('category');
-  }
-
-  /**
-   * Returns the Name of the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getName()
-  {
-    return $this->getProperty('name');
-  }
+  protected $graphObjectMap = [
+    'best_page' => 'Facebook\GraphNodes\GraphPage',
+    'global_brand_parent_page' => 'Facebook\GraphNodes\GraphPage',
+    'location' => 'Facebook\GraphNodes\GraphLocation',
+  ];
 
 }

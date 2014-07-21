@@ -1,27 +1,44 @@
 <?php
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphUser;
 
 class GraphUserTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testMeReturnsGraphUser()
+  public function testPagePropertiesWillGetCastAsGraphPageObjects()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/me'
-    ))->execute()->getGraphObject(GraphUser::className());
+    $graphObject = new GraphUser([
+      'id' => '123',
+      'name' => 'Foo User',
+      'hometown' => [
+        'id' => '1',
+        'name' => 'Foo Place',
+      ],
+      'location' => [
+        'id' => '2',
+        'name' => 'Bar Place',
+      ],
+    ]);
+    $hometown = $graphObject->getHometown();
+    $location = $graphObject->getLocation();
 
-    $info = FacebookTestHelper::$testSession->getSessionInfo();
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphPage', $hometown);
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphPage', $location);
+  }
 
-    $this->assertTrue($response instanceof GraphUser);
-    $this->assertEquals($info->getId(), $response->getId());
-    $this->assertNotNull($response->getName());
-    $this->assertNotNull($response->getLastName());
-    $this->assertNotNull($response->getLink());
+  public function testUserPropertiesWillGetCastAsGraphUserObjects()
+  {
+    $graphObject = new GraphUser([
+      'id' => '123',
+      'name' => 'Foo User',
+      'significant_other' => [
+        'id' => '1337',
+        'name' => 'Bar User',
+      ],
+    ]);
+    $significantOther = $graphObject->getSignificantOther();
+
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $significantOther);
   }
 
 }

@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
+require __DIR__ . '/AbstractTestHttpClient.php';
 
 use Mockery as m;
-use Facebook\HttpClients\FacebookGuzzleHttpClient;
+use Facebook\Http\Clients\FacebookGuzzleHttpClient;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {

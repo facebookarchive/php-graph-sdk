@@ -1,7 +1,7 @@
 <?php
 
+use Facebook\Facebook;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
 
 class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
 {
@@ -17,15 +17,16 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     $helper->disableSessionStatusCheck();
     $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
     $state = $_SESSION['FBRLH_state'];
-    $params = array(
+    $params = [
       'client_id' => FacebookTestCredentials::$appId,
       'redirect_uri' => self::REDIRECT_URL,
       'state' => $state,
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
-      'scope' => implode(',', array())
-    );
-    $expectedUrl = 'https://www.facebook.com/v2.0/dialog/oauth?';
-    $this->assertTrue(strpos($loginUrl, $expectedUrl) !== false);
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
+      'scope' => '',
+    ];
+    $version = Facebook::getDefaultGraphApiVersion();
+    $expectedUrl = 'https://www.facebook.com/' . $version . '/dialog/oauth?';
+    $this->assertTrue(strpos($loginUrl, $expectedUrl) === 0);
     foreach ($params as $key => $value) {
       $this->assertTrue(
         strpos($loginUrl, $key . '=' . urlencode($value)) !== false
@@ -40,15 +41,13 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appSecret
     );
     $helper->disableSessionStatusCheck();
-    $logoutUrl = $helper->getLogoutUrl(
-      FacebookTestHelper::$testSession, self::REDIRECT_URL
-    );
-    $params = array(
+    $logoutUrl = $helper->getLogoutUrl('foo_token', self::REDIRECT_URL);
+    $params = [
       'next' => self::REDIRECT_URL,
-      'access_token' => FacebookTestHelper::$testSession->getToken()
-    );
+      'access_token' => 'foo_token',
+    ];
     $expectedUrl = 'https://www.facebook.com/logout.php?';
-    $this->assertTrue(strpos($logoutUrl, $expectedUrl) !== false);
+    $this->assertTrue(strpos($logoutUrl, $expectedUrl) === 0);
     foreach ($params as $key => $value) {
       $this->assertTrue(
         strpos($logoutUrl, $key . '=' . urlencode($value)) !== false

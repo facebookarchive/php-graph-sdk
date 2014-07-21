@@ -21,48 +21,71 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Entities;
 
 /**
- * Interface FacebookHttpClientInterface
+ * Class BatchRequest
  * @package Facebook
  */
-interface FacebookHttpClientInterface
+class BatchRequest extends Request
 {
 
   /**
-   * The headers we want to send with the request
-   *
-   * @param string $key
-   * @param string $value
+   * @var string  The name of this request so that it can be referenced
+   *              from another request in the batch.
    */
-  public function addRequestHeader($key, $value);
+  protected $batchRequestName;
 
   /**
-   * The headers returned in the response
+   * Set the name of this request.
    *
-   * @return array
+   * @param string|null $name
+   *
+   * @return BatchRequest
    */
-  public function getResponseHeaders();
+  public function setBatchRequestName($name = null)
+  {
+    $this->batchRequestName = $name;
+
+    return $this;
+  }
 
   /**
-   * The HTTP status response code
+   * Return the name of this request.
    *
-   * @return int
+   * @return string|null
    */
-  public function getResponseHttpStatusCode();
+  public function getBatchRequestName()
+  {
+    return $this->batchRequestName;
+  }
 
   /**
-   * Sends a request to the server
+   * Return the access token for this request.
    *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
-   *
-   * @return string Raw response from the server
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
+   * @return string
    */
-  public function send($url, $method = 'GET', $parameters = array());
+  public function getAccessToken()
+  {
+    return $this->accessToken;
+  }
+
+  /**
+   * Individual requests on a batch do not require an access token.
+   */
+  public function validateAccessToken()
+  {
+    return;
+  }
+
+  /**
+   * Checks if an access token has been set directly for this entity.
+   *
+   * @return boolean
+   */
+  public function hasAccessToken()
+  {
+    return !empty($this->accessToken);
+  }
 
 }

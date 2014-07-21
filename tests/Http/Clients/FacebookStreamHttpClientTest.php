@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
+require __DIR__ . '/AbstractTestHttpClient.php';
 
 use Mockery as m;
-use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\Http\Clients\FacebookStreamHttpClient;
 
 class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 {
@@ -13,7 +13,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
   public function setUp()
   {
-    $this->streamMock = m::mock('Facebook\HttpClients\FacebookStream');
+    $this->streamMock = m::mock('Facebook\Http\Clients\FacebookStream');
     $this->streamClient = new FacebookStreamHttpClient($this->streamMock);
   }
 

@@ -1,5 +1,7 @@
 <?php
 
+if (!class_exists('AbstractTestHttpClient')) {
+
 abstract class AbstractTestHttpClient extends PHPUnit_Framework_TestCase
 {
 
@@ -36,5 +38,7 @@ Access-Control-Allow-Origin: *\r\n\r\n";
     'Cache-Control' => 'private, no-cache, no-store, must-revalidate',
     'Access-Control-Allow-Origin' => '*',
   );
+
+}
 
 }
