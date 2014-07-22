@@ -117,7 +117,7 @@ class Code
 
     $machineId = isset($response['machine_id']) ? $response['machine_id'] : null;
 
-    return new AccessToken($response['access_token'], $expiresAt, $machineId);
+    return new AccessToken($this->app, $response['access_token'], $expiresAt, $machineId);
   }
 
   public function __toString()
