@@ -23,6 +23,8 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+
 /**
  * Class FacebookJavaScriptLoginHelper
  * @package Facebook
@@ -31,7 +33,6 @@ namespace Facebook\Helpers;
  */
 class FacebookJavaScriptLoginHelper extends FacebookSignedRequestFromInputHelper
 {
-
   /**
    * Get raw signed request from the cookie.
    *

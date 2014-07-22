@@ -23,9 +23,10 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
+use Facebook\FacebookClient;
+use Facebook\Helpers\AbstractFacebookHelper;
 use Facebook\Entities\AccessToken;
+use Facebook\Entities\Code;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -34,19 +35,8 @@ use Facebook\Exceptions\FacebookSDKException;
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class FacebookRedirectLoginHelper
+class FacebookRedirectLoginHelper extends AbstractFacebookHelper
 {
-
-  /**
-   * @var string The application id
-   */
-  protected $appId;
-
-  /**
-   * @var string The application secret
-   */
-  protected $appSecret;
-
   /**
    * @var string Prefix to use for session variables
    */
@@ -56,18 +46,6 @@ class FacebookRedirectLoginHelper
    * @var boolean Toggle for PHP session status check
    */
   protected $checkForSessionStatus = true;
-
-  /**
-   * Constructs a RedirectLoginHelper for a given appId.
-   *
-   * @param string $appId The application id
-   * @param string $appSecret The application secret
-   */
-  public function __construct($appId = null, $appSecret = null)
-  {
-    $this->appId = FacebookSession::_getTargetAppId($appId);
-    $this->appSecret = FacebookSession::_getTargetAppSecret($appSecret);
-  }
 
   /**
    * Stores CSRF state and returns a URL to which the user should be sent to
@@ -81,21 +59,22 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false, $version = null)
+  public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false)
   {
-    $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $version = $this->client->getGraphVersion();
     $state = $this->generateState();
     $this->storeState($state);
     $params = array(
-      'client_id' => $this->appId,
+      'client_id' => $this->app->getId(),
       'redirect_uri' => $redirectUrl,
       'state' => $state,
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'sdk' => 'php-sdk-' . FacebookClient::VERSION,
       'scope' => implode(',', $scope)
     );
 	
-    if ($rerequest)
+    if ($rerequest) {
       $params['auth_type'] = 'rerequest';
+    }
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params, null, '&amp;');
@@ -104,17 +83,17 @@ class FacebookRedirectLoginHelper
   /**
    * Returns the URL to send the user in order to log out of Facebook.
    *
-   * @param FacebookSession $session The session that will be logged out
+   * @param AccessToken $accessToken The access token that will be logged out
    * @param string $next The url Facebook should redirect the user to after
    *   a successful logout
    *
    * @return string
    */
-  public function getLogoutUrl(FacebookSession $session, $next)
+  public function getLogoutUrl(AccessToken $accessToken, $next)
   {
     $params = array(
       'next' => $next,
-      'access_token' => $session->getToken()
+      'access_token' => (string)$accessToken,
     );
     return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, '&amp;');
   }
@@ -123,16 +102,13 @@ class FacebookRedirectLoginHelper
    * Handles a response from Facebook, including a CSRF check, and returns a
    *   FacebookSession.
    *
-   * @return FacebookSession|null
+   * @return AccessToken|null
    */
-  public function getSessionFromRedirect()
+  public function getAccessToken()
   {
     if ($this->isValidRedirect()) {
-      $params = array(
-        'redirect_uri' => $this->getFilteredUri($this->getCurrentUri()),
-        'code' => $this->getCode()
-      );
-      return new FacebookSession(AccessToken::requestAccessToken($params, $this->appId, $this->appSecret));
+      $redirectUri = $this->getFilteredUri($this->getCurrentUri());
+      return (new Code($this->app, $this->getRawCode()))->getAccessToken($this->client, $redirectUri);
     }
     return null;
   }
@@ -144,7 +120,7 @@ class FacebookRedirectLoginHelper
    */
   protected function isValidRedirect()
   {
-    return $this->getCode() && isset($_GET['state'])
+    return $this->getRawCode() && isset($_GET['state'])
         && $_GET['state'] == $this->loadState();
   }
 
@@ -153,7 +129,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string|null
    */
-  protected function getCode()
+  protected function getRawCode()
   {
     return isset($_GET['code']) ? $_GET['code'] : null;
   }

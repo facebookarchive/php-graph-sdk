@@ -23,6 +23,8 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+
 /**
  * Class FacebookCanvasLoginHelper
  * @package Facebook
@@ -31,7 +33,6 @@ namespace Facebook\Helpers;
  */
 class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
 {
-
   /**
    * Returns the app data value.
    *
@@ -39,7 +40,7 @@ class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
    */
   public function getAppData()
   {
-    return $this->signedRequest ? $this->signedRequest->get('app_data') : null;
+    return $this->getSignedRequest()->get('app_data');
   }
 
   /**
