@@ -23,68 +23,44 @@
  */
 namespace Facebook\Tests\Helpers;
 
+use Mockery as m;
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
-
-class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
-  public function getRawSignedRequest() {
-    return null;
-  }
-}
 
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {
-
-  protected $helper;
-  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
-  public $rawSignedRequestUnauthorized = 'KPlyhz-whtYAhHWr15N5TkbS_avz-2rUJFpFkfXKC88=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwMjU1MTA4Nn0=';
-
-  public function setUp()
+  public function testAccessTokenWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
   {
-    $this->helper = new FooSignedRequestHelper('123', 'foo_app_secret');
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['123', 'foo_app_secret'])->makePartial();
+    $fakeClient = m::mock('Facebook\FacebookClient')->makePartial();
+    $helper = new UnauthorizedSignedRequestHelper($fakeClient, $fakeApp);
+
+    $accessToken = $helper->getAccessToken();
+
+    $this->assertNull($accessToken);
   }
 
-  public function testSignedRequestDataCanBeRetrievedFromGetData()
+  public function testAnAccessTokenCanBeInstantiatedWhenAUserHasAuthorizedTheApp()
   {
-    $_GET['signed_request'] = 'foo_signed_request';
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['123', 'foo_app_secret'])->makePartial();
+    $fakeClient = m::mock('Facebook\FacebookClient')->makePartial();
+    $helper = new AuthorizedSignedRequestHelper($fakeClient, $fakeApp);
 
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromGet();
+    $accessToken = $helper->getAccessToken();
 
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
+    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertEquals('foo_token', $accessToken->getValue());
   }
 
-  public function testSignedRequestDataCanBeRetrievedFromPostData()
-  {
-    $_POST['signed_request'] = 'foo_signed_request';
+}
 
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromPost();
-
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
+class AuthorizedSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
+  public function getRawSignedRequest() {
+    return 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
   }
+}
 
-  public function testSignedRequestDataCanBeRetrievedFromCookieData()
-  {
-    $_COOKIE['fbsr_123'] = 'foo_signed_request';
-
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromCookie();
-
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
+class UnauthorizedSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
+  public function getRawSignedRequest() {
+    return 'KPlyhz-whtYAhHWr15N5TkbS_avz-2rUJFpFkfXKC88=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwMjU1MTA4Nn0=';
   }
-
-  public function testSessionWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
-  {
-    $this->helper->instantiateSignedRequest($this->rawSignedRequestUnauthorized);
-    $session = $this->helper->getSession();
-
-    $this->assertNull($session);
-  }
-
-  public function testAFacebookSessionCanBeInstantiatedWhenAUserHasAuthorizedTheApp()
-  {
-    $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorized);
-    $session = $this->helper->getSession();
-
-    $this->assertInstanceOf('Facebook\FacebookSession', $session);
-    $this->assertEquals('foo_token', $session->getToken());
-  }
-
 }

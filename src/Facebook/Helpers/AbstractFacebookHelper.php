@@ -25,78 +25,73 @@ namespace Facebook\Helpers;
 
 use Facebook\FacebookClient;
 use Facebook\Entities\FacebookApp;
-use Facebook\Helpers\FacebookCanvasLoginHelper;
+use Facebook\Entities\AccessToken;
+use Facebook\HttpClients\FacebookHttpClientInterface;
 
 /**
- * Class FacebookPageTabHelper
+ * Class AbstractFacebookHelper
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
  */
-class FacebookPageTabHelper extends FacebookCanvasLoginHelper
+abstract class AbstractFacebookHelper
 {
   /**
-   * @var array|null
+   * @var FacebookClient
    */
-  protected $pageData;
+  protected $client;
 
   /**
-   * Initialize the helper and process available signed request data.
+   * @var FacebookApp $app
+   */
+  protected $app;
+
+  /**
+   * Constructs a helper
    *
    * @param FacebookClient $client
    * @param FacebookApp $app
    */
   public function __construct(FacebookClient $client, FacebookApp $app)
   {
-    parent::__construct($client, $app);
-
-    $this->pageData = $this->getSignedRequest()->get('page');
+    $this->client = $client;
+    $this->app = $app;
   }
 
   /**
-   * Returns a value from the page data.
+   * @param string $appId
+   * @param string $appSecret
+   * @param FacebookHttpClientInterface $httpClient
+   * @param bool $useSecretProof
+   * @param bool $useBeta
    *
-   * @param string $key
-   * @param mixed|null $default
-   *
-   * @return mixed|null
+   * @return AbstractFacebookHelper
    */
-  public function getPageData($key, $default = null)
+  public static function create($appId, $appSecret, FacebookHttpClientInterface $httpClient = null, $useSecretProof = true, $useBeta = false)
   {
-    if (isset($this->pageData[$key])) {
-      return $this->pageData[$key];
-    }
-
-    return $default;
+    return new static(
+      new FacebookClient($httpClient, $useSecretProof, $useBeta),
+      new FacebookApp($appId, $appSecret)
+    );
   }
 
   /**
-   * Returns true if the page is liked by the user.
-   *
-   * @return bool
+   * @return AccessToken
    */
-  public function isLiked()
+  abstract public function getAccessToken();
+
+  /**
+   * @return FacebookClient
+   */
+  final public function getClient()
   {
-    return (bool)$this->getPageData('liked');
+    return $this->client;
   }
 
   /**
-   * Returns true if the user is an admin.
-   *
-   * @return bool
+   * @return FacebookApp
    */
-  public function isAdmin()
+  final public function getApp()
   {
-    return (bool)$this->getPageData('admin');
-  }
-
-  /**
-   * Returns the page id if available.
-   *
-   * @return string|null
-   */
-  public function getPageId()
-  {
-    return $this->getPageData('id');
+    return $this->app;
   }
 
 }

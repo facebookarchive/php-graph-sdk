@@ -23,6 +23,7 @@
  */
 namespace Facebook\Tests\Helpers;
 
+use Mockery as m;
 use Facebook\Helpers\FacebookCanvasLoginHelper;
 
 class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +34,10 @@ class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function setUp()
   {
-    $this->helper = new FacebookCanvasLoginHelper('123', 'foo_app_secret');
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['123', 'foo_app_secret'])->makePartial();
+    $fakeClient = m::mock('Facebook\FacebookClient')->makePartial();
+    
+    $this->helper = new FacebookCanvasLoginHelper($fakeClient, $fakeApp);
   }
 
   public function testSignedRequestDataCanBeRetrievedFromGetData()

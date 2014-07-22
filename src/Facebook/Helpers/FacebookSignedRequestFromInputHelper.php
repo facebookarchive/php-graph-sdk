@@ -23,87 +23,42 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\FacebookSession;
+use Facebook\Helpers\AbstractFacebookHelper;
 use Facebook\Entities\SignedRequest;
 
 /**
  * Class FacebookSignedRequestFromInputHelper
  * @package Facebook
  */
-abstract class FacebookSignedRequestFromInputHelper
+abstract class FacebookSignedRequestFromInputHelper extends AbstractFacebookHelper
 {
-
   /**
-   * @var \Facebook\Entities\SignedRequest|null
+   * @var SignedRequest|null
    */
   protected $signedRequest;
 
   /**
-   * @var string the app id
-   */
-  protected $appId;
-
-  /**
-   * @var string the app secret
-   */
-  protected $appSecret;
-
-  /**
-   * @var string|null Random string to prevent CSRF.
-   */
-  public $state = null;
-
-  /**
-   * Initialize the helper and process available signed request data.
-   *
-   * @param string|null $appId
-   * @param string|null $appSecret
-   */
-  public function __construct($appId = null, $appSecret = null)
-  {
-    $this->appId = FacebookSession::_getTargetAppId($appId);
-    $this->appSecret = FacebookSession::_getTargetAppSecret($appSecret);
-
-    $this->instantiateSignedRequest();
-  }
-
-  /**
    * Instantiates a new SignedRequest entity.
    *
-   * @param string|null
+   * @param SignedRequest
    */
-  public function instantiateSignedRequest($rawSignedRequest = null)
+  final public function getSignedRequest($state = null)
   {
-    $rawSignedRequest = $rawSignedRequest ?: $this->getRawSignedRequest();
-
-    if (!$rawSignedRequest) {
-      return;
+    if (!$this->signedRequest instanceof SignedRequest) {
+      $this->signedRequest = new SignedRequest($this->app, $this->getRawSignedRequest(), $state);
     }
 
-    $this->signedRequest = new SignedRequest($rawSignedRequest, $this->state, $this->appSecret);
-  }
-
-  /**
-   * Instantiates a FacebookSession from the signed request from input.
-   *
-   * @return FacebookSession|null
-   */
-  public function getSession()
-  {
-    if ($this->signedRequest && $this->signedRequest->hasOAuthData()) {
-      return FacebookSession::newSessionFromSignedRequest($this->signedRequest);
-    }
-    return null;
-  }
-
-  /**
-   * Returns the SignedRequest entity.
-   *
-   * @return \Facebook\Entities\SignedRequest|null
-   */
-  public function getSignedRequest()
-  {
     return $this->signedRequest;
+  }
+
+  /**
+   * @param string|null $state
+   *
+   * @return AccessToken
+   */
+  final public function getAccessToken($state = null)
+  {
+    return $this->getSignedRequest($state)->getAccessToken($this->client);
   }
 
   /**
@@ -113,7 +68,7 @@ abstract class FacebookSignedRequestFromInputHelper
    */
   public function getUserId()
   {
-    return $this->signedRequest ? $this->signedRequest->getUserId() : null;
+    return $this->getSignedRequest()->getUserId();
   }
 
   /**
@@ -122,46 +77,5 @@ abstract class FacebookSignedRequestFromInputHelper
    * @return string|null
    */
   abstract public function getRawSignedRequest();
-
-  /**
-   * Get raw signed request from GET input.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequestFromGet()
-  {
-    if (isset($_GET['signed_request'])) {
-      return $_GET['signed_request'];
-    }
-
-    return null;
-  }
-
-  /**
-   * Get raw signed request from POST input.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequestFromPost()
-  {
-    if (isset($_POST['signed_request'])) {
-      return $_POST['signed_request'];
-    }
-
-    return null;
-  }
-
-  /**
-   * Get raw signed request from cookie set from the Javascript SDK.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequestFromCookie()
-  {
-    if (isset($_COOKIE['fbsr_' . $this->appId])) {
-      return $_COOKIE['fbsr_' . $this->appId];
-    }
-    return null;
-  }
 
 }
