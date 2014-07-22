@@ -27,6 +27,8 @@ use Facebook\FacebookClient;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\AccessToken;
 use Facebook\HttpClients\FacebookHttpClientInterface;
+use Facebook\Builders\RequestBuilder;
+use Facebook\Builders\BatchRequestBuilder;
 
 /**
  * Class AbstractFacebookHelper
@@ -93,6 +95,32 @@ abstract class AbstractFacebookHelper
   final public function getApp()
   {
     return $this->app;
+  }
+
+  /**
+   * @param AccessToken $accessToken
+   *
+   * @return RequestBuilder
+   */
+  final public function request(AccessToken $accessToken = null)
+  {
+    $builder = new RequestBuilder($this->client, $this->app);
+
+    if ($accessToken) {
+      $builder->withAccessToken($accessToken);
+    }
+
+    return $builder;
+  }
+
+  /**
+   * @param AccessToken $fallbackAccessToken
+   *
+   * @return BatchRequestBuilder
+   */
+  final public function batch(AccessToken $fallbackAccessToken = null)
+  {
+    return new BatchRequestBuilder($this->client, $this->app, $fallbackAccessToken);
   }
 
 }
