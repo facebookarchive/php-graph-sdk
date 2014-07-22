@@ -27,6 +27,7 @@ use Facebook\FacebookClient;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\Code;
+use Facebook\Entities\DebugAccessToken;
 use Facebook\Exceptions\FacebookResponseException;
 
 /**
@@ -223,6 +224,18 @@ class AccessToken implements \Serializable
     $machineId = isset($data['machine_id']) ? $data['machine_id'] : null;
 
     return new AccessToken($this->app, $data['access_token'], $expiresAt, $machineId);
+  }
+
+  /**
+   * Get more info about an access token.
+   *
+   * @param FacebookClient $client
+   *
+   * @return DebugAccessToken
+   */
+  public function getDebugged(FacebookClient $client)
+  {
+    return new DebugAccessToken($client, $this->app, $this->value);
   }
 
   public function __toString()
