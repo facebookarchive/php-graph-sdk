@@ -144,11 +144,7 @@ class FacebookClient
     );
 
     if ($response->isError()) {
-      throw FacebookResponseException::create(
-        $response->getRaw(),
-        $response->getBody(),
-        $response->getStatusCode()
-      );
+      throw FacebookResponseException::create($response);
     }
 
     return $response;
