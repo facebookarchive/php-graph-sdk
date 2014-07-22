@@ -68,7 +68,7 @@ class FacebookApp implements \Serializable
    */
   public function getAccessToken()
   {
-    return new AccessToken($this->id . '|' . $this->secret);
+    return new AccessToken($this, $this->id . '|' . $this->secret);
   }
 
   public function serialize()
