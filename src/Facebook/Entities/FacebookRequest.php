@@ -23,6 +23,7 @@
  */
 namespace Facebook\Entities;
 
+use Facebook\FacebookClient;
 use Facebook\Entities\AccessToken;
 use Facebook\Exceptions\FacebookSDKException;
 
@@ -32,11 +33,6 @@ use Facebook\Exceptions\FacebookSDKException;
  */
 class FacebookRequest
 {
-  /**
-   * @const string Version number of the Facebook PHP SDK.
-   */
-  const SDK_VERSION = '4.1.x-dev';
-
   /**
    * @var string The Graph endpoint for this request.
    */
@@ -151,7 +147,7 @@ class FacebookRequest
   public function getHeaders()
   {
     $headers = [
-      'User-Agent' => 'fb-php-' . static::SDK_VERSION,
+      'User-Agent' => 'fb-php-' . FacebookClient::VERSION,
       'Accept-Encoding' => '*',
     ];
 
