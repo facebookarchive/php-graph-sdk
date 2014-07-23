@@ -28,6 +28,11 @@
             "Facebook\\": "src/Facebook/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Facebook\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "4.1.x-dev"
