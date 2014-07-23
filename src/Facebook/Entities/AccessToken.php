@@ -24,7 +24,7 @@
 namespace Facebook\Entities;
 
 use Facebook\FacebookRequest;
-use Facebook\Exceptions\FacebookRequestException;
+use Facebook\Exceptions\FacebookResponseException;
 use Facebook\FacebookSession;
 use Facebook\GraphNodes\GraphSessionInfo;
 
@@ -251,7 +251,7 @@ class AccessToken implements \Serializable
    *
    * @return AccessToken
    *
-   * @throws FacebookRequestException
+   * @throws FacebookResponseException
    */
   public static function requestAccessToken(array $params, $appId = null, $appSecret = null)
   {
@@ -275,7 +275,7 @@ class AccessToken implements \Serializable
       }
     }
 
-    throw FacebookRequestException::create(
+    throw FacebookResponseException::create(
       $response->getRawResponse(),
       $data,
       401
@@ -291,7 +291,7 @@ class AccessToken implements \Serializable
    *
    * @return string
    *
-   * @throws FacebookRequestException
+   * @throws FacebookResponseException
    */
   public static function requestCode(array $params, $appId = null, $appSecret = null)
   {
@@ -302,7 +302,7 @@ class AccessToken implements \Serializable
       return (string) $data->code;
     }
 
-    throw FacebookRequestException::create(
+    throw FacebookResponseException::create(
       $response->getRawResponse(),
       $data,
       401
@@ -319,7 +319,7 @@ class AccessToken implements \Serializable
    *
    * @return \Facebook\FacebookResponse
    *
-   * @throws FacebookRequestException
+   * @throws FacebookResponseException
    */
   protected static function request($endpoint, array $params, $appId = null, $appSecret = null)
   {

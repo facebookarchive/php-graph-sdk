@@ -26,7 +26,7 @@ namespace Facebook;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
-use Facebook\Exceptions\FacebookRequestException;
+use Facebook\Exceptions\FacebookResponseException;
 
 /**
  * Class FacebookRequest
@@ -223,7 +223,7 @@ class FacebookRequest
    * @return FacebookResponse
    *
    * @throws FacebookSDKException
-   * @throws FacebookRequestException
+   * @throws FacebookResponseException
    */
   public function execute()
   {
@@ -262,7 +262,7 @@ class FacebookRequest
       return new FacebookResponse($this, $out, $result, $etagHit, $etagReceived);
     }
     if (isset($decodedResult->error)) {
-      throw FacebookRequestException::create(
+      throw FacebookResponseException::create(
         $result,
         $decodedResult->error,
         $connection->getResponseHttpStatusCode()
