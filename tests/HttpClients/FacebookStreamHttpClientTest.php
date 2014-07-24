@@ -23,16 +23,20 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
-
 use Mockery as m;
-use Facebook\Tests\HttpClients\AbstractTestHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 
 class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 {
 
+  /**
+   * @var \Facebook\HttpClients\FacebookStream
+   */
   protected $streamMock;
+
+  /**
+   * @var FacebookStreamHttpClient
+   */
   protected $streamClient;
 
   public function setUp()
@@ -48,9 +52,11 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
   public function testCanCompileHeader()
   {
-    $this->streamClient->addRequestHeader('X-foo', 'bar');
-    $this->streamClient->addRequestHeader('X-bar', 'faz');
-    $header = $this->streamClient->compileHeader();
+    $headers = [
+      'X-foo' => 'bar',
+      'X-bar' => 'faz',
+    ];
+    $header = $this->streamClient->compileHeader($headers);
     $this->assertEquals("X-foo: bar\r\nX-bar: faz", $header);
   }
 
@@ -107,8 +113,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
       ->with('http://foo.com/')
       ->andReturn($this->fakeRawBody);
 
-    $this->streamClient->addRequestHeader('X-foo', 'bar');
-    $responseBody = $this->streamClient->send('http://foo.com/');
+    $responseBody = $this->streamClient->send('http://foo.com/', 'GET', [], ['X-foo' => 'bar']);
 
     $this->assertEquals($responseBody, $this->fakeRawBody);
     $this->assertEquals($this->streamClient->getResponseHeaders(), $this->fakeHeadersAsArray);

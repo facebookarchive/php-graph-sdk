@@ -21,64 +21,67 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\GraphNodes;
+namespace Facebook\Entities;
 
 /**
- * Class GraphUserPage
+ * Class AppSecretProof
  * @package Facebook
- * @author Artur Luiz <artur@arturluiz.com.br>
  */
-class GraphUserPage extends GraphObject
+class AppSecretProof
 {
 
   /**
-   * Returns the ID for the user's page as a string if present.
-   *
-   * @return string|null
+   * @var string The access token to use for this proof.
    */
-  public function getId()
+  protected $accessToken;
+
+  /**
+   * @var string|null The app secret.
+   */
+  protected $appSecret;
+
+  /**
+   * @var string The app secret proof.
+   */
+  protected $appSecretProof;
+
+  /**
+   * Creates a new Request entity.
+   *
+   * @param string $accessToken
+   * @param string $appSecret
+   */
+  public function __construct($accessToken, $appSecret)
   {
-    return $this->getProperty('id');
+    $this->accessToken = $accessToken;
+    $this->appSecret = $appSecret;
   }
 
   /**
-   * Returns the Category for the user's page as a string if present.
+   * Generate and return the app secret proof value for an access token.
    *
-   * @return string|null
+   * @param string $accessToken The access token as a string.
+   * @param string $appSecret The app secret.
+   *
+   * @return string The app secret proof.
    */
-  public function getCategory()
+  public static function make($accessToken, $appSecret)
   {
-    return $this->getProperty('category');
+    return hash_hmac('sha256', $accessToken, $appSecret);
   }
 
   /**
-   * Returns the Name of the user's page as a string if present.
+   * Convert the entity to a string by creating an app secret proof.
    *
-   * @return string|null
+   * @return string The app secret proof.
    */
-  public function getName()
+  public function __toString()
   {
-    return $this->getProperty('name');
-  }
+    if ($this->appSecretProof) {
+      return $this->appSecretProof;
+    }
 
-  /**
-   * Returns the Access Token used to access the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getAccessToken()
-  {
-    return $this->getProperty('access_token');
-  }
-  
-  /**
-   * Returns the Permissions for the user's page as an array if present.
-   *
-   * @return array|null
-   */
-  public function getPerms()
-  {
-    return $this->getProperty('perms');
+    return $this->appSecretProof = static::make($this->accessToken, $this->appSecret);
   }
 
 }

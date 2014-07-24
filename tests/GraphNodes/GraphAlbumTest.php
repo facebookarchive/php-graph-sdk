@@ -23,55 +23,42 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphAlbum;
-use Facebook\Tests\FacebookTestHelper;
 
 class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
 
-  const ALBUM_DESCRIPTION = "Album Description";
-  const ALBUM_NAME = "Album Name";
-
-  public function testMeReturnsGraphAlbum()
+  public function testDatesGetCastToDateTime()
   {
-    $response = (
-    new FacebookRequest(
-        FacebookTestHelper::$testSession,
-        'POST',
-        '/me/albums',
-        array(
-            'name' => self::ALBUM_NAME,
-            'message' => self::ALBUM_DESCRIPTION,
-            'value' => 'everyone'
-        )
-    ))->execute()->getGraphObject();
+    $data = [
+      'created_time' => '2014-07-15T03:54:34+0000',
+      'updated_time' => '2014-07-12T01:24:09+0000',
+      'id' => '123',
+      'name' => 'Bar',
+    ];
+    $graphObject = new GraphAlbum($data);
 
-    $albumId = $response->getProperty('id');
+    $createdTime = $graphObject->getCreatedTime();
+    $updatedTime = $graphObject->getUpdatedTime();
 
-    $response = (
-    new FacebookRequest(
-        FacebookTestHelper::$testSession,
-        'GET',
-        '/'.$albumId
-    ))->execute()->getGraphObject(GraphAlbum::className());
+    $this->assertInstanceOf('DateTime', $createdTime);
+    $this->assertInstanceOf('DateTime', $updatedTime);
+  }
 
-    $this->assertTrue($response instanceof GraphAlbum);
-    $this->assertEquals($albumId, $response->getId());
-    $this->assertTrue($response->getFrom() instanceof \Facebook\GraphNodes\GraphUser);
-    $this->assertTrue($response->canUpload());
-    $this->assertEquals(0, $response->getCount());
-    $this->assertEquals(self::ALBUM_NAME, $response->getName());
-    $this->assertEquals(self::ALBUM_DESCRIPTION, $response->getDescription());
-    $this->assertNotNull($response->getLink());
-    $this->assertNotNull($response->getPrivacy());
+  public function testFromGetsCastAsGraphUser()
+  {
+    $data = [
+      'id' => '123',
+      'from' => [
+        'id' => '1337',
+        'name' => 'Foo McBar',
+      ],
+    ];
+    $graphObject = new GraphAlbum($data);
 
-    $type = array("profile", "mobile", "wall", "normal", "album");
-    $this->assertTrue(in_array($response->getType(),$type));
+    $from = $graphObject->getFrom();
 
-    date_default_timezone_set('GMT');
-    $this->assertTrue($response->getCreatedTime() instanceof \DateTime);
-    $this->assertTrue($response->getUpdatedTime() instanceof \DateTime);
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $from);
   }
 
 }

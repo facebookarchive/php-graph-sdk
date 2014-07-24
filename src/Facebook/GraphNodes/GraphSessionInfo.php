@@ -72,7 +72,7 @@ class GraphSessionInfo extends GraphObject
    *
    * @return boolean
    */
-  public function isValid()
+  public function getIsValid()
   {
     return $this->getProperty('is_valid');
   }
@@ -107,7 +107,7 @@ class GraphSessionInfo extends GraphObject
    *
    * @return string|null
    */
-  public function getId()
+  public function getUserId()
   {
     return $this->getProperty('user_id');
   }

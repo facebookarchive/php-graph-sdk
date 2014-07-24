@@ -21,29 +21,25 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\GraphNodes;
+namespace Facebook\Tests\Entities;
 
-use Facebook\FacebookRequest;
-use Facebook\GraphNodes\GraphLocation;
-use Facebook\GraphNodes\GraphObject;
-use Facebook\Tests\FacebookTestHelper;
+use Facebook\Entities\AppSecretProof;
 
-class GraphLocationTest extends \PHPUnit_Framework_TestCase
+class AppSecretProofTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testLocation()
+  public function testAnAppSecretProofIsGeneratedAsExpected()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/104048449631599'
-    ))->execute()->getGraphObject();
-    $this->assertTrue($response instanceof GraphObject);
+    $appSecretProof = AppSecretProof::make('foo_access_token', 'foo_app_secret');
 
-    $location = $response->getProperty('location', GraphLocation::className());
-    $this->assertTrue(is_float($location->getLatitude()));
-    $this->assertTrue(is_float($location->getLongitude()));
+    $this->assertEquals('12f5dcbb7557d24b1d37fd180c45991c5999f325ece0af331c00a85d762f2b95', $appSecretProof);
+  }
+
+  public function testAnAppSecretProofEntityCanBeReturnedAsAString()
+  {
+    $appSecretProof = new AppSecretProof('foo_access_token', 'foo_app_secret');
+
+    $this->assertEquals('12f5dcbb7557d24b1d37fd180c45991c5999f325ece0af331c00a85d762f2b95', (string) $appSecretProof);
   }
 
 }

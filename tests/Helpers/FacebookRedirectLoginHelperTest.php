@@ -23,10 +23,10 @@
  */
 namespace Facebook\Tests\Helpers;
 
-use Facebook\Tests\FacebookTestCredentials;
+use Mockery as m;
+use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\Tests\FacebookTestHelper;
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,22 +35,23 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testLoginURL()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookRedirectLoginHelper($app);
     $helper->disableSessionStatusCheck();
-    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
-    $state = $_SESSION['FBRLH_state'];
-    $params = array(
-      'client_id' => FacebookTestCredentials::$appId,
+
+    $scope = ['foo','bar'];
+    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL, $scope, true, 'v1337');
+
+    $expectedUrl = 'https://www.facebook.com/v1337/dialog/oauth?';
+    $this->assertTrue(strpos($loginUrl, $expectedUrl) === 0, 'Unexpected base login URL returned from getLoginUrl().');
+
+    $params = [
+      'client_id' => '123',
       'redirect_uri' => self::REDIRECT_URL,
-      'state' => $state,
+      'state' => $_SESSION['FBRLH_state'],
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
-      'scope' => implode(',', array())
-    );
-    $expectedUrl = 'https://www.facebook.com/v2.0/dialog/oauth?';
-    $this->assertTrue(strpos($loginUrl, $expectedUrl) !== false);
+      'scope' => implode(',', $scope),
+    ];
     foreach ($params as $key => $value) {
       $this->assertTrue(
         strpos($loginUrl, $key . '=' . urlencode($value)) !== false
@@ -60,36 +61,63 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testLogoutURL()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookRedirectLoginHelper($app);
     $helper->disableSessionStatusCheck();
-    $logoutUrl = $helper->getLogoutUrl(
-      FacebookTestHelper::$testSession, self::REDIRECT_URL
-    );
-    $params = array(
-      'next' => self::REDIRECT_URL,
-      'access_token' => FacebookTestHelper::$testSession->getToken()
-    );
+
+    $logoutUrl = $helper->getLogoutUrl('foo_token', self::REDIRECT_URL);
     $expectedUrl = 'https://www.facebook.com/logout.php?';
-    $this->assertTrue(strpos($logoutUrl, $expectedUrl) !== false);
+    $this->assertTrue(strpos($logoutUrl, $expectedUrl) === 0, 'Unexpected base logout URL returned from getLogoutUrl().');
+
+    $params = [
+      'next' => self::REDIRECT_URL,
+      'access_token' => 'foo_token',
+    ];
     foreach ($params as $key => $value) {
       $this->assertTrue(
         strpos($logoutUrl, $key . '=' . urlencode($value)) !== false
       );
     }
   }
+
+  public function testAnAccessTokenCanBeObtainedFromRedirect()
+  {
+    $_SESSION['FBRLH_state'] = 'foo_state';
+    $_GET['state'] = 'foo_state';
+    $_GET['code'] = 'foo_code';
+
+    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn([
+          'access_token' => 'access_token_from_code',
+          'expires' => 555,
+        ]);
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
+
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookRedirectLoginHelper($app);
+    $helper->disableSessionStatusCheck();
+
+    $accessToken = $helper->getAccessTokenFromRedirect($client, self::REDIRECT_URL);
+
+    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertEquals('access_token_from_code', (string) $accessToken);
+  }
   
   /**
    * @dataProvider provideUris
    */
-  public function testGetFilterdUriRemoveFacebookQueryParams($uri, $expected)
+  public function testGetFilteredUriRemoveFacebookQueryParams($uri, $expected)
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookRedirectLoginHelper($app);
     $helper->disableSessionStatusCheck();
 
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
@@ -102,40 +130,38 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function provideUris()
   {
-    return array(
-      array(
+    return [
+      [
         'http://localhost/something?state=0000&foo=bar&code=abcd',
         'http://localhost/something?foo=bar',
-      ),
-      array(
+      ],
+      [
         'https://localhost/something?state=0000&foo=bar&code=abcd',
         'https://localhost/something?foo=bar',
-      ),
-      array(
+      ],
+      [
         'http://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
         'http://localhost/something?foo=bar',
-      ),
-      array(
+      ],
+      [
         'https://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
         'https://localhost/something?foo=bar',
-      ),
-      array(
+      ],
+      [
         'http://localhost/something?state=0000&foo=bar&error=abcd',
         'http://localhost/something?state=0000&foo=bar&error=abcd',
-      ),
-      array(
+      ],
+      [
         'https://localhost/something?state=0000&foo=bar&error=abcd',
         'https://localhost/something?state=0000&foo=bar&error=abcd',
-      ),
-    );
+      ],
+    ];
   }
   
   public function testCSPRNG()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookRedirectLoginHelper($app);
     
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
     $method = $class->getMethod('random');

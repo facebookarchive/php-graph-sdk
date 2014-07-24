@@ -23,6 +23,8 @@
  */
 namespace Facebook\GraphNodes;
 
+use Facebook\Exceptions\FacebookSDKException;
+
 /**
  * Class GraphObject
  * @package Facebook
@@ -35,18 +37,15 @@ class GraphObject
   /**
    * @var array - Holds the raw associative data for this object
    */
-  protected $backingData;
+  protected $backingData = [];
 
   /**
    * Creates a GraphObject using the data provided.
    *
    * @param array $raw
    */
-  public function __construct($raw)
+  public function __construct(array $raw = [])
   {
-    if ($raw instanceof \stdClass) {
-      $raw = get_object_vars($raw);
-    }
     $this->backingData = $raw;
 
     if (isset($this->backingData['data']) && count($this->backingData) === 1) {
@@ -96,12 +95,13 @@ class GraphObject
    * getProperty - Gets the value of the named property for this graph object,
    *   cast to the appropriate subclass type if provided.
    *
-   * @param string $name The property to retrieve
-   * @param string $type The subclass of GraphObject, optionally
+   * @param string $name The property to retrieve.
+   * @param mixed|null $default The default return value.
+   * @param string $type The subclass of GraphObject, optionally.
    *
    * @return mixed
    */
-  public function getProperty($name, $type = 'Facebook\GraphNodes\GraphObject')
+  public function getProperty($name, $default = null, $type = 'Facebook\GraphNodes\GraphObject')
   {
     if (isset($this->backingData[$name])) {
       $value = $this->backingData[$name];
@@ -110,9 +110,8 @@ class GraphObject
       } else {
         return (new GraphObject($value))->cast($type);
       }
-    } else {
-      return null;
     }
+    return $default;
   }
 
   /**

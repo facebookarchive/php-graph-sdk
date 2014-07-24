@@ -23,16 +23,20 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
-
 use Mockery as m;
-use Facebook\Tests\HttpClients\AbstractTestHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
 
+  /**
+   * @var \GuzzleHttp\Client
+   */
   protected $guzzleMock;
+
+  /**
+   * @var FacebookGuzzleHttpClient
+   */
   protected $guzzleClient;
 
   public function setUp()
@@ -72,7 +76,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', array())
+      ->with('GET', 'http://foo.com/', [])
       ->andReturn($requestMock);
     $this->guzzleMock
       ->shouldReceive('send')
@@ -80,8 +84,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->with($requestMock)
       ->andReturn($responseMock);
 
-    $this->guzzleClient->addRequestHeader('X-foo', 'bar');
-    $responseBody = $this->guzzleClient->send('http://foo.com/');
+    $responseBody = $this->guzzleClient->send('http://foo.com/', 'GET', [], ['X-foo' => 'bar']);
 
     $this->assertEquals($responseBody, $this->fakeRawBody);
     $this->assertEquals($this->guzzleClient->getResponseHeaders(), $this->fakeHeadersAsArray);
@@ -106,7 +109,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', array())
+      ->with('GET', 'http://foo.com/', [])
       ->andReturn($requestMock);
     $this->guzzleMock
       ->shouldReceive('send')
