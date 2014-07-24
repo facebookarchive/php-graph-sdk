@@ -27,7 +27,7 @@ namespace Facebook\Exceptions;
  * Class FacebookPermissionException
  * @package Facebook
  */
-class FacebookPermissionException extends FacebookRequestException
+class FacebookPermissionException extends FacebookResponseException
 {
 
 }

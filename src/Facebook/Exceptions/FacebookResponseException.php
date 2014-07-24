@@ -24,12 +24,12 @@
 namespace Facebook\Exceptions;
 
 /**
- * Class FacebookRequestException
+ * Class FacebookResponseException
  * @package Facebook
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class FacebookRequestException extends FacebookSDKException
+class FacebookResponseException extends FacebookSDKException
 {
 
   /**
@@ -48,7 +48,7 @@ class FacebookRequestException extends FacebookSDKException
   private $responseData;
 
   /**
-   * Creates a FacebookRequestException.
+   * Creates a FacebookResponseException.
    *
    * @param string $rawResponse The raw response from the Graph API
    * @param array $responseData The decoded response from the Graph API
@@ -72,7 +72,7 @@ class FacebookRequestException extends FacebookSDKException
    * @param array $data the decoded response from the Graph API
    * @param int $statusCode the HTTP response code
    *
-   * @return FacebookRequestException
+   * @return FacebookResponseException
    */
   public static function create($raw, $data, $statusCode)
   {
