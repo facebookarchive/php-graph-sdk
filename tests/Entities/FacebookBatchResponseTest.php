@@ -21,26 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Helpers;
+namespace Facebook\Tests\Entities;
 
-use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+use Facebook\Entities\FacebookBatchResponse;
 
-/**
- * Class FacebookJavaScriptLoginHelper
- * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
- */
-class FacebookJavaScriptLoginHelper extends FacebookSignedRequestFromInputHelper
+class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
-  /**
-   * Get raw signed request from the cookie.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequest()
-  {
-    return $this->getRawSignedRequestFromCookie();
-  }
-
+  /** @todo Add tests */
 }

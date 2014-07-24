@@ -21,26 +21,29 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Helpers;
+namespace Facebook\Tests\Entities;
 
-use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+use Facebook\Entities\FacebookBatchRequest;
 
-/**
- * Class FacebookJavaScriptLoginHelper
- * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
- */
-class FacebookJavaScriptLoginHelper extends FacebookSignedRequestFromInputHelper
+class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 {
-  /**
-   * Get raw signed request from the cookie.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequest()
+  public function testThatCanCreateEmptyBatchRequest()
   {
-    return $this->getRawSignedRequestFromCookie();
+    new FacebookBatchRequest();
   }
+
+  public function testThatConstructorSetBatchRequestInfos()
+  {
+    $batchRequest = new FacebookBatchRequest();
+    $params = $batchRequest->getParameters();
+
+    $this->assertEquals('/', $batchRequest->getEndpoint());
+    $this->assertEquals('POST', $batchRequest->getMethod());
+    $this->assertArrayHasKey('batch', $params);
+    $this->assertArrayHasKey('include_headers', $params);
+    $this->assertTrue($params['include_headers']);
+  }
+
+  /** @todo Add more tests */
 
 }
