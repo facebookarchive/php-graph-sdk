@@ -43,7 +43,6 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
   public function tearDown()
   {
-    m::close();
     (new FacebookGuzzleHttpClient()); // Resets the static dependency injection
   }
 

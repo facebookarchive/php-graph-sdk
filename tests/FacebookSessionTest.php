@@ -31,11 +31,6 @@ use Facebook\Tests\FacebookTestHelper;
 class FacebookSessionTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function tearDown()
-  {
-    m::close();
-  }
-
   public function testSessionToken()
   {
     $session = new FacebookSession(FacebookTestHelper::getAppToken());

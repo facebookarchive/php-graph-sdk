@@ -43,7 +43,6 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
   public function tearDown()
   {
-    m::close();
     (new FacebookStreamHttpClient()); // Resets the static dependency injection
   }
 
