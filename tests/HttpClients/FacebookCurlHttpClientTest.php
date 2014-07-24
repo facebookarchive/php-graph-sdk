@@ -46,7 +46,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
   public function tearDown()
   {
-    m::close();
     (new FacebookCurlHttpClient()); // Resets the static dependency injection
   }
 
