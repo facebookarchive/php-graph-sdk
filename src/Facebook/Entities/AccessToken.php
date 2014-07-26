@@ -70,7 +70,7 @@ class AccessToken implements \Serializable
    * @param int $expiresAt
    * @param string|null machineId
    */
-  public function __construct(FacebookApplication $app, $value, $expiresAt = 0, $machineId = null)
+  public function __construct(FacebookApp $app, $value, $expiresAt = 0, $machineId = null)
   {
     $this->app = $app;
     $this->value = $value;
@@ -79,6 +79,14 @@ class AccessToken implements \Serializable
       $this->expiresAt->setTimestamp($expiresAt);
     }
     $this->machineId = $machineId;
+  }
+
+  /**
+   * @return FacebookApp
+   */
+  public function getApp()
+  {
+    return $this->app;
   }
 
   /**
@@ -152,7 +160,7 @@ class AccessToken implements \Serializable
    */
   public function getSecretProof()
   {
-    return hash_hmac('sha256', (string)$this, $this->app->getSecret());
+    return hash_hmac('sha256', $this->value, $this->app->getSecret());
   }
 
   /**
@@ -172,10 +180,10 @@ class AccessToken implements \Serializable
     );
 
     $response = $client->handle(new FacebookRequest(
-      $this->app->getAccessToken(),
       '/oauth/client_code',
       'GET',
-      $params
+      $params,
+      $this->app->getAccessToken()
     ));
     $data = $response->getBody();
 
@@ -203,10 +211,10 @@ class AccessToken implements \Serializable
     );
 
     $response = $client->handle(new FacebookRequest(
-      $this->app->getAccessToken(),
       '/oauth/access_token',
       'GET',
-      $params
+      $params,
+      $this->app->getAccessToken()
     ));
     $data = $response->getBody();
 
@@ -240,7 +248,7 @@ class AccessToken implements \Serializable
 
   public function __toString()
   {
-    return $this->value;
+    return (string)$this->value;
   }
 
   public function serialize()
