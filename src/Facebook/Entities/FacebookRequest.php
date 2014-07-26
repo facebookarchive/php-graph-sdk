@@ -54,6 +54,11 @@ class FacebookRequest
   protected $accessToken;
 
   /**
+   * @var string
+   */
+  protected $graphVersion;
+
+  /**
    * @var string ETag to send with this request.
    */
   protected $eTag;
@@ -65,6 +70,7 @@ class FacebookRequest
    * @param string $method
    * @param array $params
    * @param AccessToken|null $accessToken
+   * @param string $graphVersion
    * @param string $eTag
    */
   public function __construct(
@@ -72,16 +78,19 @@ class FacebookRequest
     $method = 'GET',
     array $params = [],
     AccessToken $accessToken = null,
+    $graphVersion = 'v2.0',
     $eTag = ''
   )
   {
     $this->validateEndpoint($endpoint);
     $this->validateMethod($method);
+    $this->validateGraphVersion($graphVersion);
 
     $this->endpoint = '/' . ltrim($endpoint, '/');
     $this->method = strtoupper($method);
     $this->params = [];
     $this->accessToken = $accessToken;
+    $this->graphVersion = $graphVersion;
     $this->eTag = $eTag;
 
     $this->processGetParametersInEndpoint();
@@ -130,6 +139,14 @@ class FacebookRequest
   }
 
   /**
+   * @return string
+   */
+  public function getGraphVersion()
+  {
+    return $this->graphVersion;
+  }
+
+  /**
    * Return the eTag for this request.
    *
    * @return string
@@ -173,6 +190,13 @@ class FacebookRequest
   {
     if (!in_array(strtoupper($method), ['GET', 'POST', 'DELETE'])) {
       throw new FacebookSDKException('Invalid method');
+    }
+  }
+
+  protected function validateGraphVersion($graphVersion)
+  {
+    if (!in_array($graphVersion, ['v1.0', 'v2.0'])) {
+      throw new FacebookSDKException('Invalid Graph version');
     }
   }
 

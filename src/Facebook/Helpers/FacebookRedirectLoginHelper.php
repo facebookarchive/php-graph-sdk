@@ -66,7 +66,6 @@ class FacebookRedirectLoginHelper extends AbstractFacebookHelper
    */
   public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false)
   {
-    $version = $this->client->getGraphVersion();
     $state = $this->generateState();
     $this->storeState($state);
     $params = array(
@@ -81,7 +80,7 @@ class FacebookRedirectLoginHelper extends AbstractFacebookHelper
       $params['auth_type'] = 'rerequest';
     }
 
-    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
+    return 'https://www.facebook.com/dialog/oauth?' .
       http_build_query($params, null, '&amp;');
   }
 

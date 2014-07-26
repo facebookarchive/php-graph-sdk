@@ -66,6 +66,7 @@ class FacebookBatchedRequest extends FacebookRequest
       $request->getMethod(),
       $request->getParameters(),
       $request->getAccessToken(),
+      $request->getGraphVersion(),
       $request->getETag()
     );
 

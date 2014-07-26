@@ -71,14 +71,21 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
   {
     $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['01234', 'S3cr3t'])->makePartial();
     $fakeAccessToken = m::mock('Facebook\Entities\AccessToken', [$fakeApp, 'AbCd'])->makePartial();
-    $request = new FacebookRequest('/me', 'GET', [], $fakeAccessToken, 'etag');
+    $request = new FacebookRequest('/me', 'GET', [], $fakeAccessToken, 'v2.0', 'etag');
 
     $this->assertSame($fakeAccessToken, $request->getAccessToken());
   }
 
+  public function testGetGraphVersion()
+  {
+    $request = new FacebookRequest('/me', 'GET', [], null, 'v1.0');
+
+    $this->assertEquals('v1.0', $request->getGraphVersion());
+  }
+
   public function testGetETag()
   {
-    $request = new FacebookRequest('/me', 'GET', [], null, 'etag');
+    $request = new FacebookRequest('/me', 'GET', [], null, 'v2.0', 'etag');
 
     $this->assertEquals('etag', $request->getETag());
   }
@@ -108,6 +115,15 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
   public function testThatConstructorThrowsExceptionOnInvalidMethod()
   {
     new FacebookRequest('/me', 'invalid');
+  }
+
+  /**
+   * @expectedException Facebook\Exceptions\FacebookSDKException
+   * @expectedExceptionMessage Invalid Graph version
+   */
+  public function testThatConstructorThrowsExceptionOnInvalidGraphVersion()
+  {
+    new FacebookRequest('/me', 'GET', [], null, 'invalid');
   }
 
   public function testThatConstructorAcceptLowercaseMethod()
@@ -155,7 +171,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testGetHeadersWithETag()
   {
-    $request = new FacebookRequest('/me', 'GET', [], null, 'etag');
+    $request = new FacebookRequest('/me', 'GET', [], null, 'v2.0', 'etag');
     $headers = $request->getHeaders();
 
     $this->assertArrayHasKey('If-None-Match', $headers);
