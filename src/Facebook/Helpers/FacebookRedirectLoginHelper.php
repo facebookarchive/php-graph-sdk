@@ -77,6 +77,8 @@ class FacebookRedirectLoginHelper
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login
    * @param array $scope List of permissions to request during login
+   * @param boolean $rerequest If it is the re-request to the previously declined
+   * 				permissions
    * @param string $version Optional Graph API version if not default (v2.0)
    *
    * @return string
