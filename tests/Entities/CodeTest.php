@@ -2,9 +2,9 @@
 
 use Mockery as m;
 use Facebook\Entities\Code;
-use Facebook\Entities\FacebookRequest;
+use Facebook\Tests\FacebookTestCase;
 
-class CodeTest extends \PHPUnit_Framework_TestCase
+class CodeTest extends FacebookTestCase
 {
   protected $fakeApp;
 
@@ -34,43 +34,17 @@ class CodeTest extends \PHPUnit_Framework_TestCase
     $accessTokenValue = 'foo_token';
     $accessTokenExpires = time() + (60 * 60 * 24);
 
-    $clientMock = m::mock('Facebook\FacebookClient[handle]')
-      ->shouldReceive('handle')
-      ->once()
-      ->with(m::on(function($request) use ($codeValue, $redirectUri) {
-        if (!$request instanceof FacebookRequest) {
-          return false;
-        }
-
-        if ('/oauth/access_token' !== $request->getEndpoint()) {
-          return false;
-        }
-
-        if ('GET' !== $request->getMethod()) {
-          return false;
-        }
-
-        $params = $request->getParameters();
-        $expectedParams = array(
-          'client_id' => $this->fakeApp->getId(),
-          'client_secret' => $this->fakeApp->getSecret(),
-          'code' => $codeValue,
-          'redirect_uri' => $redirectUri,
-        );
-        if ($params !== $expectedParams) {
-          return false;
-        }
-
-        return true;
-      }))
-      ->andReturnUsing(function($request) use ($accessTokenValue, $accessTokenExpires) {
-        return m::mock('Facebook\Entities\FacebookResponse', [
-          $request,
-          'access_token='.$accessTokenValue.'&expires='.$accessTokenExpires
-        ])->makePartial();
-      })
-      ->getMock()
-      ->makePartial();
+    $clientMock = $this->getClientMock(
+      '/oauth/access_token',
+      'GET',
+      [
+        'client_id' => $this->fakeApp->getId(),
+        'client_secret' => $this->fakeApp->getSecret(),
+        'code' => $codeValue,
+        'redirect_uri' => $redirectUri
+      ],
+      'access_token='.$accessTokenValue.'&expires='.$accessTokenExpires
+    );
 
     $code = new Code($this->fakeApp, $codeValue);
     $accessToken = $code->getAccessToken($clientMock, $redirectUri);
