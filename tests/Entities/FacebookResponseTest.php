@@ -138,13 +138,17 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testThatGetGraphObjectListCanCast()
   {
-    $response = new FacebookResponse($this->fakeRequest, '{"data":[{},{}]}');
+    $response = new FacebookResponse($this->fakeRequest, '{"data":[{"name":"Foo"},{"name":"Bar"}]}');
+    $list = $response->getGraphObjectList('Facebook\GraphNodes\GraphUser');
 
-    foreach ($response->getGraphObjectList('Facebook\GraphNodes\GraphUser') as $object) {
+    $this->assertCount(2, $list);
+    foreach ($list as $object) {
       if ('Facebook\GraphNodes\GraphUser' !== get_class($object)) {
         $this->fail('getGraphObjectList don\'t cast all elements');
       }
     }
+    $this->assertEquals('Foo', $list[0]->getName());
+    $this->assertEquals('Bar', $list[1]->getName());
   }
 
   public function testThatCanReadResponseAsArray()

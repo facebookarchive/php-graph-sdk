@@ -23,6 +23,9 @@
  */
 namespace Facebook\GraphNodes;
 
+use Facebook\GraphNodes\GraphUser;
+use Facebook\GraphNodes\GraphPage;
+
 /**
  * Class GraphAlbum
  * @package Facebook
@@ -116,7 +119,7 @@ class GraphAlbum extends GraphObject
      */
     public function getFrom()
     {
-      return  $this->getProperty('from', GraphUser::className());
+      return $this->getProperty('from', GraphUser::className());
     }
 
     /**
@@ -150,6 +153,16 @@ class GraphAlbum extends GraphObject
     }
 
     /**
+     * Returns the place of the album
+     *
+     * @return GraphPage|null
+     */
+    public function getPlace()
+    {
+      return $this->getProperty('place', GraphPage::className());
+    }
+
+    /**
      * Returns the privacy settings for the album.
      *
      * @return string|null
@@ -168,6 +181,4 @@ class GraphAlbum extends GraphObject
     {
         return $this->getProperty('type');
     }
-
-    //TODO: public function getPlace() that should return GraphPage
 }

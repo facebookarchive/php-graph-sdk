@@ -23,55 +23,53 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphAlbum;
-use Facebook\Tests\FacebookTestHelper;
+use Facebook\GraphNodes\GraphUser;
+use Facebook\GraphNodes\GraphPage;
 
 class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
-
-  const ALBUM_DESCRIPTION = "Album Description";
-  const ALBUM_NAME = "Album Name";
-
-  public function testMeReturnsGraphAlbum()
+  public function testAlbum()
   {
-    $response = (
-    new FacebookRequest(
-        FacebookTestHelper::$testSession,
-        'POST',
-        '/me/albums',
-        array(
-            'name' => self::ALBUM_NAME,
-            'message' => self::ALBUM_DESCRIPTION,
-            'value' => 'everyone'
-        )
-    ))->execute()->getGraphObject();
+    $createdTime = time()-60;
+    $updatedTime = time();
+    $data = [
+      'id' => 1234,
+      'can_upload' => true,
+      'count' => 53,
+      'cover_photo' => 'cover',
+      'created_time' => date('c', $createdTime),
+      'description' => 'Album Description',
+      'from' => [],
+      'link' => 'http://link',
+      'location' => 'somewhere',
+      'name' => 'Album Name',
+      'place' => [],
+      'privacy' => 'everybody',
+      'type' => 'normal',
+      'updated_time' => date('c', $updatedTime),
+    ];
+    $album = new GraphAlbum($data);
 
-    $albumId = $response->getProperty('id');
-
-    $response = (
-    new FacebookRequest(
-        FacebookTestHelper::$testSession,
-        'GET',
-        '/'.$albumId
-    ))->execute()->getGraphObject(GraphAlbum::className());
-
-    $this->assertTrue($response instanceof GraphAlbum);
-    $this->assertEquals($albumId, $response->getId());
-    $this->assertTrue($response->getFrom() instanceof \Facebook\GraphNodes\GraphUser);
-    $this->assertTrue($response->canUpload());
-    $this->assertEquals(0, $response->getCount());
-    $this->assertEquals(self::ALBUM_NAME, $response->getName());
-    $this->assertEquals(self::ALBUM_DESCRIPTION, $response->getDescription());
-    $this->assertNotNull($response->getLink());
-    $this->assertNotNull($response->getPrivacy());
+    $this->assertEquals(1234, $album->getId());
+    $this->assertTrue($album->canUpload());
+    $this->assertEquals(53, $album->getCount());
+    $this->assertEquals('cover', $album->getCoverPhoto());
+    $this->assertTrue($album->getCreatedTime() instanceof \DateTime);
+    $this->assertEquals($createdTime, $album->getCreatedTime()->getTimestamp());
+    $this->assertEquals('Album Description', $album->getDescription());
+    $this->assertTrue($album->getFrom() instanceof GraphUser);
+    $this->assertNotNull($album->getLink());
+    $this->assertEquals('somewhere', $album->getLocation());
+    $this->assertEquals('Album Name', $album->getName());
+    $this->assertTrue($album->getPlace() instanceof GraphPage);
+    $this->assertNotNull($album->getPrivacy());
 
     $type = array("profile", "mobile", "wall", "normal", "album");
-    $this->assertTrue(in_array($response->getType(),$type));
+    $this->assertTrue(in_array($album->getType(),$type));
 
-    date_default_timezone_set('GMT');
-    $this->assertTrue($response->getCreatedTime() instanceof \DateTime);
-    $this->assertTrue($response->getUpdatedTime() instanceof \DateTime);
+    $this->assertTrue($album->getUpdatedTime() instanceof \DateTime);
+    $this->assertEquals($updatedTime, $album->getUpdatedTime()->getTimestamp());
   }
 
 }
