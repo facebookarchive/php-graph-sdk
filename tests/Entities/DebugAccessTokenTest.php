@@ -1,122 +1,114 @@
 <?php
 
 use Facebook\Entities\DebugAccessToken;
+use Facebook\Tests\FacebookTestCase;
 
-class DebugAccessTokenTest extends \PHPUnit_Framework_TestCase
+class DebugAccessTokenTest extends FacebookTestCase
 {
-  public function testATokenIsValidatedOnTheAppIdAndMachineIdAndTokenValidityAndTokenExpiration()
+  protected $fakeApp;
+
+  protected function setUp()
   {
-    $this->markTestSkipped('Needs FacebookClient mock');
-    /*$aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getAppId')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('isValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'foo_machine');
-
-    $this->assertTrue($isValid, 'Expected access token to be valid.');*/
-  }
-
-  public function testATokenWillNotBeValidIfTheAppIdDoesNotMatch()
-  {
-    $this->markTestSkipped('Needs FacebookClient mock');
-    /*$aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getAppId')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('isValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '42', 'foo_machine');
-
-    $this->assertFalse($isValid, 'Expected access token to be invalid because the app ID does not match.');*/
-  }
-
-  public function testATokenWillNotBeValidIfTheCollectionTellsUsItsNotValid()
-  {
-    $this->markTestSkipped('Needs FacebookClient mock');
-    /*$aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getAppId')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('isValid')
-      ->once()
-      ->andReturn(false);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'foo_machine');
-
-    $this->assertFalse($isValid, 'Expected access token to be invalid because the collection says it is not valid.');*/
+    $this->fakeApp = $this->getAppMock('foo_app_id', 'foo_app_secret');
   }
 
   public function testInfoAboutAnAccessTokenCanBeObtainedFromGraph()
   {
-    $this->markTestSkipped('Needs FacebookClient mock');
-    /*$testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
+    $clientMock = $this->getClientMock('/debug_token', 'GET', [
+      'input_token' => 'foo_token',
+    ], json_encode(
+      [
+        'data' => [
+          'app_id' => '138483919580948',
+          'application' => 'Social Cafe',
+          'expires_at' => 1352419328,
+          'is_valid' => true,
+          'issued_at' => 1347235328,
+          'metadata' => [
+              'sso' => 'iphone-safari'
+          ],
+          'scopes' => [
+              'email',
+              'publish_actions'
+          ],
+          'user_id' => 1207059
+        ]
+      ]
+    ));
 
-    $accessToken = new AccessToken($testUserAccessToken);
-    $accessTokenInfo = $accessToken->getInfo();
+    $accessToken = new DebugAccessToken($clientMock, $this->fakeApp, 'foo_token');
 
-    $testAppId = FacebookTestCredentials::$appId;
-    $this->assertEquals($testAppId, $accessTokenInfo->getAppId());
+    $this->assertInstanceOf('Facebook\Entities\DebugAccessToken', $accessToken);
+    $this->assertEquals('foo_token', $accessToken->getValue());
+    $this->assertEquals('138483919580948', $accessToken->getAppId());
+    $this->assertEquals('Social Cafe', $accessToken->getAppName());
+    $this->assertTrue($accessToken->getExpiresAt() instanceof \DateTime);
+    $this->assertEquals(1352419328, $accessToken->getExpiresAt()->getTimestamp());
+    $this->assertTrue($accessToken->getIsValid());
+    $this->assertTrue($accessToken->getIssuedAt() instanceof \DateTime);
+    $this->assertEquals(1347235328, $accessToken->getIssuedAt()->getTimestamp());
+    $this->assertEquals(['email', 'publish_actions'], $accessToken->getScopes());
+    $this->assertEquals(1207059, $accessToken->getUserId());
+  }
 
-    $testUserId = FacebookTestHelper::$testUserId;
-    $this->assertEquals($testUserId, $accessTokenInfo->getId());
+  public function testATokenIsValidatedOnTheAppIdAndMachineIdAndTokenValidityAndTokenExpiration()
+  {
+    $aWeek = time() + (60 * 60 * 24 * 7);
+    $clientMock = $this->getClientMock('/debug_token', 'GET', [
+      'input_token' => 'foo_token',
+    ], json_encode(
+      [
+        'data' => [
+          'app_id' => 'foo_app_id',
+          'expires_at' => $aWeek,
+          'is_valid' => true,
+        ]
+      ]
+    ));
 
-    $expectedScopes = FacebookTestHelper::$testUserPermissions;
-    $actualScopes = $accessTokenInfo->getPropertyAsArray('scopes');
-    foreach ($expectedScopes as $scope) {
-      $this->assertTrue(in_array($scope, $actualScopes),
-        'Expected the following permission to be present: '.$scope);
-    }*/
+    $accessToken = new DebugAccessToken($clientMock, $this->fakeApp, 'foo_token', 'foo_machine');
+
+    $this->assertTrue($accessToken->isValid('foo_machine'));
+  }
+
+  public function testATokenWillNotBeValidIfTheAppIdDoesNotMatch()
+  {
+    $aWeek = time() + (60 * 60 * 24 * 7);
+    $clientMock = $this->getClientMock('/debug_token', 'GET', [
+      'input_token' => 'foo_token',
+    ], json_encode(
+      [
+        'data' => [
+          'app_id' => 'bar_app_id',
+          'expires_at' => $aWeek,
+          'is_valid' => true,
+        ]
+      ]
+    ));
+
+    $accessToken = new DebugAccessToken($clientMock, $this->fakeApp, 'foo_token');
+
+    $this->assertFalse($accessToken->isValid());
+  }
+
+  public function testATokenWillNotBeValidIfTheCollectionTellsUsItsNotValid()
+  {
+    $aWeek = time() + (60 * 60 * 24 * 7);
+    $clientMock = $this->getClientMock('/debug_token', 'GET', [
+      'input_token' => 'foo_token',
+    ], json_encode(
+      [
+        'data' => [
+          'app_id' => 'foo_app_id',
+          'expires_at' => $aWeek,
+          'is_valid' => false,
+        ]
+      ]
+    ));
+
+    $accessToken = new DebugAccessToken($clientMock, $this->fakeApp, 'foo_token');
+
+    $this->assertFalse($accessToken->isValid());
   }
 
 }
