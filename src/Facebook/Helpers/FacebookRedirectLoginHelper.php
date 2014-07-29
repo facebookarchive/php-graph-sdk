@@ -73,10 +73,15 @@ class FacebookRedirectLoginHelper
    * Stores CSRF state and returns a URL to which the user should be sent to
    *   in order to continue the login process with Facebook.  The
    *   provided redirectUrl should invoke the handleRedirect method.
+   *   If a previous request to certain permission(s) was declined
+   *   by the user, rerequest should be set to true or the permission(s)
+   *   will not be re-asked.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login
    * @param array $scope List of permissions to request during login
+   * @param boolean $rerequest Whether this is the re-request to the previously
+   * 				declined permissions
    * @param string $version Optional Graph API version if not default (v2.0)
    *
    * @return string
