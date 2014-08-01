@@ -50,7 +50,11 @@ class GraphObject
     $this->backingData = $raw;
 
     if (isset($this->backingData['data']) && count($this->backingData) === 1) {
-      $this->backingData = $this->backingData['data'];
+      if ($this->backingData['data'] instanceof \stdClass) {
+        $this->backingData = get_object_vars($this->backingData['data']);
+      } else {
+        $this->backingData = $this->backingData['data'];
+      }
     }
   }
 
