@@ -255,7 +255,7 @@ class FacebookRequest
     $headers = $connection->getResponseHeaders();
     $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
 
-    $decodedResult = json_decode($result);
+    $decodedResult = json_decode($result, true);
     if ($decodedResult === null) {
       $out = array();
       parse_str($result, $out);
