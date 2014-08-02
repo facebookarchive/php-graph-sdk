@@ -23,25 +23,24 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphLocation;
 use Facebook\GraphNodes\GraphObject;
-use Facebook\Tests\FacebookTestHelper;
 
 class GraphLocationTest extends \PHPUnit_Framework_TestCase
 {
 
   public function testLocation()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/104048449631599'
-    ))->execute()->getGraphObject();
-    $this->assertTrue($response instanceof GraphObject);
-
-    $location = $response->getProperty('location', GraphLocation::className());
+    $data = [
+      // ...
+      'location' => [
+        'latitude' => 37.4542,
+        'longitude' => -122.179,
+      ],
+    ];
+    $object = new GraphObject($data);
+    $location = $object->getProperty('location', GraphLocation::className());
+    
     $this->assertTrue(is_float($location->getLatitude()));
     $this->assertTrue(is_float($location->getLongitude()));
   }

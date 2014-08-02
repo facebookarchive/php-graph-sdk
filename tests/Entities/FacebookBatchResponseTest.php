@@ -21,30 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\GraphNodes;
+namespace Facebook\Tests\Entities;
 
-use Facebook\GraphNodes\GraphSessionInfo;
-use Facebook\FacebookRequest;
-use Facebook\FacebookSession;
-use Facebook\Tests\FacebookTestHelper;
+use Facebook\Entities\FacebookBatchResponse;
 
-class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
+class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
-
-  public function testSessionInfo()
-  {
-    $params = array(
-      'input_token' => FacebookTestHelper::$testSession->getToken()
-    );
-    $response = (new FacebookRequest(
-      new FacebookSession(FacebookTestHelper::getAppToken()),
-      'GET',
-      '/debug_token',
-      $params
-    ))->execute()->getGraphObject(GraphSessionInfo::className());
-    $this->assertTrue($response instanceof GraphSessionInfo);
-    $this->assertNotNull($response->getAppId());
-    $this->assertTrue($response->isValid());
-  }
-
+  /** @todo Add tests */
 }

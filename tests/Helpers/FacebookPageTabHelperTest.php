@@ -23,6 +23,7 @@
  */
 namespace Facebook\Tests\Helpers;
 
+use Mockery as m;
 use Facebook\Helpers\FacebookPageTabHelper;
 
 class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +34,9 @@ class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
   public function testPageDataCanBeAccessed()
   {
     $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
-    $helper = new FacebookPageTabHelper('123', 'foo_app_secret');
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['123', 'foo_app_secret'])->makePartial();
+    $fakeClient = m::mock('Facebook\FacebookClient')->makePartial();
+    $helper = new FacebookPageTabHelper($fakeClient, $fakeApp);
 
     $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());

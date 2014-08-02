@@ -23,64 +23,80 @@
  */
 namespace Facebook\Entities;
 
-use Facebook\Entities\AccessToken;
+use Facebook\Entities\FacebookRequest;
 
-class FacebookApp implements \Serializable
+/**
+ * Class FacebookBatchedRequest
+ * @package Facebook
+ */
+class FacebookBatchedRequest extends FacebookRequest
 {
   /**
-   * @var string 
+   * @var string|null
    */
-  protected $id;
+  protected $name;
 
   /**
    * @var string
    */
-  protected $secret;
+  protected $dependsOn;
 
   /**
-   * @param string $id
-   * @param string $secret
+   * @var bool
    */
-  public function __construct($id, $secret)
+  protected $omitResponseOnSuccess;
+
+  /**
+   * Creates a new FacebookBatchedRequest entity.
+   *
+   * @param FacebookRequest $request
+   * @param string $name
+   * @param string $dependsOn
+   * @param bool $omitResponseOnSuccess
+   */
+  public function __construct(
+    FacebookRequest $request,
+    $name = '',
+    $dependsOn = '',
+    $omitResponseOnSuccess = true
+  )
   {
-    $this->id     = $id;
-    $this->secret = $secret;
+    parent::__construct(
+      $request->getEndpoint(),
+      $request->getMethod(),
+      $request->getParameters(),
+      $request->getAccessToken(),
+      $request->getGraphVersion(),
+      $request->getETag()
+    );
+
+    $this->name = $name;
+    $this->dependsOn = $dependsOn;
+    $this->omitResponseOnSuccess = (bool)$omitResponseOnSuccess;
   }
 
   /**
    * @return string
    */
-  public function getId()
+  public function getName()
   {
-    return $this->id;
+    return $this->name;
   }
 
   /**
    * @return string
    */
-  public function getSecret()
+  public function getDependsOn()
   {
-    return $this->secret;
+    return $this->dependsOn;
   }
 
   /**
-   * @return AccessToken
+   * @return bool
    */
-  public function getAccessToken()
+  public function isOmitResponseOnSuccess()
   {
-    return new AccessToken($this, $this->id . '|' . $this->secret);
-  }
-
-  public function serialize()
-  {
-    return serialize(array($this->id, $this->secret));
-  }
-
-  public function unserialize($serialized)
-  {
-    list($id, $secret) = unserialize($serialized);
-
-    $this->__construct($id, $secret);
+    return $this->omitResponseOnSuccess;
   }
 
 }

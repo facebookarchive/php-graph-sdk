@@ -21,16 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Entities;
 
-class FacebookTestCredentials {
+use Facebook\FacebookClient;
 
-  /**
-   * These must be filled out with valid Facebook app details for the tests to
-   * run.
-   */
-  public static $appId = '';
-  public static $appSecret = '';
-
+class FacebookClientTest extends \PHPUnit_Framework_TestCase
+{
+  /** @todo Add tests */
 }
-

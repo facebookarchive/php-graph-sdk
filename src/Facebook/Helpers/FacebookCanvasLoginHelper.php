@@ -23,6 +23,8 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+
 /**
  * Class FacebookCanvasLoginHelper
  * @package Facebook
@@ -31,7 +33,6 @@ namespace Facebook\Helpers;
  */
 class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
 {
-
   /**
    * Returns the app data value.
    *
@@ -39,7 +40,7 @@ class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
    */
   public function getAppData()
   {
-    return $this->signedRequest ? $this->signedRequest->get('app_data') : null;
+    return $this->getSignedRequest()->get('app_data');
   }
 
   /**
@@ -52,18 +53,16 @@ class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
     /**
      * v2.0 apps use GET for Canvas signed requests.
      */
-    $rawSignedRequest = $this->getRawSignedRequestFromGet();
-    if ($rawSignedRequest) {
-      return $rawSignedRequest;
+    if (isset($_GET['signed_request'])) {
+      return $_GET['signed_request'];
     }
 
     /**
      * v1.0 apps use POST for Canvas signed requests, will eventually be
      * deprecated.
      */
-    $rawSignedRequest = $this->getRawSignedRequestFromPost();
-    if ($rawSignedRequest) {
-      return $rawSignedRequest;
+    if (isset($_POST['signed_request'])) {
+      return $_POST['signed_request'];
     }
 
     return null;

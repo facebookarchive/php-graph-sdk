@@ -21,66 +21,48 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Entities;
+namespace Facebook\Tests\Entities;
 
-use Facebook\Entities\AccessToken;
+use Mockery as m;
+use Facebook\Entities\FacebookBatchedRequest;
 
-class FacebookApp implements \Serializable
+class FacebookBatchedRequestTest extends \PHPUnit_Framework_TestCase
 {
-  /**
-   * @var string 
-   */
-  protected $id;
+  protected $fakeRequest;
 
-  /**
-   * @var string
-   */
-  protected $secret;
-
-  /**
-   * @param string $id
-   * @param string $secret
-   */
-  public function __construct($id, $secret)
+  protected function setUp()
   {
-    $this->id     = $id;
-    $this->secret = $secret;
+    $this->fakeRequest = m::mock('Facebook\Entities\FacebookRequest', ['/me'])->makePartial();
   }
 
-  /**
-   * @return string
-   */
-  public function getId()
+  public function testConstructorDefaults()
   {
-    return $this->id;
+    $request = new FacebookBatchedRequest($this->fakeRequest);
+
+    $this->assertEquals('', $request->getName());
+    $this->assertEquals('', $request->getDependsOn());
+    $this->assertTrue($request->isOmitResponseOnSuccess());
   }
 
-  /**
-   * @return string
-   */
-  public function getSecret()
+  public function testGetName()
   {
-    return $this->secret;
+    $request = new FacebookBatchedRequest($this->fakeRequest, 'req_name');
+
+    $this->assertEquals('req_name', $request->getName());
   }
 
-  /**
-   * @return AccessToken
-   */
-  public function getAccessToken()
+  public function testGetDependsOn()
   {
-    return new AccessToken($this, $this->id . '|' . $this->secret);
+    $request = new FacebookBatchedRequest($this->fakeRequest, '', 'req_name');
+
+    $this->assertEquals('req_name', $request->getDependsOn());
   }
 
-  public function serialize()
+  public function testGetOmitResponseOnSuccess()
   {
-    return serialize(array($this->id, $this->secret));
-  }
+    $request = new FacebookBatchedRequest($this->fakeRequest, '', '',false);
 
-  public function unserialize($serialized)
-  {
-    list($id, $secret) = unserialize($serialized);
-
-    $this->__construct($id, $secret);
+    $this->assertFalse($request->isOmitResponseOnSuccess());
   }
 
 }

@@ -23,29 +23,23 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphUser;
-use Facebook\Tests\FacebookTestHelper;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
-
   public function testMeReturnsGraphUser()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/me'
-    ))->execute()->getGraphObject(GraphUser::className());
+    $data = [
+      // ...
+      'name' => 'Foo User',
+      'last_name' => 'Foo',
+      'link' => 'http://link',
+    ];
+    $user = new GraphUser($data);
 
-    $info = FacebookTestHelper::$testSession->getSessionInfo();
-
-    $this->assertTrue($response instanceof GraphUser);
-    $this->assertEquals($info->getId(), $response->getId());
-    $this->assertNotNull($response->getName());
-    $this->assertNotNull($response->getLastName());
-    $this->assertNotNull($response->getLink());
+    $this->assertEquals('Foo User', $user->getName());
+    $this->assertEquals('Foo', $user->getLastName());
+    $this->assertEquals('http://link', $user->getLink());
   }
 
 }

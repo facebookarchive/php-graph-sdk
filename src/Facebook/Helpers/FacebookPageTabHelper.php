@@ -23,6 +23,10 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\FacebookClient;
+use Facebook\Entities\FacebookApp;
+use Facebook\Helpers\FacebookCanvasLoginHelper;
+
 /**
  * Class FacebookPageTabHelper
  * @package Facebook
@@ -30,7 +34,6 @@ namespace Facebook\Helpers;
  */
 class FacebookPageTabHelper extends FacebookCanvasLoginHelper
 {
-
   /**
    * @var array|null
    */
@@ -39,18 +42,14 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
   /**
    * Initialize the helper and process available signed request data.
    *
-   * @param string|null $appId
-   * @param string|null $appSecret
+   * @param FacebookClient $client
+   * @param FacebookApp $app
    */
-  public function __construct($appId = null, $appSecret = null)
+  public function __construct(FacebookClient $client, FacebookApp $app)
   {
-    parent::__construct($appId, $appSecret);
+    parent::__construct($client, $app);
 
-    if (!$this->signedRequest) {
-      return;
-    }
-
-    $this->pageData = $this->signedRequest->get('page');
+    $this->pageData = $this->getSignedRequest()->get('page');
   }
 
   /**
@@ -66,27 +65,28 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
     if (isset($this->pageData[$key])) {
       return $this->pageData[$key];
     }
+
     return $default;
   }
 
   /**
    * Returns true if the page is liked by the user.
    *
-   * @return boolean
+   * @return bool
    */
   public function isLiked()
   {
-    return $this->getPageData('liked') === true;
+    return (bool)$this->getPageData('liked');
   }
 
   /**
    * Returns true if the user is an admin.
    *
-   * @return boolean
+   * @return bool
    */
   public function isAdmin()
   {
-    return $this->getPageData('admin') === true;
+    return (bool)$this->getPageData('admin');
   }
 
   /**

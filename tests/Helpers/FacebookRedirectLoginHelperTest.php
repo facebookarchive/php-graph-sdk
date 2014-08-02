@@ -23,33 +23,37 @@
  */
 namespace Facebook\Tests\Helpers;
 
-use Facebook\Tests\FacebookTestCredentials;
+use Mockery as m;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\Tests\FacebookTestHelper;
+use Facebook\FacebookClient;
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
+  protected $helper;
 
   const REDIRECT_URL = 'http://invalid.zzz';
 
+  public function setUp()
+  {
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['123', 'foo_app_secret'])->makePartial();
+    $fakeClient = m::mock('Facebook\FacebookClient')->makePartial();
+    
+    $this->helper = new FacebookRedirectLoginHelper($fakeClient, $fakeApp);
+  }
+
   public function testLoginURL()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
-    $helper->disableSessionStatusCheck();
-    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
+    $this->helper->disableSessionStatusCheck();
+    $loginUrl = $this->helper->getLoginUrl(self::REDIRECT_URL);
     $state = $_SESSION['FBRLH_state'];
     $params = array(
-      'client_id' => FacebookTestCredentials::$appId,
+      'client_id' => '123',
       'redirect_uri' => self::REDIRECT_URL,
       'state' => $state,
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'sdk' => 'php-sdk-' . FacebookClient::VERSION,
       'scope' => implode(',', array())
     );
-    $expectedUrl = 'https://www.facebook.com/v2.0/dialog/oauth?';
+    $expectedUrl = 'https://www.facebook.com/dialog/oauth?';
     $this->assertTrue(strpos($loginUrl, $expectedUrl) !== false);
     foreach ($params as $key => $value) {
       $this->assertTrue(
@@ -60,17 +64,16 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testLogoutURL()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
-    $helper->disableSessionStatusCheck();
-    $logoutUrl = $helper->getLogoutUrl(
-      FacebookTestHelper::$testSession, self::REDIRECT_URL
-    );
+    $this->helper->disableSessionStatusCheck();
+
+    $fakeApp = m::mock('Facebook\Entities\FacebookApp', ['foo_app_id', 'foo_app_secret']);
+    $fakeAccessToken = m::mock('Facebook\Entities\AccessToken', [$fakeApp, 'foo_token'])->makePartial();
+
+    $logoutUrl = $this->helper->getLogoutUrl($fakeAccessToken, self::REDIRECT_URL);
+
     $params = array(
       'next' => self::REDIRECT_URL,
-      'access_token' => FacebookTestHelper::$testSession->getToken()
+      'access_token' => 'foo_token'
     );
     $expectedUrl = 'https://www.facebook.com/logout.php?';
     $this->assertTrue(strpos($logoutUrl, $expectedUrl) !== false);
@@ -86,17 +89,13 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
    */
   public function testGetFilterdUriRemoveFacebookQueryParams($uri, $expected)
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
-    $helper->disableSessionStatusCheck();
+    $this->helper->disableSessionStatusCheck();
 
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
     $method = $class->getMethod('getFilteredUri');
     $method->setAccessible(true);
 
-    $currentUri = $method->invoke($helper, $uri);
+    $currentUri = $method->invoke($this->helper, $uri);
     $this->assertEquals($expected, $currentUri);
   }
 
@@ -132,16 +131,11 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
   
   public function testCSPRNG()
   {
-    $helper = new FacebookRedirectLoginHelper(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
-    
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
     $method = $class->getMethod('random');
     $method->setAccessible(true);
 
-    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $method->invoke($helper, 32)));
+    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $method->invoke($this->helper, 32)));
   }
 
 }
