@@ -241,7 +241,8 @@ class FacebookRedirectLoginHelper
     }
     $buf = '';
     // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
-    if (is_readable('/dev/urandom')) {
+    if (!ini_get('open_basedir')
+      && is_readable('/dev/urandom')) {
       $fp = fopen('/dev/urandom', 'rb');
       if ($fp !== FALSE) {
         $buf = fread($fp, $bytes);
@@ -251,7 +252,7 @@ class FacebookRedirectLoginHelper
         }
       }
     }
-	
+
     if (function_exists('mcrypt_create_iv')) {
         $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
         if ($buf !== FALSE) {
