@@ -43,24 +43,12 @@ class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
   }
 
   /**
-   * Get raw signed request from either GET or POST.
+   * Get raw signed request from POST.
    *
    * @return string|null
    */
   public function getRawSignedRequest()
   {
-    /**
-     * v2.0 apps use GET for Canvas signed requests.
-     */
-    $rawSignedRequest = $this->getRawSignedRequestFromGet();
-    if ($rawSignedRequest) {
-      return $rawSignedRequest;
-    }
-
-    /**
-     * v1.0 apps use POST for Canvas signed requests, will eventually be
-     * deprecated.
-     */
     $rawSignedRequest = $this->getRawSignedRequestFromPost();
     if ($rawSignedRequest) {
       return $rawSignedRequest;
