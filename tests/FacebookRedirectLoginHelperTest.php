@@ -65,7 +65,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appId,
       FacebookTestCredentials::$appSecret
     );
-	$this->assertTrue(preg_match('/^([0-9a-f]+)$/', $helper->random(32)));
+    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $helper->random(32)));
   }
 
 }
