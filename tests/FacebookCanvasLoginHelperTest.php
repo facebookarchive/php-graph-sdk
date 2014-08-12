@@ -13,15 +13,6 @@ class FacebookCanvasLoginHelperTest extends PHPUnit_Framework_TestCase
     $this->helper = new FacebookCanvasLoginHelper('123', 'foo_app_secret');
   }
 
-  public function testSignedRequestDataCanBeRetrievedFromGetData()
-  {
-    $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
-
-    $rawSignedRequest = $this->helper->getRawSignedRequest();
-
-    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
-  }
-
   public function testSignedRequestDataCanBeRetrievedFromPostData()
   {
     $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
