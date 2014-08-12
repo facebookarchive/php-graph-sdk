@@ -166,7 +166,7 @@ class FacebookSession
   public function getLongLivedSession($appId = null, $appSecret = null)
   {
     $longLivedAccessToken = $this->accessToken->extend($appId, $appSecret);
-    return new static($longLivedAccessToken);
+    return new static($longLivedAccessToken, $this->signedRequest);
   }
 
   // @TODO Remove getExchangeToken() in 4.1: can be accessed from AccessToken directly
