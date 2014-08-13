@@ -23,7 +23,7 @@
  */
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Tests\FacebookTestHelper;
 
 if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
