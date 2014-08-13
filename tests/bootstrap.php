@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Facebook\FacebookSDKException;
+use Facebook\Exceptions\FacebookSDKException;
 
 if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
   throw new FacebookSDKException(
