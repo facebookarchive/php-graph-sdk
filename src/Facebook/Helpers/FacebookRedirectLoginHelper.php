@@ -103,7 +103,7 @@ class FacebookRedirectLoginHelper
       $params['auth_type'] = 'rerequest';
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-      http_build_query($params, null, '&amp;');
+      http_build_query($params, null, '&');
   }
 
   /**
