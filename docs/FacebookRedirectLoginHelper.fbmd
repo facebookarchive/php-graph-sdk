@@ -15,8 +15,9 @@ Usage:
 
 ~~~~
 
-$helper = new FacebookRedirectLoginHelper($redirect_url, $appId = NULL, $appSecret = NULL);
-echo '<a href="' . $helper->getLoginUrl() . '">Login with Facebook</a>';
+$scope = array('email', 'user_birthday', 'user_location', 'publish_actions');
+$helper = new FacebookRedirectLoginHelper($appId = NULL, $appSecret = NULL);
+echo '<a href="' . $helper->getLoginUrl($redirect_url, $scope) . '">Login with Facebook</a>';
 
 ~~~~
 
