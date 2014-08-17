@@ -189,7 +189,7 @@ class FacebookResponse
     if (isset($this->responseData->paging->$direction)) {
       $url = parse_url($this->responseData->paging->$direction);
       parse_str($url['query'], $params);
-      if ($params['type'] && strpos($this->request->getPath(), $params['type']) != false){
+      if (isset($params['type']) && strpos($this->request->getPath(), $params['type']) != false){
           unset($params['type']);
       } 
 
