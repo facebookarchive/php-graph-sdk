@@ -24,7 +24,6 @@
 namespace Facebook\Entities;
 
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\FacebookSession;
 
 /**
  * Class SignedRequest
@@ -267,16 +266,16 @@ class SignedRequest
    * Hashes the signature used in a signed request.
    *
    * @param string $encodedData
-   * @param string|null $appSecret
+   * @param string $appSecret
    *
    * @return string
    *
    * @throws FacebookSDKException
    */
-  public static function hashSignature($encodedData, $appSecret = null)
+  public static function hashSignature($encodedData, $appSecret)
   {
     $hashedSig = hash_hmac(
-      'sha256', $encodedData, FacebookSession::_getTargetAppSecret($appSecret), $raw_output = true
+      'sha256', $encodedData, $appSecret, $raw_output = true
     );
 
     if ($hashedSig) {

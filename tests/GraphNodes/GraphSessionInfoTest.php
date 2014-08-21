@@ -24,27 +24,35 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Facebook\GraphNodes\GraphSessionInfo;
-use Facebook\FacebookRequest;
-use Facebook\FacebookSession;
-use Facebook\Tests\FacebookTestHelper;
 
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testSessionInfo()
+  public function testDatesGetCastToDateTime()
   {
-    $params = array(
-      'input_token' => FacebookTestHelper::$testSession->getToken()
-    );
-    $response = (new FacebookRequest(
-      new FacebookSession(FacebookTestHelper::getAppToken()),
-      'GET',
-      '/debug_token',
-      $params
-    ))->execute()->getGraphObject(GraphSessionInfo::className());
-    $this->assertTrue($response instanceof GraphSessionInfo);
-    $this->assertNotNull($response->getAppId());
-    $this->assertTrue($response->isValid());
+    $data = [
+      'expires_at' => 123,
+      'issued_at' => 1337,
+    ];
+    $graphObject = new GraphSessionInfo($data);
+
+    $expires = $graphObject->getExpiresAt();
+    $issuedAt = $graphObject->getIssuedAt();
+
+    $this->assertInstanceOf('DateTime', $expires);
+    $this->assertInstanceOf('DateTime', $issuedAt);
+  }
+
+  public function testScopesAreReturnedAsArray()
+  {
+    $data = [
+      'scopes' => ['foo', 'bar'],
+    ];
+    $graphObject = new GraphSessionInfo($data);
+
+    $scopes = $graphObject->getScopes();
+
+    $this->assertEquals(['foo', 'bar'], $scopes);
   }
 
 }

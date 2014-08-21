@@ -23,99 +23,96 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphObject;
-use Facebook\FacebookResponse;
-use Facebook\GraphNodes\GraphUser;
-use Facebook\Tests\FacebookTestHelper;
+
+class MyFooSubClassGraphObject extends GraphObject {}
 
 class GraphObjectTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testFriends()
+  public function testAnEmptyBaseGraphObjectCanInstantiate()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/me/friends'
-    ))->execute()->getGraphObjectList();
-    $this->assertTrue(is_array($response));
+    $graphObject = new GraphObject();
+    $backingData = $graphObject->asArray();
+
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+    $this->assertEquals([], $backingData);
   }
 
-  public function testArrayProperties()
+  public function testAGraphObjectCanInstantiateWithData()
   {
-    $backingData = array(
-      'id' => 42,
-      'friends' => array(
-        'data' => array(
-          array(
-            'id' => 1,
-            'name' => 'David'
-          ),
-          array(
-            'id' => 2,
-            'name' => 'Fosco'
-          )
-        ),
-        'paging' => array(
-          'next' => 'nexturl'
-        )
-      )
-    );
-    $obj = new GraphObject($backingData);
-    $friends = $obj->getPropertyAsArray('friends');
-    $this->assertEquals(2, count($friends));
-    $this->assertTrue($friends[0] instanceof GraphObject);
-    $this->assertTrue($friends[1] instanceof GraphObject);
-    $this->assertEquals('David', $friends[0]->getProperty('name'));
-    $this->assertEquals('Fosco', $friends[1]->getProperty('name'));
+    $graphObject = new GraphObject(['foo' => 'bar']);
+    $backingData = $graphObject->asArray();
 
-    $backingData = array(
-      'id' => 42,
-      'friends' => array(
-        array(
-          'id' => 1,
-          'name' => 'Ilya'
-        ),
-        array(
-          'id' => 2,
-          'name' => 'Kevin'
-        )
-      )
-    );
-    $obj = new GraphObject($backingData);
-    $friends = $obj->getPropertyAsArray('friends');
-    $this->assertEquals(2, count($friends));
-    $this->assertTrue($friends[0] instanceof GraphObject);
-    $this->assertTrue($friends[1] instanceof GraphObject);
-    $this->assertEquals('Ilya', $friends[0]->getProperty('name'));
-    $this->assertEquals('Kevin', $friends[1]->getProperty('name'));
-
+    $this->assertEquals(['foo' => 'bar'], $backingData);
   }
 
-  public function testAsList()
+  public function testSomethingThatLooksLikeAListWillBeFlattened()
   {
-    $backingData = array(
-      'data' => array(
-        array(
-          'id' => 1,
-          'name' => 'David'
-        ),
-        array(
-          'id' => 2,
-          'name' => 'Fosco'
-        )
-      )
-    );
-    $enc = json_encode($backingData);
-    $response = new FacebookResponse(null, json_decode($enc), $enc);
-    $list = $response->getGraphObjectList(GraphUser::className());
-    $this->assertEquals(2, count($list));
-    $this->assertTrue($list[0] instanceof GraphObject);
-    $this->assertTrue($list[1] instanceof GraphObject);
-    $this->assertEquals('David', $list[0]->getName());
-    $this->assertEquals('Fosco', $list[1]->getName());
+    $dataFromGraph = [
+      'data' => [
+        [
+          'id' => '123',
+          'name' => 'Foo McBar',
+          'link' => 'http://facebook/foo',
+        ],
+      ],
+    ];
+    $graphObject = new GraphObject($dataFromGraph);
+
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+  }
+
+  public function testAnExistingPropertyCanBeAccessed()
+  {
+    $graphObject = new GraphObject(['foo' => 'bar']);
+    $property = $graphObject->getProperty('foo');
+
+    $this->assertEquals('bar', $property);
+  }
+
+  public function testAMissingPropertyWillReturnNull()
+  {
+    $graphObject = new GraphObject(['foo' => 'bar']);
+    $property = $graphObject->getProperty('baz');
+
+    $this->assertNull($property, 'Expected the property to return null.');
+  }
+
+  public function testAMissingPropertyWillReturnTheDefault()
+  {
+    $graphObject = new GraphObject(['foo' => 'bar']);
+    $property = $graphObject->getProperty('baz', 'faz');
+
+    $this->assertEquals('faz', $property);
+  }
+
+  public function testTheKeysFromTheGraphDataCanBeReturned()
+  {
+    $graphObject = new GraphObject([
+      'key1' => 'foo',
+      'key2' => 'bar',
+      'key3' => 'baz',
+    ]);
+    $propertyKeys = $graphObject->getPropertyNames();
+
+    $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
+  }
+
+  public function testAGraphObjectCanBeRecast()
+  {
+    $fooGraphObject = new GraphObject(['foo' => 'bar']);
+    $newFooGraphObject = $fooGraphObject->cast('Facebook\Tests\GraphNodes\MyFooSubClassGraphObject');
+    $this->assertInstanceOf('Facebook\Tests\GraphNodes\MyFooSubClassGraphObject', $newFooGraphObject);
+  }
+
+  /**
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
+   */
+  public function testTryingToRecastToAGraphObjectThatDoesntExistWillThrow()
+  {
+    $graphObject = new GraphObject(['foo' => 'bar']);
+    $graphObject->cast('FooClass');
   }
 
 }

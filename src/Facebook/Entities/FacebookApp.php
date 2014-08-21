@@ -23,8 +23,6 @@
  */
 namespace Facebook\Entities;
 
-use Facebook\Entities\AccessToken;
-
 class FacebookApp implements \Serializable
 {
   /**

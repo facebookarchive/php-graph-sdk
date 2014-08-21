@@ -23,6 +23,7 @@
  */
 namespace Facebook\Tests\Helpers;
 
+use Facebook\Entities\FacebookApp;
 use Facebook\Helpers\FacebookPageTabHelper;
 
 class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
@@ -32,8 +33,10 @@ class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testPageDataCanBeAccessed()
   {
-    $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
-    $helper = new FacebookPageTabHelper('123', 'foo_app_secret');
+    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
+
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $helper = new FacebookPageTabHelper($app);
 
     $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());

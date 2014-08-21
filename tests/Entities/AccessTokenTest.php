@@ -24,9 +24,8 @@
 namespace Facebook\Tests\Entities;
 
 use Mockery as m;
-use Facebook\Tests\FacebookTestCredentials;
+use Facebook\Entities\FacebookApp;
 use Facebook\Entities\AccessToken;
-use Facebook\Tests\FacebookTestHelper;
 
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,7 +65,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -83,7 +83,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->twice()
       ->andReturn($dt);
 
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'foo_machine');
+    $app = new FacebookApp('123', 'foo_secret');
+    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
 
     $this->assertTrue($isValid, 'Expected access token to be valid.');
   }
@@ -96,9 +97,10 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
-      ->andReturn('123');
+      ->andReturn('1337');
     $graphSessionInfoMock
       ->shouldReceive('getProperty')
       ->with('machine_id')
@@ -113,7 +115,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->twice()
       ->andReturn($dt);
 
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '42', 'foo_machine');
+    $app = new FacebookApp('123', 'foo_secret');
+    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the app ID does not match.');
   }
@@ -126,7 +129,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -143,7 +147,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->twice()
       ->andReturn($dt);
 
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'bar_machine');
+    $app = new FacebookApp('123', 'foo_secret');
+    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'bar_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the machine ID does not match.');
   }
@@ -156,7 +161,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -173,7 +179,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->twice()
       ->andReturn($dt);
 
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'foo_machine');
+    $app = new FacebookApp('123', 'foo_secret');
+    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the collection says it is not valid.');
   }
@@ -186,7 +193,8 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
     $graphSessionInfoMock
-      ->shouldReceive('getAppId')
+      ->shouldReceive('getProperty')
+      ->with('app_id')
       ->once()
       ->andReturn('123');
     $graphSessionInfoMock
@@ -203,68 +211,115 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->twice()
       ->andReturn($dt);
 
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, '123', 'foo_machine');
+    $app = new FacebookApp('123', 'foo_secret');
+    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because it has expired.');
   }
 
   public function testInfoAboutAnAccessTokenCanBeObtainedFromGraph()
   {
-    $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
+    $app = new FacebookApp('123', 'foo_secret');
+    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response
+      ->shouldReceive('getGraphObject')
+      ->with('Facebook\GraphNodes\GraphSessionInfo')
+      ->once()
+      ->andReturn($response);
+    $response
+      ->shouldReceive('getExpiresAt')
+      ->once()
+      ->andReturn(null);
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
 
-    $accessToken = new AccessToken($testUserAccessToken);
-    $accessTokenInfo = $accessToken->getInfo();
+    $accessToken = new AccessToken('foo_token');
+    $accessTokenInfo = $accessToken->getInfo($app, $client);
 
-    $testAppId = FacebookTestCredentials::$appId;
-    $this->assertEquals($testAppId, $accessTokenInfo->getAppId());
-
-    $testUserId = FacebookTestHelper::$testUserId;
-    $this->assertEquals($testUserId, $accessTokenInfo->getId());
-
-    $expectedScopes = FacebookTestHelper::$testUserPermissions;
-    $actualScopes = $accessTokenInfo->getPropertyAsArray('scopes');
-    foreach ($expectedScopes as $scope) {
-      $this->assertTrue(in_array($scope, $actualScopes),
-        'Expected the following permission to be present: '.$scope);
-    }
+    $this->assertSame($response, $accessTokenInfo);
   }
 
   public function testAShortLivedAccessTokenCabBeExtended()
   {
-    $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
+    $app = new FacebookApp('123', 'foo_secret');
+    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn([
+          'access_token' => 'long_token',
+          'expires' => 123,
+          'machine_id' => 'foo_machine',
+        ]);
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
 
-    $accessToken = new AccessToken($testUserAccessToken);
-    $longLivedAccessToken = $accessToken->extend();
+    $accessToken = new AccessToken('foo_token');
+    $longLivedAccessToken = $accessToken->extend($app, $client);
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $longLivedAccessToken);
+    $this->assertEquals('long_token', (string)$longLivedAccessToken);
+    $this->assertEquals('foo_machine', $longLivedAccessToken->getMachineId());
+    $this->assertEquals(time() + 123, $longLivedAccessToken->getExpiresAt()->getTimeStamp());
   }
 
   public function testALongLivedAccessTokenCanBeUsedToObtainACode()
   {
-    $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
+    $app = new FacebookApp('123', 'foo_secret');
+    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn([
+          'code' => 'foo_code',
+        ]);
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
 
-    $accessToken = new AccessToken($testUserAccessToken);
-    $longLivedAccessToken = $accessToken->extend();
+    $code = AccessToken::getCodeFromAccessToken('foo_token', $app, $client);
 
-    $code = AccessToken::getCodeFromAccessToken((string) $longLivedAccessToken);
-
-    $this->assertTrue(is_string($code));
+    $this->assertEquals('foo_code', $code);
   }
 
   public function testACodeCanBeUsedToObtainAnAccessToken()
   {
-    $testUserAccessToken = FacebookTestHelper::$testUserAccessToken;
-
-    $accessToken = new AccessToken($testUserAccessToken);
-    $longLivedAccessToken = $accessToken->extend();
-
-    $code = AccessToken::getCodeFromAccessToken($longLivedAccessToken);
-    $accessTokenFromCode = AccessToken::getAccessTokenFromCode($code);
+    $app = new FacebookApp('123', 'foo_secret');
+    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn([
+          'access_token' => 'new_long_token',
+          'expires' => 123,
+          'machine_id' => 'foo_machine',
+        ]);
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
+    $accessTokenFromCode = AccessToken::getAccessTokenFromCode('foo_code', $app, $client);
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessTokenFromCode);
+    $this->assertEquals('new_long_token', (string)$accessTokenFromCode);
+    $this->assertEquals('foo_machine', $accessTokenFromCode->getMachineId());
+    $this->assertEquals(time() + 123, $accessTokenFromCode->getExpiresAt()->getTimeStamp());
   }
 
-  public function testSerialization()
+  public function testAccessTokenCanBeSerialized()
   {
     $accessToken = new AccessToken('foo', time(), 'bar');
     $newAccessToken = unserialize(serialize($accessToken));
@@ -274,22 +329,4 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($accessToken->getMachineId(), $newAccessToken->getMachineId());
   }
 
-  /**
-   * @dataProvider provideAccessTokenExpiration
-   */
-  public function testIsExpired($expiresAt, $expected)
-  {
-    $accessToken = new AccessToken('foo', $expiresAt);
-
-    $this->assertEquals($expected, $accessToken->isExpired());
-  }
-
-  public function provideAccessTokenExpiration()
-  {
-    return array(
-      array(time()+60, false),
-      array(time()-60, true),
-      array(0, false),
-    );
-  }
 }

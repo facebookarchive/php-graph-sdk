@@ -23,6 +23,8 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Entities\FacebookApp;
+
 /**
  * Class FacebookPageTabHelper
  * @package Facebook
@@ -39,12 +41,11 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
   /**
    * Initialize the helper and process available signed request data.
    *
-   * @param string|null $appId
-   * @param string|null $appSecret
+   * @param FacebookApp $app The FacebookApp entity.
    */
-  public function __construct($appId = null, $appSecret = null)
+  public function __construct(FacebookApp $app)
   {
-    parent::__construct($appId, $appSecret);
+    parent::__construct($app);
 
     if (!$this->signedRequest) {
       return;

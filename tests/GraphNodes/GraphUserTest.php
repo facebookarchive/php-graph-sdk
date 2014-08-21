@@ -23,29 +23,36 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphUser;
-use Facebook\Tests\FacebookTestHelper;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testMeReturnsGraphUser()
+  public function testDatesGetCastToDateTime()
   {
-    $response = (
-    new FacebookRequest(
-      FacebookTestHelper::$testSession,
-      'GET',
-      '/me'
-    ))->execute()->getGraphObject(GraphUser::className());
+    $data = [
+      'birthday' => '1984-01-01',
+    ];
+    $graphObject = new GraphUser($data);
 
-    $info = FacebookTestHelper::$testSession->getSessionInfo();
+    $birthday = $graphObject->getBirthday();
 
-    $this->assertTrue($response instanceof GraphUser);
-    $this->assertEquals($info->getId(), $response->getId());
-    $this->assertNotNull($response->getName());
-    $this->assertNotNull($response->getLastName());
-    $this->assertNotNull($response->getLink());
+    $this->assertInstanceOf('DateTime', $birthday);
+  }
+
+  public function testLocationGetsCastAsLocationObject()
+  {
+    $data = [
+      'location' => [
+        'id' => '123',
+        'name' => 'Bar',
+      ],
+    ];
+    $graphObject = new GraphUser($data);
+
+    $location = $graphObject->getLocation();
+
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphLocation', $location);
   }
 
 }

@@ -23,10 +23,11 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
 use Facebook\Entities\AccessToken;
+use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
 use Facebook\Exceptions\FacebookSDKException;
+use Facebook\FacebookClient;
 
 /**
  * Class FacebookRedirectLoginHelper
@@ -38,35 +39,28 @@ class FacebookRedirectLoginHelper
 {
 
   /**
-   * @var string The application id
+   * @var FacebookApp The FacebookApp entity.
    */
-  protected $appId;
+  protected $app;
 
   /**
-   * @var string The application secret
-   */
-  protected $appSecret;
-
-  /**
-   * @var string Prefix to use for session variables
+   * @var string Prefix to use for session variables.
    */
   protected $sessionPrefix = 'FBRLH_';
 
   /**
-   * @var boolean Toggle for PHP session status check
+   * @var boolean Toggle for PHP session status check.
    */
   protected $checkForSessionStatus = true;
 
   /**
    * Constructs a RedirectLoginHelper for a given appId.
    *
-   * @param string $appId The application id
-   * @param string $appSecret The application secret
+   * @param FacebookApp $app The FacebookApp entity.
    */
-  public function __construct($appId = null, $appSecret = null)
+  public function __construct(FacebookApp $app)
   {
-    $this->appId = FacebookSession::_getTargetAppId($appId);
-    $this->appSecret = FacebookSession::_getTargetAppSecret($appSecret);
+    $this->app = $app;
   }
 
   /**
@@ -78,66 +72,78 @@ class FacebookRedirectLoginHelper
    *   will not be re-asked.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
-   *                            after login
-   * @param array $scope List of permissions to request during login
-   * @param boolean $rerequest Whether this is the re-request to the previously
-   * 				declined permissions
-   * @param string $version Optional Graph API version if not default (v2.0)
+   *                            after login.
+   * @param array $scope List of permissions to request during login.
+   * @param boolean $rerequest Toggle for this authentication to be a rerequest.
+   * @param string $version Optional Graph API version if not default (v2.0).
+   * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
-  public function getLoginUrl($redirectUrl, $scope = array(), $rerequest = false, $version = null)
+  public function getLoginUrl($redirectUrl,
+                              array $scope = [],
+                              $rerequest = false,
+                              $version = null,
+                              $separator = '&')
   {
-    $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $version = FacebookRequest::getDefaultGraphApiVersion($version);
     $state = $this->generateState();
     $this->storeState($state);
-    $params = array(
-      'client_id' => $this->appId,
+    $params = [
+      'client_id' => $this->app->getId(),
       'redirect_uri' => $redirectUrl,
       'state' => $state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
-    );
-	
-    if ($rerequest)
+    ];
+
+    if ($rerequest) {
       $params['auth_type'] = 'rerequest';
+    }
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-      http_build_query($params, null, '&');
+      http_build_query($params, null, $separator);
   }
 
   /**
    * Returns the URL to send the user in order to log out of Facebook.
    *
-   * @param FacebookSession $session The session that will be logged out
+   * @param AccessToken|string $accessToken The access token that will be logged out.
    * @param string $next The url Facebook should redirect the user to after
-   *   a successful logout
+   *                          a successful logout.
+   * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
-  public function getLogoutUrl(FacebookSession $session, $next)
+  public function getLogoutUrl($accessToken, $next, $separator = '&')
   {
-    $params = array(
+    $params = [
       'next' => $next,
-      'access_token' => $session->getToken()
-    );
-    return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, '&amp;');
+      'access_token' => (string) $accessToken,
+    ];
+    return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, $separator);
   }
 
   /**
-   * Handles a response from Facebook, including a CSRF check, and returns a
-   *   FacebookSession.
+   * Takes a valid code from a login redirect, and returns an AccessToken entity.
    *
-   * @return FacebookSession|null
+   * @param FacebookClient $client The Facebook client.
+   * @param string $redirectUrl The redirect URL.
+   *
+   * @return AccessToken|null
    */
-  public function getSessionFromRedirect()
+  public function getAccessTokenFromRedirect(FacebookClient $client, $redirectUrl = null)
   {
     if ($this->isValidRedirect()) {
-      $params = array(
-        'redirect_uri' => $this->getFilteredUri($this->getCurrentUri()),
-        'code' => $this->getCode()
-      );
-      return new FacebookSession(AccessToken::requestAccessToken($params, $this->appId, $this->appSecret));
+      $code = $this->getCode();
+      $redirectUrl = $redirectUrl ?: $this->getCurrentUri();
+      $redirectUrl = $this->getFilteredUri($redirectUrl);
+
+      try {
+        return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
+      } catch (FacebookSDKException $e) {
+        return null;
+      }
     }
     return null;
   }
@@ -216,6 +222,13 @@ class FacebookRedirectLoginHelper
     return null;
   }
 
+  /**
+   * Return a URL with the Facebook-appended params removed.
+   *
+   * @param string $uri The URL to filter.
+   *
+   * @return string
+   */
   protected function getFilteredUri($uri)
   {
     $parts = parse_url($uri);
@@ -255,7 +268,7 @@ class FacebookRedirectLoginHelper
   }
 
   /**
-   * Returns the current URI
+   * Returns the current URI.
    *
    * @return string
    */
@@ -265,9 +278,9 @@ class FacebookRedirectLoginHelper
   }
 
   /**
-   * Returns the HTTP Protocol
+   * Returns the HTTP Protocol.
    *
-   * @return string The HTTP Protocol
+   * @return string
    */
   protected function getHttpScheme() {
     $scheme = 'http';
@@ -281,15 +294,15 @@ class FacebookRedirectLoginHelper
   }
 
   /**
-   * Generate a cryptographically secure pseudrandom number
+   * Generate a cryptographically secure pseudrandom number.
    * 
-   * @param integer $bytes - number of bytes to return
+   * @param int $bytes Number of bytes to return.
    * 
    * @return string
    * 
    * @throws FacebookSDKException
    * 
-   * @todo Support Windows platforms
+   * @TODO Add support for Windows platforms.
    */
   private function random($bytes)
   {
@@ -332,7 +345,7 @@ class FacebookRedirectLoginHelper
   }
 
   /**
-   * Disables the session_status() check when using $_SESSION
+   * Disables the session_status() check when using $_SESSION.
    */
   public function disableSessionStatusCheck()
   {

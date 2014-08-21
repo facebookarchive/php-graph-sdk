@@ -25,30 +25,26 @@ namespace Facebook\HttpClients;
 
 use Facebook\Exceptions\FacebookSDKException;
 
-class FacebookStreamHttpClient implements FacebookHttpClientInterface {
+class FacebookStreamHttpClient implements FacebookHttpClientInterface
+{
 
   /**
-   * @var array The headers to be sent with the request
+   * @var array The headers received from the response.
    */
-  protected $requestHeaders = array();
+  protected $responseHeaders = [];
 
   /**
-   * @var array The headers received from the response
-   */
-  protected $responseHeaders = array();
-
-  /**
-   * @var int The HTTP status code returned from the server
+   * @var int The HTTP status code returned from the server.
    */
   protected $responseHttpStatusCode = 0;
 
   /**
-   * @var FacebookStream Procedural stream wrapper as object
+   * @var FacebookStream Procedural stream wrapper as object.
    */
   protected static $facebookStream;
 
   /**
-   * @param FacebookStream|null Procedural stream wrapper as object
+   * @param FacebookStream|null Procedural stream wrapper as object.
    */
   public function __construct(FacebookStream $facebookStream = null)
   {
@@ -56,18 +52,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * The headers we want to send with the request
-   *
-   * @param string $key
-   * @param string $value
-   */
-  public function addRequestHeader($key, $value)
-  {
-    $this->requestHeaders[$key] = $value;
-  }
-
-  /**
-   * The headers returned in the response
+   * The headers returned in the response.
    *
    * @return array
    */
@@ -77,7 +62,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * The HTTP status response code
+   * The HTTP status response code.
    *
    * @return int
    */
@@ -87,17 +72,18 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * Sends a request to the server
+   * Sends a request to the server and returns the raw response.
    *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
+   * @param string $url The endpoint to send the request to.
+   * @param string $method The request method.
+   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param array  $headers The request headers.
    *
-   * @return string Raw response from the server
+   * @return string Raw response from the server.
    *
-   * @throws FacebookSDKException
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
     $options = array(
       'http' => array(
@@ -114,10 +100,10 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface {
     if ($parameters) {
       $options['http']['content'] = http_build_query($parameters, null, '&');
 
-      $this->addRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      $headers['Content-type'] = 'application/x-www-form-urlencoded';
     }
 
-    $options['http']['header'] = $this->compileHeader();
+    $options['http']['header'] = $this->compileHeader($headers);
 
     self::$facebookStream->streamContextCreate($options);
     $rawResponse = self::$facebookStream->fileGetContents($url);
@@ -134,14 +120,16 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * Formats the headers for use in the stream wrapper
+   * Formats the headers for use in the stream wrapper.
+   *
+   * @param array $headers The request headers.
    *
    * @return string
    */
-  public function compileHeader()
+  public function compileHeader(array $headers)
   {
     $header = [];
-    foreach($this->requestHeaders as $k => $v) {
+    foreach($headers as $k => $v) {
       $header[] = $k . ': ' . $v;
     }
 

@@ -29,30 +29,26 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\AdapterException;
 use GuzzleHttp\Exception\RequestException;
 
-class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
+class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
+{
 
   /**
-   * @var array The headers to be sent with the request
+   * @var array The headers received from the response.
    */
-  protected $requestHeaders = array();
+  protected $responseHeaders = [];
 
   /**
-   * @var array The headers received from the response
-   */
-  protected $responseHeaders = array();
-
-  /**
-   * @var int The HTTP status code returned from the server
+   * @var int The HTTP status code returned from the server.
    */
   protected $responseHttpStatusCode = 0;
 
   /**
-   * @var \GuzzleHttp\Client The Guzzle client
+   * @var \GuzzleHttp\Client The Guzzle client.
    */
   protected static $guzzleClient;
 
   /**
-   * @param \GuzzleHttp\Client|null The Guzzle client
+   * @param \GuzzleHttp\Client|null The Guzzle client.
    */
   public function __construct(Client $guzzleClient = null)
   {
@@ -60,18 +56,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * The headers we want to send with the request
-   *
-   * @param string $key
-   * @param string $value
-   */
-  public function addRequestHeader($key, $value)
-  {
-    $this->requestHeaders[$key] = $value;
-  }
-
-  /**
-   * The headers returned in the response
+   * The headers returned in the response.
    *
    * @return array
    */
@@ -81,7 +66,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * The HTTP status response code
+   * The HTTP status response code.
    *
    * @return int
    */
@@ -91,17 +76,18 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
   }
 
   /**
-   * Sends a request to the server
+   * Sends a request to the server and returns the raw response.
    *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
+   * @param string $url The endpoint to send the request to.
+   * @param string $method The request method.
+   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param array  $headers The request headers.
    *
-   * @return string Raw response from the server
+   * @return string Raw response from the server.
    *
-   * @throws FacebookSDKException
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
     $options = array();
     if ($parameters) {
@@ -110,7 +96,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface {
 
     $request = self::$guzzleClient->createRequest($method, $url, $options);
 
-    foreach($this->requestHeaders as $k => $v) {
+    foreach($headers as $k => $v) {
       $request->setHeader($k, $v);
     }
 

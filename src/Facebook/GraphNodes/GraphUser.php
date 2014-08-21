@@ -114,7 +114,7 @@ class GraphUser extends GraphObject
    */
   public function getLocation()
   {
-    return $this->getProperty('location', GraphLocation::className());
+    return $this->getProperty('location', null, GraphLocation::className());
   }
 
 }

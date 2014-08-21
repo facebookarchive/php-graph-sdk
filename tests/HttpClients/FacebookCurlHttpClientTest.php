@@ -23,16 +23,20 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-require_once __DIR__ . '/AbstractTestHttpClient.php';
-
 use Mockery as m;
-use Facebook\Tests\HttpClients\AbstractTestHttpClient;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 
 class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
 
+  /**
+   * @var \Facebook\HttpClients\FacebookCurl
+   */
   protected $curlMock;
+
+  /**
+   * @var FacebookCurlHttpClient
+   */
   protected $curlClient;
 
   const CURL_VERSION_STABLE = 0x072400;
@@ -67,7 +71,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://foo.com', 'GET', array());
+    $this->curlClient->openConnection('http://foo.com', 'GET', [], []);
   }
 
   public function testCanOpenGetCurlConnectionWithHeaders()
@@ -78,21 +82,18 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
+      ->with([
           CURLOPT_URL            => 'http://foo.com',
           CURLOPT_CONNECTTIMEOUT => 10,
           CURLOPT_TIMEOUT        => 60,
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_HEADER         => true,
-          CURLOPT_HTTPHEADER     => array(
-            'X-foo: bar',
-          ),
-        ))
+          CURLOPT_HTTPHEADER     => ['X-foo: bar'],
+        ])
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->addRequestHeader('X-foo', 'bar');
-    $this->curlClient->openConnection('http://foo.com', 'GET', array());
+    $this->curlClient->openConnection('http://foo.com', 'GET', [], ['X-foo' => 'bar']);
   }
 
   public function testCanOpenPostCurlConnection()
@@ -116,7 +117,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://bar.com', 'POST', array('baz' => 'bar'));
+    $this->curlClient->openConnection('http://bar.com', 'POST', ['baz' => 'bar'], []);
   }
 
   public function testCanOpenPutCurlConnection()
@@ -141,7 +142,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://baz.com', 'PUT', array('baz' => 'bar'));
+    $this->curlClient->openConnection('http://baz.com', 'PUT', ['baz' => 'bar'], []);
   }
 
   public function testCanOpenDeleteCurlConnection()
@@ -166,7 +167,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://faz.com', 'DELETE', array('baz' => 'bar'));
+    $this->curlClient->openConnection('http://faz.com', 'DELETE', ['baz' => 'bar'], []);
   }
 
   public function testCanAddBundledCert()
@@ -215,23 +216,12 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
   public function testProperlyCompilesRequestHeaders()
   {
-    $headers = $this->curlClient->compileRequestHeaders();
-    $expectedHeaders = array();
+    $headers = $this->curlClient->compileRequestHeaders([]);
+    $expectedHeaders = [];
     $this->assertEquals($expectedHeaders, $headers);
 
-    $this->curlClient->addRequestHeader('X-foo', 'bar');
-    $headers = $this->curlClient->compileRequestHeaders();
-    $expectedHeaders = array(
-      'X-foo: bar',
-    );
-    $this->assertEquals($expectedHeaders, $headers);
-
-    $this->curlClient->addRequestHeader('X-bar', 'baz');
-    $headers = $this->curlClient->compileRequestHeaders();
-    $expectedHeaders = array(
-      'X-foo: bar',
-      'X-bar: baz',
-    );
+    $headers = $this->curlClient->compileRequestHeaders(['X-foo' => 'bar']);
+    $expectedHeaders = ['X-foo: bar'];
     $this->assertEquals($expectedHeaders, $headers);
   }
 

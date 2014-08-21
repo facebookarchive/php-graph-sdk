@@ -33,14 +33,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
 {
 
   /**
-   * @var array The headers to be sent with the request
-   */
-  protected $requestHeaders = array();
-
-  /**
    * @var array The headers received from the response
    */
-  protected $responseHeaders = array();
+  protected $responseHeaders = [];
 
   /**
    * @var int The HTTP status code returned from the server
@@ -86,17 +81,6 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * The headers we want to send with the request
-   *
-   * @param string $key
-   * @param string $value
-   */
-  public function addRequestHeader($key, $value)
-  {
-    $this->requestHeaders[$key] = $value;
-  }
-
-  /**
    * The headers returned in the response
    *
    * @return array
@@ -117,19 +101,20 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * Sends a request to the server
+   * Sends a request to the server and returns the raw response.
    *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
+   * @param string $url The endpoint to send the request to.
+   * @param string $method The request method.
+   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param array  $headers The request headers.
    *
-   * @return string Raw response from the server
+   * @return string Raw response from the server.
    *
-   * @throws FacebookSDKException
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
-    $this->openConnection($url, $method, $parameters);
+    $this->openConnection($url, $method, $parameters, $headers);
     $this->tryToSendRequest();
 
     // Need to verify the peer
@@ -153,13 +138,14 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * Opens a new curl connection
+   * Opens a new curl connection.
    *
-   * @param string $url The endpoint to send the request to
-   * @param string $method The request method
-   * @param array  $parameters The key value pairs to be sent in the body
+   * @param string $url The endpoint to send the request to.
+   * @param string $method The request method.
+   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param array  $headers The request headers.
    */
-  public function openConnection($url, $method = 'GET', $parameters = array())
+  public function openConnection($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
     $options = array(
       CURLOPT_URL            => $url,
@@ -176,8 +162,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
       $options[CURLOPT_CUSTOMREQUEST] = $method;
     }
 
-    if (!empty($this->requestHeaders)) {
-      $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders();
+    if (count($headers) > 0) {
+      $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders($headers);
     }
 
     self::$facebookCurl->init();
@@ -221,15 +207,17 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * Compiles the request headers into a curl-friendly format
+   * Compiles the request headers into a curl-friendly format.
+   *
+   * @param array  $headers The request headers.
    *
    * @return array
    */
-  public function compileRequestHeaders()
+  public function compileRequestHeaders(array $headers)
   {
-    $return = array();
+    $return = [];
 
-    foreach ($this->requestHeaders as $key => $value) {
+    foreach ($headers as $key => $value) {
       $return[] = $key . ': ' . $value;
     }
 

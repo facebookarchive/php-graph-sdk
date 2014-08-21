@@ -30,7 +30,6 @@ use Facebook\Exceptions\FacebookServerException;
 use Facebook\Exceptions\FacebookPermissionException;
 use Facebook\Exceptions\FacebookClientException;
 use Facebook\Exceptions\FacebookThrottleException;
-use Facebook\FacebookSession;
 
 class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -266,24 +265,6 @@ class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('ship love', $exception->getMessage());
     $this->assertEquals($json, $exception->getRawResponse());
     $this->assertEquals(200, $exception->getHttpStatusCode());
-  }
-
-  public function testValidateThrowsException()
-  {
-    $bogusSession = new FacebookSession('invalid-token');
-    $this->setExpectedException(
-      'Facebook\\Exceptions\\FacebookSDKException', 'Session has expired'
-    );
-    $bogusSession->validate();
-  }
-
-  public function testInvalidCredentialsException()
-  {
-    $bogusSession = new FacebookSession('invalid-token');
-    $this->setExpectedException(
-      'Facebook\\Exceptions\\FacebookAuthorizationException', 'Invalid OAuth access token'
-    );
-    $bogusSession->validate('invalid-app-id', 'invalid-app-secret');
   }
 
 }
