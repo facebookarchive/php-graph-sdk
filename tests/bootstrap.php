@@ -22,7 +22,7 @@
  *
  */
 if ( ! ini_get('date.timezone')) {
-  date_default_timezone_set('America/Los_Angeles');
+  date_default_timezone_set('Europe/Paris');
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
