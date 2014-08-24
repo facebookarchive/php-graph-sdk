@@ -249,7 +249,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
       '/' . $testUserId);
     $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphObject();
 
-    $this->assertTrue($graphObject->getProperty('was_successful'));
+    $this->assertTrue($graphObject->getProperty('success'));
   }
 
   public function initializeTestApp()
