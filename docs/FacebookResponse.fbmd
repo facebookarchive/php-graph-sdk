@@ -22,7 +22,7 @@ try {
   // If this response has multiple pages, you can get a request for the next or previous pages:
   $nextPageRequest = $response->getRequestForNextPage();
   $previousPageRequest = $response->getRequestForPreviousPage();
-} catch (FacebookRequestException $ex) {
+} catch (FacebookResponseException $ex) {
   echo $ex->getMessage();
 } catch (\Exception $ex) {
   echo $ex->getMessage();

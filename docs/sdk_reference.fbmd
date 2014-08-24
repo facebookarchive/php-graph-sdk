@@ -1,0 +1,213 @@
+<card>
+# Facebook SDK for PHP Reference (v4.1)
+
+Below is the API reference for the Facebook PHP SDK.
+</card>
+
+<card>
+# Services {#services}
+
+Services orchestrate multiple components of the SDK.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\FacebookClient](/docs/php/FacebookClient)`',
+      'A service object to send requests and receive responses from the Graph API.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# Entities {#entities}
+
+Entities are representations of "real-world things".
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\Entities\AccessToken](/docs/php/AccessToken)`',
+      'An entity that represents an access token and is required to send requests to Graph.',
+    ],
+    [
+      '`[Facebook\Entities\FacebookApp](/docs/php/FacebookApp)`',
+      'An entity that represents a Facebook app and is required to send requests to Graph.',
+    ],
+    [
+      '`[Facebook\Entities\FacebookBatchRequest](/docs/php/FacebookBatchRequest)`',
+      'An entity that represents a batch request to be sent to Graph.',
+    ],
+    [
+      '`[Facebook\Entities\FacebookBatchResponse](/docs/php/FacebookBatchResponse)`',
+      'An entity that represents a response from Graph after sending a batch request.',
+    ],
+    [
+      '`[Facebook\Entities\FacebookRequest](/docs/php/FacebookRequest)`',
+      'An entity that represents a request to be sent to Graph.',
+    ],
+    [
+      '`[Facebook\Entities\FacebookResponse](/docs/php/FacebookResponse)`',
+      'An entity that represents a response from Graph.',
+    ],
+    [
+      '`[Facebook\Entities\SignedRequest](/docs/php/SignedRequest)`',
+      'An entity that represents a signed request.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# Exceptions {#exeptions}
+
+When an error occurs, the SDK will throw an exception.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\Exceptions\FacebookAuthorizationException](/docs/php/FacebookAuthorizationException)`',
+      'Thrown when Graph returns an authorization error.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookClientException](/docs/php/FacebookClientException)`',
+      'Thrown when Graph returns a duplicate post error.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookOtherException](/docs/php/FacebookOtherException)`',
+      'Thrown when Graph returns an error that is unknown to the SDK.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookPermissionException](/docs/php/FacebookPermissionException)`',
+      'Thrown when Graph returns a user permissions error.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookResponseException](/docs/php/FacebookResponseException)`',
+      'The base exception to all Graph error responses. This exception is never thrown directly.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookSDKException](/docs/php/FacebookSDKException)`',
+      'The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookServerException](/docs/php/FacebookServerException)`',
+      'Thrown when Graph returns a server error.',
+    ],
+    [
+      '`[Facebook\Exceptions\FacebookThrottleException](/docs/php/FacebookThrottleException)`',
+      'Thrown when Graph returns a throttle error.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# Graph nodes {#graph-nodes}
+
+Graph nodes are collections that represent nodes returned by Graph.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\GraphNodes\GraphAlbum](/docs/php/GraphAlbum)`',
+      'A collection that represents an album node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphLocation](/docs/php/GraphLocation)`',
+      'A collection that represents a location node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphObject](/docs/php/GraphObject)`',
+      'The base collection object that represents a generic node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphPage](/docs/php/GraphPage)`',
+      'A collection that represents a page node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphSessionInfo](/docs/php/GraphSessionInfo)`',
+      '*(Deprecated)* A collection that represents a an access token node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphUser](/docs/php/GraphUser)`',
+      'A collection that represents a user node.',
+    ],
+    [
+      '`[Facebook\GraphNodes\GraphUserPage](/docs/php/GraphUserPage)`',
+      '*(Deprecated)* A collection that represents a user page node.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# Helpers {#helpers}
+
+Helpers allow you to obtain access tokens and signed requests in various contexts.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\Helpers\FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper)`',
+      'Used to obtain an access token or signed request within the context of an app canvas.',
+    ],
+    [
+      '`[Facebook\Helpers\FacebookJavaScriptHelper](/docs/php/FacebookJavaScriptHelper)`',
+      'Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.',
+    ],
+    [
+      '`[Facebook\Helpers\FacebookPageTabHelper](/docs/php/FacebookPageTabHelper)`',
+      'Used to obtain an access token or signed request within the context of a page tab.',
+    ],
+    [
+      '`[Facebook\Helpers\FacebookRedirectLoginHelper](/docs/php/FacebookRedirectLoginHelper)`',
+      'Used to obtain a user access token from a redirect using a "Log in with Facebook" link.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# HTTP clients {#http-clients}
+
+Various HTTP clients that can be implemented to send and return requests to Graph.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\HttpClients\FacebookHttpCurlClient](/docs/php/FacebookHttpCurlClient)`',
+      'The cURL HTTP client implementation. This is the default implementation.',
+    ],
+    [
+      '`[Facebook\HttpClients\FacebookStreamHttpClient](/docs/php/FacebookStreamHttpClient)`',
+      'The stream wrapper HTTP client implementation. This is the fallback implementation if cURL is not detected.',
+    ],
+    [
+      '`[Facebook\HttpClients\FacebookGuzzleHttpClient](/docs/php/FacebookGuzzleHttpClient)`',
+      'The Guzzle HTTP client implementation. Requires installing Guzzle with Composer.',
+    ],
+  ],
+})
+</card>
+
+<card>
+# Interfaces {#interfaces}
+
+Interfaces you can code to.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Interface name','Description',],
+  rows: [
+    [
+      '`[Facebook\HttpClients\FacebookHttpClientInterface](/docs/php/FacebookHttpClientInterface)`',
+      'Interface to code your own HTTP client implementation.',
+    ],
+  ],
+})
+</card>

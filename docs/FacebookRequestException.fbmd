@@ -1,11 +1,11 @@
 <card>
-# FacebookRequestException for the Facebook SDK for PHP
+# FacebookResponseException for the Facebook SDK for PHP
 
 Represents an exception thrown by executing a Facebook request.
 </card>
 
 <card>
-## Facebook\FacebookRequestException {#overview}
+## Facebook\FacebookResponseException {#overview}
 
 This base class has several subclasses:
 
@@ -16,14 +16,14 @@ This base class has several subclasses:
 `FacebookThrottleException`  
 `FacebookOtherException`  
 
-Whenever a FacebookRequestException is thrown, it will be one of these types.
+Whenever a FacebookResponseException is thrown, it will be one of these types.
 They are derived from the error information here: https://developers.facebook.com/docs/graph-api/using-graph-api/#errors
 </card>
 
 <card>
 ## Instance Methods {#instance-methods}
 
-`FacebookRequestException` extends from the base `\Exception` class, so `getCode()` and `getMessage()` are available by default.
+`FacebookResponseException` extends from the base `\Exception` class, so `getCode()` and `getMessage()` are available by default.
 
 ### getHttpStatusCode {#gethttpstatus}
 `getHttpStatusCode()`  

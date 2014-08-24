@@ -5,7 +5,7 @@ This example covers uploading a photo to the current User's profile using the Gr
 
 It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).  You must have requested the `publish_actions` scope when logging in the user for this to work.
 
-For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookRequestException`](/docs/php/FacebookRequestException).
+For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
 
 </card>
 
@@ -14,7 +14,7 @@ For more information, see the documentation for [`GraphObject`](/docs/php/GraphO
 ~~~~
 use Facebook\FacebookRequest;
 use Facebook\GraphObject;
-use Facebook\FacebookRequestException;
+use Facebook\FacebookResponseException;
 
 if($session) {
 
@@ -35,7 +35,7 @@ if($session) {
 
     echo "Posted with id: " . $response->getProperty('id');
 
-  } catch(FacebookRequestException $e) {
+  } catch(FacebookResponseException $e) {
 
     echo "Exception occured, code: " . $e->getCode();
     echo " with message: " . $e->getMessage();
