@@ -68,6 +68,11 @@ class FacebookCurlHttpClient implements FacebookHttpable
   protected static $facebookCurl;
 
   /**
+   * @var boolean If IPv6 should be disabled
+   */
+  protected static $disableIPv6;
+
+  /**
    * @const Curl Version which is unaffected by the proxy header length error.
    */
   const CURL_PROXY_QUIRK_VER = 0x071E00;
@@ -83,6 +88,15 @@ class FacebookCurlHttpClient implements FacebookHttpable
   public function __construct(FacebookCurl $facebookCurl = null)
   {
     self::$facebookCurl = $facebookCurl ?: new FacebookCurl();
+    self::$disableIPv6 = self::$disableIPv6 ?: false;
+  }
+
+  /**
+   * Disable IPv6 resolution
+   */
+  public function disableIPv6()
+  {
+    self::$disableIPv6 = true;
   }
 
   /**
@@ -178,6 +192,10 @@ class FacebookCurlHttpClient implements FacebookHttpable
 
     if (!empty($this->requestHeaders)) {
       $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders();
+    }
+
+    if (self::$disableIPv6) {
+      $options[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
     }
 
     self::$facebookCurl->init();
