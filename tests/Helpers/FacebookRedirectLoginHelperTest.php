@@ -105,7 +105,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $helper = new FacebookRedirectLoginHelper($app);
     $helper->disableSessionStatusCheck();
 
-    $accessToken = $helper->getAccessTokenFromRedirect($client, self::REDIRECT_URL);
+    $accessToken = $helper->getAccessToken($client, self::REDIRECT_URL);
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
     $this->assertEquals('access_token_from_code', (string) $accessToken);

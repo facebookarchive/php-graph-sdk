@@ -132,7 +132,7 @@ class FacebookRedirectLoginHelper
    *
    * @return AccessToken|null
    */
-  public function getAccessTokenFromRedirect(FacebookClient $client, $redirectUrl = null)
+  public function getAccessToken(FacebookClient $client, $redirectUrl = null)
   {
     if ($this->isValidRedirect()) {
       $code = $this->getCode();
