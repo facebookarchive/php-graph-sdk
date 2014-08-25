@@ -46,7 +46,7 @@ spl_autoload_register(function ($class)
   $prefix = 'Facebook\\';
 
   // base directory for the namespace prefix
-  $base_dir = defined('FACEBOOK_SDK_V4_SRC_DIR') ? FACEBOOK_SDK_V4_SRC_DIR : __DIR__ . '/src/Facebook/';
+  $base_dir = defined('FACEBOOK_SDK_V4_SRC_DIR') ? FACEBOOK_SDK_V4_SRC_DIR : __DIR__ . '/';
 
   // does the class use the namespace prefix?
   $len = strlen($prefix);
