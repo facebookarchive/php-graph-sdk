@@ -23,9 +23,9 @@
  */
 namespace Facebook\Entities;
 
+use Facebook\GraphNodes\GraphObjectFactory;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\GraphNodes\GraphObject;
 
 /**
  * Class Response
@@ -50,9 +50,9 @@ class FacebookResponse
   protected $body;
 
   /**
-   * @var mixed The decoded body of the Graph response.
+   * @var array The decoded body of the Graph response.
    */
-  protected $decodedBody;
+  protected $decodedBody = [];
 
   /**
    * @var string The access token that was used.
@@ -148,48 +148,11 @@ class FacebookResponse
   /**
    * Return the decoded body response.
    *
-   * @return mixed
+   * @return array
    */
   public function getDecodedBody()
   {
     return $this->decodedBody;
-  }
-
-  /**
-   * @TODO Make this smarter - casting recursively.
-   *
-   * Gets the result as a GraphObject.  If a type is specified, returns the
-   *   strongly-typed subclass of GraphObject for the data.
-   *
-   * @param string $type
-   *
-   * @return mixed
-   */
-  public function getGraphObject($type = 'Facebook\GraphNodes\GraphObject')
-  {
-    return (new GraphObject($this->decodedBody))->cast($type);
-  }
-
-  /**
-   * @TODO This will soon return a GraphList object.
-   *
-   * Returns an array of GraphObject returned by the request.  If a type is
-   * specified, returns the strongly-typed subclass of GraphObject for the data.
-   *
-   * @param string $type
-   *
-   * @return array|null
-   */
-  public function getGraphObjectList($type = 'Facebook\GraphNodes\GraphObject')
-  {
-    if (!isset($this->decodedBody['data'])) {
-      return null;
-    }
-    $out = [];
-    foreach ($this->decodedBody['data'] as $graphObject) {
-      $out[] = (new GraphObject($graphObject))->cast($type);
-    }
-    return $out;
   }
 
   /**
@@ -283,9 +246,96 @@ class FacebookResponse
       $this->decodedBody = ['was_successful' => $this->decodedBody];
     }
 
+    if ( ! is_array($this->decodedBody)) {
+      $this->decodedBody = [];
+    }
+
     if ($this->isError()) {
       $this->makeException();
     }
+  }
+
+  /**
+   * Instantiate a new GraphObject from response.
+   *
+   * @param string|null $subclassName The GraphObject sub class to cast to.
+   *
+   * @return \Facebook\GraphNodes\GraphObject
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphObject($subclassName = null)
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphObject($subclassName);
+  }
+
+  /**
+   * Convenience method for creating a GraphAlbum collection.
+   *
+   * @return \Facebook\GraphNodes\GraphAlbum
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphAlbum()
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphAlbum();
+  }
+
+  /**
+   * Convenience method for creating a GraphPage collection.
+   *
+   * @return \Facebook\GraphNodes\GraphPage
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphPage()
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphPage();
+  }
+
+  /**
+   * Convenience method for creating a GraphSessionInfo collection.
+   *
+   * @return \Facebook\GraphNodes\GraphSessionInfo
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphSessionInfo()
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphSessionInfo();
+  }
+
+  /**
+   * Convenience method for creating a GraphUser collection.
+   *
+   * @return \Facebook\GraphNodes\GraphUser
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphUser()
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphUser();
+  }
+
+  /**
+   * Instantiate a new GraphList from response.
+   *
+   * @param string|null $subclassName The GraphObject sub class to cast list items to.
+   * @param boolean $auto_prefix Toggle to auto-prefix the subclass name.
+   *
+   * @return \Facebook\GraphNodes\GraphList
+   *
+   * @throws FacebookSDKException
+   */
+  public function getGraphList($subclassName = null, $auto_prefix = true)
+  {
+    $factory = new GraphObjectFactory($this);
+    return $factory->makeGraphList($subclassName, $auto_prefix);
   }
 
 }

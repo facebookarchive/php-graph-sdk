@@ -80,7 +80,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
     $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
     $response = new FacebookResponse($app, 200, [], $graphResponseJson);
 
-    $graphObjectList = $response->getGraphObjectList();
+    $graphObjectList = $response->getGraphList();
 
     $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
     $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[0]);

@@ -25,8 +25,6 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\GraphNodes\GraphObject;
 
-class MyFooSubClassGraphObject extends GraphObject {}
-
 class GraphObjectTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -35,7 +33,6 @@ class GraphObjectTest extends \PHPUnit_Framework_TestCase
     $graphObject = new GraphObject();
     $backingData = $graphObject->asArray();
 
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
     $this->assertEquals([], $backingData);
   }
 
@@ -47,72 +44,97 @@ class GraphObjectTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals(['foo' => 'bar'], $backingData);
   }
 
-  public function testSomethingThatLooksLikeAListWillBeFlattened()
+  public function testDatesThatShouldBeCastAsDateTimeObjectsAreDetected()
   {
-    $dataFromGraph = [
-      'data' => [
-        [
-          'id' => '123',
-          'name' => 'Foo McBar',
-          'link' => 'http://facebook/foo',
-        ],
-      ],
-    ];
-    $graphObject = new GraphObject($dataFromGraph);
+    $graphObject = new GraphObject();
 
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+    // Should pass
+    $shouldPass = $graphObject->isIso8601DateString('1985-10-26T01:21:00+0000');
+    $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.');
+
+    $shouldPass = $graphObject->isIso8601DateString('1999-12-31');
+    $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.');
+
+    $shouldPass = $graphObject->isIso8601DateString('2009-05-19T14:39Z');
+    $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
+
+    $shouldPass = $graphObject->isIso8601DateString('2014-W36');
+    $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
+
+    // Should fail
+    $shouldFail = $graphObject->isIso8601DateString('2009-05-19T14a39r');
+    $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
+
+    $shouldFail = $graphObject->isIso8601DateString('foo_time');
+    $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
   }
 
-  public function testAnExistingPropertyCanBeAccessed()
+  public function testATimeStampCanBeConvertedToADateTimeObject()
   {
-    $graphObject = new GraphObject(['foo' => 'bar']);
-    $property = $graphObject->getProperty('foo');
+    $someTimeStampFromGraph = 1405547020;
+    $graphObject = new GraphObject();
+    $dateTime = $graphObject->castToDateTime($someTimeStampFromGraph);
+    $prettyDate = $dateTime->format(\DateTime::RFC1036);
+    $timeStamp = $dateTime->getTimestamp();
 
-    $this->assertEquals('bar', $property);
+    $this->assertInstanceOf('DateTime', $dateTime);
+    $this->assertEquals('Wed, 16 Jul 14 23:43:40 +0200', $prettyDate);
+    $this->assertEquals(1405547020, $timeStamp);
   }
 
-  public function testAMissingPropertyWillReturnNull()
+  public function testAGraphDateStringCanBeConvertedToADateTimeObject()
   {
-    $graphObject = new GraphObject(['foo' => 'bar']);
-    $property = $graphObject->getProperty('baz');
+    $someDateStringFromGraph = '2014-07-15T03:44:53+0000';
+    $graphObject = new GraphObject();
+    $dateTime = $graphObject->castToDateTime($someDateStringFromGraph);
+    $prettyDate = $dateTime->format(\DateTime::RFC1036);
+    $timeStamp = $dateTime->getTimestamp();
 
-    $this->assertNull($property, 'Expected the property to return null.');
+    $this->assertInstanceOf('DateTime', $dateTime);
+    $this->assertEquals('Tue, 15 Jul 14 03:44:53 +0000', $prettyDate);
+    $this->assertEquals(1405395893, $timeStamp);
   }
 
-  public function testAMissingPropertyWillReturnTheDefault()
+  public function testUncastingAGraphObjectWillUncastTheDateTimeObject()
   {
-    $graphObject = new GraphObject(['foo' => 'bar']);
-    $property = $graphObject->getProperty('baz', 'faz');
-
-    $this->assertEquals('faz', $property);
-  }
-
-  public function testTheKeysFromTheGraphDataCanBeReturned()
-  {
-    $graphObject = new GraphObject([
-      'key1' => 'foo',
-      'key2' => 'bar',
-      'key3' => 'baz',
+    $collectionOne = new GraphObject(['foo', 'bar']);
+    $collectionTwo = new GraphObject([
+      'id' => '123',
+      'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+      'some_collection' => $collectionOne,
     ]);
-    $propertyKeys = $graphObject->getPropertyNames();
 
-    $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
+    $uncastArray = $collectionTwo->uncastItems();
+
+    $this->assertEquals([
+        'id' => '123',
+        'date' => '2014-07-15T03:44:53+0000',
+        'some_collection' => ['foo', 'bar'],
+      ], $uncastArray);
   }
 
-  public function testAGraphObjectCanBeRecast()
+  public function testGettingGraphObjectAsAnArrayWillNotUncastTheDateTimeObject()
   {
-    $fooGraphObject = new GraphObject(['foo' => 'bar']);
-    $newFooGraphObject = $fooGraphObject->cast('Facebook\Tests\GraphNodes\MyFooSubClassGraphObject');
-    $this->assertInstanceOf('Facebook\Tests\GraphNodes\MyFooSubClassGraphObject', $newFooGraphObject);
+    $collection = new GraphObject([
+      'id' => '123',
+      'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+    ]);
+
+    $collectionAsArray = $collection->asArray();
+
+    $this->assertInstanceOf('DateTime', $collectionAsArray['date']);
   }
 
-  /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
-   */
-  public function testTryingToRecastToAGraphObjectThatDoesntExistWillThrow()
+  public function testReturningACollectionAsJasonWillSafelyRepresentDateTimes()
   {
-    $graphObject = new GraphObject(['foo' => 'bar']);
-    $graphObject->cast('FooClass');
+    $collection = new GraphObject([
+      'id' => '123',
+      'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+    ]);
+
+    $collectionAsString = $collection->asJson();
+
+    $this->assertEquals('{"id":"123","date":"2014-07-15T03:44:53+0000"}', $collectionAsString);
   }
 
 }

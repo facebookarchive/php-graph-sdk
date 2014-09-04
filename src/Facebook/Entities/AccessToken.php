@@ -166,7 +166,7 @@ class AccessToken implements \Serializable
   {
     $appIdIsValid = $tokenInfo->getProperty('app_id') == $app->getId();
     $machineIdIsValid = $tokenInfo->getProperty('machine_id') == $machineId;
-    $accessTokenIsValid = $tokenInfo->isValid();
+    $accessTokenIsValid = $tokenInfo->getIsValid();
 
     // Not all access tokens return an expiration. E.g. an app access token.
     if ($tokenInfo->getExpiresAt() instanceof \DateTime) {
@@ -362,14 +362,15 @@ class AccessToken implements \Serializable
       '/debug_token',
       $params
     );
-    $response = $client->sendRequest($request)->getGraphObject(GraphSessionInfo::className());
+    $response = $client->sendRequest($request);
+    $graphObject = $response->getGraphSessionInfo();
 
     // Update the data on this token
-    if ($response->getExpiresAt()) {
-      $this->expiresAt = $response->getExpiresAt();
+    if ($graphObject->getExpiresAt()) {
+      $this->expiresAt = $graphObject->getExpiresAt();
     }
 
-    return $response;
+    return $graphObject;
   }
 
   /**

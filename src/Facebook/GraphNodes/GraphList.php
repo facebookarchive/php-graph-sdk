@@ -24,61 +24,46 @@
 namespace Facebook\GraphNodes;
 
 /**
- * Class GraphUserPage
+ * Class GraphList
  * @package Facebook
- * @author Artur Luiz <artur@arturluiz.com.br>
  */
-class GraphUserPage extends GraphObject
+class GraphList extends Collection
 {
 
   /**
-   * Returns the ID for the user's page as a string if present.
-   *
-   * @return string|null
+   * @var array $metaData An array of Graph meta data like pagination, etc.
    */
-  public function getId()
+  protected $metaData = [];
+
+  /**
+   * Init this collection of GraphObject's.
+   *
+   * @param array $data An array of GraphObject's.
+   * @param array $metaData An array of Graph meta data like pagination, etc.
+   */
+  public function __construct(array $data = [], array $metaData = [])
   {
-    return $this->getProperty('id');
+    $this->metaData = $metaData;
+
+    parent::__construct($data);
   }
 
   /**
-   * Returns the Category for the user's page as a string if present.
+   * Get the next page of results of this list of Graph objects.
    *
-   * @return string|null
+   * @TODO
    */
-  public function getCategory()
+  public function next()
   {
-    return $this->getProperty('category');
   }
 
   /**
-   * Returns the Name of the user's page as a string if present.
+   * Get the previous page of results of this list of Graph objects.
    *
-   * @return string|null
+   * @TODO
    */
-  public function getName()
+  public function previous()
   {
-    return $this->getProperty('name');
-  }
-
-  /**
-   * Returns the Access Token used to access the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getAccessToken()
-  {
-    return $this->getProperty('access_token');
-  }
-  
-  /**
-   * Returns the Permissions for the user's page as an array if present.
-   *
-   * @return array|null
-   */
-  public function getPerms()
-  {
-    return $this->getProperty('perms');
   }
 
 }

@@ -23,36 +23,90 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\GraphNodes\GraphUser;
+use Mockery as m;
+use Facebook\GraphNodes\GraphObjectFactory;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
 
+  /**
+   * @var \Facebook\Entities\FacebookResponse
+   */
+  protected $responseMock;
+
+  public function setUp()
+  {
+    $this->responseMock = m::mock('\\Facebook\\Entities\\FacebookResponse');
+  }
+
   public function testDatesGetCastToDateTime()
   {
-    $data = [
+    $dataFromGraph = [
       'birthday' => '1984-01-01',
     ];
-    $graphObject = new GraphUser($data);
+
+    $this->responseMock
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn($dataFromGraph);
+    $factory = new GraphObjectFactory($this->responseMock);
+    $graphObject = $factory->makeGraphUser();
 
     $birthday = $graphObject->getBirthday();
 
     $this->assertInstanceOf('DateTime', $birthday);
   }
 
-  public function testLocationGetsCastAsLocationObject()
+  public function testPagePropertiesWillGetCastAsGraphPageObjects()
   {
-    $data = [
+    $dataFromGraph = [
+      'id' => '123',
+      'name' => 'Foo User',
+      'hometown' => [
+        'id' => '1',
+        'name' => 'Foo Place',
+      ],
       'location' => [
-        'id' => '123',
-        'name' => 'Bar',
+        'id' => '2',
+        'name' => 'Bar Place',
       ],
     ];
-    $graphObject = new GraphUser($data);
 
+    $this->responseMock
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn($dataFromGraph);
+    $factory = new GraphObjectFactory($this->responseMock);
+    $graphObject = $factory->makeGraphUser();
+
+    $hometown = $graphObject->getHometown();
     $location = $graphObject->getLocation();
 
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphLocation', $location);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $hometown);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $location);
+  }
+
+  public function testUserPropertiesWillGetCastAsGraphUserObjects()
+  {
+    $dataFromGraph = [
+      'id' => '123',
+      'name' => 'Foo User',
+      'significant_other' => [
+        'id' => '1337',
+        'name' => 'Bar User',
+      ],
+    ];
+
+    $this->responseMock
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn($dataFromGraph);
+    $factory = new GraphObjectFactory($this->responseMock);
+    $graphObject = $factory->makeGraphUser();
+
+    $significantOther = $graphObject->getSignificantOther();
+
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
   }
 
 }
