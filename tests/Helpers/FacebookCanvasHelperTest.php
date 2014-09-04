@@ -21,25 +21,34 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Helpers;
+namespace Facebook\Tests\Helpers;
 
-/**
- * Class FacebookJavaScriptLoginHelper
- * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
- */
-class FacebookJavaScriptLoginHelper extends FacebookSignedRequestFromInputHelper
+use Facebook\Entities\FacebookApp;
+use Facebook\Helpers\FacebookCanvasHelper;
+
+class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
 
+  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+
   /**
-   * Get raw signed request from the cookie.
-   *
-   * @return string|null
+   * @var FacebookCanvasHelper
    */
-  public function getRawSignedRequest()
+  protected $helper;
+
+  public function setUp()
   {
-    return $this->getRawSignedRequestFromCookie();
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $this->helper = new FacebookCanvasHelper($app);
+  }
+
+  public function testSignedRequestDataCanBeRetrievedFromPostData()
+  {
+    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
+
+    $rawSignedRequest = $this->helper->getRawSignedRequest();
+
+    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
   }
 
 }

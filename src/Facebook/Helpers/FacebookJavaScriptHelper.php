@@ -21,26 +21,25 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Helpers;
+namespace Facebook\Helpers;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Helpers\FacebookJavaScriptLoginHelper;
-
-class FacebookJavaScriptLoginHelperTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class FacebookJavaScriptLoginHelper
+ * @package Facebook
+ * @author Fosco Marotto <fjm@fb.com>
+ * @author David Poll <depoll@fb.com>
+ */
+class FacebookJavaScriptHelper extends FacebookSignedRequestFromInputHelper
 {
 
-  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
-
-  public function testARawSignedRequestCanBeRetrievedFromCookieData()
+  /**
+   * Get raw signed request from the cookie.
+   *
+   * @return string|null
+   */
+  public function getRawSignedRequest()
   {
-    $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
-
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookJavaScriptLoginHelper($app);
-
-    $rawSignedRequest = $helper->getRawSignedRequest();
-
-    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
+    return $this->getRawSignedRequestFromCookie();
   }
 
 }

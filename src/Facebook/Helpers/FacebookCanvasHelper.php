@@ -29,7 +29,7 @@ namespace Facebook\Helpers;
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class FacebookCanvasLoginHelper extends FacebookSignedRequestFromInputHelper
+class FacebookCanvasHelper extends FacebookSignedRequestFromInputHelper
 {
 
   /**

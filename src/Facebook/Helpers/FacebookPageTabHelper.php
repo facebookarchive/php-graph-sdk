@@ -30,7 +30,7 @@ use Facebook\Entities\FacebookApp;
  * @package Facebook
  * @author Fosco Marotto <fjm@fb.com>
  */
-class FacebookPageTabHelper extends FacebookCanvasLoginHelper
+class FacebookPageTabHelper extends FacebookCanvasHelper
 {
 
   /**
