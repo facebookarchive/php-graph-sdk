@@ -11,38 +11,41 @@ Platform from your PHP app.
 Usage
 -----
 
-This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
+> **Note:** This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
 
-Minimal example:
+Simple GET example of a user's profile.
 
 ```php
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
+use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookClient;
 use Facebook\GraphNodes\GraphUser;
-use Facebook\Exceptions\FacebookRequestException;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 
-FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
+$facebookApp = new FacebookApp('{app-id}', '{app-secret}');
 
-// Use one of the helper classes to get a FacebookSession object.
-//   FacebookRedirectLoginHelper
-//   FacebookCanvasLoginHelper
-//   FacebookJavaScriptLoginHelper
-// or create a FacebookSession with a valid access token:
-$session = new FacebookSession('access-token-here');
+// Use one of the helper classes to get a Facebook\Entities\AccessToken entity.
+//   Facebook\Helpers\FacebookRedirectLoginHelper
+//   Facebook\Helpers\FacebookJavaScriptLoginHelper
+//   Facebook\Helpers\FacebookCanvasLoginHelper
+//   Facebook\Helpers\FacebookPageTabHelper
 
-// Get the GraphUser object for the current user:
+// Get the Facebook\GraphNodes\GraphUser object for the current user:
+$facebookClient = new FacebookClient();
+$request = new FacebookRequest($facebookApp, '{access-token}', 'GET', '/me');
 
 try {
-  $me = (new FacebookRequest(
-    $session, 'GET', '/me'
-  ))->execute()->getGraphObject(GraphUser::className());
-  echo $me->getName();
-} catch (FacebookRequestException $e) {
-  // The Graph API returned an error
-} catch (\Exception $e) {
-  // Some other error occurred
+  $facebookResponse = $facebookClient->sendRequest($request);
+  $me = $facebookResponse->getGraphObject(GraphUser::className());
+  echo 'Logged in as ' . $me->getName();
+} catch(FacebookResponseException $e) {
+  // When Graph returns an error
+  echo 'Graph returned an error: ' . $e->getMessage();
+} catch(FacebookSDKException $e) {
+  // When validation fails or other local issues
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
 }
-
 ```
 
 Complete documentation, installation instructions, and examples are available at:

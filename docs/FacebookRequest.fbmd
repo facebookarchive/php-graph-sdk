@@ -27,7 +27,7 @@ try {
   $response = (new FacebookRequest($session, 'GET', '/me'))->execute();
   $object = $response->getGraphObject();
   echo $object->getProperty('name');
-} catch (FacebookRequestException $ex) {
+} catch (FacebookResponseException $ex) {
   echo $ex->getMessage();
 } catch (\Exception $ex) {
   echo $ex->getMessage();
@@ -46,7 +46,7 @@ echo $me->getName();
 
 ### execute {#execute}
 `execute()`  
-Returns a `Facebook\FacebookResponse` from this request, from which a strongly-typed result can be retrieved.  Throws an exception if the request fails.  If the error is returned from Facebook, as opposed to a networking issue, a `Facebook\FacebookRequestException` is thrown.
+Returns a `Facebook\FacebookResponse` from this request, from which a strongly-typed result can be retrieved.  Throws an exception if the request fails.  If the error is returned from Facebook, as opposed to a networking issue, a `Facebook\FacebookResponseException` is thrown.
 ### getPath {#getpath}
 `getPath()`  
 Returns a copy of the path for the request, not including the version.

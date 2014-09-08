@@ -1,7 +1,7 @@
 <card>
-# FacebookJavaScriptLoginHelper for the Facebook SDK for PHP
+# Facebook\Helpers\FacebookJavaScriptHelper
 
-A helper class for getting a FacebookSession using the session from the Facebook SDK for JavaScript.
+If you're using the [JavaScript SDK](https://developers.facebook.com/docs/javascript) on your site, information on the logged in user is stored in a cookie. Use the `FacebookJavaScriptHelper` to obtain an access token or signed request from the cookie.
 </card>
 
 <card>
@@ -16,7 +16,7 @@ Usage:
 $helper = new FacebookJavaScriptLoginHelper();
 try {
 	$session = $helper->getSession();
-} catch(FacebookRequestException $ex) {
+} catch(FacebookResponseException $ex) {
 	// When Facebook returns an error
 } catch(\Exception $ex) {
 	// When validation fails or other local issues

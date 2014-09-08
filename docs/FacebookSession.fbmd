@@ -23,7 +23,7 @@ $session = FacebookSession::newAppSession();
 // To validate the session:
 try {
   $session->validate();
-} catch (FacebookRequestException $ex) {
+} catch (FacebookResponseException $ex) {
   // Session not valid, Graph API returned an exception with the reason.
   echo $ex->getMessage();
 } catch (\Exception $ex) {

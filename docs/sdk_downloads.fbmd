@@ -1,0 +1,70 @@
+<card>
+# Downloads for the Facebook SDK 4.x for PHP
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Package','Date','Change Log',],
+  rows: [
+    [
+      '[Facebook SDK 4.1.0](https://github.com/facebook/facebook-php-sdk-v4/archive/4.1.0.zip)',
+      'TBD',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.10](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.10.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.9](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.9.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.8](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.8.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.7](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.7.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.6](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.6.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.5](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.5.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.4](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.4.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.3](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.3.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.2](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.2.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.1](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.1.zip)',
+      '',
+      '',
+    ],
+    [
+      '[Facebook SDK 4.0.0](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.0.zip)',
+      'April 30, 2014',
+      '',
+    ],
+  ],
+})
+</card>
+
