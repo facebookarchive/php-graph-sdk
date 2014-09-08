@@ -59,12 +59,7 @@ class GraphSessionInfo extends GraphObject
    */
   public function getExpiresAt()
   {
-    $stamp = $this->getProperty('expires_at');
-    if ($stamp) {
-      return (new \DateTime())->setTimestamp($stamp);
-    } else {
-      return null;
-    }
+    return $this->getProperty('expires_at');
   }
 
   /**
@@ -84,12 +79,7 @@ class GraphSessionInfo extends GraphObject
    */
   public function getIssuedAt()
   {
-    $stamp = $this->getProperty('issued_at');
-    if ($stamp) {
-      return (new \DateTime())->setTimestamp($stamp);
-    } else {
-      return null;
-    }
+    return $this->getProperty('issued_at');
   }
 
   /**
@@ -99,7 +89,7 @@ class GraphSessionInfo extends GraphObject
    */
   public function getScopes()
   {
-    return $this->getPropertyAsArray('scopes');
+    return $this->getProperty('scopes');
   }
 
   /**

@@ -23,148 +23,162 @@
  */
 namespace Facebook\GraphNodes;
 
-use Facebook\Exceptions\FacebookSDKException;
-
 /**
  * Class GraphObject
  * @package Facebook
  * @author Fosco Marotto <fjm@fb.com>
  * @author David Poll <depoll@fb.com>
  */
-class GraphObject
+class GraphObject extends Collection
 {
 
   /**
-   * @var array - Holds the raw associative data for this object
+   * @var array Maps object key names to Graph object types.
    */
-  protected $backingData = [];
+  protected static $graphObjectMap = [];
 
   /**
-   * Creates a GraphObject using the data provided.
+   * Init this Graph object.
    *
-   * @param array $raw
+   * @param array $data
    */
-  public function __construct(array $raw = [])
+  public function __construct(array $data = [])
   {
-    $this->backingData = $raw;
-
-    if (isset($this->backingData['data']) && count($this->backingData) === 1) {
-      if ($this->backingData['data'] instanceof \stdClass) {
-	    $this->backingData = get_object_vars($this->backingData['data']);
-      } else {
-	    $this->backingData = $this->backingData['data'];
-      }
-    }
+    $items = $this->castItems($data);
+    parent::__construct($items);
   }
 
   /**
-   * cast - Return a new instance of a FacebookGraphObject subclass for this
-   *   objects underlying data.
+   * Iterates over an array and detects the types each node
+   * should be cast to and returns all the items as an array.
    *
-   * @param string $type The GraphObject subclass to cast to
+   * @TODO Add auto-casting to AccessToken entities.
    *
-   * @return GraphObject
-   *
-   * @throws FacebookSDKException
-   */
-  public function cast($type)
-  {
-    if ($this instanceof $type) {
-      return $this;
-    }
-    if (is_subclass_of($type, GraphObject::className())) {
-      return new $type($this->backingData);
-    } else {
-      throw new FacebookSDKException(
-        'Cannot cast to an object that is not a GraphObject subclass', 620
-      );
-    }
-  }
-
-  /**
-   * asArray - Return a key-value associative array for the given graph object.
+   * @param array $data The array to iterate over.
    *
    * @return array
    */
-  public function asArray()
+  public function castItems(array $data)
   {
-    return $this->backingData;
-  }
+    $items = [];
 
-  /**
-   * getProperty - Gets the value of the named property for this graph object,
-   *   cast to the appropriate subclass type if provided.
-   *
-   * @param string $name The property to retrieve.
-   * @param mixed|null $default The default return value.
-   * @param string $type The subclass of GraphObject, optionally.
-   *
-   * @return mixed
-   */
-  public function getProperty($name, $default = null, $type = 'Facebook\GraphNodes\GraphObject')
-  {
-    if (isset($this->backingData[$name])) {
-      $value = $this->backingData[$name];
-      if (is_scalar($value)) {
-        return $value;
+    foreach ($data as $k => $v) {
+      if (
+        $this->shouldCastAsDateTime($k)
+        && (is_numeric($v) || $this->isIso8601DateString($v))
+      ) {
+        $items[$k] = $this->castToDateTime($v);
       } else {
-        return (new GraphObject($value))->cast($type);
+        $items[$k] = $v;
       }
     }
-    return $default;
+
+    return $items;
   }
 
   /**
-   * getPropertyAsArray - Get the list value of a named property for this graph
-   *   object, where each item has been cast to the appropriate subclass type
-   *   if provided.
-   *
-   * Calling this for a property that is not an array, the behavior
-   *   is undefined, so don’t do this.
-   *
-   * @param string $name The property to retrieve
-   * @param string $type The subclass of GraphObject, optionally
+   * Uncasts any auto-casted datatypes.
+   * Basically the reverse of castItems().
    *
    * @return array
    */
-  public function getPropertyAsArray($name, $type = 'Facebook\GraphNodes\GraphObject')
+  public function uncastItems()
   {
-    $target = array();
-    if (isset($this->backingData[$name]['data'])) {
-      $target = $this->backingData[$name]['data'];
-    } else if (isset($this->backingData[$name])
-      && !is_scalar($this->backingData[$name])) {
-      $target = $this->backingData[$name];
-    }
-    $out = array();
-    foreach ($target as $key => $value) {
-      if (is_scalar($value)) {
-        $out[$key] = $value;
-      } else {
-        $out[$key] = (new GraphObject($value))->cast($type);
-      }
-    }
-    return $out;
+    $items = $this->asArray();
+    return array_map(function ($v) {
+        $returnVal = $v;
+        if ($v instanceof \DateTime) {
+          $returnVal = $v->format(\DateTime::ISO8601);
+        }
+        return $returnVal;
+      }, $items);
   }
 
   /**
-   * getPropertyNames - Returns a list of all properties set on the object.
+   * Get the collection of items as JSON.
    *
-   * @return array
-   */
-  public function getPropertyNames()
-  {
-    return array_keys($this->backingData);
-  }
-
-  /**
-   * Returns the string class name of the GraphObject or subclass.
-   *
+   * @param  int  $options
    * @return string
    */
-  public static function className()
+  public function asJson($options = 0)
   {
-    return get_called_class();
+    $items = $this->uncastItems();
+    return json_encode($items, $options);
+  }
+
+  /**
+   * Detects an ISO 8601 formatted string.
+   *
+   * @see https://developers.facebook.com/docs/graph-api/using-graph-api/#readmodifiers
+   * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
+   * @see http://en.wikipedia.org/wiki/ISO_8601
+   *
+   * @param string $string
+   *
+   * @return boolean
+   */
+  public function isIso8601DateString($string)
+  {
+    // This insane regex was yoinked from here:
+    // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
+    // ...and I'm all like:
+    // http://thecodinglove.com/post/95378251969/when-code-works-and-i-dont-know-why
+    $crazyInsaneRegexThatSomehowDetectsIso8601 = '/^([\+-]?\d{4}(?!\d{2}\b))'
+      . '((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?'
+      . '|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d'
+      . '|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])'
+      . '((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d'
+      . '([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/';
+    return preg_match($crazyInsaneRegexThatSomehowDetectsIso8601, $string) ===  1;
+  }
+
+  /**
+   * Determines if a value from Graph should be cast to DateTime.
+   *
+   * @param string $key
+   *
+   * @return boolean
+   */
+  public function shouldCastAsDateTime($key)
+  {
+    return in_array($key, [
+        'created_time',
+        'updated_time',
+        'start_time',
+        'end_time',
+        'backdated_time',
+        'issued_at',
+        'expires_at',
+        'birthday',
+      ], true);
+  }
+
+  /**
+   * Casts a date value from Graph to DateTime.
+   *
+   * @param int|string $value
+   *
+   * @return \DateTime
+   */
+  public function castToDateTime($value)
+  {
+    if (is_int($value)) {
+      $dt = new \DateTime();
+      $dt->setTimestamp($value);
+    } else {
+      $dt = new \DateTime($value);
+    }
+    return $dt;
+  }
+
+  /**
+   * Getter for $graphObjectMap.
+   *
+   * @return array
+   */
+  public static function getObjectMap()
+  {
+    return static::$graphObjectMap;
   }
 
 }

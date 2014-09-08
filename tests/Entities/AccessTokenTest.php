@@ -75,7 +75,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getIsValid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
@@ -107,7 +107,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getIsValid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
@@ -139,7 +139,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getIsValid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
@@ -171,7 +171,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getIsValid')
       ->once()
       ->andReturn(false);
     $graphSessionInfoMock
@@ -203,7 +203,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn('foo_machine');
     $graphSessionInfoMock
-      ->shouldReceive('isValid')
+      ->shouldReceive('getIsValid')
       ->once()
       ->andReturn(true);
     $graphSessionInfoMock
@@ -222,8 +222,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     $app = new FacebookApp('123', 'foo_secret');
     $response = m::mock('Facebook\Entities\FacebookResponse');
     $response
-      ->shouldReceive('getGraphObject')
-      ->with('Facebook\GraphNodes\GraphSessionInfo')
+      ->shouldReceive('getGraphSessionInfo')
       ->once()
       ->andReturn($response);
     $response

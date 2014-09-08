@@ -23,36 +23,42 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\GraphNodes\GraphSessionInfo;
+use Mockery as m;
+use Facebook\GraphNodes\GraphObjectFactory;
 
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
 
+  /**
+   * @var \Facebook\Entities\FacebookResponse
+   */
+  protected $responseMock;
+
+  public function setUp()
+  {
+    $this->responseMock = m::mock('\\Facebook\\Entities\\FacebookResponse');
+  }
+
   public function testDatesGetCastToDateTime()
   {
-    $data = [
+    $dataFromGraph = [
       'expires_at' => 123,
       'issued_at' => 1337,
     ];
-    $graphObject = new GraphSessionInfo($data);
+
+    $this->responseMock
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn($dataFromGraph);
+    $factory = new GraphObjectFactory($this->responseMock);
+
+    $graphObject = $factory->makeGraphSessionInfo();
 
     $expires = $graphObject->getExpiresAt();
     $issuedAt = $graphObject->getIssuedAt();
 
     $this->assertInstanceOf('DateTime', $expires);
     $this->assertInstanceOf('DateTime', $issuedAt);
-  }
-
-  public function testScopesAreReturnedAsArray()
-  {
-    $data = [
-      'scopes' => ['foo', 'bar'],
-    ];
-    $graphObject = new GraphSessionInfo($data);
-
-    $scopes = $graphObject->getScopes();
-
-    $this->assertEquals(['foo', 'bar'], $scopes);
   }
 
 }

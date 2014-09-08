@@ -26,7 +26,7 @@ namespace Facebook\Tests\GraphNodes;
 use Mockery as m;
 use Facebook\GraphNodes\GraphObjectFactory;
 
-class GraphAlbumTest extends \PHPUnit_Framework_TestCase
+class GraphPageTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
@@ -39,36 +39,18 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
     $this->responseMock = m::mock('\\Facebook\\Entities\\FacebookResponse');
   }
 
-  public function testDatesGetCastToDateTime()
-  {
-    $dataFromGraph = [
-      'created_time' => '2014-07-15T03:54:34+0000',
-      'updated_time' => '2014-07-12T01:24:09+0000',
-      'id' => '123',
-      'name' => 'Bar',
-    ];
-
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
-
-    $createdTime = $graphObject->getCreatedTime();
-    $updatedTime = $graphObject->getUpdatedTime();
-
-    $this->assertInstanceOf('DateTime', $createdTime);
-    $this->assertInstanceOf('DateTime', $updatedTime);
-  }
-
-  public function testFromGetsCastAsGraphUser()
+  public function testPagePropertiesReturnGraphPageObjects()
   {
     $dataFromGraph = [
       'id' => '123',
-      'from' => [
-        'id' => '1337',
-        'name' => 'Foo McBar',
+      'name' => 'Foo Page',
+      'best_page' => [
+        'id' => '1',
+        'name' => 'Bar Page',
+      ],
+      'global_brand_parent_page' => [
+        'id' => '2',
+        'name' => 'Faz Page',
       ],
     ];
 
@@ -77,22 +59,27 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn($dataFromGraph);
     $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
+    $graphObject = $factory->makeGraphPage();
 
-    $from = $graphObject->getFrom();
+    $bestPage = $graphObject->getBestPage();
+    $globalBrandParentPage = $graphObject->getGlobalBrandParentPage();
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
   }
 
-  public function testPlacePropertyWillGetCastAsGraphPageObject()
+  public function testLocationPropertyWillGetCastAsGraphLocationObject()
   {
     $dataFromGraph = [
       'id' => '123',
-      'name' => 'Foo Album',
-      'place' => [
-        'id' => '1',
-        'name' => 'For Bar Place',
-      ]
+      'name' => 'Foo Page',
+      'location' => [
+        'city' => 'Washington',
+        'country' => 'United States',
+        'latitude' => 38.881634205431,
+        'longitude' => -77.029121075722,
+        'state' => 'DC',
+      ],
     ];
 
     $this->responseMock
@@ -100,11 +87,11 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
       ->once()
       ->andReturn($dataFromGraph);
     $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
+    $graphObject = $factory->makeGraphPage();
 
-    $place = $graphObject->getPlace();
+    $location = $graphObject->getLocation();
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
   }
 
 }

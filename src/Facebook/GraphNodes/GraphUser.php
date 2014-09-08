@@ -33,6 +33,15 @@ class GraphUser extends GraphObject
 {
 
   /**
+   * @var array Maps object key names to Graph object types.
+   */
+  protected static $graphObjectMap = [
+    'hometown' => 'Facebook\\GraphNodes\\GraphPage',
+    'location' => 'Facebook\\GraphNodes\\GraphPage',
+    'significant_other' => 'Facebook\\GraphNodes\\GraphUser',
+  ];
+
+  /**
    * Returns the ID for the user as a string if present.
    *
    * @return string|null
@@ -99,22 +108,37 @@ class GraphUser extends GraphObject
    */
   public function getBirthday()
   {
-    $value = $this->getProperty('birthday');
-    if ($value) {
-      return new \DateTime($value);
-    }
-    return null;
+    return $this->getProperty('birthday');
   }
 
   /**
-   * Returns the current location of the user as a FacebookGraphLocation
-   *   if available.
+   * Returns the current location of the user as a GraphPage.
    *
-   * @return GraphLocation|null
+   * @return GraphPage|null
    */
   public function getLocation()
   {
-    return $this->getProperty('location', null, GraphLocation::className());
+    return $this->getProperty('location');
+  }
+
+  /**
+   * Returns the current location of the user as a GraphPage.
+   *
+   * @return GraphPage|null
+   */
+  public function getHometown()
+  {
+    return $this->getProperty('hometown');
+  }
+
+  /**
+   * Returns the current location of the user as a GraphUser.
+   *
+   * @return GraphUser|null
+   */
+  public function getSignificantOther()
+  {
+    return $this->getProperty('significant_other');
   }
 
 }
