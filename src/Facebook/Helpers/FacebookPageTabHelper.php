@@ -71,6 +71,9 @@ class FacebookPageTabHelper extends FacebookCanvasLoginHelper
   }
 
   /**
+   * @TODO Deprecated: Remove after November 5, 2014
+   * @see https://developers.facebook.com/blog/post/2014/08/07/Graph-API-v2.1/
+   *
    * Returns true if the page is liked by the user.
    *
    * @return boolean

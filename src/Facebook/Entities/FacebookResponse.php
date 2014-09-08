@@ -266,11 +266,13 @@ class FacebookResponse
   /**
    * Convert the raw response into an array if possible.
    *
-   * Graph will return 3 types of responses:
+   * Graph will return 2 types of responses:
    * - JSON(P)
+   *    Most responses from Grpah are JSON(P)
    * - application/x-www-form-urlencoded key/value pairs
-   * - The string "true"
-   * ... And sometimes nothing :/ but that'd be a bug.
+   *    Happens on the `/oauth/access_token` endpoint when exchanging
+   *    a short-lived access token for a long-lived access token
+   * - And sometimes nothing :/ but that'd be a bug.
    */
   public function decodeBody()
   {
@@ -279,8 +281,15 @@ class FacebookResponse
     if ($this->decodedBody === null) {
       $this->decodedBody = [];
       parse_str($this->body, $this->decodedBody);
-    } elseif (is_bool($this->decodedBody)) {
-      $this->decodedBody = ['was_successful' => $this->decodedBody];
+    }
+
+    // Backwards compatibility for Graph < 2.1.
+    // Mimics 2.1 responses.
+    // @TODO Remove this after Graph 2.0 is no longer supported
+    elseif (is_bool($this->decodedBody)) {
+      $this->decodedBody = ['success' => $this->decodedBody];
+    } elseif (is_numeric($this->decodedBody)) {
+      $this->decodedBody = ['id' => $this->decodedBody];
     }
 
     if ($this->isError()) {

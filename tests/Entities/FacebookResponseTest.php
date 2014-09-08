@@ -102,19 +102,6 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
       ], $decodedResponse);
   }
 
-  public function testASuccessfulBooleanResponseWillBeDecoded()
-  {
-    $app = new FacebookApp('123', 'foo_secret');
-    $graphResponse = 'true';
-    $response = new FacebookResponse($app, 200, [], $graphResponse);
-
-    $decodedResponse = $response->getDecodedBody();
-
-    $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-    $this->assertEquals(['was_successful' => true], $decodedResponse);
-  }
-
-  /*
   public function testErrorStatusCanBeCheckedWhenAnErrorResponseIsReturned()
   {
     $app = new FacebookApp('123', 'foo_secret');
@@ -126,6 +113,5 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
     $this->assertTrue($response->isError(), 'Expected Response to return an error.');
     $this->assertInstanceOf('Facebook\Exceptions\FacebookResponseException', $exception);
   }
-  */
 
 }

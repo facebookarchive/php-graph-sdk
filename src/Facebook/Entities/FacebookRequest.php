@@ -41,7 +41,7 @@ class FacebookRequest
   /**
    * @var string Default Graph API version for requests.
    */
-  protected static $defaultGraphApiVersion = 'v2.0';
+  protected static $defaultGraphApiVersion = 'v2.1';
 
   /**
    * @var FacebookApp The Facebook app entity.

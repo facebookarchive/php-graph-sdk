@@ -38,7 +38,6 @@ class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
     $app = new FacebookApp('123', 'foo_app_secret');
     $helper = new FacebookPageTabHelper($app);
 
-    $this->assertTrue($helper->isLiked());
     $this->assertFalse($helper->isAdmin());
     $this->assertEquals('42', $helper->getPageId());
     $this->assertEquals('42', $helper->getPageData('id'));
