@@ -24,29 +24,21 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\Entities\FacebookApp;
-use Facebook\Helpers\FacebookCanvasLoginHelper;
+use Facebook\Helpers\FacebookJavaScriptHelper;
 
-class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookJavaScriptLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
 
   public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
 
-  /**
-   * @var FacebookCanvasLoginHelper
-   */
-  protected $helper;
-
-  public function setUp()
+  public function testARawSignedRequestCanBeRetrievedFromCookieData()
   {
+    $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
+
     $app = new FacebookApp('123', 'foo_app_secret');
-    $this->helper = new FacebookCanvasLoginHelper($app);
-  }
+    $helper = new FacebookJavaScriptHelper($app);
 
-  public function testSignedRequestDataCanBeRetrievedFromPostData()
-  {
-    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
-
-    $rawSignedRequest = $this->helper->getRawSignedRequest();
+    $rawSignedRequest = $helper->getRawSignedRequest();
 
     $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
   }
