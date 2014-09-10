@@ -133,7 +133,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $longLivedAccessToken = $accessToken->extend($app, $client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $longLivedAccessToken);
+    $this->assertInstanceOf('\\Facebook\\Entities\\AccessToken', $longLivedAccessToken);
     $this->assertEquals('long_token', (string)$longLivedAccessToken);
     $this->assertEquals('foo_machine', $longLivedAccessToken->getMachineId());
     $this->assertEquals(time() + 123, $longLivedAccessToken->getExpiresAt()->getTimeStamp());
@@ -164,7 +164,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $accessTokenFromCode = AccessToken::getAccessTokenFromCode('foo_code', $app, $client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessTokenFromCode);
+    $this->assertInstanceOf('\\Facebook\\Entities\\AccessToken', $accessTokenFromCode);
     $this->assertEquals('new_long_token', (string)$accessTokenFromCode);
     $this->assertEquals('foo_machine', $accessTokenFromCode->getMachineId());
     $this->assertEquals(time() + 123, $accessTokenFromCode->getExpiresAt()->getTimeStamp());

@@ -43,7 +43,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
   public function testEmptyBatchRequestEntitiesCanBeInstantiated()
   {
     $batchRequest = new FacebookBatchRequest();
-    $this->assertInstanceOf('Facebook\Entities\FacebookBatchRequest', $batchRequest);
+    $this->assertInstanceOf('\\Facebook\\Entities\\FacebookBatchRequest', $batchRequest);
   }
 
   public function testABatchRequestWillInstantiateWithTheProperProperties()

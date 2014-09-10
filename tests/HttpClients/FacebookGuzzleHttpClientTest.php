@@ -41,7 +41,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
   public function setUp()
   {
-    $this->guzzleMock = m::mock('GuzzleHttp\Client');
+    $this->guzzleMock = m::mock('\\GuzzleHttp\\Client');
     $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);
   }
 
@@ -52,14 +52,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
   public function testCanSendNormalRequest()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
+    $requestMock = m::mock('\\GuzzleHttp\\Message\\RequestInterface');
     $requestMock
       ->shouldReceive('setHeader')
       ->once()
       ->with('X-foo', 'bar')
       ->andReturn(null);
 
-    $responseMock = m::mock('GuzzleHttp\Message\ResponseInterface');
+    $responseMock = m::mock('\\GuzzleHttp\\Message\\ResponseInterface');
     $responseMock
       ->shouldReceive('getStatusCode')
       ->once()
@@ -96,14 +96,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
    */
   public function testThrowsExceptionOnClientError()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
+    $requestMock = m::mock('\\GuzzleHttp\\Message\\RequestInterface');
     $exceptionMock = m::mock(
-                      'GuzzleHttp\Exception\RequestException',
+                      '\\GuzzleHttp\\Exception\\RequestException',
                         [
                           'Foo Error',
                           $requestMock,
                           null,
-                          m::mock('GuzzleHttp\Exception\AdapterException'),
+                          m::mock('\\GuzzleHttp\\Exception\\AdapterException'),
                         ]);
 
     $this->guzzleMock

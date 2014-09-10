@@ -176,7 +176,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
     $userId = $signedRequest->getUserId();
     $hasOAuthData = $signedRequest->hasOAuthData();
 
-    $this->assertInstanceOf('\Facebook\Entities\SignedRequest', $signedRequest);
+    $this->assertInstanceOf('\\Facebook\\Entities\\SignedRequest', $signedRequest);
     $this->assertEquals($this->rawSignedRequest, $rawSignedRequest);
     $this->assertEquals($this->payloadData, $payloadData);
     $this->assertEquals(123, $userId);

@@ -54,12 +54,12 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 
     // Single Graph object.
     $this->assertFalse($decodedResponses[0]->isError(), 'Did not expect Response to return an error for single Graph object.');
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $decodedResponses[0]->getGraphObject());
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $decodedResponses[0]->getGraphObject());
     // Paginated list of Graph objects.
     $this->assertFalse($decodedResponses[1]->isError(), 'Did not expect Response to return an error for paginated list of Graph objects.');
     $graphList = $decodedResponses[1]->getGraphList();
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphList[0]);
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphList[1]);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphList[0]);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphList[1]);
     /*
     // Endpoint not found.
     $this->assertTrue($decodedResponses[2]->isError(), 'Expected Response to return an error for endpoint not found.');
@@ -91,7 +91,7 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('IteratorAggregate', $batchResponse);
 
     foreach ($batchResponse as $responseEntity) {
-      $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $responseEntity);
+      $this->assertInstanceOf('\\Facebook\\Entities\\FacebookResponse', $responseEntity);
     }
   }
 

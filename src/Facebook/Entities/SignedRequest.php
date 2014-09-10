@@ -372,7 +372,7 @@ class SignedRequest
    */
   public static function validateBase64($input)
   {
-    $pattern = '/^[a-zA-Z0-9\/\r\n+]*={0,2}$/';
+    $pattern = '/^[a-zA-Z0-9\\/\\r\\n+]*={0,2}$/';
     if (preg_match($pattern, $input)) {
       return;
     }

@@ -80,7 +80,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
 
   public function testAccessTokenWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
   {
-    $client = m::mock('Facebook\FacebookClient');
+    $client = m::mock('\\Facebook\\FacebookClient');
     $client
       ->shouldReceive('sendRequest')
       ->never();
@@ -93,7 +93,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
 
   public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsAnAccessToken()
   {
-    $client = m::mock('Facebook\FacebookClient');
+    $client = m::mock('\\Facebook\\FacebookClient');
     $client
       ->shouldReceive('sendRequest')
       ->never();
@@ -101,13 +101,13 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
     $accessToken = $this->helper->getAccessToken($client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertInstanceOf('\\Facebook\\Entities\\AccessToken', $accessToken);
     $this->assertEquals('foo_token', (string) $accessToken);
   }
 
   public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsACode()
   {
-    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response = m::mock('\\Facebook\\Entities\\FacebookResponse');
     $response
       ->shouldReceive('getDecodedBody')
       ->once()
@@ -115,17 +115,17 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
           'access_token' => 'access_token_from_code',
           'expires' => 555,
         ]);
-    $client = m::mock('Facebook\FacebookClient');
+    $client = m::mock('\\Facebook\\FacebookClient');
     $client
       ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->with(m::type('\\Facebook\\Entities\\FacebookRequest'))
       ->once()
       ->andReturn($response);
 
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
     $accessToken = $this->helper->getAccessToken($client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertInstanceOf('\\Facebook\\Entities\\AccessToken', $accessToken);
     $this->assertEquals('access_token_from_code', (string) $accessToken);
   }
 

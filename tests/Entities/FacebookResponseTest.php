@@ -34,7 +34,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
     $app = new FacebookApp('123', 'foo_secret');
     $response = new FacebookResponse($app);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $response);
+    $this->assertInstanceOf('\\Facebook\\Entities\\FacebookResponse', $response);
   }
 
   public function testAnETagCanBeProperlyAccessed()
@@ -71,7 +71,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
       'id' => '123',
       'name' => 'Foo',
     ], $decodedResponse);
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphObject);
   }
 
   public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
@@ -83,8 +83,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
     $graphObjectList = $response->getGraphList();
 
     $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[0]);
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[1]);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphObjectList[0]);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphObjectList[1]);
   }
 
   public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()

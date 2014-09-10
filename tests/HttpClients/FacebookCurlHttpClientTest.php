@@ -44,7 +44,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
   public function setUp()
   {
-    $this->curlMock = m::mock('Facebook\HttpClients\FacebookCurl');
+    $this->curlMock = m::mock('\\Facebook\\HttpClients\\FacebookCurl');
     $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
   }
 
@@ -174,7 +174,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
   {
     $this->curlMock
       ->shouldReceive('setopt')
-      ->with(CURLOPT_CAINFO, '/.fb_ca_chain_bundle\.crt$/')
+      ->with(CURLOPT_CAINFO, '/.fb_ca_chain_bundle\\.crt$/')
       ->once()
       ->andReturn(null);
 

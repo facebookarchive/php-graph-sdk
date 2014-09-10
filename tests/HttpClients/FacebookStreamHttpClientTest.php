@@ -41,7 +41,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
   public function setUp()
   {
-    $this->streamMock = m::mock('Facebook\HttpClients\FacebookStream');
+    $this->streamMock = m::mock('\\Facebook\\HttpClients\\FacebookStream');
     $this->streamClient = new FacebookStreamHttpClient($this->streamMock);
   }
 
@@ -96,7 +96,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
               return false;
             }
 
-            if (false === preg_match('/.fb_ca_chain_bundle\.crt$/', $arg['ssl']['cafile'])) {
+            if (false === preg_match('/.fb_ca_chain_bundle\\.crt$/', $arg['ssl']['cafile'])) {
               return false;
             }
 
