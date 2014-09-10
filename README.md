@@ -66,7 +66,7 @@ and edit it to add your credentials.
 3) The tests can be executed by running this command from the root directory:
 
 ```bash
-./vendor/bin/phpunit
+./bin/phpunit
 ```
 
 
