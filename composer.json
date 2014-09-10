@@ -26,5 +26,8 @@
         "psr-4": {
             "Facebook\\": "src/Facebook/"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
