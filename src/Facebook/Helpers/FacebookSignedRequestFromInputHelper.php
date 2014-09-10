@@ -84,6 +84,8 @@ abstract class FacebookSignedRequestFromInputHelper
    * @param FacebookClient $client The Facebook client.
    *
    * @return AccessToken|null
+   *
+   * @throws \Facebook\Exceptions\FacebookSDKException
    */
   public function getAccessToken(FacebookClient $client)
   {
