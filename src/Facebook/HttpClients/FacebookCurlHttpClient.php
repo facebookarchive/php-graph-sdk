@@ -147,13 +147,13 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function openConnection($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
-    $options = array(
+    $options = [
       CURLOPT_URL            => $url,
       CURLOPT_CONNECTTIMEOUT => 10,
       CURLOPT_TIMEOUT        => 60,
       CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
       CURLOPT_HEADER         => true, // Enable header processing
-    );
+    ];
 
     if ($method !== "GET") {
       $options[CURLOPT_POSTFIELDS] = $parameters;
@@ -248,7 +248,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public static function headersToArray($rawHeaders)
   {
-    $headers = array();
+    $headers = [];
 
     // Normalize line breaks
     $rawHeaders = str_replace("\r\n", "\n", $rawHeaders);

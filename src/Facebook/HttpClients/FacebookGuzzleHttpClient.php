@@ -89,9 +89,9 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
    */
   public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
-    $options = array();
+    $options = [];
     if ($parameters) {
-      $options = array('body' => $parameters);
+      $options = ['body' => $parameters];
     }
 
     $request = self::$guzzleClient->createRequest($method, $url, $options);

@@ -238,19 +238,19 @@ class FacebookRedirectLoginHelper
 
     $query = '';
     if (isset($parts['query'])) {
-      $full_query = array();
+      $full_query = [];
       parse_str($parts['query'], $full_query);
 
       // remove Facebook appended query params
-      $toDrop = array();
+      $toDrop = [];
       if (isset($full_query['state']) && isset($full_query['code'])) {
-        $toDrop = array('state', 'code');
+        $toDrop = ['state', 'code'];
       } elseif (isset($full_query['state'])
           && isset($full_query['error'])
           && isset($full_query['error_reason'])
           && isset($full_query['error_description'])
           && isset($full_query['error_code'])) {
-        $toDrop = array('state', 'error', 'error_reason', 'error_description', 'error_code');
+        $toDrop = ['state', 'error', 'error_reason', 'error_description', 'error_code'];
       }
       $real_query = array_diff_key($full_query, array_flip($toDrop));
 

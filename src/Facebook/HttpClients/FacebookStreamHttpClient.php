@@ -85,17 +85,17 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
    */
   public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
   {
-    $options = array(
-      'http' => array(
+    $options = [
+      'http' => [
         'method' => $method,
         'timeout' => 60,
         'ignore_errors' => true
-      ),
-      'ssl' => array(
+      ],
+      'ssl' => [
         'verify_peer' => true,
         'cafile' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt',
-      ),
-    );
+      ],
+    ];
 
     if ($parameters) {
       $options['http']['content'] = http_build_query($parameters, null, '&');
@@ -146,7 +146,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
    */
   public static function formatHeadersToArray(array $rawHeaders)
   {
-    $headers = array();
+    $headers = [];
 
     foreach ($rawHeaders as $line) {
       if (strpos($line, ':') === false) {

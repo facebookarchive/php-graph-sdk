@@ -83,12 +83,12 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
               return false;
             }
 
-            if ($arg['http'] !== array(
+            if ($arg['http'] !== [
                 'method' => 'GET',
                 'timeout' => 60,
                 'ignore_errors' => true,
                 'header' => 'X-foo: bar',
-              )) {
+              ]) {
               return false;
             }
 
