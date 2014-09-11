@@ -71,7 +71,7 @@ class FacebookApp implements \Serializable
 
   public function serialize()
   {
-    return serialize(array($this->id, $this->secret));
+    return serialize([$this->id, $this->secret]);
   }
 
   public function unserialize($serialized)

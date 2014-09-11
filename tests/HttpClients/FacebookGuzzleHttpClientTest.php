@@ -99,12 +99,12 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
     $exceptionMock = m::mock(
                       'GuzzleHttp\Exception\RequestException',
-                        array(
+                        [
                           'Foo Error',
                           $requestMock,
                           null,
                           m::mock('GuzzleHttp\Exception\AdapterException'),
-                        ));
+                        ]);
 
     $this->guzzleMock
       ->shouldReceive('createRequest')

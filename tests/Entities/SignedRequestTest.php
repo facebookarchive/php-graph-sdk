@@ -32,7 +32,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
 
   public $rawSignedRequest = 'U0_O1MqqNKUt32633zAkdd2Ce-jGVgRgJeRauyx_zC8=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjozMjEsImNvZGUiOiJmb29fY29kZSIsInN0YXRlIjoiZm9vX3N0YXRlIiwidXNlcl9pZCI6MTIzLCJmb28iOiJiYXIifQ==';
 
-  public $payloadData = array(
+  public $payloadData = [
     'oauth_token' => 'foo_token',
     'algorithm' => 'HMAC-SHA256',
     'issued_at' => 321,
@@ -40,7 +40,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
     'state' => 'foo_state',
     'user_id' => 123,
     'foo' => 'bar',
-  );
+  ];
 
   public function testValidSignedRequestsWillPassFormattingValidation()
   {
@@ -97,7 +97,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
   {
     $decodedPayload = SignedRequest::decodePayload('WyJwYXlsb2FkIl0=');
 
-    $this->assertEquals(array('payload'), $decodedPayload);
+    $this->assertEquals(['payload'], $decodedPayload);
   }
 
   /**

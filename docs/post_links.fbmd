@@ -21,10 +21,10 @@ if($session) {
   try {
 
     $response = (new FacebookRequest(
-      $session, 'POST', '/me/feed', array(
+      $session, 'POST', '/me/feed', [
       	'link' => 'www.example.com',
       	'message' => 'User provided message'
-      )
+      ]
     ))->execute()->getGraphObject();
 
     echo "Posted with id: " . $response->getProperty('id');
