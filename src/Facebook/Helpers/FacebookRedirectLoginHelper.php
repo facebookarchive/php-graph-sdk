@@ -131,6 +131,8 @@ class FacebookRedirectLoginHelper
    * @param string $redirectUrl The redirect URL.
    *
    * @return AccessToken|null
+   *
+   * @throws FacebookSDKException
    */
   public function getAccessToken(FacebookClient $client, $redirectUrl = null)
   {
@@ -139,11 +141,7 @@ class FacebookRedirectLoginHelper
       $redirectUrl = $redirectUrl ?: $this->getCurrentUri();
       $redirectUrl = $this->getFilteredUri($redirectUrl);
 
-      try {
-        return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
-      } catch (FacebookSDKException $e) {
-        return null;
-      }
+      return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
     return null;
   }

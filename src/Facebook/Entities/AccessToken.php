@@ -188,6 +188,8 @@ class AccessToken implements \Serializable
    * @param string|null $machineId
    *
    * @return AccessToken
+   *
+   * @throws FacebookSDKException
    */
   public static function getAccessTokenFromCode($code,
                                                 FacebookApp $app,
@@ -216,6 +218,8 @@ class AccessToken implements \Serializable
    * @param string|null $redirectUri
    *
    * @return AccessToken
+   *
+   * @throws FacebookSDKException
    */
   public static function getCodeFromAccessToken($accessToken,
                                                 FacebookApp $app,
@@ -239,6 +243,8 @@ class AccessToken implements \Serializable
    * @param FacebookClient $client The Facebook client.
    *
    * @return AccessToken
+   *
+   * @throws FacebookSDKException
    */
   public function extend(FacebookApp $app, FacebookClient $client)
   {
