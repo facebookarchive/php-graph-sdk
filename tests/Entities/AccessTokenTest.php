@@ -26,6 +26,7 @@ namespace Facebook\Tests\Entities;
 use Mockery as m;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\AccessToken;
+use Facebook\GraphNodes\GraphSessionInfo;
 
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,8 +50,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
   public function testLongLivedAccessTokensCanBeDetected()
   {
-    $aWeek = time() + (60 * 60 * 24 * 7);
-    $accessToken = new AccessToken('foo_token', $aWeek);
+    $accessToken = new AccessToken('foo_token', $this->aWeekFromNow());
 
     $isLongLived = $accessToken->isLongLived();
 
@@ -59,160 +59,51 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
   public function testATokenIsValidatedOnTheAppIdAndMachineIdAndTokenValidityAndTokenExpiration()
   {
-    $aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('app_id')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('getIsValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
+    $graphSession = $this->createGraphSessionInfo('123', 'foo_machine', true, $this->aWeekFromNow());
     $app = new FacebookApp('123', 'foo_secret');
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
+
+    $isValid = AccessToken::validateAccessToken($graphSession, $app, 'foo_machine');
 
     $this->assertTrue($isValid, 'Expected access token to be valid.');
   }
 
   public function testATokenWillNotBeValidIfTheAppIdDoesNotMatch()
   {
-    $aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('app_id')
-      ->once()
-      ->andReturn('1337');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('getIsValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
+    $graphSession = $this->createGraphSessionInfo('1337', 'foo_machine', true, $this->aWeekFromNow());
     $app = new FacebookApp('123', 'foo_secret');
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
+
+    $isValid = AccessToken::validateAccessToken($graphSession, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the app ID does not match.');
   }
 
   public function testATokenWillNotBeValidIfTheMachineIdDoesNotMatch()
   {
-    $aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('app_id')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('getIsValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
+    $graphSession = $this->createGraphSessionInfo('123', 'foo_machine', true, $this->aWeekFromNow());
     $app = new FacebookApp('123', 'foo_secret');
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'bar_machine');
+
+    $isValid = AccessToken::validateAccessToken($graphSession, $app, 'bar_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the machine ID does not match.');
   }
 
   public function testATokenWillNotBeValidIfTheCollectionTellsUsItsNotValid()
   {
-    $aWeek = time() + (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($aWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('app_id')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('getIsValid')
-      ->once()
-      ->andReturn(false);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
+    $graphSession = $this->createGraphSessionInfo('123', 'foo_machine', false, $this->aWeekFromNow());
     $app = new FacebookApp('123', 'foo_secret');
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
+
+    $isValid = AccessToken::validateAccessToken($graphSession, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because the collection says it is not valid.');
   }
 
   public function testATokenWillNotBeValidIfTheTokenHasExpired()
   {
-    $lastWeek = time() - (60 * 60 * 24 * 7);
-    $dt = new \DateTime();
-    $dt->setTimestamp($lastWeek);
-
-    $graphSessionInfoMock = m::mock('Facebook\GraphNodes\GraphSessionInfo');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('app_id')
-      ->once()
-      ->andReturn('123');
-    $graphSessionInfoMock
-      ->shouldReceive('getProperty')
-      ->with('machine_id')
-      ->once()
-      ->andReturn('foo_machine');
-    $graphSessionInfoMock
-      ->shouldReceive('getIsValid')
-      ->once()
-      ->andReturn(true);
-    $graphSessionInfoMock
-      ->shouldReceive('getExpiresAt')
-      ->twice()
-      ->andReturn($dt);
-
+    $expiredTime = time() - (60 * 60 * 24 * 7);
+    $graphSession = $this->createGraphSessionInfo('123', 'foo_machine', true, $expiredTime);
     $app = new FacebookApp('123', 'foo_secret');
-    $isValid = AccessToken::validateAccessToken($graphSessionInfoMock, $app, 'foo_machine');
+
+    $isValid = AccessToken::validateAccessToken($graphSession, $app, 'foo_machine');
 
     $this->assertFalse($isValid, 'Expected access token to be invalid because it has expired.');
   }
@@ -220,23 +111,10 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
   public function testInfoAboutAnAccessTokenCanBeObtainedFromGraph()
   {
     $app = new FacebookApp('123', 'foo_secret');
-    $response = m::mock('Facebook\Entities\FacebookResponse');
-    $response
-      ->shouldReceive('getGraphSessionInfo')
-      ->once()
-      ->andReturn($response);
-    $response
-      ->shouldReceive('getExpiresAt')
-      ->once()
-      ->andReturn(null);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
-
+    $response = $this->createFacebookResponseMockWithNoExpiresAt();
+    $client = $this->createFacebookClientMockWithResponse($response);
     $accessToken = new AccessToken('foo_token');
+
     $accessTokenInfo = $accessToken->getInfo($app, $client);
 
     $this->assertSame($response, $accessTokenInfo);
@@ -245,23 +123,14 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
   public function testAShortLivedAccessTokenCabBeExtended()
   {
     $app = new FacebookApp('123', 'foo_secret');
-    $response = m::mock('Facebook\Entities\FacebookResponse');
-    $response
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn([
-          'access_token' => 'long_token',
-          'expires' => 123,
-          'machine_id' => 'foo_machine',
-        ]);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
-
+    $response = $this->createFacebookResponseMockWithDecodedBody([
+      'access_token' => 'long_token',
+      'expires' => 123,
+      'machine_id' => 'foo_machine',
+    ]);
+    $client = $this->createFacebookClientMockWithResponse($response);
     $accessToken = new AccessToken('foo_token');
+
     $longLivedAccessToken = $accessToken->extend($app, $client);
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $longLivedAccessToken);
@@ -273,19 +142,10 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
   public function testALongLivedAccessTokenCanBeUsedToObtainACode()
   {
     $app = new FacebookApp('123', 'foo_secret');
-    $response = m::mock('Facebook\Entities\FacebookResponse');
-    $response
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn([
-          'code' => 'foo_code',
-        ]);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
+    $response = $this->createFacebookResponseMockWithDecodedBody([
+      'code' => 'foo_code',
+    ]);
+    $client = $this->createFacebookClientMockWithResponse($response);
 
     $code = AccessToken::getCodeFromAccessToken('foo_token', $app, $client);
 
@@ -295,21 +155,13 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
   public function testACodeCanBeUsedToObtainAnAccessToken()
   {
     $app = new FacebookApp('123', 'foo_secret');
-    $response = m::mock('Facebook\Entities\FacebookResponse');
-    $response
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn([
-          'access_token' => 'new_long_token',
-          'expires' => 123,
-          'machine_id' => 'foo_machine',
-        ]);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
+    $response = $this->createFacebookResponseMockWithDecodedBody([
+      'access_token' => 'new_long_token',
+      'expires' => 123,
+      'machine_id' => 'foo_machine',
+    ]);
+    $client = $this->createFacebookClientMockWithResponse($response);
+
     $accessTokenFromCode = AccessToken::getAccessTokenFromCode('foo_code', $app, $client);
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessTokenFromCode);
@@ -321,11 +173,67 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
   public function testAccessTokenCanBeSerialized()
   {
     $accessToken = new AccessToken('foo', time(), 'bar');
+
     $newAccessToken = unserialize(serialize($accessToken));
 
-    $this->assertEquals((string)$accessToken, (string)$newAccessToken);
+    $this->assertEquals((string) $accessToken, (string) $newAccessToken);
     $this->assertEquals($accessToken->getExpiresAt(), $newAccessToken->getExpiresAt());
     $this->assertEquals($accessToken->getMachineId(), $newAccessToken->getMachineId());
+  }
+
+  private function createGraphSessionInfo($appId, $machineId, $isValid, $expiresAt)
+  {
+    return new GraphSessionInfo([
+      'app_id' => $appId,
+      'machine_id' => $machineId,
+      'is_valid' => $isValid,
+      'expires_at' => $expiresAt
+    ]);
+  }
+
+  private function aWeekFromNow()
+  {
+    return time() + (60 * 60 * 24 * 7);//a week from now
+  }
+
+  private function createFacebookClientMockWithResponse($response)
+  {
+    $client = m::mock('Facebook\FacebookClient');
+    $client
+      ->shouldReceive('sendRequest')
+      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->once()
+      ->andReturn($response);
+    return $client;
+  }
+
+  private function createFacebookResponseMockWithDecodedBody($decodedBody)
+  {
+    $response = $this->createFacebookResponseMock();
+    $response
+      ->shouldReceive('getDecodedBody')
+      ->once()
+      ->andReturn($decodedBody);
+    return $response;
+  }
+
+  private function createFacebookResponseMock()
+  {
+    return m::mock('Facebook\Entities\FacebookResponse');
+  }
+
+  private function createFacebookResponseMockWithNoExpiresAt()
+  {
+    $response = $this->createFacebookResponseMock();
+    $response
+      ->shouldReceive('getGraphSessionInfo')
+      ->once()
+      ->andReturn($response);
+    $response
+      ->shouldReceive('getExpiresAt')
+      ->once()
+      ->andReturn(null);
+    return $response;
   }
 
 }
