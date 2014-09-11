@@ -27,33 +27,34 @@ use Facebook\Entities\FacebookApp;
 
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
+  private $app;
+
+  public function setUp()
+  {
+    $this->app = new FacebookApp('id', 'secret');
+  }
+
   public function testGetId()
   {
-    $app = new FacebookApp('id', 'secret');
-
-    $this->assertEquals('id', $app->getId());
+    $this->assertEquals('id', $this->app->getId());
   }
 
   public function testGetSecret()
   {
-    $app = new FacebookApp('id', 'secret');
-
-    $this->assertEquals('secret', $app->getSecret());
+    $this->assertEquals('secret', $this->app->getSecret());
   }
 
   public function testGetAccessToken()
   {
-    $app = new FacebookApp('id', 'secret');
-    $accessToken = $app->getAccessToken();
+    $accessToken = $this->app->getAccessToken();
 
     $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
-    $this->assertEquals('id|secret', (string)$accessToken);
+    $this->assertEquals('id|secret', (string) $accessToken);
   }
 
   public function testSerialization()
   {
-    $app = new FacebookApp('id', 'secret');
-    $newApp = unserialize(serialize($app));
+    $newApp = unserialize(serialize($this->app));
 
     $this->assertInstanceOf('Facebook\Entities\FacebookApp', $newApp);
     $this->assertEquals('id', $newApp->getId());
