@@ -284,7 +284,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     // for additional Proxy headers.
     if ( self::needsCurlProxyFix() ) {
       // Additional way to calculate the request body size.
-      if (preg_match('/Content-Length: (\d+)/', $this->rawResponse, $m)) {
+      if (preg_match('/Content-Length: (\\d+)/', $this->rawResponse, $m)) {
           $headerSize = mb_strlen($this->rawResponse) - $m[1];
       } elseif (stripos($this->rawResponse, self::CONNECTION_ESTABLISHED) !== false) {
           $headerSize += mb_strlen(self::CONNECTION_ESTABLISHED);

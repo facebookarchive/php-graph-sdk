@@ -34,7 +34,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     $app = new FacebookApp('123', 'foo_secret');
     $request = new FacebookRequest($app);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $request);
+    $this->assertInstanceOf('\\Facebook\\Entities\\FacebookRequest', $request);
   }
 
   /**

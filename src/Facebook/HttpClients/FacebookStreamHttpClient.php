@@ -169,7 +169,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
    */
   public static function getStatusCodeFromHeader($header)
   {
-    preg_match('|HTTP/\d\.\d\s+(\d+)\s+.*|', $header, $match);
+    preg_match('|HTTP/\\d\\.\\d\\s+(\\d+)\\s+.*|', $header, $match);
     return (int) $match[1];
   }
 

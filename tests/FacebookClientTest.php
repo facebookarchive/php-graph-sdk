@@ -53,7 +53,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
   public function setUp()
   {
-    $this->httpClientMock = m::mock('Facebook\HttpClients\FacebookHttpClientInterface');
+    $this->httpClientMock = m::mock('\\Facebook\\HttpClients\\FacebookHttpClientInterface');
   }
 
   public function testACustomHttpClientCanBeInjected()
@@ -61,7 +61,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $client = new FacebookClient($this->httpClientMock);
     $httpHandler = $client->getHttpClientHandler();
 
-    $this->assertInstanceOf('Mockery\MockInterface', $httpHandler);
+    $this->assertInstanceOf('Mockery\\MockInterface', $httpHandler);
     $this->assertSame($this->httpClientMock, $httpHandler);
   }
 
@@ -71,9 +71,9 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $httpHandler = $client->getHttpClientHandler();
 
     if (function_exists('curl_init')) {
-      $this->assertInstanceOf('Facebook\HttpClients\FacebookCurlHttpClient', $httpHandler);
+      $this->assertInstanceOf('\\Facebook\\HttpClients\\FacebookCurlHttpClient', $httpHandler);
     } else {
-      $this->assertInstanceOf('Facebook\HttpClients\FacebookStreamHttpClient', $httpHandler);
+      $this->assertInstanceOf('\\Facebook\\HttpClients\\FacebookStreamHttpClient', $httpHandler);
     }
   }
 
@@ -103,7 +103,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
   public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph()
   {
     $facebookApp = new FacebookApp('123', 'foo_secret');
-    $facebookRequest = m::mock('Facebook\Entities\FacebookRequest');
+    $facebookRequest = m::mock('\\Facebook\\Entities\\FacebookRequest');
     $facebookRequest
       ->shouldReceive('getUrl')
       ->once()
@@ -146,13 +146,13 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $client = new FacebookClient($this->httpClientMock);
     $response = $client->sendRequest($facebookRequest);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $response);
+    $this->assertInstanceOf('\\Facebook\\Entities\\FacebookResponse', $response);
   }
 
   public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
   {
     $facebookApp = new FacebookApp('123', 'foo_secret');
-    $facebookBatchRequest = m::mock('Facebook\Entities\FacebookBatchRequest');
+    $facebookBatchRequest = m::mock('\\Facebook\\Entities\\FacebookBatchRequest');
     $facebookBatchRequest
       ->shouldReceive('prepareRequestsForBatch')
       ->once()
@@ -199,7 +199,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $client = new FacebookClient($this->httpClientMock);
     $response = $client->sendBatchRequest($facebookBatchRequest);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookBatchResponse', $response);
+    $this->assertInstanceOf('\\Facebook\\Entities\\FacebookBatchResponse', $response);
   }
 
   /**
@@ -237,7 +237,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
       '/me');
     $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphObject();
 
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphObject', $graphObject);
     $this->assertNotNull($graphObject->getProperty('id'));
     $this->assertEquals('Foo Phpunit User', $graphObject->getProperty('name'));
 
