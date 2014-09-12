@@ -42,6 +42,7 @@ You will need to have configured a Facebook App, which you can obtain from the [
 Then, initialize the SDK with your app ID and secret:
 
 ~~~
+session_start(); // For the Facebook SDK to work correctly, you need to start a PHP session
 FacebookSession::setDefaultApplication('YOUR_APP_ID', 'YOUR_APP_SECRET');
 ~~~
 </card>
