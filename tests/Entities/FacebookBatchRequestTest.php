@@ -30,69 +30,50 @@ use Facebook\Entities\FacebookBatchRequest;
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 {
 
-  protected $requestHeaders = [];
+  private $app;
 
   public function setUp()
   {
-    $this->requestHeaders = [];
-    foreach (FacebookRequest::getDefaultHeaders() as $name => $value) {
-      $this->requestHeaders[] = $name . ': ' . $value;
-    }
-  }
-
-  public function testEmptyBatchRequestEntitiesCanBeInstantiated()
-  {
-    $batchRequest = new FacebookBatchRequest();
-    $this->assertInstanceOf('Facebook\Entities\FacebookBatchRequest', $batchRequest);
+    $this->app = new FacebookApp('123', 'foo_secret');
   }
 
   public function testABatchRequestWillInstantiateWithTheProperProperties()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token', [], 'v0.1337');
+    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', [], 'v0.1337');
 
-    $batchApp = $batchRequest->getApp();
-    $accessToken = $batchRequest->getAccessToken();
-    $method = $batchRequest->getMethod();
-    $endpoint = $batchRequest->getEndpoint();
-    $graphVersion = $batchRequest->getGraphVersion();
-
-    $this->assertSame($app, $batchApp);
-    $this->assertEquals('foo_token', $accessToken);
-    $this->assertEquals('POST', $method);
-    $this->assertEquals('', $endpoint);
-    $this->assertEquals('v0.1337', $graphVersion);
+    $this->assertSame($this->app, $batchRequest->getApp());
+    $this->assertEquals('foo_token', $batchRequest->getAccessToken());
+    $this->assertEquals('POST', $batchRequest->getMethod());
+    $this->assertEquals('', $batchRequest->getEndpoint());
+    $this->assertEquals('v0.1337', $batchRequest->getGraphVersion());
   }
 
-  public function testMissingAppOrAccessTokensOnRequestObjectsWillFallbackToBatchDefaults()
+  public function testEmptyRequestWillFallbackToBatchDefaults()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
+    $request = new FacebookRequest();
 
-    $requestTotallyEmpty = new FacebookRequest();
-    $batchRequest->addFallbackDefaults($requestTotallyEmpty);
-    $appTotallyEmpty = $requestTotallyEmpty->getApp();
-    $accessTokenTotallyEmpty = $requestTotallyEmpty->getAccessToken();
+    $this->createBatchRequest()->addFallbackDefaults($request);
 
-    $this->assertSame($app, $appTotallyEmpty);
-    $this->assertEquals('foo_token', $accessTokenTotallyEmpty);
+    $this->assertRequestContainsAppAndToken($request, $this->app, 'foo_token');
+  }
 
-    $requestTokenOnly = new FacebookRequest(null, 'bar_token');
-    $batchRequest->addFallbackDefaults($requestTokenOnly);
-    $appTokenOnly = $requestTokenOnly->getApp();
-    $accessTokenTokenOnly = $requestTokenOnly->getAccessToken();
+  public function testRequestWithTokenOnlyWillFallbackToBatchDefaults()
+  {
+    $request = new FacebookRequest(null, 'bar_token');
 
-    $this->assertSame($app, $appTokenOnly);
-    $this->assertEquals('bar_token', $accessTokenTokenOnly);
+    $this->createBatchRequest()->addFallbackDefaults($request);
 
-    $myApp = new FacebookApp('1337', 'bar_secret');
-    $requestAppOnly = new FacebookRequest($myApp);
-    $batchRequest->addFallbackDefaults($requestAppOnly);
-    $appAppOnly = $requestAppOnly->getApp();
-    $accessTokenAppOnly = $requestAppOnly->getAccessToken();
+    $this->assertRequestContainsAppAndToken($request, $this->app, 'bar_token');
+  }
 
-    $this->assertSame($myApp, $appAppOnly);
-    $this->assertEquals('foo_token', $accessTokenAppOnly);
+  public function testRequestWithAppOnlyWillFallbackToBatchDefaults()
+  {
+    $customApp = new FacebookApp('1337', 'bar_secret');
+    $request = new FacebookRequest($customApp);
+
+    $this->createBatchRequest()->addFallbackDefaults($request);
+
+    $this->assertRequestContainsAppAndToken($request, $customApp, 'foo_token');
   }
 
   /**
@@ -102,8 +83,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
   {
     $batchRequest = new FacebookBatchRequest();
 
-    $requestTotallyEmpty = new FacebookRequest(null, 'foo_token');
-    $batchRequest->addFallbackDefaults($requestTotallyEmpty);
+    $batchRequest->addFallbackDefaults(new FacebookRequest(null, 'foo_token'));
   }
 
   /**
@@ -111,11 +91,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testWillThrowWhenNoThereIsNoAccessTokenFallback()
   {
-    $batchRequest = new FacebookBatchRequest();
+    $request = new FacebookBatchRequest();
 
-    $app = new FacebookApp('123', 'foo_secret');
-    $requestTotallyEmpty = new FacebookRequest($app);
-    $batchRequest->addFallbackDefaults($requestTotallyEmpty);
+    $request->addFallbackDefaults(new FacebookRequest($this->app));
   }
 
   /**
@@ -123,103 +101,53 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAnInvalidTypeGivenToAddWillThrow()
   {
-    $batchRequest = new FacebookBatchRequest();
+    $request = new FacebookBatchRequest();
 
-    $batchRequest->add('foo');
+    $request->add('foo');
   }
 
   public function testAddingRequestsWillBeFormattedInAnArrayProperly()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
-
-    $requestOne = new FacebookRequest(null, null, 'GET', '/foo');
-    $requestTwo = new FacebookRequest(null, null, 'POST', '/bar', ['foo' => 'bar']);
-    $requestThree = new FacebookRequest(null, null, 'DELETE', '/baz');
-
-    $batchRequest->add($requestOne);
-    $batchRequest->add($requestTwo, 'my-second-request');
-    $batchRequest->add($requestThree, 'my-third-request');
-
-    $requests = $batchRequest->getRequests();
-
-    $expectedRequests = [
-      [
-        'name' => null,
-        'request' => $requestOne,
-      ],
-      [
-        'name' => 'my-second-request',
-        'request' => $requestTwo,
-      ],
-      [
-        'name' => 'my-third-request',
-        'request' => $requestThree,
-      ],
+    $requests = [
+      null => new FacebookRequest(null, null, 'GET', '/foo'),
+      'my-second-request' => new FacebookRequest(null, null, 'POST', '/bar', ['foo' => 'bar']),
+      'my-third-request' => new FacebookRequest(null, null, 'DELETE', '/baz')
     ];
-    $this->assertEquals($expectedRequests, $requests);
+
+    $batchRequest = $this->createBatchRequest();
+    $batchRequest->add($requests[null]);
+    $batchRequest->add($requests['my-second-request'], 'my-second-request');
+    $batchRequest->add($requests['my-third-request'], 'my-third-request');
+
+    $formattedRequests = $batchRequest->getRequests();
+
+    $this->assertRequestsMatch($requests, $formattedRequests);
   }
 
   public function testANumericArrayOfRequestsCanBeAdded()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
-
     $requests = [
       new FacebookRequest(null, null, 'GET', '/foo'),
       new FacebookRequest(null, null, 'POST', '/bar', ['foo' => 'bar']),
       new FacebookRequest(null, null, 'DELETE', '/baz'),
-      ];
-
-    $batchRequest->add($requests);
-    $formattedRequests = $batchRequest->getRequests();
-
-    $expectedRequests = [
-      [
-        'name' => 0,
-        'request' => $requests[0],
-      ],
-      [
-        'name' => 1,
-        'request' => $requests[1],
-      ],
-      [
-        'name' => 2,
-        'request' => $requests[2],
-      ],
     ];
-    $this->assertEquals($expectedRequests, $formattedRequests);
+
+    $formattedRequests = $this->createBatchRequestWithRequests($requests)->getRequests();
+
+    $this->assertRequestsMatch($requests, $formattedRequests);
   }
 
   public function testAnAssociativeArrayOfRequestsCanBeAdded()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
-
     $requests = [
       'req-one' => new FacebookRequest(null, null, 'GET', '/foo'),
       'req-two' => new FacebookRequest(null, null, 'POST', '/bar', ['foo' => 'bar']),
       'req-three' => new FacebookRequest(null, null, 'DELETE', '/baz'),
-      ];
-
-    $batchRequest->add($requests);
-    $formattedRequests = $batchRequest->getRequests();
-
-    $expectedRequests = [
-      [
-        'name' => 'req-one',
-        'request' => $requests['req-one'],
-      ],
-      [
-        'name' => 'req-two',
-        'request' => $requests['req-two'],
-      ],
-      [
-        'name' => 'req-three',
-        'request' => $requests['req-three'],
-      ],
     ];
-    $this->assertEquals($expectedRequests, $formattedRequests);
+
+    $formattedRequests = $this->createBatchRequestWithRequests($requests)->getRequests();
+
+    $this->assertRequestsMatch($requests, $formattedRequests);
   }
 
   public function testRequestsCanBeInjectedIntoConstructor()
@@ -230,26 +158,10 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
       new FacebookRequest(null, null, 'DELETE', '/baz'),
     ];
 
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token', $requests);
-
+    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', $requests);
     $formattedRequests = $batchRequest->getRequests();
 
-    $expectedRequests = [
-      [
-        'name' => 0,
-        'request' => $requests[0],
-      ],
-      [
-        'name' => 1,
-        'request' => $requests[1],
-      ],
-      [
-        'name' => 2,
-        'request' => $requests[2],
-      ],
-    ];
-    $this->assertEquals($expectedRequests, $formattedRequests);
+    $this->assertRequestsMatch($requests, $formattedRequests);
   }
 
   /**
@@ -257,8 +169,8 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAZeroRequestCountWithThrow()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
+    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token');
+
     $batchRequest->validateBatchRequestCount();
   }
 
@@ -267,92 +179,82 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testMoreThanFiftyRequestsWillThrow()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
+    $batchRequest = $this->createBatchRequest();
 
-    for ($i=0; $i<=50; $i++) {
-      $batchRequest->add(new FacebookRequest());
-    }
+    $this->createAndAppendRequestsTo($batchRequest, 51);
+
     $batchRequest->validateBatchRequestCount();
   }
 
-  public function testLessThanFiftyRequestsWillNotThrow()
+  public function testLessOrEqualThanFiftyRequestsWillNotThrow()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
+    $batchRequest = $this->createBatchRequest();
 
-    for ($i=0; $i<50; $i++) {
-      $batchRequest->add(new FacebookRequest());
-    }
+    $this->createAndAppendRequestsTo($batchRequest, 50);
+
     $batchRequest->validateBatchRequestCount();
   }
 
-  public function testBatchRequestEntitiesProperlyGetConvertedToAnArrayForJsonEncodingForEachMethod()
+  /**
+   * @dataProvider requestsAndExpectedResponsesProvider
+   */
+  public function testBatchRequestEntitiesProperlyGetConvertedToAnArray($request, $expectedArray)
   {
-    $app = new FacebookApp('123', 'foo_secret');
-
-    // GET request
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
-    $batchRequest->add(new FacebookRequest(null, null, 'GET', '/foo', ['foo' => 'bar']), 'foo_name');
+    $batchRequest = $this->createBatchRequest();
+    $batchRequest->add($request, 'foo_name');
 
     $requests = $batchRequest->getRequests();
     $batchRequestArray = FacebookBatchRequest::requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
 
-    $expectedArray = [
-      'headers' => $this->requestHeaders,
-      'method' => 'GET',
-      'relative_url' => '/'.FacebookRequest::getDefaultGraphApiVersion().'/foo?foo=bar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
-      'name' => 'foo_name',
-    ];
-
     $this->assertEquals($expectedArray, $batchRequestArray);
+  }
 
-    // POST request
-    $batchRequest = new FacebookBatchRequest($app, 'bar_token');
-    $batchRequest->add(new FacebookRequest(null, null, 'POST', '/bar', ['bar' => 'baz']), 'bar_name');
-
-    $requests = $batchRequest->getRequests();
-    $batchRequestArray = FacebookBatchRequest::requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
-
-    $expectedArray = [
-      'headers' => $this->requestHeaders,
-      'method' => 'POST',
-      'relative_url' => '/'.FacebookRequest::getDefaultGraphApiVersion().'/bar',
-      'body' => 'bar=baz&access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd',
-      'name' => 'bar_name',
+  public function requestsAndExpectedResponsesProvider()
+  {
+    $headers = $this->defaultHeaders();
+    $apiVersion = FacebookRequest::getDefaultGraphApiVersion();
+    return [
+      [
+        new FacebookRequest(null, null, 'GET', '/foo', ['foo' => 'bar']),
+        [
+          'headers' => $headers,
+          'method' => 'GET',
+          'relative_url' => '/' . $apiVersion . '/foo?foo=bar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+          'name' => 'foo_name',
+        ],
+      ],
+      [
+        new FacebookRequest(null, null, 'POST', '/bar', ['bar' => 'baz']),
+        [
+          'headers' => $headers,
+          'method' => 'POST',
+          'relative_url' => '/' . $apiVersion . '/bar',
+          'body' => 'bar=baz&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+          'name' => 'foo_name',
+        ],
+      ],
+      [
+        new FacebookRequest(null, null, 'DELETE', '/bar'),
+        [
+          'headers' => $headers,
+          'method' => 'DELETE',
+          'relative_url' => '/' . $apiVersion . '/bar?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+          'name' => 'foo_name',
+        ],
+      ],
     ];
-
-    $this->assertEquals($expectedArray, $batchRequestArray);
-
-    // DELETE request
-    $batchRequest = new FacebookBatchRequest($app, 'bar_token');
-    $batchRequest->add(new FacebookRequest(null, null, 'DELETE', '/bar'), 'bar_name');
-
-    $requests = $batchRequest->getRequests();
-    $batchRequestArray = FacebookBatchRequest::requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
-
-    $expectedArray = [
-      'headers' => $this->requestHeaders,
-      'method' => 'DELETE',
-      'relative_url' => '/'.FacebookRequest::getDefaultGraphApiVersion().'/bar?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd',
-      'name' => 'bar_name',
-    ];
-
-    $this->assertEquals($expectedArray, $batchRequestArray);
   }
 
   public function testPreppingABatchRequestProperlySetsThePostParams()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $batchRequest = new FacebookBatchRequest($app, 'foo_token');
-
+    $batchRequest = $this->createBatchRequest();
     $batchRequest->add(new FacebookRequest(null, 'bar_token', 'GET', '/foo'), 'foo_name');
     $batchRequest->add(new FacebookRequest(null, null, 'POST', '/bar', ['foo' => 'bar']));
-
     $batchRequest->prepareRequestsForBatch();
+
     $params = $batchRequest->getParams();
 
-    $expectedHeaders = json_encode($this->requestHeaders);
+    $expectedHeaders = json_encode($this->defaultHeaders());
     $version = FacebookRequest::getDefaultGraphApiVersion();
     $expectedBatchParams = [
       'batch' => '[{"headers":'.$expectedHeaders.',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
@@ -362,6 +264,55 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
       'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
     ];
     $this->assertEquals($expectedBatchParams, $params);
+  }
+
+  private function assertRequestContainsAppAndToken(FacebookRequest $request, FacebookApp $expectedApp, $expectedToken)
+  {
+    $app = $request->getApp();
+    $token = $request->getAccessToken();
+
+    $this->assertSame($expectedApp, $app);
+    $this->assertEquals($expectedToken, $token);
+  }
+
+  private function defaultHeaders()
+  {
+    $headers = [];
+    foreach (FacebookRequest::getDefaultHeaders() as $name => $value) {
+      $headers[] = $name . ': ' . $value;
+    }
+    return $headers;
+  }
+
+  private function createAndAppendRequestsTo(FacebookBatchRequest $batchRequest, $number)
+  {
+    for ($i = 0; $i < $number; $i++) {
+      $batchRequest->add(new FacebookRequest());
+    }
+  }
+
+  private function createBatchRequest()
+  {
+    return new FacebookBatchRequest($this->app, 'foo_token');
+  }
+
+  private function createBatchRequestWithRequests(array $requests)
+  {
+    $batchRequest = $this->createBatchRequest();
+    $batchRequest->add($requests);
+    return $batchRequest;
+  }
+
+  private function assertRequestsMatch($requests, $formattedRequests)
+  {
+    $expectedRequests = [];
+    foreach ($requests as $name => $request) {
+      $expectedRequests[] = [
+        'name' => $name,
+        'request' => $request
+      ];
+    }
+    $this->assertEquals($expectedRequests, $formattedRequests);
   }
 
 }
