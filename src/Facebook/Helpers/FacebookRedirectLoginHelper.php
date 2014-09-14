@@ -91,7 +91,7 @@ class FacebookRedirectLoginHelper
     $this->storeState($state);
     $params = [
       'client_id' => $this->app->getId(),
-      'redirect_uri' => $redirectUrl,
+      'redirect_uri' => rtrim($redirectUrl, '/'),
       'state' => $state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
@@ -139,7 +139,7 @@ class FacebookRedirectLoginHelper
     if ($this->isValidRedirect()) {
       $code = $this->getCode();
       $redirectUrl = $redirectUrl ?: $this->getCurrentUri();
-      $redirectUrl = $this->getFilteredUri($redirectUrl);
+      $redirectUrl = rtrim($this->getFilteredUri($redirectUrl), '/');
 
       return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
