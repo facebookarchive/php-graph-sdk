@@ -188,6 +188,9 @@ class FacebookResponse
       $url = parse_url($this->responseData->paging->$direction);
       parse_str($url['query'], $params);
 
+      if (isset($params['type']) && strpos($this->request->getPath(), $params['type']) != false){
+        unset($params['type']);
+      }
       return new FacebookRequest(
         $this->request->getSession(),
         $this->request->getMethod(),
