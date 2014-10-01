@@ -119,6 +119,7 @@ class FacebookRedirectLoginHelper
     $params = array(
       'client_id' => $this->appId,
       'redirect_uri' => $this->redirectUrl,
+      'state' => $this->state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'auth_type' => 'rerequest',
       'scope' => implode(',', $scope)
