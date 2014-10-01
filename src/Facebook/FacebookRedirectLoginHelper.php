@@ -114,12 +114,9 @@ class FacebookRedirectLoginHelper
   public function getReRequestUrl($scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
-    $this->state = $this->random(16);
-    $this->storeState($this->state);
     $params = array(
       'client_id' => $this->appId,
       'redirect_uri' => $this->redirectUrl,
-      'state' => $this->state,
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'auth_type' => 'rerequest',
       'scope' => implode(',', $scope)
