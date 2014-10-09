@@ -16,14 +16,15 @@ Usage
 Simple GET example of a user's profile.
 
 ```php
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\FacebookClient;
-use Facebook\GraphNodes\GraphUser;
+use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 
-$facebookApp = new FacebookApp('{app-id}', '{app-secret}');
+$fb = new Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  // 'default_access_token' => '{access-token}', // optional
+]);
 
 // Use one of the helper classes to get a Facebook\Entities\AccessToken entity.
 //   Facebook\Helpers\FacebookRedirectLoginHelper
@@ -31,13 +32,10 @@ $facebookApp = new FacebookApp('{app-id}', '{app-secret}');
 //   Facebook\Helpers\FacebookCanvasLoginHelper
 //   Facebook\Helpers\FacebookPageTabHelper
 
-// Get the Facebook\GraphNodes\GraphUser object for the current user:
-$facebookClient = new FacebookClient();
-$request = new FacebookRequest($facebookApp, '{access-token}', 'GET', '/me');
-
 try {
-  $facebookResponse = $facebookClient->sendRequest($request);
-  $me = $facebookResponse->getGraphObject(GraphUser::className());
+  // Get the Facebook\GraphNodes\GraphUser object for the current user:
+  $response = $fb->get('/me', '{access-token}');
+  $me = $response->getGraphUser();
   echo 'Logged in as ' . $me->getName();
 } catch(FacebookResponseException $e) {
   // When Graph returns an error
