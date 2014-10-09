@@ -65,7 +65,9 @@ class GraphObject extends Collection
     foreach ($data as $k => $v) {
       if (
         $this->shouldCastAsDateTime($k)
-        && (is_numeric($v) || $this->isIso8601DateString($v))
+        && (is_numeric($v)
+          || $k === 'birthday'
+          || $this->isIso8601DateString($v))
       ) {
         $items[$k] = $this->castToDateTime($v);
       } else {
