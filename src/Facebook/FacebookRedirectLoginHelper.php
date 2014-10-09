@@ -104,6 +104,28 @@ class FacebookRedirectLoginHelper
   }
 
   /**
+   * Returns a URL to which the user should be sent to re-request permissions.
+   *
+   * @param array $scope List of permissions to re-request
+   * @param string $version Optional Graph API version if not default (v2.0)
+   *
+   * @return string
+   */
+  public function getReRequestUrl($scope = array(), $version = null)
+  {
+    $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
+    $params = array(
+      'client_id' => $this->appId,
+      'redirect_uri' => $this->redirectUrl,
+      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'auth_type' => 'rerequest',
+      'scope' => implode(',', $scope)
+    );
+    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
+      http_build_query($params, null, '&');
+  }
+
+  /**
    * Returns the URL to send the user in order to log out of Facebook.
    *
    * @param FacebookSession $session The session that will be logged out
