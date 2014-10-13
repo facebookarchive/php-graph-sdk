@@ -24,8 +24,8 @@
 namespace Facebook\Tests\Helpers;
 
 use Mockery as m;
+use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +49,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
       'client_id' => '123',
       'redirect_uri' => self::REDIRECT_URL,
       'state' => $_SESSION['FBRLH_state'],
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
       'scope' => implode(',', $scope),
     ];
     foreach ($params as $key => $value) {

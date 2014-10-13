@@ -23,9 +23,9 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookClient;
 
@@ -86,14 +86,14 @@ class FacebookRedirectLoginHelper
                               $version = null,
                               $separator = '&')
   {
-    $version = FacebookRequest::getDefaultGraphApiVersion($version);
+    $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
     $state = $this->generateState();
     $this->storeState($state);
     $params = [
       'client_id' => $this->app->getId(),
       'redirect_uri' => $redirectUrl,
       'state' => $state,
-      'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
       'scope' => implode(',', $scope)
     ];
 

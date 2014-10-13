@@ -23,6 +23,7 @@
  */
 namespace Facebook\Entities;
 
+use Facebook\Facebook;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -31,17 +32,6 @@ use Facebook\Exceptions\FacebookSDKException;
  */
 class FacebookRequest
 {
-
-  /**
-   * @TODO Move this to a global `Facebook` class.
-   * @const string Version number of the Facebook PHP SDK.
-   */
-  const VERSION = '4.1.0-dev';
-
-  /**
-   * @var string Default Graph API version for requests.
-   */
-  protected static $defaultGraphApiVersion = 'v2.1';
 
   /**
    * @var FacebookApp The Facebook app entity.
@@ -105,7 +95,7 @@ class FacebookRequest
     $this->setEndpoint($endpoint);
     $this->setParams($params);
     $this->setETag($eTag);
-    $this->graphVersion = $graphVersion ?: static::getDefaultGraphApiVersion();
+    $this->graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
   }
 
   /**
@@ -387,29 +377,6 @@ class FacebookRequest
   }
 
   /**
-   * Returns the default Graph version.
-   *
-   * @param string|null $graphApiVersion The Graph version we want to use.
-   *
-   * @return string
-   */
-  public static function getDefaultGraphApiVersion($graphApiVersion = null)
-  {
-    return $graphApiVersion ?: static::$defaultGraphApiVersion;
-  }
-
-  /**
-   * Sets the default Graph API version.
-   *
-   * @param string $graphApiVersion
-   */
-  public static function setDefaultGraphApiVersion($graphApiVersion)
-  {
-    static::$defaultGraphApiVersion = $graphApiVersion;
-  }
-
-
-  /**
    * Return the default headers that every request should use.
    *
    * @return array
@@ -417,7 +384,7 @@ class FacebookRequest
   public static function getDefaultHeaders()
   {
     return [
-      'User-Agent' => 'fb-php-' . static::VERSION,
+      'User-Agent' => 'fb-php-' . Facebook::VERSION,
       'Accept-Encoding' => '*',
     ];
   }
