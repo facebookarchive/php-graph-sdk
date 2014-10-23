@@ -51,6 +51,11 @@ class GraphUser extends GraphObject
   {
     return $this->getProperty('name');
   }
+  
+  public function getEmail()
+  {
+    return $this->getProperty('email');
+  }
 
   /**
    * Returns the first name for the user as a string if present.
