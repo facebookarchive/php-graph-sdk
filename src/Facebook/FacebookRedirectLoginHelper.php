@@ -84,10 +84,11 @@ class FacebookRedirectLoginHelper
    *
    * @param array $scope List of permissions to request during login
    * @param string $version Optional Graph API version if not default (v2.0)
+   * @param boolean $displayAsPopup Indicate if the page will be displayed as a popup
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null)
+  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -99,6 +100,12 @@ class FacebookRedirectLoginHelper
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
     );
+    
+    if ($displayAsPopup)
+    {
+      $params['display'] = 'popup';
+    }
+    
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params, null, '&');
   }
