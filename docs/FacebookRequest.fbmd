@@ -1,23 +1,30 @@
 <card>
 # FacebookRequest for the Facebook SDK for PHP
 
-Represents a request that will be made against the Graph API.
+Represents a request that will be sent to the Graph API.
 </card>
 
 <card>
-## Facebook\FacebookRequest {#overview}
+## Facebook\Entities\FacebookRequest {#overview}
 
-Constructor:
+You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
 ~~~~
+use Facebook\Entities\FacebookRequest;
+
 $request = new FacebookRequest(  
-  FacebookSession $session,  
-  string $httpMethod,  
-  string $path, 
-  array $params = NULL,
-  string $version = NULL
+  FacebookApp $app,
+  string $accessToken,
+  string $method,
+  string $endpoint,
+  array $params,
+  string $eTag,
+  string $graphVersion
 );
 ~~~~
+
+Alternatively, you can make use of the `Facebook\Facebook::request()` factory to create new `FacebookRequest` instances. [See full `Facebook\Facebook` reference](/docs/php/Facebook)
+
 
 Usage:
 
