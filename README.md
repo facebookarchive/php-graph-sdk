@@ -16,6 +16,8 @@ This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
 Minimal example:
 
 ```php
+<?php
+
 use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\GraphUser;
