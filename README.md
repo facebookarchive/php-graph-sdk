@@ -23,7 +23,7 @@ use Facebook\Exceptions\FacebookSDKException;
 $fb = new Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  // 'default_access_token' => '{access-token}', // optional
+  //'default_access_token' => '{access-token}', // optional
 ]);
 
 // Use one of the helper classes to get a Facebook\Entities\AccessToken entity.

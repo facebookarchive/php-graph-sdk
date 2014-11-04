@@ -3,42 +3,36 @@
 
 This example covers posting a link to the current user's timeline using the Graph API and Facebook SDK for PHP.
 
-It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).  You must have requested the `publish_actions` scope when logging in the user for this to work.
+It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/reference#helpers). You must have requested the `publish_actions` permission when logging in the user for this to work.
 
-For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
-
+For more information, see the documentation for [`Facebook`](/docs/php/Facebook), [`GraphObject`](/docs/php/GraphObject), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
 </card>
 
 <card>
 
 ~~~~
-use Facebook\FacebookRequest;
-use Facebook\GraphObject;
-use Facebook\FacebookResponseException;
+use Facebook\Exceptions\FacebookResponseException;
 
-if($session) {
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  ]);
 
-  try {
+$linkData = [
+  'link' => 'http://www.example.com',
+  'message' => 'User provided message',
+  ];
 
-    $response = (new FacebookRequest(
-      $session, 'POST', '/me/feed', [
-      	'link' => 'www.example.com',
-      	'message' => 'User provided message'
-      ]
-    ))->execute()->getGraphObject();
+try {
+  $response = $fb->post('/me/feed', $linkData, '{access-token}');
+  $graphObject = $response->getGraphObject();
 
-    echo "Posted with id: " . $response->getProperty('id');
+  echo 'Posted with id: ' . $graphObject['id'];
 
-  } catch(FacebookResponseException $e) {
-
-    echo "Exception occured, code: " . $e->getCode();
-    echo " with message: " . $e->getMessage();
-
-  }   
-
+} catch(FacebookResponseException $e) {
+  echo 'There was an error: ' . $e->getMessage();
 }
 ~~~~
 
 Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
-
 </card>

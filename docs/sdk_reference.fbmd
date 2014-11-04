@@ -13,6 +13,10 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
+      '`[Facebook\Facebook](/docs/php/Facebook)`',
+      'The main service object that helps tie all the SDK components together.',
+    ],
+    [
       '`[Facebook\FacebookClient](/docs/php/FacebookClient)`',
       'A service object to send requests and receive responses from the Graph API.',
     ],
@@ -153,8 +157,8 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
-      '`[Facebook\Helpers\FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper)`',
-      'Used to obtain an access token or signed request within the context of an app canvas.',
+      '`[Facebook\Helpers\FacebookCanvasHelper](/docs/php/FacebookCanvasHelper)`',
+      'Used to obtain an access token or signed request from within the context of an app canvas.',
     ],
     [
       '`[Facebook\Helpers\FacebookJavaScriptHelper](/docs/php/FacebookJavaScriptHelper)`',
@@ -162,7 +166,7 @@ FB(devsite:markdown-wiki:table {
     ],
     [
       '`[Facebook\Helpers\FacebookPageTabHelper](/docs/php/FacebookPageTabHelper)`',
-      'Used to obtain an access token or signed request within the context of a page tab.',
+      'Used to obtain an access token or signed request from within the context of a page tab.',
     ],
     [
       '`[Facebook\Helpers\FacebookRedirectLoginHelper](/docs/php/FacebookRedirectLoginHelper)`',
@@ -175,7 +179,7 @@ FB(devsite:markdown-wiki:table {
 <card>
 # HTTP clients {#http-clients}
 
-Various HTTP clients that can be implemented to send and return requests to Graph.
+Various HTTP clients that can be implemented to send and return requests to and from Graph.
 
 FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],

@@ -24,11 +24,19 @@ As you may have already noticed, the Facebook SDK v4 does not follow strict [sem
   - Added `Facebook\Entities\FacebookApp` entity
   - Namespaced tests
   - Grouped functional tests under `functional` group
+  - Added `Facebook\Facebook` super service
   - Added this CHANGELOG. Hi! :)
 
 
 ## 4.0.x
 
+- 4.0.12 (2014-10-30)
+  - Added Graph v2.2 support
+  - Fixed potential duplicate `type` param in URL's
+  - [`FacebookRedirectLoginHelper`] Added `getReRequestUrl()`
+  - [`GraphUser`] Added `getEmail()`
+- 4.0.11 (2014-08-25)
+  - [`FacebookCurlHttpClient`] Added a method to disable IPv6 resolution
 - 4.0.10 (2014-08-12)
   - [`GraphObject`] Fixed improper usage of `stdClass`
   - Fixed warnings when `open_basedir` directive set

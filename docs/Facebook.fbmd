@@ -1,0 +1,265 @@
+<card>
+# Facebook service class for the Facebook SDK for PHP
+
+The Facebook SDK for PHP is made up of many components. The `Facebook\Facebook` service class provides an easy interface for working with all the components of the SDK.
+</card>
+
+<card>
+## Facebook\Facebook {#overview}
+
+To instantiate a new `Facebook\Facebook` service, pass an array of configuration options to the constructor.
+
+~~~~
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  // . . .
+  ]);
+~~~~
+
+Usage:
+
+~~~~
+// Send a GET request
+$response = $fb->get('/me');
+
+// Send a POST request
+$response = $fb->post('/me/feed', ['message' => 'Foo message']);
+
+// Send a DELETE request
+$response = $fb->delete('/{node-id}');
+~~~~
+
+If you don't provide a `default_access_token` in the configuration options, or you wish to use a different access token than the default, you can explicitly pass the access token as an argument to the `get()`, `post()`, and `delete()` methods.
+
+~~~~
+$res = $fb->get('/me', '{access-token}');
+$res = $fb->post('/me/feed', ['foo' => 'bar'], '{access-token}');
+$res = $fb->delete('/{node-id}', '{access-token}');
+~~~~
+</card>
+
+<card>
+## Configuration options {#config}
+
+Although the `Facebook\Facebook` service tries to make the SDK as easy as possible to use, it also makes it easy to customize with configuration options.
+
+Full configuration options list:
+
+~~~~
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  'default_access_token' => '{access-token}',
+  'enable_beta_mode' => true,
+  'default_graph_version' => 'v2.2',
+  'http_client_handler' => 'guzzle',
+]);
+~~~~
+
+### `app_id`
+The ID of your Facebook app (required).
+
+### `app_secret`
+The secret of your Facebook app (required).
+
+### `default_access_token`
+The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\Entities\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
+
+### `enable_beta_mode`
+Enable [beta mode](https://developers.facebook.com/docs/support/beta-tier/) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
+
+### `default_graph_version`
+Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.0`. Defaults to the latest version of Graph.
+
+### `http_client_handler`
+Allows you to overwrite the default HTTP client.
+
+By default, the SDK will try to use cURL as the HTTP client. If a cURL implementation cannot be found, it will fallback to a stream wrapper HTTP client. You can force either HTTP client implementations by setting this value to `curl` or `stream`.
+
+If you wish to use Guzzle, you can set this value to `guzzle`, but it requires that you [install Guzzle](http://docs.guzzlephp.org/en/latest/) with composer.
+
+If you wish to write your own HTTP client, you can code your HTTP client to the `[Facebook\HttpClients\FacebookHttpClientInterface](/docs/php/FacebookHttpClientInterface)` and set this value to an instance of your custom client.
+
+~~~~
+$fb = new Facebook([
+  'http_client_handler' => new MyCustomHttpClient(),
+]);
+~~~~
+
+If any other value is provided an `InvalidArgumentException` will be thrown.
+</card>
+
+<card>
+## Environment variables fallback {#env-vars}
+
+The only required configuration options are `app_id` and `app_secret`. However, the SDK will look to environment variables for the app ID and app secret.
+
+To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service without setting any configuration in the constructor.
+
+~~~~
+$fb = new Facebook\Facebook();
+~~~~
+</card>
+
+<card>
+## Instance Methods {#instance-methods}
+
+### getApp() {#get-app}
+~~~~
+public FacebookApp getApp()
+~~~~
+Returns the instance of `Facebook\Entities\FacebookApp` for the instantiated service.
+</card>
+
+<card>
+### getClient() {#get-client}
+~~~~
+public FacebookClient getClient()
+~~~~
+Returns the instance of `Facebook\FacebookClient` for the instantiated service.
+</card>
+
+<card>
+### getDefaultAccessToken() {#get-default-access-token}
+~~~~
+public AccessToken|null getDefaultAccessToken()
+~~~~
+Returns the default `Facebook\Entities\AccessToken` entity if the configuration option `default_access_token` was set.
+</card>
+
+<card>
+### getDefaultGraphVersion() {#get-default-graph-version}
+~~~~
+public string getDefaultGraphVersion()
+~~~~
+Returns the default version of Graph. If the `default_graph_version` configuration option was not set, this will default to `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
+</card>
+
+<card>
+### get() {#get}
+~~~~
+public Facebook\Entities\FacebookResponse get(
+  string $endpoint,
+  string|AccessToken|null $accessToken,
+  string|null $eTag,
+  string|null $graphVersion
+)
+~~~~
+
+Sends a GET request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+
+`$endpoint`
+The url to send to Graph without the version prefix (required).
+
+~~~
+$fb->get('/me');
+~~~
+
+`$accessToken`
+The access token (as a `string` or `Facebook\Entities\AccessToken`) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
+
+`$eTag`
+[Graph supports eTags](https://developers.facebook.com/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
+
+`$graphVersion`
+Set the Graph version to something other than what was set in the `default_graph_version` configuration option or `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
+</card>
+
+<card>
+### post() {#post}
+~~~~
+public Facebook\Entities\FacebookResponse post(
+  string $endpoint,
+  array $params,
+  string|AccessToken|null $accessToken,
+  string|null $eTag,
+  string|null $graphVersion
+)
+~~~~
+
+Sends a POST request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+
+The arguments are the same as `get()` above with the exception of `$params`.
+
+`$params`
+The associative array of params you want to send in the body of the POST request.
+
+~~~~
+$response = $fb->post('/me/feed', ['message' => 'Foo message']);
+~~~~
+</card>
+
+<card>
+### delete() {#delete}
+~~~~
+public Facebook\Entities\FacebookResponse delete(
+  string $endpoint,
+  string|AccessToken|null $accessToken,
+  string|null $eTag,
+  string|null $graphVersion
+)
+~~~~
+
+Sends a DELETE request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+
+The arguments are the same as `get()` above.
+
+~~~~
+$response = $fb->delete('/{node-id}');
+~~~~
+</card>
+
+<card>
+### request() {#request}
+~~~~
+public Facebook\Entities\FacebookRequest request(
+  string $method,
+  string $endpoint,
+  array $params,
+  string|AccessToken|null $accessToken,
+  string|null $eTag,
+  string|null $graphVersion
+)
+~~~~
+
+Instantiates a new `Facebook\Entities\FacebookRequest` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
+
+The arguments are the same as `post()` above with the exception of `$method`.
+
+`$method`
+The HTTP request verb to use for this request. This can be set to any verb that the `$graphVersion` of Graph supports, e.g. `GET`, `POST`, `DELETE`, etc.
+
+~~~~
+$request = $fb->request('GET', '/{node-id}');
+~~~~
+</card>
+
+<card>
+### sendBatchRequest() {#send-batch-request}
+~~~~
+public Facebook\Entities\FacebookBatchResponse sendBatchRequest(
+  array $requests,
+  string|AccessToken|null $accessToken,
+  string|null $graphVersion
+)
+~~~~
+
+Sends an array of `Facebook\Entities\FacebookRequest` entities as a batch request to Graph.
+
+The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
+
+`$requests`
+An array of `Facebook\Entities\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be of type `Facebook\Entities\FacebookRequest`.
+
+If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
+
+~~~~
+$requests = [
+  'me' => $fb->request('GET', '/me'),
+  'you' => $fb->request('GET', '/1337', [], '{user-b-access-token}'),
+  'my_post' => $fb->request('POST', '/1337/feed', ['message' => 'Hi!']),
+];
+$batchResponse = $fb->sendBatchRequest($requests);
+~~~~
+</card>
