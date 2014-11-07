@@ -37,7 +37,7 @@ if($session) {
 
   } catch(FacebookResponseException $e) {
 
-    echo "Exception occured, code: " . $e->getCode();
+    echo "Exception occurred, code: " . $e->getCode();
     echo " with message: " . $e->getMessage();
 
   }   
