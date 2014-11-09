@@ -21,27 +21,32 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Tests\FileUpload;
 
-/**
- * Interface FacebookHttpClientInterface
- * @package Facebook
- */
-interface FacebookHttpClientInterface
+use Facebook\FileUpload\Mimetypes;
+
+class MimetypesTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * Sends a request to the server and returns the raw response.
-   *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param string $body The body of the request.
-   * @param array  $headers The request headers.
-   *
-   * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
+   * Taken from Guzzle
+   * @see https://github.com/guzzle/guzzle/blob/master/tests/MimetypesTest.php
    */
-  public function send($url, $method, $body, array $headers);
+  public function testGetsFromExtension()
+  {
+    $this->assertEquals('text/x-php', Mimetypes::getInstance()->fromExtension('php'));
+  }
+  public function testGetsFromFilename()
+  {
+    $this->assertEquals('text/x-php', Mimetypes::getInstance()->fromFilename(__FILE__));
+  }
+  public function testGetsFromCaseInsensitiveFilename()
+  {
+    $this->assertEquals('text/x-php', Mimetypes::getInstance()->fromFilename(strtoupper(__FILE__)));
+  }
+  public function testReturnsNullWhenNoMatchFound()
+  {
+    $this->assertNull(Mimetypes::getInstance()->fromExtension('foobar'));
+  }
 
 }

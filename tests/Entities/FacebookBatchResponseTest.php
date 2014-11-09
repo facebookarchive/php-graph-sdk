@@ -24,11 +24,36 @@
 namespace Facebook\Tests\Entities;
 
 use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookResponse;
+use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookBatchResponse;
 
 class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
+
+  /**
+   * @var \Facebook\Entities\FacebookApp
+   */
+  protected $app;
+
+  /**
+   * @var \Facebook\Entities\FacebookRequest
+   */
+  protected $request;
+
+  public function setUp()
+  {
+    $this->app = new FacebookApp('123', 'foo_secret');
+    $this->request = new FacebookRequest(
+      $this->app,
+      'foo_token',
+      'POST',
+      '/',
+      ['batch' => 'foo'],
+      'foo_eTag',
+      'v1337');
+  }
 
   public function testASuccessfulJsonBatchResponseWillBeDecoded()
   {
@@ -46,9 +71,9 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
     // After DELETE operation.
     $graphResponseJson .= ',{"code":200,"headers":[{"name":"Connection","value":"close"},{"name":"Expires","value":"Sat, 01 Jan 2000 00:00:00 GMT"},{"name":"Cache-Control","value":"private, no-cache, no-store, must-revalidate"},{"name":"Access-Control-Allow-Origin","value":"*"},{"name":"Pragma","value":"no-cache"},{"name":"Content-Type","value":"text\/javascript; charset=UTF-8"},{"name":"Facebook-API-Version","value":"v2.0"}],"body":"true"}';
     $graphResponseJson .= ']';
-    $app = new FacebookApp('123', 'foo_secret');
-    $response = new FacebookResponse($app, 200, [], $graphResponseJson);
-    $batchResponse = new FacebookBatchResponse($response);
+    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
+    $batchRequest = new FacebookBatchRequest($this->app, []);
+    $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
     $decodedResponses = $batchResponse->getResponses();
 
@@ -84,15 +109,40 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
     $graphResponseJson .= ',{"code":200,"headers":[],"body":"{\"foo\":\"bar\"}"}';
     $graphResponseJson .= ',{"code":200,"headers":[],"body":"{\"foo\":\"bar\"}"}';
     $graphResponseJson .= ']';
-    $app = new FacebookApp('123', 'foo_secret');
-    $response = new FacebookResponse($app, 200, [], $graphResponseJson);
-    $batchResponse = new FacebookBatchResponse($response);
+    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
+    $batchRequest = new FacebookBatchRequest($this->app, []);
+    $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
     $this->assertInstanceOf('IteratorAggregate', $batchResponse);
 
     foreach ($batchResponse as $responseEntity) {
       $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $responseEntity);
     }
+  }
+
+  public function testTheOriginalRequestCanBeObtainedForEachRequest()
+  {
+    $graphResponseJson = '[';
+    $graphResponseJson .= '{"code":200,"headers":[],"body":"{\"foo\":\"bar\"}"}';
+    $graphResponseJson .= ',{"code":200,"headers":[],"body":"{\"foo\":\"bar\"}"}';
+    $graphResponseJson .= ',{"code":200,"headers":[],"body":"{\"foo\":\"bar\"}"}';
+    $graphResponseJson .= ']';
+    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
+
+    $requests = [
+      new FacebookRequest($this->app, 'foo_token_one', 'GET', '/me'),
+      new FacebookRequest($this->app, 'foo_token_two', 'POST', '/you'),
+      new FacebookRequest($this->app, 'foo_token_three', 'DELETE', '/123456'),
+    ];
+
+    $batchRequest = new FacebookBatchRequest($this->app, $requests);
+    $batchResponse = new FacebookBatchResponse($batchRequest, $response);
+
+    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $batchResponse[0]);
+    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $batchResponse[0]->getRequest());
+    $this->assertEquals('foo_token_one', $batchResponse[0]->getAccessToken());
+    $this->assertEquals('foo_token_two', $batchResponse[1]->getAccessToken());
+    $this->assertEquals('foo_token_three', $batchResponse[2]->getAccessToken());
   }
 
 }

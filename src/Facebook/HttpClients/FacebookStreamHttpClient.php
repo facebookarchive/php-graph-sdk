@@ -23,71 +23,35 @@
  */
 namespace Facebook\HttpClients;
 
+use Facebook\Http\GraphRawResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
 class FacebookStreamHttpClient implements FacebookHttpClientInterface
 {
 
   /**
-   * @var array The headers received from the response.
-   */
-  protected $responseHeaders = [];
-
-  /**
-   * @var int The HTTP status code returned from the server.
-   */
-  protected $responseHttpStatusCode = 0;
-
-  /**
    * @var FacebookStream Procedural stream wrapper as object.
    */
-  protected static $facebookStream;
+  protected $facebookStream;
 
   /**
    * @param FacebookStream|null Procedural stream wrapper as object.
    */
   public function __construct(FacebookStream $facebookStream = null)
   {
-    self::$facebookStream = $facebookStream ?: new FacebookStream();
+    $this->facebookStream = $facebookStream ?: new FacebookStream();
   }
 
   /**
-   * The headers returned in the response.
-   *
-   * @return array
+   * @inheritdoc
    */
-  public function getResponseHeaders()
-  {
-    return $this->responseHeaders;
-  }
-
-  /**
-   * The HTTP status response code.
-   *
-   * @return int
-   */
-  public function getResponseHttpStatusCode()
-  {
-    return $this->responseHttpStatusCode;
-  }
-
-  /**
-   * Sends a request to the server and returns the raw response.
-   *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param array  $parameters The key value pairs to be sent in the body.
-   * @param array  $headers The request headers.
-   *
-   * @return string Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
-   */
-  public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
+  public function send($url, $method, $body, array $headers)
   {
     $options = [
       'http' => [
         'method' => $method,
+        'header' => $this->compileHeader($headers),
+        'content' => $body,
         'timeout' => 60,
         'ignore_errors' => true
       ],
@@ -97,26 +61,17 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
       ],
     ];
 
-    if ($parameters) {
-      $options['http']['content'] = http_build_query($parameters, null, '&');
+    $this->facebookStream->streamContextCreate($options);
+    $rawBody = $this->facebookStream->fileGetContents($url);
+    $rawHeaders = $this->facebookStream->getResponseHeaders();
 
-      $headers['Content-type'] = 'application/x-www-form-urlencoded';
-    }
-
-    $options['http']['header'] = $this->compileHeader($headers);
-
-    self::$facebookStream->streamContextCreate($options);
-    $rawResponse = self::$facebookStream->fileGetContents($url);
-    $rawHeaders = self::$facebookStream->getResponseHeaders();
-
-    if ($rawResponse === false || !$rawHeaders) {
+    if ($rawBody === false || !$rawHeaders) {
       throw new FacebookSDKException('Stream returned an empty response', 660);
     }
 
-    $this->responseHeaders = self::formatHeadersToArray($rawHeaders);
-    $this->responseHttpStatusCode = self::getStatusCodeFromHeader($this->responseHeaders['http_code']);
+    $rawHeaders = implode("\r\n", $rawHeaders);
 
-    return $rawResponse;
+    return new GraphRawResponse($rawHeaders, $rawBody);
   }
 
   /**
@@ -134,43 +89,6 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
     }
 
     return implode("\r\n", $header);
-  }
-
-  /**
-   * Converts array of headers returned from the wrapper into
-   * something standard
-   *
-   * @param array $rawHeaders
-   *
-   * @return array
-   */
-  public static function formatHeadersToArray(array $rawHeaders)
-  {
-    $headers = [];
-
-    foreach ($rawHeaders as $line) {
-      if (strpos($line, ':') === false) {
-        $headers['http_code'] = $line;
-      } else {
-        list ($key, $value) = explode(': ', $line);
-        $headers[$key] = $value;
-      }
-    }
-
-    return $headers;
-  }
-
-  /**
-   * Pulls out the HTTP status code from a response header
-   *
-   * @param string $header
-   *
-   * @return int
-   */
-  public static function getStatusCodeFromHeader($header)
-  {
-    preg_match('|HTTP/\d\.\d\s+(\d+)\s+.*|', $header, $match);
-    return (int) $match[1];
   }
 
 }

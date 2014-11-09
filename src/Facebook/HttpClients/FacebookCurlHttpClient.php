@@ -23,6 +23,7 @@
  */
 namespace Facebook\HttpClients;
 
+use Facebook\Http\GraphRawResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -31,16 +32,6 @@ use Facebook\Exceptions\FacebookSDKException;
  */
 class FacebookCurlHttpClient implements FacebookHttpClientInterface
 {
-
-  /**
-   * @var array The headers received from the response
-   */
-  protected $responseHeaders = [];
-
-  /**
-   * @var int The HTTP status code returned from the server
-   */
-  protected $responseHttpStatusCode = 0;
 
   /**
    * @var string The client error message
@@ -60,7 +51,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   /**
    * @var FacebookCurl Procedural curl as object
    */
-  protected static $facebookCurl;
+  protected $facebookCurl;
 
   /**
    * @const Curl Version which is unaffected by the proxy header length error.
@@ -77,44 +68,15 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function __construct(FacebookCurl $facebookCurl = null)
   {
-    self::$facebookCurl = $facebookCurl ?: new FacebookCurl();
+    $this->facebookCurl = $facebookCurl ?: new FacebookCurl();
   }
 
   /**
-   * The headers returned in the response
-   *
-   * @return array
+   * @inheritdoc
    */
-  public function getResponseHeaders()
+  public function send($url, $method, $body, array $headers)
   {
-    return $this->responseHeaders;
-  }
-
-  /**
-   * The HTTP status response code
-   *
-   * @return int
-   */
-  public function getResponseHttpStatusCode()
-  {
-    return $this->responseHttpStatusCode;
-  }
-
-  /**
-   * Sends a request to the server and returns the raw response.
-   *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param array  $parameters The key value pairs to be sent in the body.
-   * @param array  $headers The request headers.
-   *
-   * @return string Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
-   */
-  public function send($url, $method = 'GET', array $parameters = [], array $headers = [])
-  {
-    $this->openConnection($url, $method, $parameters, $headers);
+    $this->openConnection($url, $method, $body, $headers);
     $this->tryToSendRequest();
 
     // Need to verify the peer
@@ -130,11 +92,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     // Separate the raw headers from the raw body
     list($rawHeaders, $rawBody) = $this->extractResponseHeadersAndBody();
 
-    $this->responseHeaders = self::headersToArray($rawHeaders);
-
     $this->closeConnection();
 
-    return $rawBody;
+    return new GraphRawResponse($rawHeaders, $rawBody);
   }
 
   /**
@@ -142,12 +102,14 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    *
    * @param string $url The endpoint to send the request to.
    * @param string $method The request method.
-   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param string $body The body of the request.
    * @param array  $headers The request headers.
    */
-  public function openConnection($url, $method = 'GET', array $parameters = [], array $headers = [])
+  public function openConnection($url, $method, $body, array $headers)
   {
     $options = [
+      CURLOPT_CUSTOMREQUEST  => $method,
+      CURLOPT_HTTPHEADER     => $this->compileRequestHeaders($headers),
       CURLOPT_URL            => $url,
       CURLOPT_CONNECTTIMEOUT => 10,
       CURLOPT_TIMEOUT        => 60,
@@ -156,18 +118,11 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     ];
 
     if ($method !== "GET") {
-      $options[CURLOPT_POSTFIELDS] = $parameters;
-    }
-    if ($method === 'DELETE' || $method === 'PUT') {
-      $options[CURLOPT_CUSTOMREQUEST] = $method;
+      $options[CURLOPT_POSTFIELDS] = $body;
     }
 
-    if (count($headers) > 0) {
-      $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders($headers);
-    }
-
-    self::$facebookCurl->init();
-    self::$facebookCurl->setopt_array($options);
+    $this->facebookCurl->init();
+    $this->facebookCurl->setopt_array($options);
   }
 
   /**
@@ -175,7 +130,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function addBundledCert()
   {
-    self::$facebookCurl->setopt(CURLOPT_CAINFO,
+    $this->facebookCurl->setopt(CURLOPT_CAINFO,
       dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
   }
 
@@ -184,7 +139,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function closeConnection()
   {
-    self::$facebookCurl->close();
+    $this->facebookCurl->close();
   }
 
   /**
@@ -193,9 +148,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   public function tryToSendRequest()
   {
     $this->sendRequest();
-    $this->curlErrorMessage = self::$facebookCurl->error();
-    $this->curlErrorCode = self::$facebookCurl->errno();
-    $this->responseHttpStatusCode = self::$facebookCurl->getinfo(CURLINFO_HTTP_CODE);
+    $this->curlErrorMessage = $this->facebookCurl->error();
+    $this->curlErrorCode = $this->facebookCurl->errno();
   }
 
   /**
@@ -203,7 +157,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function sendRequest()
   {
-    $this->rawResponse = self::$facebookCurl->exec();
+    $this->rawResponse = $this->facebookCurl->exec();
   }
 
   /**
@@ -231,45 +185,12 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   public function extractResponseHeadersAndBody()
   {
-    $headerSize = self::getHeaderSize();
+    $headerSize = $this->getHeaderSize();
 
     $rawHeaders = mb_substr($this->rawResponse, 0, $headerSize);
     $rawBody = mb_substr($this->rawResponse, $headerSize);
 
     return array(trim($rawHeaders), trim($rawBody));
-  }
-
-  /**
-   * Converts raw header responses into an array
-   *
-   * @param string $rawHeaders
-   *
-   * @return array
-   */
-  public static function headersToArray($rawHeaders)
-  {
-    $headers = [];
-
-    // Normalize line breaks
-    $rawHeaders = str_replace("\r\n", "\n", $rawHeaders);
-
-    // There will be multiple headers if a 301 was followed
-    // or a proxy was followed, etc
-    $headerCollection = explode("\n\n", trim($rawHeaders));
-    // We just want the last response (at the end)
-    $rawHeader = array_pop($headerCollection);
-
-    $headerComponents = explode("\n", $rawHeader);
-    foreach ($headerComponents as $line) {
-      if (strpos($line, ': ') === false) {
-        $headers['http_code'] = $line;
-      } else {
-        list ($key, $value) = explode(': ', $line);
-        $headers[$key] = $value;
-      }
-    }
-
-    return $headers;
   }
 
   /**
@@ -279,10 +200,10 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    */
   private function getHeaderSize()
   {
-    $headerSize = self::$facebookCurl->getinfo(CURLINFO_HEADER_SIZE);
+    $headerSize = $this->facebookCurl->getinfo(CURLINFO_HEADER_SIZE);
     // This corrects a Curl bug where header size does not account
     // for additional Proxy headers.
-    if ( self::needsCurlProxyFix() ) {
+    if ( $this->needsCurlProxyFix() ) {
       // Additional way to calculate the request body size.
       if (preg_match('/Content-Length: (\d+)/', $this->rawResponse, $m)) {
           $headerSize = mb_strlen($this->rawResponse) - $m[1];
@@ -300,9 +221,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    *
    * @return boolean
    */
-  private static function needsCurlProxyFix()
+  private function needsCurlProxyFix()
   {
-    $ver = self::$facebookCurl->version();
+    $ver = $this->facebookCurl->version();
     $version = $ver['version_number'];
 
     return $version < self::CURL_PROXY_QUIRK_VER;

@@ -45,9 +45,19 @@ class FacebookClient
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
 
   /**
+   * @const string Graph API URL for video uploads.
+   */
+  const BASE_GRAPH_VIDEO_URL = 'https://graph-video.facebook.com';
+
+  /**
    * @const string Beta Graph API URL.
    */
   const BASE_GRAPH_URL_BETA = 'https://graph.beta.facebook.com';
+
+  /**
+   * @const string Beta Graph API URL for video uploads.
+   */
+  const BASE_GRAPH_VIDEO_URL_BETA = 'https://graph-video.beta.facebook.com';
 
   /**
    * @var bool Toggle to use Graph beta url.
@@ -124,11 +134,49 @@ class FacebookClient
   /**
    * Returns the base Graph URL.
    *
+   * @param boolean $postToVideoUrl Post to the video API if videos are being uploaded.
+   *
    * @return string
    */
-  public function getBaseGraphUrl()
+  public function getBaseGraphUrl($postToVideoUrl = false)
   {
+    if ($postToVideoUrl) {
+      return $this->enableBetaMode ? static::BASE_GRAPH_VIDEO_URL_BETA : static::BASE_GRAPH_VIDEO_URL;
+    }
     return $this->enableBetaMode ? static::BASE_GRAPH_URL_BETA : static::BASE_GRAPH_URL;
+  }
+
+  /**
+   * Prepares the request for sending to the client handler.
+   *
+   * @param FacebookRequest $request
+   *
+   * @return array
+   */
+  public function prepareRequestMessage(FacebookRequest $request)
+  {
+    $postToVideoUrl = $request->containsAVideoUpload();
+    $url = $this->getBaseGraphUrl($postToVideoUrl) . $request->getUrl();
+
+    // If we're sending files they should be sent as multipart/form-data
+    if($request->containsFileUploads()) {
+      $requestBody = $request->getMultipartBody();
+      $request->setHeaders(
+        ['Content-Type' => 'multipart/form-data; boundary=' . $requestBody->getBoundary()]
+      );
+    } else {
+      $requestBody = $request->getUrlEncodedBody();
+      $request->setHeaders(
+        ['Content-Type' => 'application/x-www-form-urlencoded']
+      );
+    }
+
+    return [
+      $url,
+      $request->getMethod(),
+      $request->getHeaders(),
+      $requestBody->getBody(),
+    ];
   }
 
   /**
@@ -145,24 +193,21 @@ class FacebookClient
     if (get_class($request) === 'FacebookRequest') {
       $request->validateAccessToken();
     }
-    $url = $this->getBaseGraphUrl() . $request->getUrl();
-    $method = $request->getMethod();
-    $params = $request->getPostParams();
-    $headers = $request->getHeaders();
+
+    list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
 
     // Should throw `FacebookSDKException` exception on HTTP client error.
     // Don't catch to allow it to bubble up.
-    $response = $this->httpClientHandler->send($url, $method, $params, $headers);
+    $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers);
 
     static::$requestCount++;
 
-    $httpResponseCode = $this->httpClientHandler->getResponseHttpStatusCode();
-    $httpResponseHeaders = $this->httpClientHandler->getResponseHeaders();
-
-    $accessToken = $request->getAccessToken();
-    $app = $request->getApp();
-
-    $returnResponse = new FacebookResponse($app, $httpResponseCode, $httpResponseHeaders, $response, $accessToken);
+    $returnResponse = new FacebookResponse(
+      $request,
+      $rawResponse->getBody(),
+      $rawResponse->getHttpResponseCode(),
+      $rawResponse->getHeaders()
+    );
 
     if ($returnResponse->isError()) {
       throw $returnResponse->getThrownException();
@@ -185,7 +230,7 @@ class FacebookClient
     $request->prepareRequestsForBatch();
     $facebookResponse = $this->sendRequest($request);
 
-    return new FacebookBatchResponse($facebookResponse);
+    return new FacebookBatchResponse($request, $facebookResponse);
   }
 
 }

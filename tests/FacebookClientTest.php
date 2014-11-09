@@ -25,16 +25,42 @@ namespace Facebook\Tests;
 
 use Facebook\Exceptions\FacebookSDKException;
 use Mockery as m;
+use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
+use Facebook\Entities\FacebookBatchRequest;
 use Facebook\FacebookClient;
+use Facebook\Http\GraphRawResponse;
+use Facebook\HttpClients\FacebookHttpClientInterface;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
 // These are needed when you uncomment the HTTP clients below.
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 
+class MyFooClientHandler implements FacebookHttpClientInterface
+{
+  public function send($url, $method, $body, array $headers) {
+    return new GraphRawResponse(
+      "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+      '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
+    );
+  }
+}
+
 class FacebookClientTest extends \PHPUnit_Framework_TestCase
 {
+
+  /**
+   * @var FacebookApp
+   */
+  public $fbApp;
+
+  /**
+   * @var FacebookClient
+   */
+  public $fbClient;
 
   /**
    * @var FacebookApp
@@ -53,16 +79,18 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
   public function setUp()
   {
+    $this->fbApp = new FacebookApp('id', 'shhhh!');
+    $this->fbClient = new FacebookClient(new MyFooClientHandler());
     $this->httpClientMock = m::mock('Facebook\HttpClients\FacebookHttpClientInterface');
   }
 
   public function testACustomHttpClientCanBeInjected()
   {
-    $client = new FacebookClient($this->httpClientMock);
+    $handler = new MyFooClientHandler();
+    $client = new FacebookClient($handler);
     $httpHandler = $client->getHttpClientHandler();
 
-    $this->assertInstanceOf('Mockery\MockInterface', $httpHandler);
-    $this->assertSame($this->httpClientMock, $httpHandler);
+    $this->assertInstanceOf('Facebook\Tests\MyFooClientHandler', $httpHandler);
   }
 
   public function testTheHttpClientWillFallbackToDefault()
@@ -100,106 +128,90 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA, $url);
   }
 
+  public function testGraphVideoUrlCanBeSet()
+  {
+    $client = new FacebookClient();
+    $client->enableBetaMode(false);
+    $url = $client->getBaseGraphUrl($postToVideoUrl = true);
+    $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL, $url);
+
+    $client->enableBetaMode(true);
+    $url = $client->getBaseGraphUrl($postToVideoUrl = true);
+    $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL_BETA, $url);
+  }
+
   public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph()
   {
-    $facebookApp = new FacebookApp('123', 'foo_secret');
-    $facebookRequest = m::mock('Facebook\Entities\FacebookRequest');
-    $facebookRequest
-      ->shouldReceive('getUrl')
-      ->once()
-      ->andReturn('/foo');
-    $facebookRequest
-      ->shouldReceive('getMethod')
-      ->once()
-      ->andReturn('GET');
-    $facebookRequest
-      ->shouldReceive('getPostParams')
-      ->once()
-      ->andReturn([]);
-    $facebookRequest
-      ->shouldReceive('getHeaders')
-      ->once()
-      ->andReturn(['request_header' => 'foo']);
-    $facebookRequest
-      ->shouldReceive('getAccessToken')
-      ->once()
-      ->andReturn('foo_token');
-    $facebookRequest
-      ->shouldReceive('getApp')
-      ->once()
-      ->andReturn($facebookApp);
-
-    $this->httpClientMock
-      ->shouldReceive('send')
-      ->with(FacebookClient::BASE_GRAPH_URL . '/foo', 'GET', [], ['request_header' => 'foo'])
-      ->once()
-      ->andReturn('foo_response');
-    $this->httpClientMock
-      ->shouldReceive('getResponseHttpStatusCode')
-      ->once()
-      ->andReturn(200);
-    $this->httpClientMock
-      ->shouldReceive('getResponseHeaders')
-      ->once()
-      ->andReturn(['response_header' => 'bar']);
-
-    $client = new FacebookClient($this->httpClientMock);
-    $response = $client->sendRequest($facebookRequest);
+    $fbRequest = new FacebookRequest($this->fbApp, 'token', 'GET', '/foo');
+    $response = $this->fbClient->sendRequest($fbRequest);
 
     $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $response);
+    $this->assertEquals(200, $response->getHttpStatusCode());
+    $this->assertEquals('{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}', $response->getBody());
   }
 
   public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
   {
-    $facebookApp = new FacebookApp('123', 'foo_secret');
-    $facebookBatchRequest = m::mock('Facebook\Entities\FacebookBatchRequest');
-    $facebookBatchRequest
-      ->shouldReceive('prepareRequestsForBatch')
-      ->once()
-      ->andReturn(null);
-    $facebookBatchRequest
-      ->shouldReceive('getUrl')
-      ->once()
-      ->andReturn('');
-    $facebookBatchRequest
-      ->shouldReceive('getMethod')
-      ->once()
-      ->andReturn('POST');
-    $facebookBatchRequest
-      ->shouldReceive('getPostParams')
-      ->once()
-      ->andReturn([]);
-    $facebookBatchRequest
-      ->shouldReceive('getHeaders')
-      ->once()
-      ->andReturn(['request_header' => 'foo']);
-    $facebookBatchRequest
-      ->shouldReceive('getAccessToken')
-      ->once()
-      ->andReturn('foo_token');
-    $facebookBatchRequest
-      ->shouldReceive('getApp')
-      ->once()
-      ->andReturn($facebookApp);
+    $fbRequests = [
+      new FacebookRequest($this->fbApp, 'token', 'GET', '/foo'),
+      new FacebookRequest($this->fbApp, 'token', 'POST', '/bar'),
+    ];
+    $fbBatchRequest = new FacebookBatchRequest($this->fbApp, $fbRequests);
 
-    $this->httpClientMock
-      ->shouldReceive('send')
-      ->with(FacebookClient::BASE_GRAPH_URL, 'POST', [], ['request_header' => 'foo'])
-      ->once()
-      ->andReturn('[]');
-    $this->httpClientMock
-      ->shouldReceive('getResponseHttpStatusCode')
-      ->once()
-      ->andReturn(200);
-    $this->httpClientMock
-      ->shouldReceive('getResponseHeaders')
-      ->once()
-      ->andReturn(['response_header' => 'bar']);
-
-    $client = new FacebookClient($this->httpClientMock);
-    $response = $client->sendBatchRequest($facebookBatchRequest);
+    $response = $this->fbClient->sendBatchRequest($fbBatchRequest);
 
     $this->assertInstanceOf('Facebook\Entities\FacebookBatchResponse', $response);
+    // @TODO I think this is a bug
+    //$this->assertEquals('GET', $response[0]->getRequest()->getMethod());
+    //$this->assertEquals('POST', $response[1]->getRequest()->getMethod());
+  }
+
+  public function testAFacebookBatchRequestWillProperlyBatchFiles()
+  {
+    $fbRequests = [
+      new FacebookRequest($this->fbApp, 'token', 'POST', '/photo', [
+          'message' => 'foobar',
+          'source' => new FacebookFile(__DIR__ . '/foo.txt'),
+        ]),
+      new FacebookRequest($this->fbApp, 'token', 'POST', '/video', [
+          'message' => 'foobar',
+          'source' => new FacebookVideo(__DIR__ . '/foo.txt'),
+        ]),
+    ];
+    $fbBatchRequest = new FacebookBatchRequest($this->fbApp, $fbRequests);
+    $fbBatchRequest->prepareRequestsForBatch();
+
+    list($url, $method, $headers, $body) = $this->fbClient->prepareRequestMessage($fbBatchRequest);
+
+    $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL . '/' . Facebook::DEFAULT_GRAPH_VERSION, $url);
+    $this->assertEquals('POST', $method);
+    $this->assertContains('multipart/form-data; boundary=', $headers['Content-Type']);
+    $this->assertContains('Content-Disposition: form-data; name="batch"', $body);
+    $this->assertContains('Content-Disposition: form-data; name="include_headers"', $body);
+    $this->assertContains('"name":0,"attached_files":', $body);
+    $this->assertContains('"name":1,"attached_files":', $body);
+    $this->assertContains('"; filename="foo.txt"', $body);
+  }
+
+  public function testARequestOfParamsWillBeUrlEncoded()
+  {
+    $fbRequest = new FacebookRequest($this->fbApp, 'token', 'POST', '/foo', ['foo' => 'bar']);
+    $response = $this->fbClient->sendRequest($fbRequest);
+
+    $headersSent = $response->getRequest()->getHeaders();
+
+    $this->assertEquals('application/x-www-form-urlencoded', $headersSent['Content-Type']);
+  }
+
+  public function testARequestWithFilesWillBeMultipart()
+  {
+    $myFile = new FacebookFile(__DIR__ . '/foo.txt');
+    $fbRequest = new FacebookRequest($this->fbApp, 'token', 'POST', '/foo', ['file' => $myFile]);
+    $response = $this->fbClient->sendRequest($fbRequest);
+
+    $headersSent = $response->getRequest()->getHeaders();
+
+    $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
   }
 
   /**

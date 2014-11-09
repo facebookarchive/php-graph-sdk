@@ -21,27 +21,22 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Tests\Http;
 
-/**
- * Interface FacebookHttpClientInterface
- * @package Facebook
- */
-interface FacebookHttpClientInterface
+use Facebook\Http\RequestBodyUrlEncoded;
+
+class RequestBodyUrlEncodedTest extends \PHPUnit_Framework_TestCase
 {
 
-  /**
-   * Sends a request to the server and returns the raw response.
-   *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param string $body The body of the request.
-   * @param array  $headers The request headers.
-   *
-   * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
-   */
-  public function send($url, $method, $body, array $headers);
+  public function testCanProperlyEncodeAnArrayOfParams()
+  {
+    $message = new RequestBodyUrlEncoded([
+        'foo' => 'bar',
+        'scawy_vawues' => '@FooBar is a real twitter handle.',
+      ]);
+    $body = $message->getBody();
+
+    $this->assertEquals('foo=bar&scawy_vawues=%40FooBar+is+a+real+twitter+handle.', $body);
+  }
 
 }

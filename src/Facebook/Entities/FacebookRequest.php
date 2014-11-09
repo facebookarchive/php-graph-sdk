@@ -24,6 +24,11 @@
 namespace Facebook\Entities;
 
 use Facebook\Facebook;
+use Facebook\Url\FacebookUrlManipulator;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
+use Facebook\Http\RequestBodyMultipart;
+use Facebook\Http\RequestBodyUrlEncoded;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -54,9 +59,19 @@ class FacebookRequest
   protected $endpoint;
 
   /**
+   * @var array The headers to send with this request.
+   */
+  protected $headers = [];
+
+  /**
    * @var array The parameters to send with this request.
    */
   protected $params = [];
+
+  /**
+   * @var array The files to send with this request.
+   */
+  protected $files = [];
 
   /**
    * @var string ETag to send with this request.
@@ -114,6 +129,30 @@ class FacebookRequest
   }
 
   /**
+   * Sets the access token with one harvested from a URL or POST params.
+   *
+   * @param string $accessToken The access token.
+   *
+   * @return FacebookRequest
+   *
+   * @throws FacebookSDKException
+   */
+  public function setAccessTokenFromParams($accessToken)
+  {
+    $existingAccessToken = $this->getAccessToken();
+    if ( ! $existingAccessToken) {
+      $this->setAccessToken($accessToken);
+    } elseif ($accessToken !== $existingAccessToken) {
+      throw new FacebookSDKException(
+        'Access token mismatch. The access token provided in the FacebookRequest ' .
+        'and the one provided in the URL or POST params do not match.'
+      );
+    }
+
+    return $this;
+  }
+
+  /**
    * Return the access token for this request.
    *
    * @return string
@@ -141,6 +180,16 @@ class FacebookRequest
   public function getApp()
   {
     return $this->app;
+  }
+
+  /**
+   * Generate an app secret proof to sign this request.
+   *
+   * @return string
+   */
+  public function getAppSecretProof()
+  {
+    return AppSecretProof::make($this->getAccessToken(), $this->app->getSecret());
   }
 
   /**
@@ -210,10 +259,21 @@ class FacebookRequest
    * @param string
    *
    * @return FacebookRequest
+   *
+   * @throws FacebookSDKException
    */
   public function setEndpoint($endpoint)
   {
-    $this->endpoint = $endpoint;
+    // Harvest the access token from the endpoint to keep things in sync
+    $params = FacebookUrlManipulator::getParamsAsArray($endpoint);
+    if (isset($params['access_token'])) {
+      $this->setAccessTokenFromParams($params['access_token']);
+    }
+
+    // Clean the token & app secret proof from the endpoint.
+    $filterParams = ['access_token', 'appsecret_proof'];
+    $this->endpoint = FacebookUrlManipulator::removeParamsFromUrl($endpoint, $filterParams);
+
     return $this;
   }
 
@@ -241,7 +301,17 @@ class FacebookRequest
       $headers['If-None-Match'] = $this->eTag;
     }
 
-    return $headers;
+    return array_merge($this->headers, $headers);
+  }
+
+  /**
+   * Set the headers for this request.
+   *
+   * @param array $headers
+   */
+  public function setHeaders(array $headers)
+  {
+    $this->headers = array_merge($this->headers, $headers);
   }
 
   /**
@@ -260,13 +330,136 @@ class FacebookRequest
    * @param array $params
    *
    * @return FacebookRequest
+   *
+   * @throws FacebookSDKException
    */
   public function setParams(array $params = [])
   {
-    if (is_array($params)) {
-      $this->params = array_merge($this->params, $params);
+    if (isset($params['access_token'])) {
+      $this->setAccessTokenFromParams($params['access_token']);
     }
+
+    // Don't let these buggers slip in.
+    unset($params['access_token'], $params['appsecret_proof']);
+
+    // @TODO Refactor code above with this
+    //$params = $this->sanitizeAuthenticationParams($params);
+    $params = $this->sanitizeFileParams($params);
+    $this->dangerouslySetParams($params);
+
     return $this;
+  }
+
+  /**
+   * Set the params for this request without filtering them first.
+   *
+   * @param array $params
+   *
+   * @return FacebookRequest
+   */
+  public function dangerouslySetParams(array $params = [])
+  {
+    $this->params = array_merge($this->params, $params);
+
+    return $this;
+  }
+
+  /**
+   * Iterate over the params and pull out the file uploads.
+   *
+   * @param array $params
+   *
+   * @return array
+   */
+  public function sanitizeFileParams(array $params)
+  {
+    foreach ($params as $key => $value) {
+      if ($value instanceOf FacebookFile) {
+        $this->addFile($key, $value);
+        unset($params[$key]);
+      }
+    }
+
+    return $params;
+  }
+
+  /**
+   * Add a file to be uploaded.
+   *
+   * @param string $key
+   * @param FacebookFile $file
+   */
+  public function addFile($key, FacebookFile $file)
+  {
+    $this->files[$key] = $file;
+  }
+
+  /**
+   * Removes all the files from the upload queue.
+   */
+  public function resetFiles()
+  {
+    $this->files = [];
+  }
+
+  /**
+   * Get the list of files to be uploaded.
+   *
+   * @return array
+   */
+  public function getFiles()
+  {
+    return $this->files;
+  }
+
+  /**
+   * Let's us know if there is a file upload with this request.
+   *
+   * @return boolean
+   */
+  public function containsFileUploads()
+  {
+    return ! empty($this->files);
+  }
+
+  /**
+   * Let's us know if there is a video upload with this request.
+   *
+   * @return boolean
+   */
+  public function containsAVideoUpload()
+  {
+    foreach ($this->files as $file) {
+      if ($file instanceOf FacebookVideo) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns the body of the request as multipart/form-data.
+   *
+   * @return RequestBodyMultipart
+   */
+  public function getMultipartBody()
+  {
+    $params = $this->getPostParams();
+
+    return new RequestBodyMultipart($params, $this->files);
+  }
+
+  /**
+   * Returns the body of the request as URL-encoded.
+   *
+   * @return RequestBodyUrlEncoded
+   */
+  public function getUrlEncodedBody()
+  {
+    $params = $this->getPostParams();
+
+    return new RequestBodyUrlEncoded($params);
   }
 
   /**
@@ -278,11 +471,10 @@ class FacebookRequest
   {
     $params = $this->params;
 
-    if (!isset($params['access_token']) && $this->getAccessToken()) {
-      $params['access_token'] = $this->getAccessToken();
-    }
-    if (!isset($params['appsecret_proof']) && isset($params['access_token'])) {
-      $params['appsecret_proof'] = AppSecretProof::make($params['access_token'], $this->app->getSecret());
+    $accessToken = $this->getAccessToken();
+    if ($accessToken) {
+      $params['access_token'] = $accessToken;
+      $params['appsecret_proof'] = $this->getAppSecretProof();
     }
 
     return $params;
@@ -321,59 +513,17 @@ class FacebookRequest
   {
     $this->validateMethod();
 
-    $graphVersion = static::forceSlashPrefix($this->graphVersion);
-    $endpoint = static::forceSlashPrefix($this->getEndpoint());
+    $graphVersion = FacebookUrlManipulator::forceSlashPrefix($this->graphVersion);
+    $endpoint = FacebookUrlManipulator::forceSlashPrefix($this->getEndpoint());
 
     $url = $graphVersion.$endpoint;
 
     if ($this->getMethod() !== 'POST') {
       $params = $this->getParams();
-      $url = static::appendParamsToUrl($url, $params);
+      $url = FacebookUrlManipulator::appendParamsToUrl($url, $params);
     }
 
     return $url;
-  }
-
-  /**
-   * Gracefully appends params to the URL.
-   *
-   * @param string $url
-   * @param array $params
-   *
-   * @return string
-   */
-  public static function appendParamsToUrl($url, $params = [])
-  {
-    if (!$params) {
-      return $url;
-    }
-
-    if (strpos($url, '?') === false) {
-      return $url . '?' . http_build_query($params, null, '&');
-    }
-
-    list($path, $query_string) = explode('?', $url, 2);
-    parse_str($query_string, $query_array);
-
-    // Favor params from the original URL over $params
-    $params = array_merge($params, $query_array);
-
-    return $path . '?' . http_build_query($params, null, '&');
-  }
-
-  /**
-   * Check for a "/" prefix and prepend it if not exists.
-   *
-   * @param string|null $string
-   *
-   * @return string|null
-   */
-  public static function forceSlashPrefix($string)
-  {
-    if (!$string) {
-      return $string;
-    }
-    return strpos($string, '/') === 0 ? $string : '/'.$string;
   }
 
   /**

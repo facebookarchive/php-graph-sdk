@@ -29,6 +29,7 @@ use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookResponse;
 use Facebook\Entities\FacebookBatchResponse;
+use Facebook\GraphNodes\GraphList;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\HttpClients\FacebookHttpClientInterface;
@@ -101,6 +102,11 @@ class Facebook
    * @var PersistentDataInterface|null The persistent data handler.
    */
   protected $persistentDataHandler;
+
+  /**
+   * @var FacebookResponse|FacebookBatchResponse|null Stores the last request made to Graph.
+   */
+  protected $lastResponse;
 
   /**
    * @TODO Add FacebookInputInterface
@@ -219,6 +225,16 @@ class Facebook
   public function getClient()
   {
     return $this->client;
+  }
+
+  /**
+   * Returns the last response returned from Graph.
+   *
+   * @return FacebookResponse|FacebookBatchResponse|null
+   */
+  public function getLastResponse()
+  {
+    return $this->lastResponse;
   }
 
   /**
@@ -353,6 +369,60 @@ class Facebook
   }
 
   /**
+   * Sends a request to Graph for the next page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function next(GraphList $graphList)
+  {
+    return $this->getPaginationResults($graphList, 'next');
+  }
+
+  /**
+   * Sends a request to Graph for the previous page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function previous(GraphList $graphList)
+  {
+    return $this->getPaginationResults($graphList, 'previous');
+  }
+
+  /**
+   * Sends a request to Graph for the next page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   * @param string $direction The direction of the pagination: next|previous.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function getPaginationResults(GraphList $graphList, $direction)
+  {
+    $paginationRequest = $graphList->getPaginationRequest($direction);
+    if ( ! $paginationRequest) {
+      return null;
+    }
+
+    $this->lastResponse = $this->client->sendRequest($paginationRequest);
+
+    // Keep the same GraphObject subclass
+    $subClassName = $graphList->getSubClassName();
+    $graphList = $this->lastResponse->getGraphList($subClassName, false);
+
+    return count($graphList) > 0 ? $graphList : null;
+  }
+
+  /**
    * Sends a request to Graph and returns the result.
    *
    * @param string $method
@@ -377,7 +447,7 @@ class Facebook
     $accessToken = $accessToken ?: $this->defaultAccessToken;
     $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
     $request = $this->request($method, $endpoint, $params, $accessToken, $eTag, $graphVersion);
-    return $this->client->sendRequest($request);
+    return $this->lastResponse = $this->client->sendRequest($request);
   }
 
   /**
@@ -400,12 +470,12 @@ class Facebook
     $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
     $batchRequest = new FacebookBatchRequest(
       $this->app,
-      $accessToken,
       $requests,
+      $accessToken,
       $graphVersion
     );
 
-    return $this->client->sendBatchRequest($batchRequest);
+    return $this->lastResponse = $this->client->sendBatchRequest($batchRequest);
   }
 
   /**

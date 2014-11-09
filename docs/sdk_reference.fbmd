@@ -117,16 +117,20 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
+        '`[Facebook\GraphNodes\GraphObject](/docs/php/GraphObject)`',
+        'The base collection object that represents a generic node.',
+    ],
+    [
+        '`[Facebook\GraphNodes\GraphList](/docs/php/GraphList)`',
+        'A list of GraphObject's with special methods to help paginate over the list.',
+    ],
+    [
       '`[Facebook\GraphNodes\GraphAlbum](/docs/php/GraphAlbum)`',
       'A collection that represents an album node.',
     ],
     [
       '`[Facebook\GraphNodes\GraphLocation](/docs/php/GraphLocation)`',
       'A collection that represents a location node.',
-    ],
-    [
-      '`[Facebook\GraphNodes\GraphObject](/docs/php/GraphObject)`',
-      'The base collection object that represents a generic node.',
     ],
     [
       '`[Facebook\GraphNodes\GraphPage](/docs/php/GraphPage)`',
@@ -139,10 +143,6 @@ FB(devsite:markdown-wiki:table {
     [
       '`[Facebook\GraphNodes\GraphUser](/docs/php/GraphUser)`',
       'A collection that represents a user node.',
-    ],
-    [
-      '`[Facebook\GraphNodes\GraphUserPage](/docs/php/GraphUserPage)`',
-      '*(Deprecated)* A collection that represents a user page node.',
     ],
   ],
 })

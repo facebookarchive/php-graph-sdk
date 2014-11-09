@@ -21,27 +21,20 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Http;
 
 /**
- * Interface FacebookHttpClientInterface
+ * Interface
  * @package Facebook
  */
-interface FacebookHttpClientInterface
+interface RequestBodyInterface
 {
 
   /**
-   * Sends a request to the server and returns the raw response.
+   * Get the body of the request to send to Graph.
    *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param string $body The body of the request.
-   * @param array  $headers The request headers.
-   *
-   * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
+   * @return string
    */
-  public function send($url, $method, $body, array $headers);
+  public function getBody();
 
 }

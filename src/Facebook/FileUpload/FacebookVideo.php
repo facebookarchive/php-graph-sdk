@@ -21,27 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\FileUpload;
 
 /**
- * Interface FacebookHttpClientInterface
+ * Class FacebookVideo
  * @package Facebook
  */
-interface FacebookHttpClientInterface
+class FacebookVideo extends FacebookFile
 {
-
-  /**
-   * Sends a request to the server and returns the raw response.
-   *
-   * @param string $url The endpoint to send the request to.
-   * @param string $method The request method.
-   * @param string $body The body of the request.
-   * @param array  $headers The request headers.
-   *
-   * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-   *
-   * @throws \Facebook\Exceptions\FacebookSDKException
-   */
-  public function send($url, $method, $body, array $headers);
-
+  // The class left intentionally blank.
 }
