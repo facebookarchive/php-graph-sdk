@@ -17,7 +17,7 @@ If you're using [Composer](https://getcomposer.org/) as a package manager for PH
 ~~~~
 {
   "require" : {
-    "facebook/php-sdk-v4" : "4.0.*"
+    "facebook/php-sdk-v4" : "~4.0.12"
   }
 }
 ~~~~
