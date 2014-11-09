@@ -151,6 +151,14 @@ Returns the instance of `Facebook\FacebookClient` for the instantiated service.
 </card>
 
 <card>
+### getLastResponse() {#get-last-response}
+~~~~
+public Facebook\Entities\FacebookResponse|Facebook\Entities\FacebookBatchResponse|null getLastResponse()
+~~~~
+Returns the last response received from the Graph API in the form of a `Facebook\Entities\FacebookResponse` or `Facebook\Entities\FacebookBatchResponse`.
+</card>
+
+<card>
 ### getDefaultAccessToken() {#get-default-access-token}
 ~~~~
 public AccessToken|null getDefaultAccessToken()
@@ -305,4 +313,49 @@ Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRed
 ~~~~
 $helper = $fb->getRedirectLoginHelper();
 ~~~~
+</card>
+
+<card>
+### next() {#next}
+~~~~
+public Facebook\GraphNodes\GraphList|null next(Facebook\GraphNodes\GraphList $graphList)
+~~~~
+
+Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) object. If the next page returns no results, `null` will be returned.
+
+~~~~
+// Iterate over 5 pages max
+$maxPages = 5;
+
+// Get a list of photo objects
+$response = $fb->get('/me/photos?fields=id,source,likes&limit=5');
+
+$photosList = $response->getGraphList();
+
+if (count($photosList) > 0) {
+  $pageCount = 0;
+  do {
+    foreach ($photosList as $photo) {
+      var_dump($photo->asArray());
+
+      // Deep pagination is supported on child GraphList's
+      $likes = $photo['likes'];
+      do {
+        echo '<p>Likes:</p>' . "\n\n";
+        var_dump($likes->asArray());
+      } while ($likes = $fqb->next($likes));
+    }
+    $pageCount++;
+  } while ($pageCount < $maxPages && $photosList = $fb->next($photosList));
+}
+~~~~
+</card>
+
+<card>
+### previous() {#previous}
+~~~~
+public Facebook\GraphNodes\GraphList|null previous(Facebook\GraphNodes\GraphList $graphList)
+~~~~
+
+Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` object. Functions just like `next()` above, but in the opposite direction of pagination.
 </card>

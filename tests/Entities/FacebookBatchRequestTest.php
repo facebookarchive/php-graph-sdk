@@ -31,6 +31,9 @@ use Facebook\Entities\FacebookBatchRequest;
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 {
 
+  /**
+   * @var FacebookApp
+   */
   private $app;
 
   public function setUp()
@@ -40,7 +43,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testABatchRequestWillInstantiateWithTheProperProperties()
   {
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', [], 'v0.1337');
+    $batchRequest = new FacebookBatchRequest($this->app, [], 'foo_token', 'v0.1337');
 
     $this->assertSame($this->app, $batchRequest->getApp());
     $this->assertEquals('foo_token', $batchRequest->getAccessToken());
@@ -159,7 +162,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
       new FacebookRequest(null, null, 'DELETE', '/baz'),
     ];
 
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', $requests);
+    $batchRequest = new FacebookBatchRequest($this->app, $requests, 'foo_token');
     $formattedRequests = $batchRequest->getRequests();
 
     $this->assertRequestsMatch($requests, $formattedRequests);
@@ -170,7 +173,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAZeroRequestCountWithThrow()
   {
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token');
+    $batchRequest = new FacebookBatchRequest($this->app, [], 'foo_token');
 
     $batchRequest->validateBatchRequestCount();
   }
@@ -294,7 +297,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
   private function createBatchRequest()
   {
-    return new FacebookBatchRequest($this->app, 'foo_token');
+    return new FacebookBatchRequest($this->app, [], 'foo_token');
   }
 
   private function createBatchRequestWithRequests(array $requests)

@@ -23,13 +23,16 @@
  */
 namespace Facebook\Entities;
 
+use ArrayIterator;
+use IteratorAggregate;
+use ArrayAccess;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class BatchRequest
  * @package Facebook
  */
-class FacebookBatchRequest extends FacebookRequest
+class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate, ArrayAccess
 {
 
   /**
@@ -41,14 +44,14 @@ class FacebookBatchRequest extends FacebookRequest
    * Creates a new Request entity.
    *
    * @param FacebookApp|null $app
-   * @param AccessToken|string|null $accessToken
    * @param array $requests
+   * @param AccessToken|string|null $accessToken
    * @param string|null $graphVersion
    */
   public function __construct(
     FacebookApp $app = null,
-    $accessToken = null,
     array $requests = [],
+    $accessToken = null,
     $graphVersion = null
   )
   {
@@ -214,6 +217,48 @@ class FacebookBatchRequest extends FacebookRequest
     // @TODO Add support for JSONP with "callback"
 
     return $batch;
+  }
+
+  /**
+   * Get an iterator for the items.
+   *
+   * @return ArrayIterator
+   */
+  public function getIterator()
+  {
+    return new ArrayIterator($this->requests);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetSet($offset, $value)
+  {
+    $this->add($value, $offset);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->requests[$offset]);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetUnset($offset)
+  {
+    unset($this->requests[$offset]);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetGet($offset)
+  {
+    return isset($this->requests[$offset]) ? $this->requests[$offset] : null;
   }
 
 }

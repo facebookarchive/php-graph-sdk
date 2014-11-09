@@ -102,7 +102,6 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
   public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph()
   {
-    $facebookApp = new FacebookApp('123', 'foo_secret');
     $facebookRequest = m::mock('Facebook\Entities\FacebookRequest');
     $facebookRequest
       ->shouldReceive('getUrl')
@@ -120,14 +119,6 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
       ->shouldReceive('getHeaders')
       ->once()
       ->andReturn(['request_header' => 'foo']);
-    $facebookRequest
-      ->shouldReceive('getAccessToken')
-      ->once()
-      ->andReturn('foo_token');
-    $facebookRequest
-      ->shouldReceive('getApp')
-      ->once()
-      ->andReturn($facebookApp);
 
     $this->httpClientMock
       ->shouldReceive('send')
@@ -151,7 +142,6 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
   public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
   {
-    $facebookApp = new FacebookApp('123', 'foo_secret');
     $facebookBatchRequest = m::mock('Facebook\Entities\FacebookBatchRequest');
     $facebookBatchRequest
       ->shouldReceive('prepareRequestsForBatch')
@@ -173,14 +163,6 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
       ->shouldReceive('getHeaders')
       ->once()
       ->andReturn(['request_header' => 'foo']);
-    $facebookBatchRequest
-      ->shouldReceive('getAccessToken')
-      ->once()
-      ->andReturn('foo_token');
-    $facebookBatchRequest
-      ->shouldReceive('getApp')
-      ->once()
-      ->andReturn($facebookApp);
 
     $this->httpClientMock
       ->shouldReceive('send')

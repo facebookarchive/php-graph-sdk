@@ -25,13 +25,19 @@ namespace Facebook\Entities;
 
 use ArrayIterator;
 use IteratorAggregate;
+use ArrayAccess;
 
 /**
  * Class BatchResponse
  * @package Facebook
  */
-class FacebookBatchResponse extends FacebookResponse implements IteratorAggregate
+class FacebookBatchResponse extends FacebookResponse implements IteratorAggregate, ArrayAccess
 {
+
+  /**
+   * @var FacebookBatchRequest The original entity that made the batch request.
+   */
+  protected $batchRequest;
 
   /**
    * @var array An array of FacebookResponse entities.
@@ -41,18 +47,21 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   /**
    * Creates a new Response entity.
    *
+   * @param FacebookBatchRequest $batchRequest
    * @param FacebookResponse $response
    */
   public function __construct(
+    FacebookBatchRequest $batchRequest,
     FacebookResponse $response
   )
   {
-    $app = $response->getApp();
+    $this->batchRequest = $batchRequest;
+
+    $request = $response->getRequest();
+    $body = $response->getBody();
     $httpStatusCode = $response->getHttpStatusCode();
     $headers = $response->getHeaders();
-    $body = $response->getBody();
-    $accessToken = $response->getAccessToken();
-    parent::__construct($app, $httpStatusCode, $headers, $body, $accessToken);
+    parent::__construct($request, $body, $httpStatusCode, $headers);
 
     $responses = $response->getDecodedBody();
     $this->setResponses($responses);
@@ -77,24 +86,75 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   public function setResponses(array $responses)
   {
     $this->responses = [];
-    foreach ($responses as $graphResponse) {
-      $httpResponseCode = isset($graphResponse['code']) ? $graphResponse['code'] : null;
-      $httpResponseHeaders = isset($graphResponse['headers']) ? $graphResponse['headers'] : [];
-      $httpResponseBody = isset($graphResponse['body']) ? $graphResponse['body'] : null;
-      // @TODO Figure out an elegant way to get the access token that was used with this response.
-      $accessToken = null;
-      $this->responses[] = new FacebookResponse($this->app, $httpResponseCode, $httpResponseHeaders, $httpResponseBody, $accessToken);
+    foreach ($responses as $key => $graphResponse) {
+      $this->addResponse($key, $graphResponse);
     }
   }
 
   /**
-   * Get an iterator for the items.
+   * Add a response to the list.
    *
-   * @return ArrayIterator
+   * @param int $key
+   * @param array|null $response
+   */
+  public function addResponse($key, $response)
+  {
+    $originalRequestName = isset($this->batchRequest[$key]['name'])
+      ? $this->batchRequest[$key]['name']
+      : $key;
+    $originalRequest = isset($this->batchRequest[$key]['request'])
+      ? $this->batchRequest[$key]['request']
+      : null;
+
+    $httpResponseBody = isset($response['body']) ? $response['body'] : null;
+    $httpResponseCode = isset($response['code']) ? $response['code'] : null;
+    $httpResponseHeaders = isset($response['headers']) ? $response['headers'] : [];
+
+    $this->responses[$originalRequestName] = new FacebookResponse(
+      $originalRequest,
+      $httpResponseBody,
+      $httpResponseCode,
+      $httpResponseHeaders);
+  }
+
+  /**
+   * @return @inheritdoc
    */
   public function getIterator()
   {
     return new ArrayIterator($this->responses);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetSet($offset, $value)
+  {
+    $this->addResponse($offset, $value);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->responses[$offset]);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetUnset($offset)
+  {
+    unset($this->responses[$offset]);
+  }
+
+  /**
+   * @return @inheritdoc
+   */
+  public function offsetGet($offset)
+  {
+    return isset($this->responses[$offset]) ? $this->responses[$offset] : null;
   }
 
 }
