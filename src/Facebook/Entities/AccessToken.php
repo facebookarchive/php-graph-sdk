@@ -343,9 +343,12 @@ class AccessToken implements \Serializable
       $app,
       $app->getAccessToken(),
       'GET',
-      $endpoint,
-      $params
+      $endpoint
     );
+    // We know what we're doing here.
+    // We want to send the access token as a param.
+    $request->dangerouslySetParams($params);
+
     return $client->sendRequest($request);
   }
 

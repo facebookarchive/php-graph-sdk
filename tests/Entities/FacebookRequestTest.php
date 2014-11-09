@@ -98,6 +98,25 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
       ], $params);
   }
 
+  public function testAnAccessTokenCanBeSetFromTheParams()
+  {
+    $app = new FacebookApp('123', 'foo_secret');
+    $request = new FacebookRequest($app, null, 'POST', '/me', ['access_token' => 'bar_token']);
+
+    $accessToken = $request->getAccessToken();
+
+    $this->assertEquals('bar_token', $accessToken);
+  }
+
+  /**
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
+   */
+  public function testAccessTokenConflictsWillThrow()
+  {
+    $app = new FacebookApp('123', 'foo_secret');
+    new FacebookRequest($app, 'foo_token', 'POST', '/me', ['access_token' => 'bar_token']);
+  }
+
   public function testAProperUrlWillBeGenerated()
   {
     $app = new FacebookApp('123', 'foo_secret');
@@ -117,7 +136,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($expectedUrl, $postUrl);
   }
 
-  public function testParamsAreNotOverwritten()
+  public function testAuthenticationParamsAreStrippedAndReapplied()
   {
     $app = new FacebookApp('123', 'foo_secret');
 
@@ -127,71 +146,26 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
       $method = 'GET',
       $endpoint = '/foo',
       $params = [
-        'access_token' => 'bar_access_token',
+        'access_token' => 'foo_token',
         'appsecret_proof' => 'bar_app_secret',
+        'bar' => 'baz',
       ]
     );
 
     $url = $request->getUrl();
 
-    $expectedParams = 'access_token=bar_access_token&appsecret_proof=bar_app_secret';
+    $expectedParams = 'bar=baz&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9';
     $expectedUrl = '/' . Facebook::DEFAULT_GRAPH_VERSION . '/foo?' . $expectedParams;
     $this->assertEquals($expectedUrl, $url);
 
     $params = $request->getParams();
 
     $expectedParams = [
-      'access_token' => 'bar_access_token',
-      'appsecret_proof' => 'bar_app_secret',
-    ];
-    $this->assertEquals($expectedParams, $params);
-  }
-
-  public function testGracefullyHandlesUrlAppending()
-  {
-    $params = [];
-    $url = 'https://www.foo.com/';
-    $processed_url = FacebookRequest::appendParamsToUrl($url, $params);
-    $this->assertEquals('https://www.foo.com/', $processed_url);
-
-    $params = [
-      'access_token' => 'foo',
-    ];
-    $url = 'https://www.foo.com/';
-    $processed_url = FacebookRequest::appendParamsToUrl($url, $params);
-    $this->assertEquals('https://www.foo.com/?access_token=foo', $processed_url);
-
-    $params = [
-      'access_token' => 'foo',
+      'access_token' => 'foo_token',
+      'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
       'bar' => 'baz',
     ];
-    $url = 'https://www.foo.com/?foo=bar';
-    $processed_url = FacebookRequest::appendParamsToUrl($url, $params);
-    $this->assertEquals('https://www.foo.com/?access_token=foo&bar=baz&foo=bar', $processed_url);
-
-    $params = [
-      'access_token' => 'foo',
-    ];
-    $url = 'https://www.foo.com/?foo=bar&access_token=bar';
-    $processed_url = FacebookRequest::appendParamsToUrl($url, $params);
-    $this->assertEquals('https://www.foo.com/?access_token=bar&foo=bar', $processed_url);
-  }
-
-  public function testSlashesAreProperlyPrepended()
-  {
-    $slashTestOne = FacebookRequest::forceSlashPrefix('foo');
-    $slashTestTwo = FacebookRequest::forceSlashPrefix('/foo');
-    $slashTestThree = FacebookRequest::forceSlashPrefix('foo/bar');
-    $slashTestFour = FacebookRequest::forceSlashPrefix('/foo/bar');
-    $slashTestFive = FacebookRequest::forceSlashPrefix(null);
-    $slashTestSix = FacebookRequest::forceSlashPrefix('');
-
-    $this->assertEquals('/foo', $slashTestOne);
-    $this->assertEquals('/foo', $slashTestTwo);
-    $this->assertEquals('/foo/bar', $slashTestThree);
-    $this->assertEquals('/foo/bar', $slashTestFour);
-    $this->assertEquals(null, $slashTestFive);
-    $this->assertEquals('', $slashTestSix);
+    $this->assertEquals($expectedParams, $params);
   }
 
 }

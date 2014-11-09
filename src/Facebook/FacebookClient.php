@@ -152,17 +152,14 @@ class FacebookClient
 
     // Should throw `FacebookSDKException` exception on HTTP client error.
     // Don't catch to allow it to bubble up.
-    $response = $this->httpClientHandler->send($url, $method, $params, $headers);
+    $responseBody = $this->httpClientHandler->send($url, $method, $params, $headers);
 
     static::$requestCount++;
 
     $httpResponseCode = $this->httpClientHandler->getResponseHttpStatusCode();
     $httpResponseHeaders = $this->httpClientHandler->getResponseHeaders();
 
-    $accessToken = $request->getAccessToken();
-    $app = $request->getApp();
-
-    $returnResponse = new FacebookResponse($app, $httpResponseCode, $httpResponseHeaders, $response, $accessToken);
+    $returnResponse = new FacebookResponse($request, $responseBody, $httpResponseCode, $httpResponseHeaders);
 
     if ($returnResponse->isError()) {
       throw $returnResponse->getThrownException();
@@ -185,7 +182,7 @@ class FacebookClient
     $request->prepareRequestsForBatch();
     $facebookResponse = $this->sendRequest($request);
 
-    return new FacebookBatchResponse($facebookResponse);
+    return new FacebookBatchResponse($request, $facebookResponse);
   }
 
 }
