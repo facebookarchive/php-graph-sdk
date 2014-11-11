@@ -35,6 +35,10 @@ use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
+use Facebook\PersistentData\PersistentDataInterface;
+use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -79,7 +83,7 @@ class Facebook
   protected $client;
 
   /**
-   * @var UrlInterface The URL handler.
+   * @var UrlInterface|null The URL handler.
    */
   protected $urlHandler;
 
@@ -94,8 +98,12 @@ class Facebook
   protected $defaultGraphVersion;
 
   /**
+   * @var PersistentDataInterface|null The persistent data handler.
+   */
+  protected $persistentDataHandler;
+
+  /**
    * @TODO Add FacebookInputInterface
-   * @TODO Add FacebookSessionInterface
    * @TODO Add FacebookRandomGeneratorInterface
    * @TODO Add FacebookRequestInterface
    * @TODO Add FacebookResponseInterface
@@ -158,6 +166,21 @@ class Facebook
       } else {
         throw new \InvalidArgumentException(
           'The url_handler must be an instance of Facebook\Url\UrlInterface'
+          );
+      }
+    }
+
+    if (isset($config['persistent_data_handler'])) {
+      if ( $config['persistent_data_handler'] instanceof PersistentDataInterface) {
+        $this->persistentDataHandler = $config['persistent_data_handler'];
+      } elseif ($config['persistent_data_handler'] === 'session') {
+        $this->persistentDataHandler = new FacebookSessionPersistentDataHandler();
+      } elseif ($config['persistent_data_handler'] === 'memory') {
+        $this->persistentDataHandler = new FacebookMemoryPersistentDataHandler();
+      } else {
+        throw new \InvalidArgumentException(
+          'The persistent_data_handler must be set to "session", "memory", '
+          . ' or be an instance of Facebook\PersistentData\PersistentDataInterface'
         );
       }
     }
@@ -230,6 +253,20 @@ class Facebook
   public function getDefaultGraphVersion()
   {
     return $this->defaultGraphVersion;
+  }
+
+  /**
+   * Returns the redirect login helper.
+   *
+   * @return FacebookRedirectLoginHelper
+   */
+  public function getRedirectLoginHelper()
+  {
+    return new FacebookRedirectLoginHelper(
+      $this->app,
+      $this->persistentDataHandler,
+      $this->urlHandler
+    );
   }
 
   /**

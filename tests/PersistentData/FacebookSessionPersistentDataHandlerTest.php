@@ -21,47 +21,44 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Url;
+namespace Facebook\Tests\PersistentData;
 
-/**
- * Class FacebookUrlManipulator
- * @package Facebook
- */
-class FacebookUrlManipulator
+use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+
+class FacebookSessionPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * Remove params from a URL.
-   *
-   * @param string $url The URL to filter.
-   * @param array $paramsToFilter The params to filter from the URL.
-   *
-   * @return string The URL with the params removed.
+   * @expectedException \Facebook\Exceptions\FacebookSDKException
    */
-  public static function removeParamsFromUrl($url, array $paramsToFilter)
+  public function testInactiveSessionsWillThrow()
   {
-    $parts = parse_url($url);
+    $handler = new FacebookSessionPersistentDataHandler();
+  }
 
-    $query = '';
-    if (isset($parts['query'])) {
-      $params = [];
-      parse_str($parts['query'], $params);
+  public function testCanSetAValue()
+  {
+    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+    $handler->set('foo', 'bar');
 
-      // Remove query params
-      foreach ($paramsToFilter as $paramName) {
-        unset($params[$paramName]);
-      }
+    $this->assertEquals('bar', $_SESSION['FBRLH_foo']);
+  }
 
-      if (count($params) > 0) {
-        $query = '?' . http_build_query($params, null, '&');
-      }
-    }
+  public function testCanGetAValue()
+  {
+    $_SESSION['FBRLH_faz'] = 'baz';
+    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+    $value = $handler->get('faz');
 
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-    $path = isset($parts['path']) ? $parts['path'] : '';
-    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+    $this->assertEquals('baz', $value);
+  }
 
-    return $parts['scheme'] . '://' . $parts['host'] . $port . $path . $query . $fragment;
+  public function testGettingAValueThatDoesntExistWillReturnNull()
+  {
+    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+    $value = $handler->get('does_not_exist');
+
+    $this->assertNull($value);
   }
 
 }

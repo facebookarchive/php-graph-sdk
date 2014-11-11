@@ -54,6 +54,7 @@ $fb = new Facebook\Facebook([
   'enable_beta_mode' => true,
   'default_graph_version' => 'v2.2',
   'http_client_handler' => 'guzzle',
+  'persistent_data_handler' => 'memory',
 ]);
 ~~~~
 
@@ -84,6 +85,21 @@ If you wish to write your own HTTP client, you can code your HTTP client to the 
 ~~~~
 $fb = new Facebook([
   'http_client_handler' => new MyCustomHttpClient(),
+]);
+~~~~
+
+If any other value is provided an `InvalidArgumentException` will be thrown.
+
+### `persistent_data_handler`
+Allows you to overwrite the default persistent data store.
+
+By default, the SDK will try to use the native PHP session for the persistent data store. There is also an in-memory persistent data handler which is useful when running your script from the command line for example. You can force either implementation by setting this value to `session` or `memory`.
+
+If you wish to write your own persistent data handler, you can code your persistent data handler to the `[Facebook\PersistentData\PersistentDataInterface](/docs/php/PersistentDataInterface)` and set the value of `persistent_data_handler` to an instance of your custom handler.
+
+~~~~
+$fb = new Facebook([
+  'persistent_data_handler' => new MyCustomPersistentDataHandler(),
 ]);
 ~~~~
 
@@ -261,5 +277,18 @@ $requests = [
   'my_post' => $fb->request('POST', '/1337/feed', ['message' => 'Hi!']),
 ];
 $batchResponse = $fb->sendBatchRequest($requests);
+~~~~
+</card>
+
+<card>
+### getRedirectLoginHelper() {#get-redirect-login-helper}
+~~~~
+public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRedirectLoginHelper) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
+
+~~~~
+$helper = $fb->getRedirectLoginHelper();
 ~~~~
 </card>

@@ -21,47 +21,36 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Url;
+namespace Facebook\PersistentData;
 
 /**
- * Class FacebookUrlManipulator
+ * Class FacebookMemoryPersistentDataHandler
  * @package Facebook
  */
-class FacebookUrlManipulator
+class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
 {
 
   /**
-   * Remove params from a URL.
-   *
-   * @param string $url The URL to filter.
-   * @param array $paramsToFilter The params to filter from the URL.
-   *
-   * @return string The URL with the params removed.
+   * @var array The session data to keep in memory.
    */
-  public static function removeParamsFromUrl($url, array $paramsToFilter)
+  protected $sessionData = [];
+
+  /**
+   * @inheritdoc
+   */
+  public function get($key)
   {
-    $parts = parse_url($url);
+    return isset($this->sessionData[$key])
+      ? $this->sessionData[$key]
+      : null;
+  }
 
-    $query = '';
-    if (isset($parts['query'])) {
-      $params = [];
-      parse_str($parts['query'], $params);
-
-      // Remove query params
-      foreach ($paramsToFilter as $paramName) {
-        unset($params[$paramName]);
-      }
-
-      if (count($params) > 0) {
-        $query = '?' . http_build_query($params, null, '&');
-      }
-    }
-
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-    $path = isset($parts['path']) ? $parts['path'] : '';
-    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
-
-    return $parts['scheme'] . '://' . $parts['host'] . $port . $path . $query . $fragment;
+  /**
+   * @inheritdoc
+   */
+  public function set($key, $value)
+  {
+    $this->sessionData[$key] = $value;
   }
 
 }

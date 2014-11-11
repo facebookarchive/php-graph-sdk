@@ -21,47 +21,30 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Url;
+namespace Facebook\PersistentData;
 
 /**
- * Class FacebookUrlManipulator
+ * Interface PersistentDataInterface
  * @package Facebook
  */
-class FacebookUrlManipulator
+interface PersistentDataInterface
 {
 
   /**
-   * Remove params from a URL.
+   * Get a value from a persistent data store.
    *
-   * @param string $url The URL to filter.
-   * @param array $paramsToFilter The params to filter from the URL.
+   * @param string $key
    *
-   * @return string The URL with the params removed.
+   * @return mixed
    */
-  public static function removeParamsFromUrl($url, array $paramsToFilter)
-  {
-    $parts = parse_url($url);
+  public function get($key);
 
-    $query = '';
-    if (isset($parts['query'])) {
-      $params = [];
-      parse_str($parts['query'], $params);
-
-      // Remove query params
-      foreach ($paramsToFilter as $paramName) {
-        unset($params[$paramName]);
-      }
-
-      if (count($params) > 0) {
-        $query = '?' . http_build_query($params, null, '&');
-      }
-    }
-
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-    $path = isset($parts['path']) ? $parts['path'] : '';
-    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
-
-    return $parts['scheme'] . '://' . $parts['host'] . $port . $path . $query . $fragment;
-  }
+  /**
+   * Set a value in the persistent data store.
+   *
+   * @param string $key
+   * @param mixed $value
+   */
+  public function set($key, $value);
 
 }

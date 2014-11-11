@@ -21,47 +21,55 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Url;
+namespace Facebook\PersistentData;
+
+use Facebook\Exceptions\FacebookSDKException;
 
 /**
- * Class FacebookUrlManipulator
+ * Class FacebookSessionPersistentDataHandler
  * @package Facebook
  */
-class FacebookUrlManipulator
+class FacebookSessionPersistentDataHandler implements PersistentDataInterface
 {
 
   /**
-   * Remove params from a URL.
-   *
-   * @param string $url The URL to filter.
-   * @param array $paramsToFilter The params to filter from the URL.
-   *
-   * @return string The URL with the params removed.
+   * @var string Prefix to use for session variables.
    */
-  public static function removeParamsFromUrl($url, array $paramsToFilter)
+  protected $sessionPrefix = 'FBRLH_';
+
+  /**
+   * Init the session handler.
+   *
+   * @param boolean $enableSessionCheck
+   *
+   * @throws FacebookSDKException
+   */
+  public function __construct($enableSessionCheck = true)
   {
-    $parts = parse_url($url);
-
-    $query = '';
-    if (isset($parts['query'])) {
-      $params = [];
-      parse_str($parts['query'], $params);
-
-      // Remove query params
-      foreach ($paramsToFilter as $paramName) {
-        unset($params[$paramName]);
-      }
-
-      if (count($params) > 0) {
-        $query = '?' . http_build_query($params, null, '&');
-      }
+    if ($enableSessionCheck
+      && session_status() !== PHP_SESSION_ACTIVE) {
+      throw new FacebookSDKException(
+        'Sessions are not active. Please make sure session_start() is at the top of your script.', 720
+      );
     }
+  }
 
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-    $path = isset($parts['path']) ? $parts['path'] : '';
-    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+  /**
+   * @inheritdoc
+   */
+  public function get($key)
+  {
+    return isset($_SESSION[$this->sessionPrefix . $key])
+      ? $_SESSION[$this->sessionPrefix . $key]
+      : null;
+  }
 
-    return $parts['scheme'] . '://' . $parts['host'] . $port . $path . $query . $fragment;
+  /**
+   * @inheritdoc
+   */
+  public function set($key, $value)
+  {
+    $_SESSION[$this->sessionPrefix . $key] = $value;
   }
 
 }

@@ -21,47 +21,28 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Url;
+namespace Facebook\Tests\PersistentData;
 
-/**
- * Class FacebookUrlManipulator
- * @package Facebook
- */
-class FacebookUrlManipulator
+use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+
+class FacebookMemoryPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
 {
 
-  /**
-   * Remove params from a URL.
-   *
-   * @param string $url The URL to filter.
-   * @param array $paramsToFilter The params to filter from the URL.
-   *
-   * @return string The URL with the params removed.
-   */
-  public static function removeParamsFromUrl($url, array $paramsToFilter)
+  public function testCanGetAndSetAVirtualValue()
   {
-    $parts = parse_url($url);
+    $handler = new FacebookMemoryPersistentDataHandler();
+    $handler->set('foo', 'bar');
+    $value = $handler->get('foo');
 
-    $query = '';
-    if (isset($parts['query'])) {
-      $params = [];
-      parse_str($parts['query'], $params);
+    $this->assertEquals('bar', $value);
+  }
 
-      // Remove query params
-      foreach ($paramsToFilter as $paramName) {
-        unset($params[$paramName]);
-      }
+  public function testGettingAValueThatDoesntExistWillReturnNull()
+  {
+    $handler = new FacebookMemoryPersistentDataHandler();
+    $value = $handler->get('does_not_exist');
 
-      if (count($params) > 0) {
-        $query = '?' . http_build_query($params, null, '&');
-      }
-    }
-
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-    $path = isset($parts['path']) ? $parts['path'] : '';
-    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
-
-    return $parts['scheme'] . '://' . $parts['host'] . $port . $path . $query . $fragment;
+    $this->assertNull($value);
   }
 
 }

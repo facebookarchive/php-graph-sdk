@@ -27,7 +27,10 @@ use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
 use Facebook\Url\UrlInterface;
+use Facebook\Url\FacebookUrlHandler;
 use Facebook\Url\FacebookUrlManipulator;
+use Facebook\PersistentData\PersistentDataInterface;
+use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookClient;
 
@@ -51,34 +54,44 @@ class FacebookRedirectLoginHelper
   protected $urlHandler;
 
   /**
-   * @var FacebookUrlManipulator The URL manipulator.
+   * @var PersistentDataInterface The persistent data handler.
    */
-  protected $urlManipulator;
-
-  /**
-   * @var string Prefix to use for session variables.
-   */
-  protected $sessionPrefix = 'FBRLH_';
-
-  /**
-   * @var boolean Toggle for PHP session status check.
-   */
-  protected $checkForSessionStatus = true;
+  protected $persistentDataHandler;
 
   /**
    * Constructs a RedirectLoginHelper for a given appId.
    *
    * @param FacebookApp $app The FacebookApp entity.
-   * @param UrlInterface $urlHandler The URL handler.
-   * @param FacebookUrlManipulator $urlManipulator The URL manipulator.
+   * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
+   * @param UrlInterface|null $urlHandler The URL handler.
    */
   public function __construct(FacebookApp $app,
-                              UrlInterface $urlHandler,
-                              FacebookUrlManipulator $urlManipulator)
+                              PersistentDataInterface $persistentDataHandler = null,
+                              UrlInterface $urlHandler = null)
   {
     $this->app = $app;
-    $this->urlHandler = $urlHandler;
-    $this->urlManipulator = $urlManipulator;
+    $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
+    $this->urlHandler = $urlHandler ?: new FacebookUrlHandler();
+  }
+
+  /**
+   * Returns the persistent data handler.
+   *
+   * @return PersistentDataInterface
+   */
+  public function getPersistentDataHandler()
+  {
+    return $this->persistentDataHandler;
+  }
+
+  /**
+   * Returns the URL handler.
+   *
+   * @return UrlInterface
+   */
+  public function getUrlHandler()
+  {
+    return $this->urlHandler;
   }
 
   /**
@@ -166,7 +179,7 @@ class FacebookRedirectLoginHelper
         'error_description',
         'error_code',
         ];
-      $redirectUrl = $this->urlManipulator->removeParamsFromUrl($redirectUrl, $paramsToFilter);
+      $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, $paramsToFilter);
 
       return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
@@ -215,13 +228,7 @@ class FacebookRedirectLoginHelper
    */
   protected function storeState($state)
   {
-    if ($this->checkForSessionStatus === true
-      && session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not store state.', 720
-      );
-    }
-    $_SESSION[$this->sessionPrefix . 'state'] = $state;
+    $this->persistentDataHandler->set('state', $state);
   }
 
   /**
@@ -235,16 +242,7 @@ class FacebookRedirectLoginHelper
    */
   protected function loadState()
   {
-    if ($this->checkForSessionStatus === true
-      && session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not load state.', 721
-      );
-    }
-    if (isset($_SESSION[$this->sessionPrefix . 'state'])) {
-      return $_SESSION[$this->sessionPrefix . 'state'];
-    }
-    return null;
+    return $this->persistentDataHandler->get('state');
   }
 
   /**
@@ -296,14 +294,6 @@ class FacebookRedirectLoginHelper
       // We are appending raw binary
     }
     return bin2hex(substr($buf, 0, $bytes));
-  }
-
-  /**
-   * Disables the session_status() check when using $_SESSION.
-   */
-  public function disableSessionStatusCheck()
-  {
-    $this->checkForSessionStatus = false;
   }
 
 }

@@ -27,12 +27,20 @@ use Mockery as m;
 use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\HttpClients\FacebookHttpClientInterface;
+use Facebook\PersistentData\PersistentDataInterface;
+
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
   public function getResponseHeaders() { return ['X-foo-header' => 'bar']; }
   public function getResponseHttpStatusCode() { return 1337; }
   public function send($url, $method = 'GET', array $parameters = [], array $headers = []) { return 'foo_response'; }
+}
+
+class FooPersistentDataInterface implements PersistentDataInterface
+{
+  public function get($key) { return 'foo'; }
+  public function set($key, $value) {}
 }
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
@@ -109,6 +117,27 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    */
+  public function testSettingAnInvalidPersistentDataHandlerThrows()
+  {
+    $config = array_merge($this->config, [
+        'persistent_data_handler' => 'foo_handler',
+      ]);
+    $fb = new Facebook($config);
+  }
+
+  public function testPersistentDataHandlerCanBeForced()
+  {
+    $config = array_merge($this->config, [
+      'persistent_data_handler' => 'memory'
+    ]);
+    $fb = new Facebook($config);
+    $this->assertInstanceOf('Facebook\PersistentData\FacebookMemoryPersistentDataHandler',
+      $fb->getRedirectLoginHelper()->getPersistentDataHandler());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
   public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
   {
     $config = array_merge($this->config, [
@@ -122,6 +151,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $config = array_merge($this->config, [
         'default_access_token' => 'foo_token',
         'http_client_handler' => new FooClientInterface(),
+        'persistent_data_handler' => new FooPersistentDataInterface(),
         'enable_beta_mode' => true,
         'default_graph_version' => 'v1337',
       ]);
@@ -130,6 +160,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $request = $fb->request('FOO_VERB', '/foo');
     $this->assertInstanceOf('Facebook\Tests\FooClientInterface',
       $fb->getClient()->getHttpClientHandler());
+    $this->assertInstanceOf('Facebook\Tests\FooPersistentDataInterface',
+      $fb->getRedirectLoginHelper()->getPersistentDataHandler());
     $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA,
       $fb->getClient()->getBaseGraphUrl());
     $this->assertEquals('1337', $request->getApp()->getId());
