@@ -26,6 +26,8 @@ namespace Facebook\Helpers;
 use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
+use Facebook\PersistentData\PersistentDataInterface;
+use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookClient;
 
@@ -44,23 +46,30 @@ class FacebookRedirectLoginHelper
   protected $app;
 
   /**
-   * @var string Prefix to use for session variables.
+   * @var PersistentDataInterface The persistent data handler.
    */
-  protected $sessionPrefix = 'FBRLH_';
-
-  /**
-   * @var boolean Toggle for PHP session status check.
-   */
-  protected $checkForSessionStatus = true;
+  protected $persistentDataHandler;
 
   /**
    * Constructs a RedirectLoginHelper for a given appId.
    *
    * @param FacebookApp $app The FacebookApp entity.
+   * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
    */
-  public function __construct(FacebookApp $app)
+  public function __construct(FacebookApp $app, PersistentDataInterface $persistentDataHandler = null)
   {
     $this->app = $app;
+    $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
+  }
+
+  /**
+   * Returns the persistent data handler.
+   *
+   * @return PersistentDataInterface
+   */
+  public function getPersistentDataHandler()
+  {
+    return $this->persistentDataHandler;
   }
 
   /**
@@ -188,13 +197,7 @@ class FacebookRedirectLoginHelper
    */
   protected function storeState($state)
   {
-    if ($this->checkForSessionStatus === true
-      && session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not store state.', 720
-      );
-    }
-    $_SESSION[$this->sessionPrefix . 'state'] = $state;
+    $this->persistentDataHandler->set('state', $state);
   }
 
   /**
@@ -208,16 +211,7 @@ class FacebookRedirectLoginHelper
    */
   protected function loadState()
   {
-    if ($this->checkForSessionStatus === true
-      && session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Session not active, could not load state.', 721
-      );
-    }
-    if (isset($_SESSION[$this->sessionPrefix . 'state'])) {
-      return $_SESSION[$this->sessionPrefix . 'state'];
-    }
-    return null;
+    return $this->persistentDataHandler->get('state');
   }
 
   /**
@@ -340,14 +334,6 @@ class FacebookRedirectLoginHelper
       // We are appending raw binary
     }
     return bin2hex(substr($buf, 0, $bytes));
-  }
-
-  /**
-   * Disables the session_status() check when using $_SESSION.
-   */
-  public function disableSessionStatusCheck()
-  {
-    $this->checkForSessionStatus = false;
   }
 
 }

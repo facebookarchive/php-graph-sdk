@@ -27,17 +27,27 @@ use Mockery as m;
 use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
+use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
 
+  /**
+   * @var FacebookMemoryPersistentDataHandler
+   */
+  protected $persistentDataHandler;
+
   const REDIRECT_URL = 'http://invalid.zzz';
+
+  public function setUp()
+  {
+    $this->persistentDataHandler = new FacebookMemoryPersistentDataHandler();
+  }
 
   public function testLoginURL()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app);
-    $helper->disableSessionStatusCheck();
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
 
     $scope = ['foo','bar'];
     $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL, $scope, true, 'v1337');
@@ -62,8 +72,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
   public function testLogoutURL()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app);
-    $helper->disableSessionStatusCheck();
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
 
     $logoutUrl = $helper->getLogoutUrl('foo_token', self::REDIRECT_URL);
     $expectedUrl = 'https://www.facebook.com/logout.php?';
@@ -82,7 +91,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testAnAccessTokenCanBeObtainedFromRedirect()
   {
-    $_SESSION['FBRLH_state'] = 'foo_state';
+    $this->persistentDataHandler->set('state', 'foo_state');
     $_GET['state'] = 'foo_state';
     $_GET['code'] = 'foo_code';
 
@@ -102,8 +111,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
       ->andReturn($response);
 
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app);
-    $helper->disableSessionStatusCheck();
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
 
     $accessToken = $helper->getAccessToken($client, self::REDIRECT_URL);
 
@@ -117,8 +125,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
   public function testGetFilteredUriRemoveFacebookQueryParams($uri, $expected)
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app);
-    $helper->disableSessionStatusCheck();
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
 
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
     $method = $class->getMethod('getFilteredUri');
@@ -161,7 +168,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
   public function testCSPRNG()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app);
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
     
     $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
     $method = $class->getMethod('random');

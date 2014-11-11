@@ -212,6 +212,10 @@ FB(devsite:markdown-wiki:table {
       '`[Facebook\HttpClients\FacebookHttpClientInterface](/docs/php/FacebookHttpClientInterface)`',
       'Interface to code your own HTTP client implementation.',
     ],
+    [
+      '`[Facebook\PersistentData\PersistentDataInterface](/docs/php/PersistentDataInterface)`',
+      'Interface to code your own persistent data storage implementation.',
+    ],
   ],
 })
 </card>
