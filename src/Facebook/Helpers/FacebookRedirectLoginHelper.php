@@ -26,6 +26,8 @@ namespace Facebook\Helpers;
 use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
+use Facebook\Url\UrlInterface;
+use Facebook\Url\FacebookUrlManipulator;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookClient;
 
@@ -44,6 +46,16 @@ class FacebookRedirectLoginHelper
   protected $app;
 
   /**
+   * @var UrlInterface The URL handler.
+   */
+  protected $urlHandler;
+
+  /**
+   * @var FacebookUrlManipulator The URL manipulator.
+   */
+  protected $urlManipulator;
+
+  /**
    * @var string Prefix to use for session variables.
    */
   protected $sessionPrefix = 'FBRLH_';
@@ -57,10 +69,16 @@ class FacebookRedirectLoginHelper
    * Constructs a RedirectLoginHelper for a given appId.
    *
    * @param FacebookApp $app The FacebookApp entity.
+   * @param UrlInterface $urlHandler The URL handler.
+   * @param FacebookUrlManipulator $urlManipulator The URL manipulator.
    */
-  public function __construct(FacebookApp $app)
+  public function __construct(FacebookApp $app,
+                              UrlInterface $urlHandler,
+                              FacebookUrlManipulator $urlManipulator)
   {
     $this->app = $app;
+    $this->urlHandler = $urlHandler;
+    $this->urlManipulator = $urlManipulator;
   }
 
   /**
@@ -128,7 +146,7 @@ class FacebookRedirectLoginHelper
    * Takes a valid code from a login redirect, and returns an AccessToken entity.
    *
    * @param FacebookClient $client The Facebook client.
-   * @param string $redirectUrl The redirect URL.
+   * @param string|null $redirectUrl The redirect URL.
    *
    * @return AccessToken|null
    *
@@ -138,8 +156,17 @@ class FacebookRedirectLoginHelper
   {
     if ($this->isValidRedirect()) {
       $code = $this->getCode();
-      $redirectUrl = $redirectUrl ?: $this->getCurrentUri();
-      $redirectUrl = $this->getFilteredUri($redirectUrl);
+      $redirectUrl = $redirectUrl ?: $this->urlHandler->getCurrentUrl();
+
+      $paramsToFilter = [
+        'state',
+        'code',
+        'error',
+        'error_reason',
+        'error_description',
+        'error_code',
+        ];
+      $redirectUrl = $this->urlManipulator->removeParamsFromUrl($redirectUrl, $paramsToFilter);
 
       return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
@@ -218,77 +245,6 @@ class FacebookRedirectLoginHelper
       return $_SESSION[$this->sessionPrefix . 'state'];
     }
     return null;
-  }
-
-  /**
-   * Return a URL with the Facebook-appended params removed.
-   *
-   * @param string $uri The URL to filter.
-   *
-   * @return string
-   */
-  protected function getFilteredUri($uri)
-  {
-    $parts = parse_url($uri);
-    $scheme = isset($parts['scheme']) ? $parts['scheme'] : $this->getHttpScheme();
-
-    $path = isset($parts['path']) ? $parts['path'] : '';
-
-    $query = '';
-    if (isset($parts['query'])) {
-      $full_query = [];
-      parse_str($parts['query'], $full_query);
-
-      // remove Facebook appended query params
-      $toDrop = [];
-      if (isset($full_query['state']) && isset($full_query['code'])) {
-        $toDrop = ['state', 'code'];
-      } elseif (isset($full_query['state'])
-          && isset($full_query['error'])
-          && isset($full_query['error_reason'])
-          && isset($full_query['error_description'])
-          && isset($full_query['error_code'])) {
-        $toDrop = ['state', 'error', 'error_reason', 'error_description', 'error_code'];
-      }
-      $real_query = array_diff_key($full_query, array_flip($toDrop));
-
-      $query = '';
-      if (!empty($real_query)) {
-        $query = '?' . http_build_query($real_query, null, '&');
-      }
-    }
-
-    // use port if non default
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-
-    // rebuild
-    return $scheme . '://' . $parts['host'] . $port . $path . $query;
-  }
-
-  /**
-   * Returns the current URI.
-   *
-   * @return string
-   */
-  protected function getCurrentUri()
-  {
-    return $this->getHttpScheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-  }
-
-  /**
-   * Returns the HTTP Protocol.
-   *
-   * @return string
-   */
-  protected function getHttpScheme() {
-    $scheme = 'http';
-    if (isset($_SERVER['HTTPS']) &&
-        ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)
-        || isset($_SERVER['SERVER_PORT']) &&
-        ($_SERVER['SERVER_PORT'] === '443')) {
-      $scheme = 'https';
-    }
-    return $scheme;
   }
 
   /**
