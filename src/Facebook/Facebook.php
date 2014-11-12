@@ -83,9 +83,9 @@ class Facebook
   protected $client;
 
   /**
-   * @var UrlDetectionInterface|null The URL handler.
+   * @var UrlDetectionInterface|null The URL detection handler.
    */
-  protected $urlHandler;
+  protected $urlDetectionHandler;
 
   /**
    * @var AccessToken|null The default access token to use with requests.
@@ -160,12 +160,12 @@ class Facebook
     $enableBeta = isset($config['enable_beta_mode']) && $config['enable_beta_mode'] === true;
     $this->client = new FacebookClient($httpClientHandler, $enableBeta);
 
-    if (isset($config['url_handler'])) {
-      if ($config['url_handler'] instanceof UrlDetectionInterface) {
-        $this->urlHandler = $config['url_handler'];
+    if (isset($config['url_detection_handler'])) {
+      if ($config['url_detection_handler'] instanceof UrlDetectionInterface) {
+        $this->urlDetectionHandler = $config['url_detection_handler'];
       } else {
         throw new \InvalidArgumentException(
-          'The url_handler must be an instance of Facebook\Url\UrlInterface'
+          'The url_detection_handler must be an instance of Facebook\Url\UrlDetectionInterface'
           );
       }
     }
@@ -222,17 +222,17 @@ class Facebook
   }
 
   /**
-   * Returns the URL handler.
+   * Returns the URL detection handler.
    *
    * @return UrlDetectionInterface
    */
-  public function getUrlHandler()
+  public function getUrlDetectionHandler()
   {
-    if ( ! $this->urlHandler) {
-      $this->urlHandler = new FacebookUrlDetectionHandler();
+    if ( ! $this->urlDetectionHandler) {
+      $this->urlDetectionHandler = new FacebookUrlDetectionHandler();
     }
 
-    return $this->urlHandler;
+    return $this->urlDetectionHandler;
   }
 
   /**
@@ -265,7 +265,7 @@ class Facebook
     return new FacebookRedirectLoginHelper(
       $this->app,
       $this->persistentDataHandler,
-      $this->urlHandler
+      $this->urlDetectionHandler
     );
   }
 

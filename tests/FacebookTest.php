@@ -146,7 +146,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   public function testSettingAnInvalidUrlHandlerThrows()
   {
     $config = array_merge($this->config, [
-        'url_handler' => 'foo_handler',
+        'url_detection_handler' => 'foo_handler',
       ]);
     $fb = new Facebook($config);
   }
@@ -154,7 +154,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   public function testDefaultUrlHandlerWillBeLazyLoaded()
   {
     $fb = new Facebook($this->config);
-    $this->assertInstanceOf('Facebook\Url\FacebookUrlDetectionHandler', $fb->getUrlHandler());
+    $this->assertInstanceOf('Facebook\Url\FacebookUrlDetectionHandler', $fb->getUrlDetectionHandler());
   }
 
   /**
@@ -174,7 +174,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         'default_access_token' => 'foo_token',
         'http_client_handler' => new FooClientInterface(),
         'persistent_data_handler' => new FooPersistentDataInterface(),
-        'url_handler' => new FooUrlDetectionInterface(),
+        'url_detection_handler' => new FooUrlDetectionInterface(),
         'enable_beta_mode' => true,
         'default_graph_version' => 'v1337',
       ]);
@@ -186,7 +186,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('Facebook\Tests\FooPersistentDataInterface',
       $fb->getRedirectLoginHelper()->getPersistentDataHandler());
     $this->assertInstanceOf('Facebook\Tests\FooUrlDetectionInterface',
-      $fb->getRedirectLoginHelper()->getUrlHandler());
+      $fb->getRedirectLoginHelper()->getUrlDetectionHandler());
     $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA,
       $fb->getClient()->getBaseGraphUrl());
     $this->assertEquals('1337', $request->getApp()->getId());

@@ -49,9 +49,9 @@ class FacebookRedirectLoginHelper
   protected $app;
 
   /**
-   * @var UrlDetectionInterface The URL handler.
+   * @var UrlDetectionInterface The URL detection handler.
    */
-  protected $urlHandler;
+  protected $urlDetectionHandler;
 
   /**
    * @var PersistentDataInterface The persistent data handler.
@@ -63,7 +63,7 @@ class FacebookRedirectLoginHelper
    *
    * @param FacebookApp $app The FacebookApp entity.
    * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
-   * @param UrlDetectionInterface|null $urlHandler The URL handler.
+   * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
    */
   public function __construct(FacebookApp $app,
                               PersistentDataInterface $persistentDataHandler = null,
@@ -71,7 +71,7 @@ class FacebookRedirectLoginHelper
   {
     $this->app = $app;
     $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
-    $this->urlHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
+    $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
   }
 
   /**
@@ -85,13 +85,13 @@ class FacebookRedirectLoginHelper
   }
 
   /**
-   * Returns the URL handler.
+   * Returns the URL detection handler.
    *
    * @return UrlDetectionInterface
    */
-  public function getUrlHandler()
+  public function getUrlDetectionHandler()
   {
-    return $this->urlHandler;
+    return $this->urlDetectionHandler;
   }
 
   /**
@@ -169,7 +169,7 @@ class FacebookRedirectLoginHelper
   {
     if ($this->isValidRedirect()) {
       $code = $this->getCode();
-      $redirectUrl = $redirectUrl ?: $this->urlHandler->getCurrentUrl();
+      $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
 
       $paramsToFilter = [
         'state',
