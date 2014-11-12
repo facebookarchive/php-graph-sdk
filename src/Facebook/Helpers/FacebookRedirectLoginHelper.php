@@ -26,8 +26,8 @@ namespace Facebook\Helpers;
 use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
-use Facebook\Url\UrlInterface;
-use Facebook\Url\FacebookUrlHandler;
+use Facebook\Url\UrlDetectionInterface;
+use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
@@ -49,7 +49,7 @@ class FacebookRedirectLoginHelper
   protected $app;
 
   /**
-   * @var UrlInterface The URL handler.
+   * @var UrlDetectionInterface The URL handler.
    */
   protected $urlHandler;
 
@@ -63,15 +63,15 @@ class FacebookRedirectLoginHelper
    *
    * @param FacebookApp $app The FacebookApp entity.
    * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
-   * @param UrlInterface|null $urlHandler The URL handler.
+   * @param UrlDetectionInterface|null $urlHandler The URL handler.
    */
   public function __construct(FacebookApp $app,
                               PersistentDataInterface $persistentDataHandler = null,
-                              UrlInterface $urlHandler = null)
+                              UrlDetectionInterface $urlHandler = null)
   {
     $this->app = $app;
     $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
-    $this->urlHandler = $urlHandler ?: new FacebookUrlHandler();
+    $this->urlHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
   }
 
   /**
@@ -87,7 +87,7 @@ class FacebookRedirectLoginHelper
   /**
    * Returns the URL handler.
    *
-   * @return UrlInterface
+   * @return UrlDetectionInterface
    */
   public function getUrlHandler()
   {

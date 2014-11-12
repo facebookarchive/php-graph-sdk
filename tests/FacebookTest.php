@@ -28,7 +28,7 @@ use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
-
+use Facebook\Url\UrlDetectionInterface;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
@@ -41,6 +41,11 @@ class FooPersistentDataInterface implements PersistentDataInterface
 {
   public function get($key) { return 'foo'; }
   public function set($key, $value) {}
+}
+
+class FooUrlDetectionInterface implements UrlDetectionInterface
+{
+  public function getCurrentUrl() { return 'https://foo.bar'; }
 }
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
@@ -138,6 +143,23 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    */
+  public function testSettingAnInvalidUrlHandlerThrows()
+  {
+    $config = array_merge($this->config, [
+        'url_handler' => 'foo_handler',
+      ]);
+    $fb = new Facebook($config);
+  }
+
+  public function testDefaultUrlHandlerWillBeLazyLoaded()
+  {
+    $fb = new Facebook($this->config);
+    $this->assertInstanceOf('Facebook\Url\FacebookUrlDetectionHandler', $fb->getUrlHandler());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
   public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
   {
     $config = array_merge($this->config, [
@@ -152,6 +174,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         'default_access_token' => 'foo_token',
         'http_client_handler' => new FooClientInterface(),
         'persistent_data_handler' => new FooPersistentDataInterface(),
+        'url_handler' => new FooUrlDetectionInterface(),
         'enable_beta_mode' => true,
         'default_graph_version' => 'v1337',
       ]);
@@ -162,6 +185,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
       $fb->getClient()->getHttpClientHandler());
     $this->assertInstanceOf('Facebook\Tests\FooPersistentDataInterface',
       $fb->getRedirectLoginHelper()->getPersistentDataHandler());
+    $this->assertInstanceOf('Facebook\Tests\FooUrlDetectionInterface',
+      $fb->getRedirectLoginHelper()->getUrlHandler());
     $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA,
       $fb->getClient()->getBaseGraphUrl());
     $this->assertEquals('1337', $request->getApp()->getId());

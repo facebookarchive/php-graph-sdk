@@ -29,8 +29,8 @@ use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookResponse;
 use Facebook\Entities\FacebookBatchResponse;
-use Facebook\Url\UrlInterface;
-use Facebook\Url\FacebookUrlHandler;
+use Facebook\Url\UrlDetectionInterface;
+use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
@@ -83,7 +83,7 @@ class Facebook
   protected $client;
 
   /**
-   * @var UrlInterface|null The URL handler.
+   * @var UrlDetectionInterface|null The URL handler.
    */
   protected $urlHandler;
 
@@ -161,7 +161,7 @@ class Facebook
     $this->client = new FacebookClient($httpClientHandler, $enableBeta);
 
     if (isset($config['url_handler'])) {
-      if ($config['url_handler'] instanceof UrlInterface) {
+      if ($config['url_handler'] instanceof UrlDetectionInterface) {
         $this->urlHandler = $config['url_handler'];
       } else {
         throw new \InvalidArgumentException(
@@ -224,12 +224,12 @@ class Facebook
   /**
    * Returns the URL handler.
    *
-   * @return UrlInterface
+   * @return UrlDetectionInterface
    */
   public function getUrlHandler()
   {
     if ( ! $this->urlHandler) {
-      $this->urlHandler = new FacebookUrlHandler();
+      $this->urlHandler = new FacebookUrlDetectionHandler();
     }
 
     return $this->urlHandler;

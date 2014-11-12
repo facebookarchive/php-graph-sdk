@@ -24,10 +24,10 @@
 namespace Facebook\Url;
 
 /**
- * Class FacebookUrlHandler
+ * Class FacebookUrlDetectionHandler
  * @package Facebook
  */
-class FacebookUrlHandler implements UrlInterface
+class FacebookUrlDetectionHandler implements UrlDetectionInterface
 {
 
   /**
@@ -35,7 +35,7 @@ class FacebookUrlHandler implements UrlInterface
    */
   public function getCurrentUrl()
   {
-    return $this->getCurrentHttpScheme() . '://'
+    return $this->getHttpScheme() . '://'
       . $this->getHostName()
       . $this->getServerVar('REQUEST_URI');
   }
@@ -45,7 +45,7 @@ class FacebookUrlHandler implements UrlInterface
    *
    * @return string
    */
-  public function getCurrentHttpScheme()
+  public function getHttpScheme()
   {
     return $this->isBehindSsl() ? 'https' : 'http';
   }
@@ -113,16 +113,16 @@ class FacebookUrlHandler implements UrlInterface
     $host = strtolower(preg_replace('/:\d+$/', '', trim($host)));
 
     // Port number
-    $scheme = $this->getCurrentHttpScheme();
+    $scheme = $this->getHttpScheme();
     $port = $this->getCurrentPort();
-    $appendPort = '';
+    $appendPort = ':' . $port;
 
-    // Append port number if it's not normal port.
+    // Don't append port number if a normal port.
     if (
       ($scheme == 'http' && $port == '80')
       || ($scheme == 'https' && $port == '443')
     ) {
-      $appendPort = ':' . $port;
+      $appendPort = '';
     }
 
     return $host . $appendPort;

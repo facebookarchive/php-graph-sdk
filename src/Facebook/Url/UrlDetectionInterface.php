@@ -24,10 +24,10 @@
 namespace Facebook\Url;
 
 /**
- * Interface UrlInterface
+ * Interface UrlDetectionInterface
  * @package Facebook
  */
-interface UrlInterface
+interface UrlDetectionInterface
 {
 
   /**
