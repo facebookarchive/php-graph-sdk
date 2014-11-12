@@ -36,7 +36,7 @@ There are two methods to install the Facebook PHP SDK. The preferred method is w
 ~~~
 {
   "require" : {
-    "facebook/php-sdk-v4" : "~4.1"
+    "facebook/php-sdk-v4" : "~4.1.0"
   }
 }
 ~~~
