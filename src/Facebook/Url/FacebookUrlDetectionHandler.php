@@ -45,7 +45,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return string
    */
-  public function getHttpScheme()
+  protected function getHttpScheme()
   {
     return $this->isBehindSsl() ? 'https' : 'http';
   }
@@ -55,7 +55,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return boolean
    */
-  public function isBehindSsl()
+  protected function isBehindSsl()
   {
     // Check for proxy first
     $protocol = $this->getHeader('X_FORWARDED_PROTO');
@@ -78,7 +78,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return boolean
    */
-  public function protocolWithActiveSsl($protocol)
+  protected function protocolWithActiveSsl($protocol)
   {
     $protocol = strtolower((string) $protocol);
     return (
@@ -96,7 +96,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return string
    */
-  public function getHostName()
+  protected function getHostName()
   {
     // Check for proxy first
     if ($host = $this->getHeader('X_FORWARDED_HOST')) {
@@ -128,7 +128,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     return $host . $appendPort;
   }
 
-  public function getCurrentPort()
+  protected function getCurrentPort()
   {
     // Check for proxy first
     $port = $this->getHeader('X_FORWARDED_PORT');
@@ -151,7 +151,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return string
    */
-  public function getServerVar($key)
+  protected function getServerVar($key)
   {
     return isset($_SERVER[$key]) ? $_SERVER[$key] : '';
   }
@@ -163,7 +163,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
    *
    * @return string
    */
-  public function getHeader($key)
+  protected function getHeader($key)
   {
     return $this->getServerVar('HTTP_' . $key);
   }

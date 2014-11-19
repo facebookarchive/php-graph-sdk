@@ -228,7 +228,7 @@ class Facebook
    */
   public function getUrlDetectionHandler()
   {
-    if ( ! $this->urlDetectionHandler) {
+    if ( ! $this->urlDetectionHandler instanceof UrlDetectionInterface) {
       $this->urlDetectionHandler = new FacebookUrlDetectionHandler();
     }
 

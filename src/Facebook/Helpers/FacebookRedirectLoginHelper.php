@@ -171,16 +171,6 @@ class FacebookRedirectLoginHelper
       $code = $this->getCode();
       $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
 
-      $paramsToFilter = [
-        'state',
-        'code',
-        'error',
-        'error_reason',
-        'error_description',
-        'error_code',
-        ];
-      $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, $paramsToFilter);
-
       return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
     return null;

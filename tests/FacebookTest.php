@@ -151,7 +151,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $fb = new Facebook($config);
   }
 
-  public function testDefaultUrlHandlerWillBeLazyLoaded()
+  public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
   {
     $fb = new Facebook($this->config);
     $this->assertInstanceOf('Facebook\Url\FacebookUrlDetectionHandler', $fb->getUrlDetectionHandler());
