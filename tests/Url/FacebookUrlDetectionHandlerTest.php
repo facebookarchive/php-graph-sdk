@@ -28,26 +28,13 @@ use Facebook\Url\FacebookUrlDetectionHandler;
 class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function setUp()
-  {
-    unset(
-      $_SERVER['REQUEST_URI'],
-      $_SERVER['HTTPS'],
-      $_SERVER['SERVER_PORT'],
-      $_SERVER['SERVER_NAME'],
-      $_SERVER['SERVER_ADDR'],
-      $_SERVER['HTTP_HOST'],
-      $_SERVER['HTTP_X_FORWARDED_HOST'],
-      $_SERVER['HTTP_X_FORWARDED_PORT'],
-      $_SERVER['HTTP_X_FORWARDED_PROTO']
-    );
-  }
-
   public function testProperlyGeneratesUrlFromCommonScenario()
   {
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '80';
-    $_SERVER['REQUEST_URI'] = '/baz?foo=123';
+    $_SERVER = [
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '80',
+      'REQUEST_URI' => '/baz?foo=123',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -57,9 +44,11 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesSecureUrlFromCommonScenario()
   {
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '443';
-    $_SERVER['REQUEST_URI'] = '/baz?foo=123';
+    $_SERVER = [
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '443',
+      'REQUEST_URI' => '/baz?foo=123',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -69,11 +58,13 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesUrlFromProxy()
   {
-    $_SERVER['HTTP_X_FORWARDED_PORT'] = '80';
-    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http';
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '80';
-    $_SERVER['REQUEST_URI'] = '/baz?foo=123';
+    $_SERVER = [
+      'HTTP_X_FORWARDED_PORT' => '80',
+      'HTTP_X_FORWARDED_PROTO' => 'http',
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '80',
+      'REQUEST_URI' => '/baz?foo=123',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -83,11 +74,13 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesSecureUrlFromProxy()
   {
-    $_SERVER['HTTP_X_FORWARDED_PORT'] = '443';
-    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '80';
-    $_SERVER['REQUEST_URI'] = '/baz?foo=123';
+    $_SERVER = [
+      'HTTP_X_FORWARDED_PORT' => '443',
+      'HTTP_X_FORWARDED_PROTO' => 'https',
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '80',
+      'REQUEST_URI' => '/baz?foo=123',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -97,9 +90,11 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesUrlWithCustomPort()
   {
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '1337';
-    $_SERVER['REQUEST_URI'] = '/foo.php';
+    $_SERVER = [
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '1337',
+      'REQUEST_URI' => '/foo.php',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -109,10 +104,12 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesSecureUrlWithCustomPort()
   {
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '1337';
-    $_SERVER['REQUEST_URI'] = '/foo.php';
-    $_SERVER['HTTPS'] = 'On';
+    $_SERVER = [
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '1337',
+      'REQUEST_URI' => '/foo.php',
+      'HTTPS' => 'On',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
@@ -122,11 +119,13 @@ class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 
   public function testProperlyGeneratesUrlWithCustomPortFromProxy()
   {
-    $_SERVER['HTTP_X_FORWARDED_PORT'] = '8888';
-    $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http';
-    $_SERVER['HTTP_HOST'] = 'foo.bar';
-    $_SERVER['SERVER_PORT'] = '80';
-    $_SERVER['REQUEST_URI'] = '/foo.php';
+    $_SERVER = [
+      'HTTP_X_FORWARDED_PORT' => '8888',
+      'HTTP_X_FORWARDED_PROTO' => 'http',
+      'HTTP_HOST' => 'foo.bar',
+      'SERVER_PORT' => '80',
+      'REQUEST_URI' => '/foo.php',
+    ];
 
     $urlHandler = new FacebookUrlDetectionHandler();
     $currentUri = $urlHandler->getCurrentUrl();
