@@ -26,6 +26,9 @@ namespace Facebook\Helpers;
 use Facebook\Facebook;
 use Facebook\Entities\AccessToken;
 use Facebook\Entities\FacebookApp;
+use Facebook\Url\UrlDetectionInterface;
+use Facebook\Url\FacebookUrlDetectionHandler;
+use Facebook\Url\FacebookUrlManipulator;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\Exceptions\FacebookSDKException;
@@ -46,6 +49,11 @@ class FacebookRedirectLoginHelper
   protected $app;
 
   /**
+   * @var UrlDetectionInterface The URL detection handler.
+   */
+  protected $urlDetectionHandler;
+
+  /**
    * @var PersistentDataInterface The persistent data handler.
    */
   protected $persistentDataHandler;
@@ -55,11 +63,15 @@ class FacebookRedirectLoginHelper
    *
    * @param FacebookApp $app The FacebookApp entity.
    * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
+   * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
    */
-  public function __construct(FacebookApp $app, PersistentDataInterface $persistentDataHandler = null)
+  public function __construct(FacebookApp $app,
+                              PersistentDataInterface $persistentDataHandler = null,
+                              UrlDetectionInterface $urlHandler = null)
   {
     $this->app = $app;
     $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
+    $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
   }
 
   /**
@@ -70,6 +82,16 @@ class FacebookRedirectLoginHelper
   public function getPersistentDataHandler()
   {
     return $this->persistentDataHandler;
+  }
+
+  /**
+   * Returns the URL detection handler.
+   *
+   * @return UrlDetectionInterface
+   */
+  public function getUrlDetectionHandler()
+  {
+    return $this->urlDetectionHandler;
   }
 
   /**
@@ -137,7 +159,7 @@ class FacebookRedirectLoginHelper
    * Takes a valid code from a login redirect, and returns an AccessToken entity.
    *
    * @param FacebookClient $client The Facebook client.
-   * @param string $redirectUrl The redirect URL.
+   * @param string|null $redirectUrl The redirect URL.
    *
    * @return AccessToken|null
    *
@@ -147,8 +169,7 @@ class FacebookRedirectLoginHelper
   {
     if ($this->isValidRedirect()) {
       $code = $this->getCode();
-      $redirectUrl = $redirectUrl ?: $this->getCurrentUri();
-      $redirectUrl = $this->getFilteredUri($redirectUrl);
+      $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
 
       return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
     }
@@ -212,77 +233,6 @@ class FacebookRedirectLoginHelper
   protected function loadState()
   {
     return $this->persistentDataHandler->get('state');
-  }
-
-  /**
-   * Return a URL with the Facebook-appended params removed.
-   *
-   * @param string $uri The URL to filter.
-   *
-   * @return string
-   */
-  protected function getFilteredUri($uri)
-  {
-    $parts = parse_url($uri);
-    $scheme = isset($parts['scheme']) ? $parts['scheme'] : $this->getHttpScheme();
-
-    $path = isset($parts['path']) ? $parts['path'] : '';
-
-    $query = '';
-    if (isset($parts['query'])) {
-      $full_query = [];
-      parse_str($parts['query'], $full_query);
-
-      // remove Facebook appended query params
-      $toDrop = [];
-      if (isset($full_query['state']) && isset($full_query['code'])) {
-        $toDrop = ['state', 'code'];
-      } elseif (isset($full_query['state'])
-          && isset($full_query['error'])
-          && isset($full_query['error_reason'])
-          && isset($full_query['error_description'])
-          && isset($full_query['error_code'])) {
-        $toDrop = ['state', 'error', 'error_reason', 'error_description', 'error_code'];
-      }
-      $real_query = array_diff_key($full_query, array_flip($toDrop));
-
-      $query = '';
-      if (!empty($real_query)) {
-        $query = '?' . http_build_query($real_query, null, '&');
-      }
-    }
-
-    // use port if non default
-    $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-
-    // rebuild
-    return $scheme . '://' . $parts['host'] . $port . $path . $query;
-  }
-
-  /**
-   * Returns the current URI.
-   *
-   * @return string
-   */
-  protected function getCurrentUri()
-  {
-    return $this->getHttpScheme() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-  }
-
-  /**
-   * Returns the HTTP Protocol.
-   *
-   * @return string
-   */
-  protected function getHttpScheme() {
-    $scheme = 'http';
-    if (isset($_SERVER['HTTPS']) &&
-        ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)
-        || isset($_SERVER['SERVER_PORT']) &&
-        ($_SERVER['SERVER_PORT'] === '443')) {
-      $scheme = 'https';
-    }
-    return $scheme;
   }
 
   /**

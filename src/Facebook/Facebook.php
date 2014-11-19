@@ -29,6 +29,8 @@ use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookResponse;
 use Facebook\Entities\FacebookBatchResponse;
+use Facebook\Url\UrlDetectionInterface;
+use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
@@ -81,6 +83,11 @@ class Facebook
   protected $client;
 
   /**
+   * @var UrlDetectionInterface|null The URL detection handler.
+   */
+  protected $urlDetectionHandler;
+
+  /**
    * @var AccessToken|null The default access token to use with requests.
    */
   protected $defaultAccessToken;
@@ -97,7 +104,6 @@ class Facebook
 
   /**
    * @TODO Add FacebookInputInterface
-   * @TODO Add FacebookUrlInterface
    * @TODO Add FacebookRandomGeneratorInterface
    * @TODO Add FacebookRequestInterface
    * @TODO Add FacebookResponseInterface
@@ -136,7 +142,7 @@ class Facebook
 
     $httpClientHandler = null;
     if (isset($config['http_client_handler'])) {
-      if ( $config['http_client_handler'] instanceof FacebookHttpClientInterface) {
+      if ($config['http_client_handler'] instanceof FacebookHttpClientInterface) {
         $httpClientHandler = $config['http_client_handler'];
       } elseif ($config['http_client_handler'] === 'curl') {
         $httpClientHandler = new FacebookCurlHttpClient();
@@ -153,6 +159,16 @@ class Facebook
     }
     $enableBeta = isset($config['enable_beta_mode']) && $config['enable_beta_mode'] === true;
     $this->client = new FacebookClient($httpClientHandler, $enableBeta);
+
+    if (isset($config['url_detection_handler'])) {
+      if ($config['url_detection_handler'] instanceof UrlDetectionInterface) {
+        $this->urlDetectionHandler = $config['url_detection_handler'];
+      } else {
+        throw new \InvalidArgumentException(
+          'The url_detection_handler must be an instance of Facebook\Url\UrlDetectionInterface'
+          );
+      }
+    }
 
     if (isset($config['persistent_data_handler'])) {
       if ( $config['persistent_data_handler'] instanceof PersistentDataInterface) {
@@ -206,6 +222,20 @@ class Facebook
   }
 
   /**
+   * Returns the URL detection handler.
+   *
+   * @return UrlDetectionInterface
+   */
+  public function getUrlDetectionHandler()
+  {
+    if ( ! $this->urlDetectionHandler instanceof UrlDetectionInterface) {
+      $this->urlDetectionHandler = new FacebookUrlDetectionHandler();
+    }
+
+    return $this->urlDetectionHandler;
+  }
+
+  /**
    * Returns the default AccessToken entity.
    *
    * @return AccessToken|null
@@ -232,7 +262,11 @@ class Facebook
    */
   public function getRedirectLoginHelper()
   {
-    return new FacebookRedirectLoginHelper($this->app, $this->persistentDataHandler);
+    return new FacebookRedirectLoginHelper(
+      $this->app,
+      $this->persistentDataHandler,
+      $this->urlDetectionHandler
+    );
   }
 
   /**

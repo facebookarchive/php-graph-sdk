@@ -216,6 +216,10 @@ FB(devsite:markdown-wiki:table {
       '`[Facebook\PersistentData\PersistentDataInterface](/docs/php/PersistentDataInterface)`',
       'Interface to code your own persistent data storage implementation.',
     ],
+    [
+      '`[Facebook\Url\UrlDetectionInterface](/docs/php/UrlDetectionInterface)`',
+      'Interface to code your own URL detection logic.',
+    ],
   ],
 })
 </card>

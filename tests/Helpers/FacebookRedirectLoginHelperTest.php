@@ -119,52 +119,6 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('access_token_from_code', (string) $accessToken);
   }
   
-  /**
-   * @dataProvider provideUris
-   */
-  public function testGetFilteredUriRemoveFacebookQueryParams($uri, $expected)
-  {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
-
-    $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
-    $method = $class->getMethod('getFilteredUri');
-    $method->setAccessible(true);
-
-    $currentUri = $method->invoke($helper, $uri);
-    $this->assertEquals($expected, $currentUri);
-  }
-
-  public function provideUris()
-  {
-    return [
-      [
-        'http://localhost/something?state=0000&foo=bar&code=abcd',
-        'http://localhost/something?foo=bar',
-      ],
-      [
-        'https://localhost/something?state=0000&foo=bar&code=abcd',
-        'https://localhost/something?foo=bar',
-      ],
-      [
-        'http://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
-        'http://localhost/something?foo=bar',
-      ],
-      [
-        'https://localhost/something?state=0000&foo=bar&error=abcd&error_reason=abcd&error_description=abcd&error_code=1',
-        'https://localhost/something?foo=bar',
-      ],
-      [
-        'http://localhost/something?state=0000&foo=bar&error=abcd',
-        'http://localhost/something?state=0000&foo=bar&error=abcd',
-      ],
-      [
-        'https://localhost/something?state=0000&foo=bar&error=abcd',
-        'https://localhost/something?state=0000&foo=bar&error=abcd',
-      ],
-    ];
-  }
-  
   public function testCSPRNG()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
