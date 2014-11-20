@@ -1,17 +1,19 @@
 <card>
 # GraphObject for the Facebook SDK for PHP
 
-Represents an object returned by the Graph API.
+A `GraphObject` is a collection that represents a node returned by the Graph API.
 
 </card>
 
 <card>
 ## Facebook\GraphObject {#overview}
 
-This base class has several subclasses, some are provided by default:
+This base class has several subclasses:
 
-[__GraphUser__](#user-instance-methods)  
-[__GraphLocation__](#location-instance-methods)  
+[__GraphUser__](#user-instance-methods)
+[__GraphPage__](#page-instance-methods)
+[__GraphAlbum__](#album-instance-methods)
+[__GraphLocation__](#location-instance-methods)
 [__GraphSessionInfo__](#sessioninfo-instance-methods)  
 
 Usage:
@@ -21,14 +23,10 @@ Usage:
 $object = $response->getGraphObject();
 
 // Get the response typed as a GraphUser
-$user = $response->getGraphObject(GraphUser::className());
-// or convert the base object previously accessed
-// $user = $object->cast(GraphUser::className());
+$user = $response->getGraphUser());
 
-// Get the response typed as a GraphLocation
-$loc = $response->getGraphObject(GraphLocation::className());
-// or convert the base object previously accessed
-// $loc = $object->cast(GraphLocation::className());
+// Get the response typed as a GraphPage
+$page = $response->getGraphPage();
 
 // User example
 echo $object->getProperty('name');
@@ -40,7 +38,31 @@ echo $loc->getCountry();
 
 // SessionInfo example
 $info = $session->getSessionInfo());
-echo $info->getxpiresAt();
+echo $info->getExpiresAt();
+~~~~
+
+</card>
+
+<card>
+## SPL Libraries {#spl}
+
+The `GraphObject` collection and its subclasses implement several [SPL](http://php.net/manual/en/book.spl.php) libraries and [predefined PHP interfaces and classes](http://php.net/manual/en/reserved.interfaces.php) which make it convenient to work with the object in PHP. The supported libraries are `ArrayAccess`, `ArrayIterator`, `Countable`, and `IteratorAggregate`.
+
+All of the following operations are possible on a `GraphObject`.
+
+~~~~
+$graphObject = $response->getGraphObject();
+
+// Array access
+$id = $graphObject['id'];
+
+// Iteration
+foreach ($graphObject as $key => $value) {
+  // . . .
+}
+
+// Counting
+$total = count($graphObject);
 ~~~~
 
 </card>
@@ -48,25 +70,32 @@ echo $info->getxpiresAt();
 <card>
 ## GraphObject Instance Methods {#instance-methods}
 
-### cast {#cast}
-`cast(string $type)`  
-Returns a new instance of a GraphObject subclass with this objects underlying data.
 
-### asArray {#asarray}
+### asArray {#as-array}
 `asArray()`  
 Returns the raw representation (associative arrays, nested) of this objects underlying data.
 
-### getProperty {#getproperty}
-`getProperty(string $name, string $type = 'Facebook\GraphObject')`  
-Gets the value of a named key for this graph object.  If the value is a scalar (string, number, etc.) it will be returned.  If it's an associative array, it will be returned as a GraphObject cast to the appropriate subclass type if provided.
 
-### getPropertyAsArray {#getproparray}
-`getPropertyAsArray()`  
-Gets the contents of a named array property on this graph object.  If the values are scalar (strings, numbers, etc.) they will be returned as-is.  If the values are associative arrays, they will be returned as GraphObjects cast to the appropriate subclass type if provided.
+### asJson {#as-json}
+`asJson()`
+Returns the data as a JSON string.
 
-### getPropertyNames
+
+### getProperty {#get-property}
+`getProperty(string $name, string $default = 'foo')`
+Gets the value of a named key for this graph object.  If the value is a scalar (string, number, etc.) it will be returned.  If it's an associative array, it will be returned as a GraphObject.
+
+The second argument lets you define a default value to return if the property doesn't exist.
+
+
+### getPropertyNames {#get-property-names}
 `getPropertyNames()`  
 Returns an array with the names of all properties present on this graph object.
+
+
+### map {#map}
+`map(Closure $callback)`
+Provides a way to map over the data within the collection just like `array_map()`.
 </card>
 
 <card>
