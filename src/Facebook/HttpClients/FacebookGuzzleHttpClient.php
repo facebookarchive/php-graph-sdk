@@ -49,11 +49,13 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers)
+  public function send($url, $method, $body, array $headers, $timeOut)
   {
     $options = [
       'headers' => $headers,
       'body' => $body,
+      'timeout' => $timeOut,
+      'connect_timeout' => 10,
     ];
     $request = $this->guzzleClient->createRequest($method, $url, $options);
 

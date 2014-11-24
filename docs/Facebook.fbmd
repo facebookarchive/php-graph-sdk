@@ -359,3 +359,60 @@ public Facebook\GraphNodes\GraphList|null previous(Facebook\GraphNodes\GraphList
 
 Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` object. Functions just like `next()` above, but in the opposite direction of pagination.
 </card>
+
+<card>
+### fileToUpload() {#file-to-upload}
+~~~~
+public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
+~~~~
+
+When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` that can be used in the params in a POST request to Graph.
+
+~~~~
+// Upload a photo for a user
+$data = [
+  'message' => 'A neat photo upload example. Neat.',
+  'source' => $fb->fileToUpload('/path/to/photo.jpg'),
+];
+
+try {
+  $response = $fb->post('/me/photos', $data);
+} catch(FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Photo ID: ' . $graphObject['id'];
+~~~~
+</card>
+
+<card>
+### videoToUpload() {#video-to-upload}
+~~~~
+public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
+~~~~
+
+Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the PHP SDK will automatically point the request to the `graph-video.facebook.com` host name for you.
+
+~~~~
+// Upload a video for a user
+$data = [
+  'title' => 'My awesome video',
+  'description' => 'More info about my awesome video.',
+  'source' => $fb->videoToUpload('/path/to/video.mp4'),
+];
+
+try {
+  $response = $fb->post('/me/videos', $data);
+} catch(FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Video ID: ' . $graphObject['id'];
+~~~~
+</card>

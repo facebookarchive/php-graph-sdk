@@ -60,6 +60,21 @@ class FacebookClient
   const BASE_GRAPH_VIDEO_URL_BETA = 'https://graph-video.beta.facebook.com';
 
   /**
+   * @const int The timeout in seconds for a normal request.
+   */
+  const DEFAULT_REQUEST_TIMEOUT = 60;
+
+  /**
+   * @const int The timeout in seconds for a request that contains file uploads.
+   */
+  const DEFAULT_FILE_UPLOAD_REQUEST_TIMEOUT = 3600;
+
+  /**
+   * @const int The timeout in seconds for a request that contains video uploads.
+   */
+  const DEFAULT_VIDEO_UPLOAD_REQUEST_TIMEOUT = 7200;
+
+  /**
    * @var bool Toggle to use Graph beta url.
    */
   protected $enableBetaMode = false;
@@ -155,7 +170,7 @@ class FacebookClient
    */
   public function prepareRequestMessage(FacebookRequest $request)
   {
-    $postToVideoUrl = $request->containsAVideoUpload();
+    $postToVideoUrl = $request->containsVideoUploads();
     $url = $this->getBaseGraphUrl($postToVideoUrl) . $request->getUrl();
 
     // If we're sending files they should be sent as multipart/form-data
@@ -196,9 +211,17 @@ class FacebookClient
 
     list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
 
+    // Since file uploads can take a while, we need to give more time for uploads
+    $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
+    if ($request->containsFileUploads()) {
+      $timeOut = static::DEFAULT_FILE_UPLOAD_REQUEST_TIMEOUT;
+    } elseif ($request->containsVideoUploads()) {
+      $timeOut = static::DEFAULT_VIDEO_UPLOAD_REQUEST_TIMEOUT;
+    }
+
     // Should throw `FacebookSDKException` exception on HTTP client error.
     // Don't catch to allow it to bubble up.
-    $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers);
+    $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut);
 
     static::$requestCount++;
 

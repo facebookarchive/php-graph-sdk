@@ -177,6 +177,26 @@ FB(devsite:markdown-wiki:table {
 </card>
 
 <card>
+# File Uploads {#file-uploads}
+
+Special objects that represent files to be uploaded with a Graph request.
+
+FB(devsite:markdown-wiki:table {
+  columns: ['Class name','Description',],
+  rows: [
+    [
+      '`[Facebook\FileUpload\FacebookFile](/docs/php/FacebookFile)`',
+      'Represents a generic file to be uploaded to the Graph API.',
+    ],
+    [
+      '`[Facebook\FileUpload\FacebookVideo](/docs/php/FacebookVideo)`',
+      'Represents a video file to be uploaded to the Graph API.',
+    ],
+  ],
+})
+</card>
+
+<card>
 # HTTP clients {#http-clients}
 
 Various HTTP clients that can be implemented to send and return requests to and from Graph.

@@ -45,14 +45,14 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers)
+  public function send($url, $method, $body, array $headers, $timeOut)
   {
     $options = [
       'http' => [
         'method' => $method,
         'header' => $this->compileHeader($headers),
         'content' => $body,
-        'timeout' => 60,
+        'timeout' => $timeOut,
         'ignore_errors' => true
       ],
       'ssl' => [

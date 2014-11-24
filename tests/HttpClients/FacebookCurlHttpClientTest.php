@@ -61,14 +61,14 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
           CURLOPT_HTTPHEADER     => ['X-Foo-Header: X-Bar'],
           CURLOPT_URL            => 'http://foo.com',
           CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
+          CURLOPT_TIMEOUT        => 123,
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_HEADER         => true,
         ])
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://foo.com', 'GET', 'foo_body', ['X-Foo-Header' => 'X-Bar']);
+    $this->curlClient->openConnection('http://foo.com', 'GET', 'foo_body', ['X-Foo-Header' => 'X-Bar'], 123);
   }
 
   public function testCanOpenCurlConnectionWithPostBody()
@@ -92,7 +92,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://bar.com', 'POST', 'baz=bar', []);
+    $this->curlClient->openConnection('http://bar.com', 'POST', 'baz=bar', [], 60);
   }
 
   public function testCanAddBundledCert()
@@ -289,7 +289,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $response = $this->curlClient->send('http://foo.com/', 'GET', '', []);
+    $response = $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
 
     $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
     $this->assertEquals($this->fakeRawBody, $response->getBody());
@@ -323,7 +323,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn('Foo error');
 
-    $this->curlClient->send('http://foo.com/', 'GET', '', []);
+    $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
   }
 
 }

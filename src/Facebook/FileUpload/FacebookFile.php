@@ -70,16 +70,16 @@ class FacebookFile
    */
   public function open()
   {
-    if ( ! is_readable($this->path)) {
+    if ( ! $this->isRemoteFile($this->path)
+      && ! is_readable($this->path) ) {
       throw new FacebookSDKException('Failed to create FacebookFile entity. '
-        . 'The file "' . $this->path . '" does not exist or is not readable.');
+        . 'Unable to read resource: ' . $this->path . '.');
     }
-
     $this->stream = fopen($this->path, 'r');
 
     if ( ! $this->stream) {
       throw new FacebookSDKException('Failed to create FacebookFile entity. '
-        . 'Unable to open file: ' . $this->path . '.');
+        . 'Unable to open resource: ' . $this->path . '.');
     }
   }
 
@@ -121,6 +121,18 @@ class FacebookFile
   public function getMimetype()
   {
     return Mimetypes::getInstance()->fromFilename($this->path) ?: 'text/plain';
+  }
+
+  /**
+   * Returns true if the path to the file is remote.
+   *
+   * @param string $pathToFile
+   *
+   * @return boolean
+   */
+  protected function isRemoteFile($pathToFile)
+  {
+    return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
   }
 
 }

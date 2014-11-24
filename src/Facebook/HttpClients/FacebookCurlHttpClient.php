@@ -74,9 +74,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers)
+  public function send($url, $method, $body, array $headers, $timeOut)
   {
-    $this->openConnection($url, $method, $body, $headers);
+    $this->openConnection($url, $method, $body, $headers, $timeOut);
     $this->tryToSendRequest();
 
     // Need to verify the peer
@@ -104,15 +104,16 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    * @param string $method The request method.
    * @param string $body The body of the request.
    * @param array  $headers The request headers.
+   * @param int    $timeOut The timeout in seconds for the request.
    */
-  public function openConnection($url, $method, $body, array $headers)
+  public function openConnection($url, $method, $body, array $headers, $timeOut)
   {
     $options = [
       CURLOPT_CUSTOMREQUEST  => $method,
       CURLOPT_HTTPHEADER     => $this->compileRequestHeaders($headers),
       CURLOPT_URL            => $url,
       CURLOPT_CONNECTTIMEOUT => 10,
-      CURLOPT_TIMEOUT        => 60,
+      CURLOPT_TIMEOUT        => $timeOut,
       CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
       CURLOPT_HEADER         => true, // Enable header processing
     ];

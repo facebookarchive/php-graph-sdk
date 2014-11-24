@@ -29,6 +29,8 @@ use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookResponse;
 use Facebook\Entities\FacebookBatchResponse;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphList;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
@@ -511,6 +513,34 @@ class Facebook
       $eTag,
       $graphVersion
     );
+  }
+
+  /**
+   * Factory to create FacebookFile's.
+   *
+   * @param string $pathToFile
+   *
+   * @return FacebookFile
+   *
+   * @throws FacebookSDKException
+   */
+  public function fileToUpload($pathToFile)
+  {
+    return new FacebookFile($pathToFile);
+  }
+
+  /**
+   * Factory to create FacebookVideo's.
+   *
+   * @param string $pathToFile
+   *
+   * @return FacebookVideo
+   *
+   * @throws FacebookSDKException
+   */
+  public function videoToUpload($pathToFile)
+  {
+    return new FacebookVideo($pathToFile);
   }
 
 }

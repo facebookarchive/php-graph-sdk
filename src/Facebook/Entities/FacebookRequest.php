@@ -427,7 +427,7 @@ class FacebookRequest
    *
    * @return boolean
    */
-  public function containsAVideoUpload()
+  public function containsVideoUploads()
   {
     foreach ($this->files as $file) {
       if ($file instanceOf FacebookVideo) {

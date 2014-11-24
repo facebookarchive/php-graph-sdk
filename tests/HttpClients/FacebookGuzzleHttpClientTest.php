@@ -64,6 +64,8 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $options = [
       'headers' => ['X-foo' => 'bar'],
       'body' => 'foo_body',
+      'timeout' => 123,
+      'connect_timeout' => 10,
     ];
 
     $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
@@ -78,7 +80,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->with($requestMock)
       ->andReturn($responseMock);
 
-    $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar']);
+    $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
     $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
     $this->assertEquals($this->fakeRawBody, $response->getBody());
@@ -104,6 +106,8 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $options = [
       'headers' => [],
       'body' => 'foo_body',
+      'timeout' => 60,
+      'connect_timeout' => 10,
     ];
 
     $this->guzzleMock
@@ -117,7 +121,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->with($requestMock)
       ->andThrow($exceptionMock);
 
-    $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', []);
+    $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
   }
 
 }

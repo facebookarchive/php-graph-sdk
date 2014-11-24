@@ -183,7 +183,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     $actualParams = $request->getParams();
 
     $this->assertTrue($request->containsFileUploads());
-    $this->assertFalse($request->containsAVideoUpload());
+    $this->assertFalse($request->containsVideoUploads());
     $this->assertTrue( ! isset($actualParams['source']));
     $this->assertEquals('Foo Bar', $actualParams['name']);
   }
@@ -201,7 +201,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     $actualParams = $request->getParams();
 
     $this->assertTrue($request->containsFileUploads());
-    $this->assertTrue($request->containsAVideoUpload());
+    $this->assertTrue($request->containsVideoUploads());
     $this->assertTrue( ! isset($actualParams['source']));
     $this->assertEquals('Foo Bar', $actualParams['name']);
   }
