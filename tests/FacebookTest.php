@@ -23,18 +23,21 @@
  */
 namespace Facebook\Tests;
 
-use Mockery as m;
 use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Url\UrlDetectionInterface;
+use Facebook\Entities\FacebookRequest;
+use Facebook\GraphNodes\GraphList;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
   public function getResponseHeaders() { return ['X-foo-header' => 'bar']; }
   public function getResponseHttpStatusCode() { return 1337; }
-  public function send($url, $method = 'GET', array $parameters = [], array $headers = []) { return 'foo_response'; }
+  public function send($url, $method = 'GET', array $parameters = [], array $headers = []) {
+    return '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
+  }
 }
 
 class FooPersistentDataInterface implements PersistentDataInterface
@@ -193,6 +196,38 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('foo_secret', $request->getApp()->getSecret());
     $this->assertEquals('foo_token', (string) $request->getAccessToken());
     $this->assertEquals('v1337', $request->getGraphVersion());
+  }
+
+  public function testPaginationReturnsProperResponse()
+  {
+    $config = array_merge($this->config, [
+        'http_client_handler' => new FooClientInterface(),
+      ]);
+    $fb = new Facebook($config);
+
+    $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
+    $graphList = new GraphList(
+      $request,
+      [],
+      [
+        'paging' => [
+          'cursors' => [
+            'after' => 'bar_after_cursor',
+            'before' => 'bar_before_cursor',
+          ],
+        ]
+      ],
+      '/1337/photos',
+      '\Facebook\GraphNodes\GraphUser');
+
+    $nextPage = $fb->next($graphList);
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphList', $nextPage);
+    $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $nextPage[0]);
+    $this->assertEquals('Foo', $nextPage[0]['name']);
+
+    $lastResponse = $fb->getLastResponse();
+    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $lastResponse);
+    $this->assertEquals(1337, $lastResponse->getHttpStatusCode());
   }
 
 }
