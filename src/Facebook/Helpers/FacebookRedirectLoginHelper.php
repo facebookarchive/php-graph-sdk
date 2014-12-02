@@ -119,11 +119,12 @@ class FacebookRedirectLoginHelper
   {
     $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
     $state = $this->generateState();
-    $this->storeState($state);
+    $this->persistentDataHandler->set('state', $state);
     $params = [
       'client_id' => $this->app->getId(),
       'redirect_uri' => $redirectUrl,
       'state' => $state,
+      'response_type' => 'code',
       'sdk' => 'php-sdk-' . Facebook::VERSION,
       'scope' => implode(',', $scope)
     ];
@@ -167,24 +168,40 @@ class FacebookRedirectLoginHelper
    */
   public function getAccessToken(FacebookClient $client, $redirectUrl = null)
   {
-    if ($this->isValidRedirect()) {
-      $code = $this->getCode();
-      $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
-
-      return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
+    $this->validateCsrf();
+    if ( ! $code = $this->getCode()) {
+      return null;
     }
-    return null;
+
+    $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
+    // At minimum we need to remove the state param
+    $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, ['state']);
+
+    return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
   }
 
   /**
-   * Check if a redirect has a valid state.
+   * Validate the request against a cross-site request forgery.
    *
-   * @return bool
+   * @throws FacebookSDKException
    */
-  protected function isValidRedirect()
+  protected function validateCsrf()
   {
-    return $this->getCode() && isset($_GET['state'])
-        && $_GET['state'] == $this->loadState();
+    $state = $this->getState();
+    $savedState = $this->persistentDataHandler->get('state');
+
+    if ( ! $state || ! $savedState) {
+      throw new FacebookSDKException(
+        'Cross-site request forgery validation failed. ' .
+        'Required param "state" missing.'
+      );
+    }
+    if ($state !== $savedState) {
+      throw new FacebookSDKException(
+        'Cross-site request forgery validation failed. ' .
+        'The "state" param from the URL and session do not match.'
+      );
+    }
   }
 
   /**
@@ -194,7 +211,69 @@ class FacebookRedirectLoginHelper
    */
   protected function getCode()
   {
-    return isset($_GET['code']) ? $_GET['code'] : null;
+    return $this->getInput('code');
+  }
+
+  /**
+   * Return the state.
+   *
+   * @return string|null
+   */
+  protected function getState()
+  {
+    return $this->getInput('state');
+  }
+
+  /**
+   * Return the error code.
+   *
+   * @return string|null
+   */
+  public function getErrorCode()
+  {
+    return $this->getInput('error_code');
+  }
+
+  /**
+   * Returns the error.
+   *
+   * @return string|null
+   */
+  public function getError()
+  {
+    return $this->getInput('error');
+  }
+
+  /**
+   * Returns the error reason.
+   *
+   * @return string|null
+   */
+  public function getErrorReason()
+  {
+    return $this->getInput('error_reason');
+  }
+
+  /**
+   * Returns the error description.
+   *
+   * @return string|null
+   */
+  public function getErrorDescription()
+  {
+    return $this->getInput('error_description');
+  }
+
+  /**
+   * Returns a value from a GET param.
+   *
+   * @param string $key
+   *
+   * @return string|null
+   */
+  private function getInput($key)
+  {
+    return isset($_GET[$key]) ? $_GET[$key] : null;
   }
 
   /**
@@ -205,34 +284,6 @@ class FacebookRedirectLoginHelper
   protected function generateState()
   {
     return $this->random(16);
-  }
-
-  /**
-   * Stores a state string in session storage for CSRF protection.
-   * Developers should subclass and override this method if they want to store
-   *   this state in a different location.
-   *
-   * @param string $state
-   *
-   * @throws FacebookSDKException
-   */
-  protected function storeState($state)
-  {
-    $this->persistentDataHandler->set('state', $state);
-  }
-
-  /**
-   * Loads a state string from session storage for CSRF validation.  May return
-   *   null if no object exists.  Developers should subclass and override this
-   *   method if they want to load the state from a different location.
-   *
-   * @return string|null
-   *
-   * @throws FacebookSDKException
-   */
-  protected function loadState()
-  {
-    return $this->persistentDataHandler->get('state');
   }
 
   /**

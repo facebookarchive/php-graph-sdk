@@ -28,7 +28,7 @@ use IteratorAggregate;
 use ArrayAccess;
 
 /**
- * Class BatchResponse
+ * Class FacebookBatchResponse
  * @package Facebook
  */
 class FacebookBatchResponse extends FacebookResponse implements IteratorAggregate, ArrayAccess
@@ -86,26 +86,32 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   public function setResponses(array $responses)
   {
     $this->responses = [];
-    foreach ($responses as $k => $graphResponse) {
-      $this->addResponse($graphResponse, $k);
+
+    foreach ($responses as $key => $graphResponse) {
+      $this->addResponse($key, $graphResponse);
     }
   }
 
   /**
    * Add a response to the list.
    *
-   * @param array $response
-   * @param mixed|null $key
+   * @param int $key
+   * @param array|null $response
    */
-  public function addResponse(array $response, $key = null)
+  public function addResponse($key, $response)
   {
-    $originalRequest = isset($this->batchRequest[$key]) ? $this->batchRequest[$key] : $this->batchRequest;
+    $originalRequestName = isset($this->batchRequest[$key]['name'])
+      ? $this->batchRequest[$key]['name']
+      : $key;
+    $originalRequest = isset($this->batchRequest[$key]['request'])
+      ? $this->batchRequest[$key]['request']
+      : null;
 
     $httpResponseBody = isset($response['body']) ? $response['body'] : null;
     $httpResponseCode = isset($response['code']) ? $response['code'] : null;
     $httpResponseHeaders = isset($response['headers']) ? $response['headers'] : [];
 
-    $this->responses[] = new FacebookResponse(
+    $this->responses[$originalRequestName] = new FacebookResponse(
       $originalRequest,
       $httpResponseBody,
       $httpResponseCode,
@@ -113,7 +119,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function getIterator()
   {
@@ -121,15 +127,15 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetSet($offset, $value)
   {
-    $this->addResponse($value, $offset);
+    $this->addResponse($offset, $value);
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetExists($offset)
   {
@@ -137,7 +143,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetUnset($offset)
   {
@@ -145,7 +151,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetGet($offset)
   {

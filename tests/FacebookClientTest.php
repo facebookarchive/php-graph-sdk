@@ -24,7 +24,6 @@
 namespace Facebook\Tests;
 
 use Facebook\Exceptions\FacebookSDKException;
-use Mockery as m;
 use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
@@ -45,6 +44,16 @@ class MyFooClientHandler implements FacebookHttpClientInterface
     return new GraphRawResponse(
       "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
       '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
+    );
+  }
+}
+
+class MyFooBatchClientHandler implements FacebookHttpClientInterface
+{
+  public function send($url, $method, $body, array $headers, $timeOut) {
+    return new GraphRawResponse(
+      "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+      '[{"code":"123","body":"Foo"},{"code":"1337","body":"Bar"}]'
     );
   }
 }
@@ -72,16 +81,10 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
    */
   public static $testFacebookClient;
 
-  /**
-   * @var \Facebook\HttpClients\FacebookHttpClientInterface
-   */
-  protected $httpClientMock;
-
   public function setUp()
   {
     $this->fbApp = new FacebookApp('id', 'shhhh!');
     $this->fbClient = new FacebookClient(new MyFooClientHandler());
-    $this->httpClientMock = m::mock('Facebook\HttpClients\FacebookHttpClientInterface');
   }
 
   public function testACustomHttpClientCanBeInjected()
@@ -158,12 +161,12 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     ];
     $fbBatchRequest = new FacebookBatchRequest($this->fbApp, $fbRequests);
 
-    $response = $this->fbClient->sendBatchRequest($fbBatchRequest);
+    $fbBatchClient = new FacebookClient(new MyFooBatchClientHandler());
+    $response = $fbBatchClient->sendBatchRequest($fbBatchRequest);
 
     $this->assertInstanceOf('Facebook\Entities\FacebookBatchResponse', $response);
-    // @TODO I think this is a bug
-    //$this->assertEquals('GET', $response[0]->getRequest()->getMethod());
-    //$this->assertEquals('POST', $response[1]->getRequest()->getMethod());
+    $this->assertEquals('GET', $response[0]->getRequest()->getMethod());
+    $this->assertEquals('POST', $response[1]->getRequest()->getMethod());
   }
 
   public function testAFacebookBatchRequestWillProperlyBatchFiles()
