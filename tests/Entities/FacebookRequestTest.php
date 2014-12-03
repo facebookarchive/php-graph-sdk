@@ -26,6 +26,8 @@ namespace Facebook\Tests\Entities;
 use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
 
 class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -166,6 +168,42 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
       'bar' => 'baz',
     ];
     $this->assertEquals($expectedParams, $params);
+  }
+
+  public function testAFileCanBeAddedToParams()
+  {
+    $myFile = new FacebookFile(__DIR__ . '/../foo.txt');
+    $params = [
+      'name' => 'Foo Bar',
+      'source' => $myFile,
+    ];
+    $app = new FacebookApp('123', 'foo_secret');
+    $request = new FacebookRequest($app, 'foo_token', 'POST', '/foo/photos', $params);
+
+    $actualParams = $request->getParams();
+
+    $this->assertTrue($request->containsFileUploads());
+    $this->assertFalse($request->containsVideoUploads());
+    $this->assertTrue( ! isset($actualParams['source']));
+    $this->assertEquals('Foo Bar', $actualParams['name']);
+  }
+
+  public function testAVideoCanBeAddedToParams()
+  {
+    $myFile = new FacebookVideo(__DIR__ . '/../foo.txt');
+    $params = [
+      'name' => 'Foo Bar',
+      'source' => $myFile,
+    ];
+    $app = new FacebookApp('123', 'foo_secret');
+    $request = new FacebookRequest($app, 'foo_token', 'POST', '/foo/videos', $params);
+
+    $actualParams = $request->getParams();
+
+    $this->assertTrue($request->containsFileUploads());
+    $this->assertTrue($request->containsVideoUploads());
+    $this->assertTrue( ! isset($actualParams['source']));
+    $this->assertEquals('Foo Bar', $actualParams['name']);
   }
 
 }

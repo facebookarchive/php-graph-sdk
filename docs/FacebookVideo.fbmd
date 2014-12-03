@@ -1,0 +1,53 @@
+<card>
+# Video Uploading with the Facebook SDK for PHP
+
+Uploading video files to the Graph API is made a breeze with the PHP SDK.
+</card>
+
+<card>
+## Facebook\FileUpload\FacebookVideo(string $pathToVideoFile) {#overview}
+
+The `FacebookVideo` entity represents a local or remote video file to be uploaded with a request to Graph.
+
+There are two ways to instantiate a `FacebookVideo` entity. One way is to instantiate it directly:
+
+~~~~
+use Facebook\FileUpload\FacebookVideo;
+
+$myVideoFileToUpload = new FacebookVideo('/path/to/video-file.mp4');
+~~~~
+
+Alternatively, you can use the `videoToUpload()` factory on the `Facebook\Facebook` super service to instantiate a new `FacebookVideo` entity.
+
+~~~~
+$fb = new Facebook\Facebook(/* . . . */);
+
+$myVideoFileToUpload = $fb->videoToUpload('/path/to/video-file.mp4'),
+~~~~
+</card>
+
+<card>
+## Usage {#usage}
+
+The following example uploads a video for a user.
+
+~~~~
+// Upload a video for a user
+$data = [
+  'title' => 'My awesome video',
+  'description' => 'More info about my awesome video.',
+  'source' => $fb->videoToUpload('/path/to/video.mp4'),
+];
+
+try {
+  $response = $fb->post('/me/videos', $data);
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Video ID: ' . $graphObject['id'];
+~~~~
+</card>

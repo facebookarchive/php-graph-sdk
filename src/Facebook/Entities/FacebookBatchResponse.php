@@ -28,7 +28,7 @@ use IteratorAggregate;
 use ArrayAccess;
 
 /**
- * Class BatchResponse
+ * Class FacebookBatchResponse
  * @package Facebook
  */
 class FacebookBatchResponse extends FacebookResponse implements IteratorAggregate, ArrayAccess
@@ -86,6 +86,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   public function setResponses(array $responses)
   {
     $this->responses = [];
+
     foreach ($responses as $key => $graphResponse) {
       $this->addResponse($key, $graphResponse);
     }
@@ -118,7 +119,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function getIterator()
   {
@@ -126,7 +127,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetSet($offset, $value)
   {
@@ -134,7 +135,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetExists($offset)
   {
@@ -142,7 +143,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetUnset($offset)
   {
@@ -150,7 +151,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
   }
 
   /**
-   * @return @inheritdoc
+   * @inheritdoc
    */
   public function offsetGet($offset)
   {

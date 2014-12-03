@@ -45,20 +45,8 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);
   }
 
-  public function tearDown()
-  {
-    (new FacebookGuzzleHttpClient()); // Resets the static dependency injection
-  }
-
   public function testCanSendNormalRequest()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
-    $requestMock
-      ->shouldReceive('setHeader')
-      ->once()
-      ->with('X-foo', 'bar')
-      ->andReturn(null);
-
     $responseMock = m::mock('GuzzleHttp\Message\ResponseInterface');
     $responseMock
       ->shouldReceive('getStatusCode')
@@ -73,10 +61,18 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn($this->fakeRawBody);
 
+    $options = [
+      'headers' => ['X-foo' => 'bar'],
+      'body' => 'foo_body',
+      'timeout' => 123,
+      'connect_timeout' => 10,
+    ];
+
+    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', [])
+      ->with('GET', 'http://foo.com/', $options)
       ->andReturn($requestMock);
     $this->guzzleMock
       ->shouldReceive('send')
@@ -84,11 +80,12 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->with($requestMock)
       ->andReturn($responseMock);
 
-    $responseBody = $this->guzzleClient->send('http://foo.com/', 'GET', [], ['X-foo' => 'bar']);
+    $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
-    $this->assertEquals($responseBody, $this->fakeRawBody);
-    $this->assertEquals($this->guzzleClient->getResponseHeaders(), $this->fakeHeadersAsArray);
-    $this->assertEquals(200, $this->guzzleClient->getResponseHttpStatusCode());
+    $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
+    $this->assertEquals($this->fakeRawBody, $response->getBody());
+    $this->assertEquals($this->fakeHeadersAsArray, $response->getHeaders());
+    $this->assertEquals(200, $response->getHttpResponseCode());
   }
 
   /**
@@ -103,13 +100,20 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
                           'Foo Error',
                           $requestMock,
                           null,
-                          m::mock('GuzzleHttp\Exception\AdapterException'),
+                          m::mock('GuzzleHttp\Ring\Exception\RingException'),
                         ]);
+
+    $options = [
+      'headers' => [],
+      'body' => 'foo_body',
+      'timeout' => 60,
+      'connect_timeout' => 10,
+    ];
 
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', [])
+      ->with('GET', 'http://foo.com/', $options)
       ->andReturn($requestMock);
     $this->guzzleMock
       ->shouldReceive('send')
@@ -117,7 +121,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->with($requestMock)
       ->andThrow($exceptionMock);
 
-    $this->guzzleClient->send('http://foo.com/');
+    $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
   }
 
 }

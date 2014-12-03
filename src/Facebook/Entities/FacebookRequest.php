@@ -25,6 +25,10 @@ namespace Facebook\Entities;
 
 use Facebook\Facebook;
 use Facebook\Url\FacebookUrlManipulator;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
+use Facebook\Http\RequestBodyMultipart;
+use Facebook\Http\RequestBodyUrlEncoded;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -55,9 +59,19 @@ class FacebookRequest
   protected $endpoint;
 
   /**
+   * @var array The headers to send with this request.
+   */
+  protected $headers = [];
+
+  /**
    * @var array The parameters to send with this request.
    */
   protected $params = [];
+
+  /**
+   * @var array The files to send with this request.
+   */
+  protected $files = [];
 
   /**
    * @var string ETag to send with this request.
@@ -287,7 +301,17 @@ class FacebookRequest
       $headers['If-None-Match'] = $this->eTag;
     }
 
-    return $headers;
+    return array_merge($this->headers, $headers);
+  }
+
+  /**
+   * Set the headers for this request.
+   *
+   * @param array $headers
+   */
+  public function setHeaders(array $headers)
+  {
+    $this->headers = array_merge($this->headers, $headers);
   }
 
   /**
@@ -318,6 +342,9 @@ class FacebookRequest
     // Don't let these buggers slip in.
     unset($params['access_token'], $params['appsecret_proof']);
 
+    // @TODO Refactor code above with this
+    //$params = $this->sanitizeAuthenticationParams($params);
+    $params = $this->sanitizeFileParams($params);
     $this->dangerouslySetParams($params);
 
     return $this;
@@ -335,6 +362,104 @@ class FacebookRequest
     $this->params = array_merge($this->params, $params);
 
     return $this;
+  }
+
+  /**
+   * Iterate over the params and pull out the file uploads.
+   *
+   * @param array $params
+   *
+   * @return array
+   */
+  public function sanitizeFileParams(array $params)
+  {
+    foreach ($params as $key => $value) {
+      if ($value instanceOf FacebookFile) {
+        $this->addFile($key, $value);
+        unset($params[$key]);
+      }
+    }
+
+    return $params;
+  }
+
+  /**
+   * Add a file to be uploaded.
+   *
+   * @param string $key
+   * @param FacebookFile $file
+   */
+  public function addFile($key, FacebookFile $file)
+  {
+    $this->files[$key] = $file;
+  }
+
+  /**
+   * Removes all the files from the upload queue.
+   */
+  public function resetFiles()
+  {
+    $this->files = [];
+  }
+
+  /**
+   * Get the list of files to be uploaded.
+   *
+   * @return array
+   */
+  public function getFiles()
+  {
+    return $this->files;
+  }
+
+  /**
+   * Let's us know if there is a file upload with this request.
+   *
+   * @return boolean
+   */
+  public function containsFileUploads()
+  {
+    return ! empty($this->files);
+  }
+
+  /**
+   * Let's us know if there is a video upload with this request.
+   *
+   * @return boolean
+   */
+  public function containsVideoUploads()
+  {
+    foreach ($this->files as $file) {
+      if ($file instanceOf FacebookVideo) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns the body of the request as multipart/form-data.
+   *
+   * @return RequestBodyMultipart
+   */
+  public function getMultipartBody()
+  {
+    $params = $this->getPostParams();
+
+    return new RequestBodyMultipart($params, $this->files);
+  }
+
+  /**
+   * Returns the body of the request as URL-encoded.
+   *
+   * @return RequestBodyUrlEncoded
+   */
+  public function getUrlEncodedBody()
+  {
+    $params = $this->getPostParams();
+
+    return new RequestBodyUrlEncoded($params);
   }
 
   /**

@@ -25,6 +25,7 @@ namespace Facebook\Tests;
 
 use Facebook\Facebook;
 use Facebook\FacebookClient;
+use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Url\UrlDetectionInterface;
@@ -33,10 +34,11 @@ use Facebook\GraphNodes\GraphList;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
-  public function getResponseHeaders() { return ['X-foo-header' => 'bar']; }
-  public function getResponseHttpStatusCode() { return 1337; }
-  public function send($url, $method = 'GET', array $parameters = [], array $headers = []) {
-    return '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
+  public function send($url, $method, $body, array $headers, $timeOut) {
+    return new GraphRawResponse(
+      "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+      '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
+    );
   }
 }
 
