@@ -64,11 +64,13 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
           CURLOPT_TIMEOUT        => 123,
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_HEADER         => true,
+          CURLOPT_SSL_VERIFYPEER => true,
+          CURLOPT_CAINFO         => 'foo.crt',
         ])
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://foo.com', 'GET', 'foo_body', ['X-Foo-Header' => 'X-Bar'], 123);
+    $this->curlClient->openConnection('http://foo.com', 'GET', 'foo_body', ['X-Foo-Header' => 'X-Bar'], 123, 'foo.crt');
   }
 
   public function testCanOpenCurlConnectionWithPostBody()
@@ -87,23 +89,14 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
           CURLOPT_TIMEOUT        => 60,
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_HEADER         => true,
+          CURLOPT_SSL_VERIFYPEER => true,
+          CURLOPT_CAINFO         => 'foo.crt',
           CURLOPT_POSTFIELDS     => 'baz=bar',
         ])
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://bar.com', 'POST', 'baz=bar', [], 60);
-  }
-
-  public function testCanAddBundledCert()
-  {
-    $this->curlMock
-      ->shouldReceive('setopt')
-      ->with(CURLOPT_CAINFO, '/.fb_ca_chain_bundle\.crt$/')
-      ->once()
-      ->andReturn(null);
-
-    $this->curlClient->addBundledCert();
+    $this->curlClient->openConnection('http://bar.com', 'POST', 'baz=bar', [], 60, 'foo.crt');
   }
 
   public function testCanCloseConnection()
@@ -114,24 +107,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
 
     $this->curlClient->closeConnection();
-  }
-
-  public function testTrySendRequest()
-  {
-    $this->curlMock
-      ->shouldReceive('exec')
-      ->once()
-      ->andReturn('foo response');
-    $this->curlMock
-      ->shouldReceive('errno')
-      ->once()
-      ->andReturn(null);
-    $this->curlMock
-      ->shouldReceive('error')
-      ->once()
-      ->andReturn(null);
-
-    $this->curlClient->tryToSendRequest();
   }
 
   public function testIsolatesTheHeaderAndBody()
@@ -272,10 +247,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
     $this->curlMock
-      ->shouldReceive('error')
-      ->once()
-      ->andReturn(null);
-    $this->curlMock
       ->shouldReceive('getinfo')
       ->with(CURLINFO_HEADER_SIZE)
       ->once()
@@ -289,7 +260,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $response = $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
+    $response = $this->curlClient->send('http://foo.com/', 'GET', '', [], 60, 'foo.crt');
 
     $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
     $this->assertEquals($this->fakeRawBody, $response->getBody());
@@ -323,7 +294,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn('Foo error');
 
-    $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
+    $this->curlClient->send('http://foo.com/', 'GET', '', [], 60, 'foo.crt');
   }
 
 }

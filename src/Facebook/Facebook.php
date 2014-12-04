@@ -166,7 +166,8 @@ class Facebook
       }
     }
     $enableBeta = isset($config['enable_beta_mode']) && $config['enable_beta_mode'] === true;
-    $this->client = new FacebookClient($httpClientHandler, $enableBeta);
+    $caCertificateBundle = isset($config['ca_bundle']) ? $config['ca_bundle'] : null;
+    $this->client = new FacebookClient($httpClientHandler, $enableBeta, $caCertificateBundle);
 
     if (isset($config['url_detection_handler'])) {
       if ($config['url_detection_handler'] instanceof UrlDetectionInterface) {
