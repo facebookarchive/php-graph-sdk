@@ -31,6 +31,10 @@ use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
+use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
+use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
+use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookClient;
 
@@ -42,6 +46,11 @@ use Facebook\FacebookClient;
  */
 class FacebookRedirectLoginHelper
 {
+
+  /**
+   * @const int The length of CSRF string to validate the login link.
+   */
+  const CSRF_LENGTH = 32;
 
   /**
    * @var FacebookApp The FacebookApp entity.
@@ -59,19 +68,29 @@ class FacebookRedirectLoginHelper
   protected $persistentDataHandler;
 
   /**
+   * @var PseudoRandomStringGeneratorInterface The cryptographically secure
+   *                                           pseudo-random string generator.
+   */
+  protected $pseudoRandomStringGenerator;
+
+  /**
    * Constructs a RedirectLoginHelper for a given appId.
    *
    * @param FacebookApp $app The FacebookApp entity.
    * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
    * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
+   * @param PseudoRandomStringGeneratorInterface|null $prsg The cryptographically secure
+   *                                                        pseudo-random string generator.
    */
   public function __construct(FacebookApp $app,
                               PersistentDataInterface $persistentDataHandler = null,
-                              UrlDetectionInterface $urlHandler = null)
+                              UrlDetectionInterface $urlHandler = null,
+                              PseudoRandomStringGeneratorInterface $prsg = null)
   {
     $this->app = $app;
     $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
     $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
+    $this->pseudoRandomStringGenerator = $prsg ?: $this->detectPseudoRandomStringGenerator();
   }
 
   /**
@@ -92,6 +111,42 @@ class FacebookRedirectLoginHelper
   public function getUrlDetectionHandler()
   {
     return $this->urlDetectionHandler;
+  }
+
+  /**
+   * Returns the cryptographically secure pseudo-random string generator.
+   *
+   * @return PseudoRandomStringGeneratorInterface
+   */
+  public function getPseudoRandomStringGenerator()
+  {
+    return $this->pseudoRandomStringGenerator;
+  }
+
+  /**
+   * Detects which pseudo-random string generator to use.
+   *
+   * @return PseudoRandomStringGeneratorInterface
+   *
+   * @throws FacebookSDKException
+   */
+  public function detectPseudoRandomStringGenerator()
+  {
+    // Since openssl_random_pseudo_bytes() can sometimes return non-cryptographically
+    // secure pseudo-random strings (in rare cases), we check for mcrypt_create_iv() first.
+    if(function_exists('mcrypt_create_iv')) {
+      return new McryptPseudoRandomStringGenerator();
+    }
+    if(function_exists('openssl_random_pseudo_bytes')) {
+      return new OpenSslPseudoRandomStringGenerator();
+    }
+    if( ! ini_get('open_basedir') && is_readable('/dev/urandom')) {
+      return new UrandomPseudoRandomStringGenerator();
+    }
+
+    throw new FacebookSDKException(
+      'Unable to detect a cryptographically secure pseudo-random string generator.'
+    );
   }
 
   /**
@@ -118,8 +173,10 @@ class FacebookRedirectLoginHelper
                               $separator = '&')
   {
     $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
-    $state = $this->generateState();
+
+    $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
     $this->persistentDataHandler->set('state', $state);
+
     $params = [
       'client_id' => $this->app->getId(),
       'redirect_uri' => $redirectUrl,
@@ -274,67 +331,6 @@ class FacebookRedirectLoginHelper
   private function getInput($key)
   {
     return isset($_GET[$key]) ? $_GET[$key] : null;
-  }
-
-  /**
-   * Generate a state string for CSRF protection.
-   *
-   * @return string
-   */
-  protected function generateState()
-  {
-    return $this->random(16);
-  }
-
-  /**
-   * Generate a cryptographically secure pseudrandom number.
-   * 
-   * @param int $bytes Number of bytes to return.
-   * 
-   * @return string
-   * 
-   * @throws FacebookSDKException
-   * 
-   * @TODO Add support for Windows platforms.
-   */
-  private function random($bytes)
-  {
-    if (!is_numeric($bytes)) {
-      throw new FacebookSDKException(
-        "random() expects an integer"
-      );
-    }
-    if ($bytes < 1) {
-      throw new FacebookSDKException(
-        "random() expects an integer greater than zero"
-      );
-    }
-    $buf = '';
-    // http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers/
-    if (!ini_get('open_basedir')
-      && is_readable('/dev/urandom')) {
-      $fp = fopen('/dev/urandom', 'rb');
-      if ($fp !== FALSE) {
-        $buf = fread($fp, $bytes);
-        fclose($fp);
-        if($buf !== FALSE) {
-          return bin2hex($buf);
-        }
-      }
-    }
-
-    if (function_exists('mcrypt_create_iv')) {
-        $buf = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
-        if ($buf !== FALSE) {
-          return bin2hex($buf);
-        }
-    }
-    
-    while (strlen($buf) < $bytes) {
-      $buf .= md5(uniqid(mt_rand(), true), true); 
-      // We are appending raw binary
-    }
-    return bin2hex(substr($buf, 0, $bytes));
   }
 
 }

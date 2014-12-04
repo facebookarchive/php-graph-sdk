@@ -223,7 +223,7 @@ FB(devsite:markdown-wiki:table {
 <card>
 # Interfaces {#interfaces}
 
-Interfaces you can code to.
+You can overwrite certain functionality of the SDK by coding to an interface.
 
 FB(devsite:markdown-wiki:table {
   columns: ['Interface name','Description',],
@@ -239,6 +239,10 @@ FB(devsite:markdown-wiki:table {
     [
       '`[Facebook\Url\UrlDetectionInterface](/docs/php/UrlDetectionInterface)`',
       'Interface to code your own URL detection logic.',
+    ],
+    [
+      '`[Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface](/docs/php/PseudoRandomStringGeneratorInterface)`',
+      'Interface to code your own cryptographically secure pseudo-random string generator.',
     ],
   ],
 })
