@@ -30,6 +30,7 @@ use Facebook\Entities\FacebookBatchResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\HttpClients\CaCertificateBundle;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -85,6 +86,11 @@ class FacebookClient
   protected $httpClientHandler;
 
   /**
+   * @var string|null The path to the CA certificate bundle to verify peer.
+   */
+  protected $caCertificateBundle;
+
+  /**
    * @var int The number of calls that have been made to Graph.
    */
   public static $requestCount = 0;
@@ -94,14 +100,17 @@ class FacebookClient
    *
    * @param FacebookHttpClientInterface|null $httpClientHandler
    * @param boolean $enableBeta
+   * @param string|null $caCertificateBundle
    */
   public function __construct(
     FacebookHttpClientInterface $httpClientHandler = null,
-    $enableBeta = false
+    $enableBeta = false,
+    $caCertificateBundle = null
   )
   {
     $this->httpClientHandler = $httpClientHandler ?: $this->detectHttpClientHandler();
     $this->enableBetaMode = $enableBeta;
+    $this->caCertificateBundle = $caCertificateBundle;
   }
 
   /**
@@ -219,9 +228,12 @@ class FacebookClient
       $timeOut = static::DEFAULT_VIDEO_UPLOAD_REQUEST_TIMEOUT;
     }
 
+    // Try to detect the default CA certificate bundle
+    $caCertBundle = $this->getCaBundle();
+
     // Should throw `FacebookSDKException` exception on HTTP client error.
     // Don't catch to allow it to bubble up.
-    $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut);
+    $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut, $caCertBundle);
 
     static::$requestCount++;
 
@@ -254,6 +266,23 @@ class FacebookClient
     $facebookResponse = $this->sendRequest($request);
 
     return new FacebookBatchResponse($request, $facebookResponse);
+  }
+
+  /**
+   * Returns the CA certificate bundle to use.
+   *
+   * @return string|null
+   */
+  protected function getCaBundle()
+  {
+    if ($this->caCertificateBundle) {
+      return $this->caCertificateBundle;
+    } elseif (PHP_VERSION_ID < 50600) {
+      return $this->caCertificateBundle = CaCertificateBundle::getCaCertificateBundle();
+    }
+
+    // PHP 5.6 or greater will find the system cert by default.
+    return null;
   }
 
 }

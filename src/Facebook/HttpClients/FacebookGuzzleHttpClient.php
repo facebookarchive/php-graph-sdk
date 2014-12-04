@@ -49,13 +49,16 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers, $timeOut)
+  public function send($url, $method, $body, array $headers, $timeOut, $caCertBundle = null)
   {
+    // Guzzle has great CA certificate detection out of the box
+    // so we ignore $caCertBundle here.
     $options = [
       'headers' => $headers,
       'body' => $body,
       'timeout' => $timeOut,
       'connect_timeout' => 10,
+      'verify' => true, // Default to Guzzle's CA certificate detection
     ];
     $request = $this->guzzleClient->createRequest($method, $url, $options);
 

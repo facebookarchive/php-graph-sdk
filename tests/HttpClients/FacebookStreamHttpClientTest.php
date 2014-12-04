@@ -75,11 +75,11 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
               return false;
             }
 
-            if ($arg['ssl']['verify_peer'] !== true) {
-              return false;
-            }
-
-            if (false === preg_match('/.fb_ca_chain_bundle\.crt$/', $arg['ssl']['cafile'])) {
+            if ($arg['ssl'] !== [
+                'verify_peer' => true,
+                'allow_self_signed' => true,
+                'cafile' => 'foo.crt',
+              ]) {
               return false;
             }
 
@@ -96,7 +96,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
       ->with('http://foo.com/')
       ->andReturn($this->fakeRawBody);
 
-    $response = $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
+    $response = $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123, 'foo.crt');
 
     $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
     $this->assertEquals($this->fakeRawBody, $response->getBody());
@@ -123,7 +123,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
       ->with('http://foo.com/')
       ->andReturn(false);
 
-    $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
+    $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', [], 60, 'foo.crt');
   }
 
 }

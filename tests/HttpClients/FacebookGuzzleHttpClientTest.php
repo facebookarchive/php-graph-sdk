@@ -66,6 +66,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       'body' => 'foo_body',
       'timeout' => 123,
       'connect_timeout' => 10,
+      'verify' => true,
     ];
 
     $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
@@ -108,6 +109,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       'body' => 'foo_body',
       'timeout' => 60,
       'connect_timeout' => 10,
+      'verify' => true,
     ];
 
     $this->guzzleMock

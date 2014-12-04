@@ -54,6 +54,7 @@ $fb = new Facebook\Facebook([
   'enable_beta_mode' => true,
   'default_graph_version' => 'v2.2',
   'http_client_handler' => 'guzzle',
+  'ca_bundle' => '/path/to/ca-bundle.crt',
   'persistent_data_handler' => 'memory',
   'url_detection_handler' => new MyUrlDetectionHandler(),
 ]);
@@ -90,6 +91,23 @@ $fb = new Facebook([
 ~~~~
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
+
+### `ca_bundle`
+Allows you to provide the location to a CA certificate bundle to use to verify the peer with each request.
+
+For better security, all requests that the SDK makes are with peer verification enabled. This helps thwart man-in-the-middle attacks.
+
+By default, the SDK will try to detect the system's CA certificate bundle by checking the `openssl.cafile` and `curl.cainfo` PHP ini settings. If those settings are not set it will try to manually detect the CA bundle. If no bundle can be found a `Facebook\Exceptions\FacebookSDKException` will be thrown.
+
+If you're using PHP 6 or greater, the SDK will rely on PHP to detect the proper CA bundle.
+
+Mozilla provides a commonly used CA bundle which can be [downloaded from here](https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt) (provided by the maintainer of cURL).
+
+~~~~
+$fb = new Facebook([
+  'ca_bundle' => '/path/to/ca-bundle.crt',
+]);
+~~~~
 
 ### `persistent_data_handler`
 Allows you to overwrite the default persistent data store.

@@ -34,16 +34,6 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
 {
 
   /**
-   * @var string The client error message
-   */
-  protected $curlErrorMessage = '';
-
-  /**
-   * @var int The curl client error code
-   */
-  protected $curlErrorCode = 0;
-
-  /**
    * @var string|boolean The raw response from the server
    */
   protected $rawResponse;
@@ -74,19 +64,15 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers, $timeOut)
+  public function send($url, $method, $body, array $headers, $timeOut, $caCertBundle = null)
   {
-    $this->openConnection($url, $method, $body, $headers, $timeOut);
-    $this->tryToSendRequest();
+    $this->openConnection($url, $method, $body, $headers, $timeOut, $caCertBundle);
+    $this->sendRequest();
 
-    // Need to verify the peer
-    if ($this->curlErrorCode == 60 || $this->curlErrorCode == 77) {
-      $this->addBundledCert();
-      $this->tryToSendRequest();
-    }
-
-    if ($this->curlErrorCode) {
-      throw new FacebookSDKException($this->curlErrorMessage, $this->curlErrorCode);
+    $curlErrorCode = $this->facebookCurl->errno();
+    if ($curlErrorCode) {
+      $curlErrorMessage = $this->facebookCurl->error();
+      throw new FacebookSDKException($curlErrorMessage, $curlErrorCode);
     }
 
     // Separate the raw headers from the raw body
@@ -105,8 +91,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
    * @param string $body The body of the request.
    * @param array  $headers The request headers.
    * @param int    $timeOut The timeout in seconds for the request.
+   * @param string|null $caCertBundle The CA certificate bundle to use to verify peer.
    */
-  public function openConnection($url, $method, $body, array $headers, $timeOut)
+  public function openConnection($url, $method, $body, array $headers, $timeOut, $caCertBundle)
   {
     $options = [
       CURLOPT_CUSTOMREQUEST  => $method,
@@ -116,7 +103,12 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
       CURLOPT_TIMEOUT        => $timeOut,
       CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
       CURLOPT_HEADER         => true, // Enable header processing
+      CURLOPT_SSL_VERIFYPEER => true,
     ];
+
+    if ($caCertBundle) {
+      $options[CURLOPT_CAINFO] = $caCertBundle;
+    }
 
     if ($method !== "GET") {
       $options[CURLOPT_POSTFIELDS] = $body;
@@ -127,30 +119,11 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * Add a bundled cert to the connection
-   */
-  public function addBundledCert()
-  {
-    $this->facebookCurl->setopt(CURLOPT_CAINFO,
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
-  }
-
-  /**
    * Closes an existing curl connection
    */
   public function closeConnection()
   {
     $this->facebookCurl->close();
-  }
-
-  /**
-   * Try to send the request
-   */
-  public function tryToSendRequest()
-  {
-    $this->sendRequest();
-    $this->curlErrorMessage = $this->facebookCurl->error();
-    $this->curlErrorCode = $this->facebookCurl->errno();
   }
 
   /**

@@ -45,7 +45,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
   /**
    * @inheritdoc
    */
-  public function send($url, $method, $body, array $headers, $timeOut)
+  public function send($url, $method, $body, array $headers, $timeOut, $caCertBundle = null)
   {
     $options = [
       'http' => [
@@ -57,15 +57,19 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
       ],
       'ssl' => [
         'verify_peer' => true,
-        'cafile' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt',
+        'allow_self_signed' => true,
       ],
     ];
+
+    if ($caCertBundle) {
+      $options['ssl']['cafile'] = $caCertBundle;
+    }
 
     $this->facebookStream->streamContextCreate($options);
     $rawBody = $this->facebookStream->fileGetContents($url);
     $rawHeaders = $this->facebookStream->getResponseHeaders();
 
-    if ($rawBody === false || !$rawHeaders) {
+    if ($rawBody === false || ! $rawHeaders) {
       throw new FacebookSDKException('Stream returned an empty response', 660);
     }
 
