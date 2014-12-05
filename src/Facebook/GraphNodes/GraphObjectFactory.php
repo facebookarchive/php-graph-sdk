@@ -319,12 +319,9 @@ class GraphObjectFactory
    */
   public function getMetaData(array $data)
   {
-    $meta_data = [];
-    if (isset($data['paging'])) {
-      $meta_data['paging'] = $data['paging'];
-    }
+    unset($data['data']);
 
-    return $meta_data;
+    return $data;
   }
 
   /**
