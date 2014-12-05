@@ -161,9 +161,30 @@ Returns the last response received from the Graph API in the form of a `Facebook
 <card>
 ### getDefaultAccessToken() {#get-default-access-token}
 ~~~~
-public AccessToken|null getDefaultAccessToken()
+public Facebook\Entities\AccessToken|null getDefaultAccessToken()
 ~~~~
-Returns the default `Facebook\Entities\AccessToken` entity if the configuration option `default_access_token` was set.
+
+Returns the default fallback `Facebook\Entities\AccessToken` entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
+</card>
+
+<card>
+### setDefaultAccessToken() {#set-default-access-token}
+~~~~
+public setDefaultAccessToken(string|Facebook\Entities\AccessToken $accessToken)
+~~~~
+
+Sets the default access token to be use with all requests sent to Graph. The access token can be in string or `Facebook\Entities\AccessToken` format.
+
+~~~~
+$fb->setDefaultAccessToken('{my-access-token}');
+
+// . . . OR . . .
+
+$accessToken = new Facebook\Entities\AccessToken('{my-access-token}');
+$fb->setDefaultAccessToken($accessToken);
+~~~~
+
+This setting will overwrite the value from `default_access_token` if it was passed to the `Facebook\Facebook` constructor.
 </card>
 
 <card>
@@ -312,6 +333,45 @@ Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRed
 
 ~~~~
 $helper = $fb->getRedirectLoginHelper();
+~~~~
+</card>
+
+<card>
+### getJavaScriptHelper() {#get-javascript-helper}
+~~~~
+public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the JavaScript SDK.
+
+~~~~
+$helper = $fb->getJavaScriptHelper();
+~~~~
+</card>
+
+<card>
+### getCanvasHelper() {#get-canvas-helper}
+~~~~
+public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) which is used to access the signed request that is `POST`ed to canvas apps.
+
+~~~~
+$helper = $fb->getCanvasHelper();
+~~~~
+</card>
+
+<card>
+### getPageTabHelper() {#get-page-tab-helper}
+~~~~
+public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHelper) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
+
+~~~~
+$helper = $fb->getPageTabHelper();
 ~~~~
 </card>
 
