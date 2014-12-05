@@ -212,10 +212,7 @@ class FacebookResponse
    */
   public function makeException()
   {
-    $this->thrownException = FacebookResponseException::create(
-                                $this->body,
-                                $this->decodedBody,
-                                $this->httpStatusCode);
+    $this->thrownException = FacebookResponseException::create($this);
   }
 
   /**
