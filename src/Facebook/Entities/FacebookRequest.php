@@ -44,7 +44,7 @@ class FacebookRequest
   protected $app;
 
   /**
-   * @var string The access token to use for this request.
+   * @var string|null The access token to use for this request.
    */
   protected $accessToken;
 
@@ -155,11 +155,11 @@ class FacebookRequest
   /**
    * Return the access token for this request.
    *
-   * @return string
+   * @return string|null
    */
   public function getAccessToken()
   {
-    return (string) $this->accessToken;
+    return $this->accessToken;
   }
 
   /**
@@ -185,11 +185,15 @@ class FacebookRequest
   /**
    * Generate an app secret proof to sign this request.
    *
-   * @return string
+   * @return string|null
    */
   public function getAppSecretProof()
   {
-    return AppSecretProof::make($this->getAccessToken(), $this->app->getSecret());
+    if ( ! $accessToken = $this->getAccessToken()) {
+      return null;
+    }
+
+    return hash_hmac('sha256', $accessToken, $this->app->getSecret());
   }
 
   /**

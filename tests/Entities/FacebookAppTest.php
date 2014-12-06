@@ -27,6 +27,10 @@ use Facebook\Entities\FacebookApp;
 
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
+
+  /**
+   * @var FacebookApp
+   */
   private $app;
 
   public function setUp()
@@ -44,7 +48,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('secret', $this->app->getSecret());
   }
 
-  public function testGetAccessToken()
+  public function testAnAppAccessTokenCanBeGenerated()
   {
     $accessToken = $this->app->getAccessToken();
 
@@ -60,4 +64,5 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('id', $newApp->getId());
     $this->assertEquals('secret', $newApp->getSecret());
   }
+
 }

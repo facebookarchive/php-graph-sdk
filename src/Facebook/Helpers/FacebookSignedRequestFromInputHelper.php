@@ -71,11 +71,11 @@ abstract class FacebookSignedRequestFromInputHelper
   {
     $rawSignedRequest = $rawSignedRequest ?: $this->getRawSignedRequest();
 
-    if (!$rawSignedRequest) {
+    if ( ! $rawSignedRequest) {
       return;
     }
 
-    $this->signedRequest = new SignedRequest($rawSignedRequest, $this->state, $this->app->getSecret());
+    $this->signedRequest = new SignedRequest($this->app, $rawSignedRequest, $this->state);
   }
 
   /**
@@ -100,6 +100,7 @@ abstract class FacebookSignedRequestFromInputHelper
       $expiresAt = $this->signedRequest->get('expires', 0);
       return new AccessToken($accessToken, $expiresAt);
     }
+
     return null;
   }
 
@@ -168,6 +169,7 @@ abstract class FacebookSignedRequestFromInputHelper
     if (isset($_COOKIE['fbsr_' . $this->app->getId()])) {
       return $_COOKIE['fbsr_' . $this->app->getId()];
     }
+
     return null;
   }
 

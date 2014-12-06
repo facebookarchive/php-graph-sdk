@@ -77,16 +77,11 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   public function send($url, $method, $body, array $headers, $timeOut)
   {
     $this->openConnection($url, $method, $body, $headers, $timeOut);
-    $this->tryToSendRequest();
+    $this->sendRequest();
 
-    // Need to verify the peer
-    if ($this->curlErrorCode == 60 || $this->curlErrorCode == 77) {
-      $this->addBundledCert();
-      $this->tryToSendRequest();
-    }
-
-    if ($this->curlErrorCode) {
-      throw new FacebookSDKException($this->curlErrorMessage, $this->curlErrorCode);
+    if ($curlErrorCode = $this->facebookCurl->errno()) {
+      $curlErrorMessage = $this->facebookCurl->error();
+      throw new FacebookSDKException($curlErrorMessage, $curlErrorCode);
     }
 
     // Separate the raw headers from the raw body
@@ -116,6 +111,9 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
       CURLOPT_TIMEOUT        => $timeOut,
       CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
       CURLOPT_HEADER         => true, // Enable header processing
+      CURLOPT_SSL_VERIFYHOST => 2,
+      CURLOPT_SSL_VERIFYPEER => true,
+      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
     ];
 
     if ($method !== "GET") {
@@ -127,30 +125,11 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
   }
 
   /**
-   * Add a bundled cert to the connection
-   */
-  public function addBundledCert()
-  {
-    $this->facebookCurl->setopt(CURLOPT_CAINFO,
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fb_ca_chain_bundle.crt');
-  }
-
-  /**
    * Closes an existing curl connection
    */
   public function closeConnection()
   {
     $this->facebookCurl->close();
-  }
-
-  /**
-   * Try to send the request
-   */
-  public function tryToSendRequest()
-  {
-    $this->sendRequest();
-    $this->curlErrorMessage = $this->facebookCurl->error();
-    $this->curlErrorCode = $this->facebookCurl->errno();
   }
 
   /**

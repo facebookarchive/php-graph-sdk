@@ -27,7 +27,7 @@ namespace Facebook\Exceptions;
  * Class FacebookThrottleException
  * @package Facebook
  */
-class FacebookThrottleException extends FacebookResponseException
+class FacebookThrottleException extends FacebookSDKException
 {
 
 }

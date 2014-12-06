@@ -60,8 +60,8 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
     $this->streamMock
       ->shouldReceive('streamContextCreate')
       ->once()
-      ->with(\Mockery::on(function($arg) {
-            if (!isset($arg['http']) || !isset($arg['ssl'])) {
+      ->with(m::on(function($arg) {
+            if ( ! isset($arg['http']) || ! isset($arg['ssl'])) {
               return false;
             }
 
@@ -75,11 +75,17 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
               return false;
             }
 
-            if ($arg['ssl']['verify_peer'] !== true) {
+            $caInfo = array_diff_assoc($arg['ssl'], [
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => true,
+              ]);
+
+            if (count($caInfo) !== 1) {
               return false;
             }
 
-            if (false === preg_match('/.fb_ca_chain_bundle\.crt$/', $arg['ssl']['cafile'])) {
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['cafile'])) {
               return false;
             }
 

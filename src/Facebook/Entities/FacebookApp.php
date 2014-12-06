@@ -25,13 +25,14 @@ namespace Facebook\Entities;
 
 class FacebookApp implements \Serializable
 {
+
   /**
-   * @var string 
+   * @var string The app ID.
    */
   protected $id;
 
   /**
-   * @var string
+   * @var string The app secret.
    */
   protected $secret;
 
@@ -46,6 +47,8 @@ class FacebookApp implements \Serializable
   }
 
   /**
+   * Returns the app ID.
+   *
    * @return string
    */
   public function getId()
@@ -54,6 +57,8 @@ class FacebookApp implements \Serializable
   }
 
   /**
+   * Returns the app secret.
+   *
    * @return string
    */
   public function getSecret()
@@ -62,6 +67,8 @@ class FacebookApp implements \Serializable
   }
 
   /**
+   * Returns an app access token.
+   *
    * @return AccessToken
    */
   public function getAccessToken()
@@ -69,11 +76,21 @@ class FacebookApp implements \Serializable
     return new AccessToken($this->id . '|' . $this->secret);
   }
 
+  /**
+   * Serializes the FacebookApp entity as a string.
+   *
+   * @return string
+   */
   public function serialize()
   {
     return serialize([$this->id, $this->secret]);
   }
 
+  /**
+   * Unserializes a string as a FacebookApp entity.
+   *
+   * @param string $serialized
+   */
   public function unserialize($serialized)
   {
     list($id, $secret) = unserialize($serialized);
