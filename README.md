@@ -6,6 +6,7 @@ Facebook SDK for PHP
 
 This repository contains the open source PHP SDK that allows you to access Facebook
 Platform from your PHP app.
+Modify by Luigi Marangon for PHP 5.3.
 
 
 Usage
