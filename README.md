@@ -18,6 +18,10 @@ Minimal example:
 ```php
 <?php
 
+// Skip these two lines if you're using Composer
+define('FACEBOOK_SDK_V4_SRC_DIR', '/path/to/facebook-php-sdk-v4/src/Facebook/');
+require __DIR__ . '/path/to/facebook-php-sdk-v4/autoload.php';
+
 use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
 use Facebook\GraphUser;
