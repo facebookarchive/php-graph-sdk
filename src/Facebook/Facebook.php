@@ -41,14 +41,15 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+use Facebook\Helpers\FacebookCanvasHelper;
+use Facebook\Helpers\FacebookJavaScriptHelper;
+use Facebook\Helpers\FacebookPageTabHelper;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class Facebook
  * @package Facebook
- *
- * @TODO Add helpers to superclass
  */
 class Facebook
 {
@@ -194,14 +195,7 @@ class Facebook
     }
 
     if (isset($config['default_access_token'])) {
-      if (is_string($config['default_access_token'])) {
-        $this->defaultAccessToken = new AccessToken($config['default_access_token']);
-      } elseif ( ! $config['default_access_token'] instanceof AccessToken) {
-        throw new \InvalidArgumentException(
-          'The "default_access_token" provided must be of type "string"'
-          . ' or Facebook\Entities\AccessToken'
-        );
-      }
+      $this->setDefaultAccessToken($config['default_access_token']);
     }
 
     $this->defaultGraphVersion = isset($config['default_graph_version'])
@@ -264,6 +258,31 @@ class Facebook
   }
 
   /**
+   * Sets the default access token to use with requests.
+   *
+   * @param AccessToken|string $accessToken The access token to save.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function setDefaultAccessToken($accessToken)
+  {
+    if (is_string($accessToken)) {
+      $this->defaultAccessToken = new AccessToken($accessToken);
+      return;
+    }
+
+    if ($accessToken instanceof AccessToken) {
+      $this->defaultAccessToken = $accessToken;
+      return;
+    }
+
+    throw new \InvalidArgumentException(
+      'The default access token must be of type "string"'
+      . ' or Facebook\Entities\AccessToken'
+    );
+  }
+
+  /**
    * Returns the default Graph version.
    *
    * @return string
@@ -285,6 +304,36 @@ class Facebook
       $this->persistentDataHandler,
       $this->urlDetectionHandler
     );
+  }
+
+  /**
+   * Returns the JavaScript helper.
+   *
+   * @return FacebookJavaScriptHelper
+   */
+  public function getJavaScriptHelper()
+  {
+    return new FacebookJavaScriptHelper($this->app);
+  }
+
+  /**
+   * Returns the canvas helper.
+   *
+   * @return FacebookCanvasHelper
+   */
+  public function getCanvasHelper()
+  {
+    return new FacebookCanvasHelper($this->app);
+  }
+
+  /**
+   * Returns the page tab helper.
+   *
+   * @return FacebookPageTabHelper
+   */
+  public function getPageTabHelper()
+  {
+    return new FacebookPageTabHelper($this->app);
   }
 
   /**

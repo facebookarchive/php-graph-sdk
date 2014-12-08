@@ -30,6 +30,7 @@ use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Entities\FacebookRequest;
+use Facebook\Entities\AccessToken;
 use Facebook\GraphNodes\GraphList;
 
 class FooClientInterface implements FacebookHttpClientInterface
@@ -160,6 +161,26 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   {
     $fb = new Facebook($this->config);
     $this->assertInstanceOf('Facebook\Url\FacebookUrlDetectionHandler', $fb->getUrlDetectionHandler());
+  }
+
+  public function testAnAccessTokenCanBeSetAsAString()
+  {
+    $fb = new Facebook($this->config);
+    $fb->setDefaultAccessToken('foo_token');
+    $accessToken = $fb->getDefaultAccessToken();
+
+    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertEquals('foo_token', (string) $accessToken);
+  }
+
+  public function testAnAccessTokenCanBeSetAsAnAccessTokenEntity()
+  {
+    $fb = new Facebook($this->config);
+    $fb->setDefaultAccessToken(new AccessToken('bar_token'));
+    $accessToken = $fb->getDefaultAccessToken();
+
+    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertEquals('bar_token', (string) $accessToken);
   }
 
   /**
