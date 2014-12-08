@@ -25,6 +25,10 @@ namespace Facebook\Tests\HttpClients;
 
 use Mockery as m;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
+use GuzzleHttp\Message\Request;
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Exception\RequestException;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
@@ -47,38 +51,38 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
   public function testCanSendNormalRequest()
   {
-    $responseMock = m::mock('GuzzleHttp\Message\ResponseInterface');
-    $responseMock
-      ->shouldReceive('getStatusCode')
-      ->once()
-      ->andReturn(200);
-    $responseMock
-      ->shouldReceive('getHeaders')
-      ->once()
-      ->andReturn($this->fakeHeadersAsArray);
-    $responseMock
-      ->shouldReceive('getBody')
-      ->once()
-      ->andReturn($this->fakeRawBody);
+    $request = new Request('GET', 'http://foo.com');
 
-    $options = [
-      'headers' => ['X-foo' => 'bar'],
-      'body' => 'foo_body',
-      'timeout' => 123,
-      'connect_timeout' => 10,
-    ];
+    $body = Stream::factory($this->fakeRawBody);
+    $response = new Response(200, $this->fakeHeadersAsArray, $body);
 
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', $options)
-      ->andReturn($requestMock);
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            $caInfo = array_diff_assoc($arg, [
+                'headers' => ['X-foo' => 'bar'],
+                'body' => 'foo_body',
+                'timeout' => 123,
+                'connect_timeout' => 10,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+              return false;
+            }
+
+            return true;
+          }))
+      ->andReturn($request);
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()
-      ->with($requestMock)
-      ->andReturn($responseMock);
+      ->with($request)
+      ->andReturn($response);
 
     $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
@@ -93,33 +97,35 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
    */
   public function testThrowsExceptionOnClientError()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
-    $exceptionMock = m::mock(
-                      'GuzzleHttp\Exception\RequestException',
-                        [
-                          'Foo Error',
-                          $requestMock,
-                          null,
-                          m::mock('GuzzleHttp\Ring\Exception\RingException'),
-                        ]);
-
-    $options = [
-      'headers' => [],
-      'body' => 'foo_body',
-      'timeout' => 60,
-      'connect_timeout' => 10,
-    ];
+    $request = new Request('GET', 'http://foo.com');
 
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', $options)
-      ->andReturn($requestMock);
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            $caInfo = array_diff_assoc($arg, [
+                'headers' => [],
+                'body' => 'foo_body',
+                'timeout' => 60,
+                'connect_timeout' => 10,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+              return false;
+            }
+
+            return true;
+          }))
+      ->andReturn($request);
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()
-      ->with($requestMock)
-      ->andThrow($exceptionMock);
+      ->with($request)
+      ->andThrow(new RequestException('Foo', $request));
 
     $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
   }
