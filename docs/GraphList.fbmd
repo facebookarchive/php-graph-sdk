@@ -69,3 +69,56 @@ do {
 } while ($pageCount < $maxPages && $listOfPages = $fb->next($listOfPages));
 ~~~~
 </card>
+
+<card>
+## Method Reference {#method-reference}
+
+### getMetaData() {#get-meta-data}
+~~~~
+public array getMetaData()
+~~~~
+
+Sometimes Graph will return additional data associated with a list of Graph nodes. You can access this raw data as an array with `getMetaData()`.
+
+~~~~
+$metaData = $graphList->getMetaData();
+~~~~
+
+### getNextCursor() {#get-next-cursor}
+~~~~
+public string|null getNextCursor()
+~~~~
+
+Returns the `$.paging.cursors.after` value if it exists or `null` if it does not exist. Since cursors are sort of like bookmarks for paginating over a list of Graph nodes, it is sometimes handy to store the last cursor used so that you can revisit the exact position at a later time.
+
+~~~~
+$nextCursor = $graphList->getNextCursor();
+// Returns: MMAyDDM5NjA0OTEyMDc0OTM=
+~~~~
+
+### getPreviousCursor() {#get-previous-cursor}
+~~~~
+public string|null getPreviousCursor()
+~~~~
+
+Returns the `$.paging.cursors.before` value if it exists or `null` if it does not exist.
+
+~~~~
+$previousCursor = $graphList->getPreviousCursor();
+// Returns: ODOxMTUzMjQzNTg5zzU5
+~~~~
+
+### getTotalCount() {#get-total-count}
+~~~~
+public int|null getTotalCount()
+~~~~
+
+Some endpoints and edges of Graph support a summary of data. If the `summary=true` modifier was sent with a request on a supported endpoint or edge, Graph will return the total count of results in the meta data under `$.summary.total_count`. `getTotalCount()` will return that value or `null` if it does not exist.
+
+~~~~
+$response = $fb->get('/{post-id}/likes?summary=true');
+$listOfLikes = $response->getGraphList();
+$totalCount = $listOfLikes->getTotalCount();
+// Returns: 10
+~~~~
+</card>

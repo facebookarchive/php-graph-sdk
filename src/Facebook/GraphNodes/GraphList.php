@@ -94,6 +94,50 @@ class GraphList extends Collection
   }
 
   /**
+   * Returns the raw meta data associated with this GraphList.
+   *
+   * @return array
+   */
+  public function getMetaData()
+  {
+    return $this->metaData;
+  }
+
+  /**
+   * Returns the next cursor if it exists.
+   *
+   * @return string|null
+   */
+  public function getNextCursor()
+  {
+    return $this->getCursor('after');
+  }
+
+  /**
+   * Returns the previous cursor if it exists.
+   *
+   * @return string|null
+   */
+  public function getPreviousCursor()
+  {
+    return $this->getCursor('before');
+  }
+
+  /**
+   * Returns the cursor for a specific direction if it exists.
+   *
+   * @param string $direction The direction of the page: after|before
+   *
+   * @return string|null
+   */
+  public function getCursor($direction)
+  {
+    return isset($this->metaData['paging']['cursors'][$direction])
+      ? $this->metaData['paging']['cursors'][$direction]
+      : null;
+  }
+
+  /**
    * Generates a pagination URL based on a cursor.
    *
    * @param string $direction The direction of the page: next|previous
@@ -116,7 +160,8 @@ class GraphList extends Collection
 
     // Do we have a cursor to work with?
     $cursorDirection = $direction === 'next' ? 'after' : 'before';
-    if ( ! isset($this->metaData['paging']['cursors'][$cursorDirection])) {
+    $cursor = $this->getCursor($cursorDirection);
+    if ( ! $cursor) {
       return null;
     }
 
@@ -127,8 +172,6 @@ class GraphList extends Collection
 
     // We have the parent node ID, paging cursor & original request.
     // These were the ingredients chosen to create the perfect little URL.
-    $cursor = $this->metaData['paging']['cursors'][$cursorDirection];
-
     $pageUrl = $this->parentEdgeEndpoint . '?' . $cursorDirection . '=' . urlencode($cursor);
 
     // Pull in the original params
@@ -195,6 +238,19 @@ class GraphList extends Collection
   public function getPreviousPageRequest()
   {
     return $this->getPaginationRequest('previous');
+  }
+
+  /**
+   * The total number of results according to Graph if it exists.
+   * This will be returned if the summary=true modifier is present in the request.
+   *
+   * @return int|null
+   */
+  public function getTotalCount()
+  {
+    return isset($this->metaData['summary']['total_count'])
+      ? $this->metaData['summary']['total_count']
+      : null;
   }
 
 }
