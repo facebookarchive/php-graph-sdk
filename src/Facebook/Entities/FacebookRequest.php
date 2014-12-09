@@ -163,6 +163,16 @@ class FacebookRequest
   }
 
   /**
+   * Return the access token for this request an an AccessToken entity.
+   *
+   * @return AccessToken|null
+   */
+  public function getAccessTokenEntity()
+  {
+    return $this->accessToken ? new AccessToken($this->accessToken) : null;
+  }
+
+  /**
    * Set the FacebookApp entity used for this request.
    *
    * @param FacebookApp|null $app
@@ -189,11 +199,11 @@ class FacebookRequest
    */
   public function getAppSecretProof()
   {
-    if ( ! $accessToken = $this->getAccessToken()) {
+    if ( ! $accessTokenEntity = $this->getAccessTokenEntity()) {
       return null;
     }
 
-    return hash_hmac('sha256', $accessToken, $this->app->getSecret());
+    return $accessTokenEntity->getAppSecretProof($this->app->getSecret());
   }
 
   /**

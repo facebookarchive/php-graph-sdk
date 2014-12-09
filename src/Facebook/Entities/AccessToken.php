@@ -73,6 +73,18 @@ class AccessToken implements \Serializable
   }
 
   /**
+   * Generate an app secret proof to sign a request to Graph.
+   *
+   * @param string $appSecret The app secret.
+   *
+   * @return string
+   */
+  public function getAppSecretProof($appSecret)
+  {
+    return hash_hmac('sha256', $this->accessToken, $appSecret);
+  }
+
+  /**
    * Setter for expires_at.
    *
    * @param int $timeStamp
