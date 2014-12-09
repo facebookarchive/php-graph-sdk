@@ -283,6 +283,7 @@ class Facebook
    */
   public function get(
     $endpoint,
+  	array $params = [],
     $accessToken = null,
     $eTag = null,
     $graphVersion = null)
@@ -290,7 +291,7 @@ class Facebook
     return $this->sendRequest(
       'GET',
       $endpoint,
-      $params = [],
+      $params,
       $accessToken,
       $eTag,
       $graphVersion);
