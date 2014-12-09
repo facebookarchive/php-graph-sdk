@@ -28,7 +28,7 @@ use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
- * Class Response
+ * Class FacebookResponse
  * @package Facebook
  */
 class FacebookResponse
@@ -55,14 +55,9 @@ class FacebookResponse
   protected $decodedBody = [];
 
   /**
-   * @var string The access token that was used.
+   * @var FacebookRequest The original request that returned this response.
    */
-  protected $accessToken;
-
-  /**
-   * @var FacebookApp The facebook app entity.
-   */
-  protected $app;
+  protected $request;
 
   /**
    * @var FacebookSDKException The exception thrown by this request.
@@ -72,27 +67,34 @@ class FacebookResponse
   /**
    * Creates a new Response entity.
    *
-   * @param FacebookApp $app
+   * @param FacebookRequest $request
+   * @param string|null $body
    * @param int|null $httpStatusCode
    * @param array|null $headers
-   * @param string|null $body
-   * @param string|null $accessToken
    */
   public function __construct(
-    FacebookApp $app,
-    $httpStatusCode = null,
-    array $headers = [],
+    FacebookRequest $request,
     $body = null,
-    $accessToken = null
+    $httpStatusCode = null,
+    array $headers = []
   )
   {
-    $this->app = $app;
+    $this->request = $request;
+    $this->body = $body;
     $this->httpStatusCode = $httpStatusCode;
     $this->headers = $headers;
-    $this->body = $body;
-    $this->accessToken = $accessToken;
 
     $this->decodeBody();
+  }
+
+  /**
+   * Return the original request that returned this response.
+   *
+   * @return FacebookRequest
+   */
+  public function getRequest()
+  {
+    return $this->request;
   }
 
   /**
@@ -102,7 +104,7 @@ class FacebookResponse
    */
   public function getApp()
   {
-    return $this->app;
+    return $this->request->getApp();
   }
 
   /**
@@ -112,7 +114,7 @@ class FacebookResponse
    */
   public function getAccessToken()
   {
-    return $this->accessToken;
+    return $this->request->getAccessToken();
   }
 
   /**
@@ -162,7 +164,7 @@ class FacebookResponse
    */
   public function getAppSecretProof()
   {
-    return AppSecretProof::make($this->accessToken, $this->app->getSecret());
+    return $this->request->getAppSecretProof();
   }
 
   /**
@@ -210,10 +212,7 @@ class FacebookResponse
    */
   public function makeException()
   {
-    $this->thrownException = FacebookResponseException::create(
-                                $this->body,
-                                $this->decodedBody,
-                                $this->httpStatusCode);
+    $this->thrownException = FacebookResponseException::create($this);
   }
 
   /**

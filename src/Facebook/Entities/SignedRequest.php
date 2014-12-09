@@ -33,30 +33,44 @@ class SignedRequest
 {
 
   /**
-   * @var string
+   * @var FacebookApp The FacebookApp entity.
    */
-  public $rawSignedRequest;
+  protected $app;
 
   /**
-   * @var array
+   * @var string The raw encrypted signed request.
    */
-  public $payload;
+  protected $rawSignedRequest;
+
+  /**
+   * @var string|null Pseudo-random string to prevent CSRF.
+   */
+  protected $state;
+
+  /**
+   * @var array The payload from the decrypted signed request.
+   */
+  protected $payload;
 
   /**
    * Instantiate a new SignedRequest entity.
    *
+   * @param FacebookApp $facebookApp The FacebookApp entity.
    * @param string|null $rawSignedRequest The raw signed request.
-   * @param string|null $state random string to prevent CSRF.
-   * @param string|null $appSecret
+   * @param string|null $state Pseudo-random string to prevent CSRF.
    */
-  public function __construct($rawSignedRequest = null, $state = null, $appSecret = null)
+  public function __construct(FacebookApp $facebookApp, $rawSignedRequest = null, $state = null)
   {
-    if (!$rawSignedRequest) {
+    $this->app = $facebookApp;
+
+    if ( ! $rawSignedRequest) {
       return;
     }
 
     $this->rawSignedRequest = $rawSignedRequest;
-    $this->payload = static::parse($rawSignedRequest, $state, $appSecret);
+    $this->state = $state;
+
+    $this->parse();
   }
 
   /**
@@ -112,88 +126,64 @@ class SignedRequest
    */
   public function hasOAuthData()
   {
-    return isset($this->payload['oauth_token']) || isset($this->payload['code']);
+    return $this->get('oauth_token') || $this->get('code');
   }
 
   /**
    * Creates a signed request from an array of data.
    *
    * @param array $payload
-   * @param string|null $appSecret
    *
    * @return string
    */
-  public static function make(array $payload, $appSecret = null)
+  public function make(array $payload)
   {
-    $payload['algorithm'] = 'HMAC-SHA256';
-    $payload['issued_at'] = time();
-    $encodedPayload = static::base64UrlEncode(json_encode($payload));
+    $payload['algorithm'] = isset($payload['algorithm']) ? $payload['algorithm'] : 'HMAC-SHA256';
+    $payload['issued_at'] = isset($payload['issued_at']) ? $payload['issued_at'] : time();
+    $encodedPayload = $this->base64UrlEncode(json_encode($payload));
 
-    $hashedSig = static::hashSignature($encodedPayload, $appSecret);
-    $encodedSig = static::base64UrlEncode($hashedSig);
+    $hashedSig = $this->hashSignature($encodedPayload);
+    $encodedSig = $this->base64UrlEncode($hashedSig);
 
-    return $encodedSig.'.'.$encodedPayload;
+    return $encodedSig . '.' . $encodedPayload;
   }
 
   /**
-   * Validates and decodes a signed request and returns
-   * the payload as an array.
-   *
-   * @param string $signedRequest
-   * @param string|null $state
-   * @param string|null $appSecret
-   *
-   * @return array
+   * Validates and decodes a signed request and saves
+   * the payload to an array.
    */
-  public static function parse($signedRequest, $state = null, $appSecret = null)
+  protected function parse()
   {
-    list($encodedSig, $encodedPayload) = static::split($signedRequest);
+    list($encodedSig, $encodedPayload) = $this->split();
 
     // Signature validation
-    $sig = static::decodeSignature($encodedSig);
-    $hashedSig = static::hashSignature($encodedPayload, $appSecret);
-    static::validateSignature($hashedSig, $sig);
+    $sig = $this->decodeSignature($encodedSig);
+    $hashedSig = $this->hashSignature($encodedPayload);
+    $this->validateSignature($hashedSig, $sig);
+
+    $this->payload = $this->decodePayload($encodedPayload);
 
     // Payload validation
-    $data = static::decodePayload($encodedPayload);
-    static::validateAlgorithm($data);
-    if ($state) {
-      static::validateCsrf($data, $state);
-    }
-
-    return $data;
+    $this->validateAlgorithm();
+    $this->validateCsrf();
   }
 
   /**
-   * Validates the format of a signed request.
+   * Splits a raw signed request into signature and payload.
    *
-   * @param string $signedRequest
+   * @returns array
    *
    * @throws FacebookSDKException
    */
-  public static function validateFormat($signedRequest)
+  protected function split()
   {
-    if (strpos($signedRequest, '.') !== false) {
-      return;
+    if (strpos($this->rawSignedRequest, '.') === false) {
+      throw new FacebookSDKException(
+        'Malformed signed request.', 606
+      );
     }
 
-    throw new FacebookSDKException(
-      'Malformed signed request.', 606
-    );
-  }
-
-  /**
-   * Decodes a raw valid signed request.
-   *
-   * @param string $signedRequest
-   *
-   * @returns array
-   */
-  public static function split($signedRequest)
-  {
-    static::validateFormat($signedRequest);
-
-    return explode('.', $signedRequest, 2);
+    return explode('.', $this->rawSignedRequest, 2);
   }
 
   /**
@@ -205,9 +195,9 @@ class SignedRequest
    *
    * @throws FacebookSDKException
    */
-  public static function decodeSignature($encodedSig)
+  protected function decodeSignature($encodedSig)
   {
-    $sig = static::base64UrlDecode($encodedSig);
+    $sig = $this->base64UrlDecode($encodedSig);
 
     if ($sig) {
       return $sig;
@@ -227,9 +217,9 @@ class SignedRequest
    *
    * @throws FacebookSDKException
    */
-  public static function decodePayload($encodedPayload)
+  protected function decodePayload($encodedPayload)
   {
-    $payload = static::base64UrlDecode($encodedPayload);
+    $payload = $this->base64UrlDecode($encodedPayload);
 
     if ($payload) {
       $payload = json_decode($payload, true);
@@ -247,13 +237,11 @@ class SignedRequest
   /**
    * Validates the algorithm used in a signed request.
    *
-   * @param array $data
-   *
    * @throws FacebookSDKException
    */
-  public static function validateAlgorithm(array $data)
+  protected function validateAlgorithm()
   {
-    if (isset($data['algorithm']) && $data['algorithm'] === 'HMAC-SHA256') {
+    if ($this->get('algorithm') === 'HMAC-SHA256') {
       return;
     }
 
@@ -266,16 +254,15 @@ class SignedRequest
    * Hashes the signature used in a signed request.
    *
    * @param string $encodedData
-   * @param string $appSecret
    *
    * @return string
    *
    * @throws FacebookSDKException
    */
-  public static function hashSignature($encodedData, $appSecret)
+  protected function hashSignature($encodedData)
   {
     $hashedSig = hash_hmac(
-      'sha256', $encodedData, $appSecret, $raw_output = true
+      'sha256', $encodedData, $this->app->getSecret(), $raw_output = true
     );
 
     if ($hashedSig) {
@@ -295,7 +282,7 @@ class SignedRequest
    *
    * @throws FacebookSDKException
    */
-  public static function validateSignature($hashedSig, $sig)
+  protected function validateSignature($hashedSig, $sig)
   {
     if (mb_strlen($hashedSig) === mb_strlen($sig)) {
       $validate = 0;
@@ -315,14 +302,15 @@ class SignedRequest
   /**
    * Validates a signed request against CSRF.
    *
-   * @param array $data
-   * @param string $state
-   *
    * @throws FacebookSDKException
    */
-  public static function validateCsrf(array $data, $state)
+  protected function validateCsrf()
   {
-    if (isset($data['state']) && $data['state'] === $state) {
+    if ( ! $this->state) {
+      return;
+    }
+
+    if ($this->get('state') === $this->state) {
       return;
     }
 
@@ -341,10 +329,11 @@ class SignedRequest
    *
    * @return string decoded string
    */
-  public static function base64UrlDecode($input)
+  public function base64UrlDecode($input)
   {
     $urlDecodedBase64 = strtr($input, '-_', '+/');
-    static::validateBase64($urlDecodedBase64);
+    $this->validateBase64($urlDecodedBase64);
+
     return base64_decode($urlDecodedBase64);
   }
 
@@ -358,7 +347,7 @@ class SignedRequest
    *
    * @return string base64 url encoded input
    */
-  public static function base64UrlEncode($input)
+  public function base64UrlEncode($input)
   {
     return strtr(base64_encode($input), '+/', '-_');
   }
@@ -370,7 +359,7 @@ class SignedRequest
    *
    * @throws FacebookSDKException
    */
-  public static function validateBase64($input)
+  protected function validateBase64($input)
   {
     $pattern = '/^[a-zA-Z0-9\/\r\n+]*={0,2}$/';
     if (preg_match($pattern, $input)) {

@@ -46,7 +46,6 @@ Cache-Control: private, no-cache, no-store, must-revalidate
 Access-Control-Allow-Origin: *\r\n\r\n";
   protected $fakeRawBody = "{\"id\":\"123\",\"name\":\"Foo Bar\"}";
   protected $fakeHeadersAsArray = [
-    'http_code' => 'HTTP/1.1 200 OK',
     'Etag' => '"9d86b21aa74d74e574bbb35ba13524a52deb96e3"',
     'Content-Type' => 'text/javascript; charset=UTF-8',
     'X-FB-Rev' => '9244768',

@@ -145,17 +145,46 @@ Returns the instance of `Facebook\Entities\FacebookApp` for the instantiated ser
 <card>
 ### getClient() {#get-client}
 ~~~~
-public FacebookClient getClient()
+public Facebook\FacebookClient getClient()
 ~~~~
-Returns the instance of `Facebook\FacebookClient` for the instantiated service.
+Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) for the instantiated service.
+</card>
+
+<card>
+### getLastResponse() {#get-last-response}
+~~~~
+public Facebook\Entities\FacebookResponse|Facebook\Entities\FacebookBatchResponse|null getLastResponse()
+~~~~
+Returns the last response received from the Graph API in the form of a `Facebook\Entities\FacebookResponse` or `Facebook\Entities\FacebookBatchResponse`.
 </card>
 
 <card>
 ### getDefaultAccessToken() {#get-default-access-token}
 ~~~~
-public AccessToken|null getDefaultAccessToken()
+public Facebook\Entities\AccessToken|null getDefaultAccessToken()
 ~~~~
-Returns the default `Facebook\Entities\AccessToken` entity if the configuration option `default_access_token` was set.
+
+Returns the default fallback `Facebook\Entities\AccessToken` entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
+</card>
+
+<card>
+### setDefaultAccessToken() {#set-default-access-token}
+~~~~
+public setDefaultAccessToken(string|Facebook\Entities\AccessToken $accessToken)
+~~~~
+
+Sets the default access token to be use with all requests sent to Graph. The access token can be in string or `Facebook\Entities\AccessToken` format.
+
+~~~~
+$fb->setDefaultAccessToken('{my-access-token}');
+
+// . . . OR . . .
+
+$accessToken = new Facebook\Entities\AccessToken('{my-access-token}');
+$fb->setDefaultAccessToken($accessToken);
+~~~~
+
+This setting will overwrite the value from `default_access_token` if it was passed to the `Facebook\Facebook` constructor.
 </card>
 
 <card>
@@ -304,5 +333,146 @@ Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRed
 
 ~~~~
 $helper = $fb->getRedirectLoginHelper();
+~~~~
+</card>
+
+<card>
+### getJavaScriptHelper() {#get-javascript-helper}
+~~~~
+public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the JavaScript SDK.
+
+~~~~
+$helper = $fb->getJavaScriptHelper();
+~~~~
+</card>
+
+<card>
+### getCanvasHelper() {#get-canvas-helper}
+~~~~
+public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) which is used to access the signed request that is `POST`ed to canvas apps.
+
+~~~~
+$helper = $fb->getCanvasHelper();
+~~~~
+</card>
+
+<card>
+### getPageTabHelper() {#get-page-tab-helper}
+~~~~
+public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
+~~~~
+
+Returns a [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHelper) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
+
+~~~~
+$helper = $fb->getPageTabHelper();
+~~~~
+</card>
+
+<card>
+### next() {#next}
+~~~~
+public Facebook\GraphNodes\GraphList|null next(Facebook\GraphNodes\GraphList $graphList)
+~~~~
+
+Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) object. If the next page returns no results, `null` will be returned.
+
+~~~~
+// Iterate over 5 pages max
+$maxPages = 5;
+
+// Get a list of photo objects
+$response = $fb->get('/me/photos?fields=id,source,likes&limit=5');
+
+$photosList = $response->getGraphList();
+
+if (count($photosList) > 0) {
+  $pageCount = 0;
+  do {
+    foreach ($photosList as $photo) {
+      var_dump($photo->asArray());
+
+      // Deep pagination is supported on child GraphList's
+      $likes = $photo['likes'];
+      do {
+        echo '<p>Likes:</p>' . "\n\n";
+        var_dump($likes->asArray());
+      } while ($likes = $fqb->next($likes));
+    }
+    $pageCount++;
+  } while ($pageCount < $maxPages && $photosList = $fb->next($photosList));
+}
+~~~~
+</card>
+
+<card>
+### previous() {#previous}
+~~~~
+public Facebook\GraphNodes\GraphList|null previous(Facebook\GraphNodes\GraphList $graphList)
+~~~~
+
+Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` object. Functions just like `next()` above, but in the opposite direction of pagination.
+</card>
+
+<card>
+### fileToUpload() {#file-to-upload}
+~~~~
+public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
+~~~~
+
+When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` that can be used in the params in a POST request to Graph.
+
+~~~~
+// Upload a photo for a user
+$data = [
+  'message' => 'A neat photo upload example. Neat.',
+  'source' => $fb->fileToUpload('/path/to/photo.jpg'),
+];
+
+try {
+  $response = $fb->post('/me/photos', $data);
+} catch(FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Photo ID: ' . $graphObject['id'];
+~~~~
+</card>
+
+<card>
+### videoToUpload() {#video-to-upload}
+~~~~
+public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
+~~~~
+
+Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the PHP SDK will automatically point the request to the `graph-video.facebook.com` host name for you.
+
+~~~~
+// Upload a video for a user
+$data = [
+  'title' => 'My awesome video',
+  'description' => 'More info about my awesome video.',
+  'source' => $fb->videoToUpload('/path/to/video.mp4'),
+];
+
+try {
+  $response = $fb->post('/me/videos', $data);
+} catch(FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Video ID: ' . $graphObject['id'];
 ~~~~
 </card>

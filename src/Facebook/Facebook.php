@@ -29,6 +29,9 @@ use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
 use Facebook\Entities\FacebookResponse;
 use Facebook\Entities\FacebookBatchResponse;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookVideo;
+use Facebook\GraphNodes\GraphList;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\HttpClients\FacebookHttpClientInterface;
@@ -38,14 +41,15 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+use Facebook\Helpers\FacebookCanvasHelper;
+use Facebook\Helpers\FacebookJavaScriptHelper;
+use Facebook\Helpers\FacebookPageTabHelper;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class Facebook
  * @package Facebook
- *
- * @TODO Add helpers to superclass
  */
 class Facebook
 {
@@ -101,6 +105,11 @@ class Facebook
    * @var PersistentDataInterface|null The persistent data handler.
    */
   protected $persistentDataHandler;
+
+  /**
+   * @var FacebookResponse|FacebookBatchResponse|null Stores the last request made to Graph.
+   */
+  protected $lastResponse;
 
   /**
    * @TODO Add FacebookInputInterface
@@ -186,14 +195,7 @@ class Facebook
     }
 
     if (isset($config['default_access_token'])) {
-      if (is_string($config['default_access_token'])) {
-        $this->defaultAccessToken = new AccessToken($config['default_access_token']);
-      } elseif ( ! $config['default_access_token'] instanceof AccessToken) {
-        throw new \InvalidArgumentException(
-          'The "default_access_token" provided must be of type "string"'
-          . ' or Facebook\Entities\AccessToken'
-        );
-      }
+      $this->setDefaultAccessToken($config['default_access_token']);
     }
 
     $this->defaultGraphVersion = isset($config['default_graph_version'])
@@ -222,6 +224,16 @@ class Facebook
   }
 
   /**
+   * Returns the last response returned from Graph.
+   *
+   * @return FacebookResponse|FacebookBatchResponse|null
+   */
+  public function getLastResponse()
+  {
+    return $this->lastResponse;
+  }
+
+  /**
    * Returns the URL detection handler.
    *
    * @return UrlDetectionInterface
@@ -246,6 +258,31 @@ class Facebook
   }
 
   /**
+   * Sets the default access token to use with requests.
+   *
+   * @param AccessToken|string $accessToken The access token to save.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function setDefaultAccessToken($accessToken)
+  {
+    if (is_string($accessToken)) {
+      $this->defaultAccessToken = new AccessToken($accessToken);
+      return;
+    }
+
+    if ($accessToken instanceof AccessToken) {
+      $this->defaultAccessToken = $accessToken;
+      return;
+    }
+
+    throw new \InvalidArgumentException(
+      'The default access token must be of type "string"'
+      . ' or Facebook\Entities\AccessToken'
+    );
+  }
+
+  /**
    * Returns the default Graph version.
    *
    * @return string
@@ -267,6 +304,36 @@ class Facebook
       $this->persistentDataHandler,
       $this->urlDetectionHandler
     );
+  }
+
+  /**
+   * Returns the JavaScript helper.
+   *
+   * @return FacebookJavaScriptHelper
+   */
+  public function getJavaScriptHelper()
+  {
+    return new FacebookJavaScriptHelper($this->app);
+  }
+
+  /**
+   * Returns the canvas helper.
+   *
+   * @return FacebookCanvasHelper
+   */
+  public function getCanvasHelper()
+  {
+    return new FacebookCanvasHelper($this->app);
+  }
+
+  /**
+   * Returns the page tab helper.
+   *
+   * @return FacebookPageTabHelper
+   */
+  public function getPageTabHelper()
+  {
+    return new FacebookPageTabHelper($this->app);
   }
 
   /**
@@ -354,6 +421,60 @@ class Facebook
   }
 
   /**
+   * Sends a request to Graph for the next page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function next(GraphList $graphList)
+  {
+    return $this->getPaginationResults($graphList, 'next');
+  }
+
+  /**
+   * Sends a request to Graph for the previous page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function previous(GraphList $graphList)
+  {
+    return $this->getPaginationResults($graphList, 'previous');
+  }
+
+  /**
+   * Sends a request to Graph for the next page of results.
+   *
+   * @param GraphList $graphList The GraphList to paginate over.
+   * @param string $direction The direction of the pagination: next|previous.
+   *
+   * @return GraphList|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function getPaginationResults(GraphList $graphList, $direction)
+  {
+    $paginationRequest = $graphList->getPaginationRequest($direction);
+    if ( ! $paginationRequest) {
+      return null;
+    }
+
+    $this->lastResponse = $this->client->sendRequest($paginationRequest);
+
+    // Keep the same GraphObject subclass
+    $subClassName = $graphList->getSubClassName();
+    $graphList = $this->lastResponse->getGraphList($subClassName, false);
+
+    return count($graphList) > 0 ? $graphList : null;
+  }
+
+  /**
    * Sends a request to Graph and returns the result.
    *
    * @param string $method
@@ -378,7 +499,7 @@ class Facebook
     $accessToken = $accessToken ?: $this->defaultAccessToken;
     $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
     $request = $this->request($method, $endpoint, $params, $accessToken, $eTag, $graphVersion);
-    return $this->client->sendRequest($request);
+    return $this->lastResponse = $this->client->sendRequest($request);
   }
 
   /**
@@ -401,12 +522,12 @@ class Facebook
     $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
     $batchRequest = new FacebookBatchRequest(
       $this->app,
-      $accessToken,
       $requests,
+      $accessToken,
       $graphVersion
     );
 
-    return $this->client->sendBatchRequest($batchRequest);
+    return $this->lastResponse = $this->client->sendBatchRequest($batchRequest);
   }
 
   /**
@@ -442,6 +563,34 @@ class Facebook
       $eTag,
       $graphVersion
     );
+  }
+
+  /**
+   * Factory to create FacebookFile's.
+   *
+   * @param string $pathToFile
+   *
+   * @return FacebookFile
+   *
+   * @throws FacebookSDKException
+   */
+  public function fileToUpload($pathToFile)
+  {
+    return new FacebookFile($pathToFile);
+  }
+
+  /**
+   * Factory to create FacebookVideo's.
+   *
+   * @param string $pathToFile
+   *
+   * @return FacebookVideo
+   *
+   * @throws FacebookSDKException
+   */
+  public function videoToUpload($pathToFile)
+  {
+    return new FacebookVideo($pathToFile);
   }
 
 }

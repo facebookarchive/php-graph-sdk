@@ -23,16 +23,21 @@
  */
 namespace Facebook\Tests\Entities;
 
+use Facebook\Entities\FacebookApp;
 use Facebook\Entities\SignedRequest;
 
 class SignedRequestTest extends \PHPUnit_Framework_TestCase
 {
 
-  public $appSecret = 'foo_app_secret';
+  /**
+   * @var FacebookApp
+   */
+  protected $app;
 
-  public $rawSignedRequest = 'U0_O1MqqNKUt32633zAkdd2Ce-jGVgRgJeRauyx_zC8=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjozMjEsImNvZGUiOiJmb29fY29kZSIsInN0YXRlIjoiZm9vX3N0YXRlIiwidXNlcl9pZCI6MTIzLCJmb28iOiJiYXIifQ==';
+  protected $rawSignature = 'U0_O1MqqNKUt32633zAkdd2Ce-jGVgRgJeRauyx_zC8=';
+  protected $rawPayload = 'eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjozMjEsImNvZGUiOiJmb29fY29kZSIsInN0YXRlIjoiZm9vX3N0YXRlIiwidXNlcl9pZCI6MTIzLCJmb28iOiJiYXIifQ==';
 
-  public $payloadData = [
+  protected $payloadData = [
     'oauth_token' => 'foo_token',
     'algorithm' => 'HMAC-SHA256',
     'issued_at' => 321,
@@ -42,10 +47,22 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
     'foo' => 'bar',
   ];
 
-  public function testValidSignedRequestsWillPassFormattingValidation()
+  public function setUp()
   {
-    $sr = SignedRequest::make($this->payloadData, $this->appSecret);
-    SignedRequest::validateFormat($sr);
+    $this->app = new FacebookApp('123', 'foo_app_secret');
+  }
+
+  public function testAValidSignedRequestCanBeCreated()
+  {
+    $sr = new SignedRequest($this->app);
+    $rawSignedRequest = $sr->make($this->payloadData);
+
+    $srTwo = new SignedRequest($this->app, $rawSignedRequest);
+    $payload = $srTwo->getPayload();
+
+    $expectedRawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
+    $this->assertEquals($expectedRawSignedRequest, $rawSignedRequest);
+    $this->assertEquals($this->payloadData, $payload);
   }
 
   /**
@@ -53,36 +70,23 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testInvalidSignedRequestsWillFailFormattingValidation()
   {
-    SignedRequest::validateFormat('invalid_signed_request');
-  }
-
-  public function testSignatureAndPayloadCanBeSeparatedInSignedRequests()
-  {
-    list($sig, $payload) = SignedRequest::split('sig.payload');
-
-    $this->assertEquals('sig', $sig);
-    $this->assertEquals('payload', $payload);
+    new SignedRequest($this->app, 'invalid_signed_request');
   }
 
   public function testBase64EncodingIsUrlSafe()
   {
-    $encodedData = SignedRequest::base64UrlEncode('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~');
+    $sr = new SignedRequest($this->app);
+    $encodedData = $sr->base64UrlEncode('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~');
 
     $this->assertEquals('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4_Lnx-', $encodedData);
   }
 
   public function testAUrlSafeBase64EncodedStringCanBeDecoded()
   {
-    $decodedData = SignedRequest::base64UrlDecode('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4/Lnx+');
+    $sr = new SignedRequest($this->app);
+    $decodedData = $sr->base64UrlDecode('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4/Lnx+');
 
     $this->assertEquals('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~', $decodedData);
-  }
-
-  public function testAValidEncodedSignatureCanBeDecoded()
-  {
-    $decodedSig = SignedRequest::decodeSignature('c2ln');
-
-    $this->assertEquals('sig', $decodedSig);
   }
 
   /**
@@ -90,14 +94,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAnImproperlyEncodedSignatureWillThrowAnException()
   {
-    SignedRequest::decodeSignature('foo!');
-  }
-
-  public function testAValidEncodedPayloadCanBeDecoded()
-  {
-    $decodedPayload = SignedRequest::decodePayload('WyJwYXlsb2FkIl0=');
-
-    $this->assertEquals(['payload'], $decodedPayload);
+    new SignedRequest($this->app, 'foo_sig.' . $this->rawPayload);
   }
 
   /**
@@ -105,12 +102,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAnImproperlyEncodedPayloadWillThrowAnException()
   {
-    SignedRequest::decodePayload('foo!');
-  }
-
-  public function testSignedRequestDataMustContainTheHmacSha256Algorithm()
-  {
-    SignedRequest::validateAlgorithm($this->payloadData);
+    new SignedRequest($this->app, $this->rawSignature . '.foo_payload');
   }
 
   /**
@@ -120,36 +112,19 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
   {
     $signedRequestData = $this->payloadData;
     $signedRequestData['algorithm'] = 'FOO-ALGORITHM';
-    SignedRequest::validateAlgorithm($signedRequestData);
-  }
 
-  public function testASignatureHashCanBeGeneratedFromBase64EncodedData()
-  {
-    $hashedSig = SignedRequest::hashSignature('WyJwYXlsb2FkIl0=', $this->appSecret);
+    $sr = new SignedRequest($this->app);
+    $rawSignedRequest = $sr->make($signedRequestData);
 
-    $expectedSig = base64_decode('bFofyO2sERX73y8uvuX26SLodv0mZ+Zk18d8b3zhD+s=');
-    $this->assertEquals($expectedSig, $hashedSig);
-  }
-
-  public function testTwoBinaryStringsCanBeComparedForSignatureValidation()
-  {
-    $hashedSig = base64_decode('bFofyO2sERX73y8uvuX26SLodv0mZ+Zk18d8b3zhD+s=');
-    SignedRequest::validateSignature($hashedSig, $hashedSig);
-  }
-
-  /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
-   */
-  public function testNonSameBinaryStringsWillThrowAnExceptionForSignatureValidation()
-  {
-    $hashedSig1 = base64_decode('bFofyO2sERX73y8uvuX26SLodv0mZ+Zk18d8b3zhD+s=');
-    $hashedSig2 = base64_decode('GJy4HzkRtCeZA0cJjdZJtGfovcdxgl/AERI20S4MY7c=');
-    SignedRequest::validateSignature($hashedSig1, $hashedSig2);
+    new SignedRequest($this->app, $rawSignedRequest);
   }
 
   public function testASignedRequestWillPassCsrfValidation()
   {
-    SignedRequest::validateCsrf($this->payloadData, 'foo_state');
+    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
+    $sr = new SignedRequest($this->app, $rawSignedRequest, 'foo_state');
+
+    $this->assertEquals($this->payloadData, $sr->getPayload());
   }
 
   /**
@@ -157,30 +132,27 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testASignedRequestWithIncorrectCsrfDataWillThrowAnException()
   {
-    SignedRequest::validateCsrf($this->payloadData, 'invalid_foo_state');
+    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
+    new SignedRequest($this->app, $rawSignedRequest, 'invalid_foo_state');
+  }
+
+  public function testAsRawSignedRequestCanBeValidatedAndDecoded()
+  {
+    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
+    $sr = new SignedRequest($this->app, $rawSignedRequest);
+
+    $this->assertEquals($this->payloadData, $sr->getPayload());
   }
 
   public function testARawSignedRequestCanBeValidatedAndDecoded()
   {
-    $payload = SignedRequest::parse($this->rawSignedRequest, 'foo_state', $this->appSecret);
+    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
+    $sr = new SignedRequest($this->app, $rawSignedRequest);
 
-    $this->assertEquals($this->payloadData, $payload);
-  }
-
-  public function testARawSignedRequestCanBeInjectedIntoTheConstructorToInstantiateANewEntity()
-  {
-    $signedRequest = new SignedRequest($this->rawSignedRequest, 'foo_state', $this->appSecret);
-
-    $rawSignedRequest = $signedRequest->getRawSignedRequest();
-    $payloadData = $signedRequest->getPayload();
-    $userId = $signedRequest->getUserId();
-    $hasOAuthData = $signedRequest->hasOAuthData();
-
-    $this->assertInstanceOf('\Facebook\Entities\SignedRequest', $signedRequest);
-    $this->assertEquals($this->rawSignedRequest, $rawSignedRequest);
-    $this->assertEquals($this->payloadData, $payloadData);
-    $this->assertEquals(123, $userId);
-    $this->assertTrue($hasOAuthData);
+    $this->assertEquals($sr->getPayload(), $this->payloadData);
+    $this->assertEquals($sr->getRawSignedRequest(), $rawSignedRequest);
+    $this->assertEquals(123, $sr->getUserId());
+    $this->assertTrue($sr->hasOAuthData());
   }
 
 }

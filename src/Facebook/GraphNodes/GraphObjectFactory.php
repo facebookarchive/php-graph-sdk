@@ -46,12 +46,17 @@ class GraphObjectFactory
   /**
    * @const string The base graph object class.
    */
-  const BASE_GRAPH_OBJECT_CLASS = '\\Facebook\\GraphNodes\\GraphObject';
+  const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphObject';
 
   /**
    * @const string The graph object prefix.
    */
-  const BASE_GRAPH_OBJECT_PREFIX = '\\Facebook\\GraphNodes\\';
+  const BASE_GRAPH_OBJECT_PREFIX = '\Facebook\GraphNodes\\';
+
+  /**
+   * @var FacebookResponse The response entity from Graph.
+   */
+  protected $response;
 
   /**
    * @var array The decoded body of the FacebookResponse entity from Graph.
@@ -65,6 +70,7 @@ class GraphObjectFactory
    */
   public function __construct(FacebookResponse $response)
   {
+    $this->response = $response;
     $this->decodedBody = $response->getDecodedBody();
   }
 
@@ -82,12 +88,7 @@ class GraphObjectFactory
     $this->validateResponseAsArray();
     $this->validateResponseCastableAsGraphObject();
 
-    // Sometimes Graph is a weirdo and returns a GraphObject under the "data" key
-    if (isset($this->decodedBody['data'])) {
-      $this->decodedBody = $this->decodedBody['data'];
-    }
-
-    return $this->safelyMakeGraphObject($this->decodedBody, $subclassName);
+    return $this->castAsGraphObjectOrGraphList($this->decodedBody, $subclassName);
   }
 
   /**
@@ -157,7 +158,7 @@ class GraphObjectFactory
       $subclassName = static::BASE_GRAPH_OBJECT_PREFIX . $subclassName;
     }
 
-    return $this->safelyMakeGraphList($this->decodedBody, $subclassName);
+    return $this->castAsGraphObjectOrGraphList($this->decodedBody, $subclassName);
   }
 
   /**
@@ -223,6 +224,9 @@ class GraphObjectFactory
     $subclassName = $subclassName ?: static::BASE_GRAPH_OBJECT_CLASS;
     static::validateSubclass($subclassName);
 
+    // Remember the parent node ID
+    $parentNodeId = isset($data['id']) ? $data['id'] : null;
+
     $items = [];
 
     foreach ($data as $k => $v) {
@@ -237,7 +241,7 @@ class GraphObjectFactory
           : null;
 
         // Could be a GraphList or GraphObject
-        $items[$k] = $this->castAsGraphObjectOrGraphList($v, $objectSubClass);
+        $items[$k] = $this->castAsGraphObjectOrGraphList($v, $objectSubClass, $k, $parentNodeId);
       } else {
         $items[$k] = $v;
       }
@@ -251,17 +255,19 @@ class GraphObjectFactory
    *
    * @param array $data The array of data to iterate over.
    * @param string|null $subclassName The subclass to cast this collection to.
+   * @param string|null $parentKey The key of this data (Graph edge).
+   * @param string|null $parentNodeId The parent Graph node ID.
    *
    * @return GraphObject|GraphList
    *
    * @throws FacebookSDKException
    */
-  public function castAsGraphObjectOrGraphList(array $data, $subclassName = null)
+  public function castAsGraphObjectOrGraphList(array $data, $subclassName = null, $parentKey = null, $parentNodeId = null)
   {
     if (isset($data['data'])) {
       // Create GraphList
       if (static::isCastableAsGraphList($data['data'])) {
-        return $this->safelyMakeGraphList($data, $subclassName);
+        return $this->safelyMakeGraphList($data, $subclassName, $parentKey, $parentNodeId);
       }
       // Sometimes Graph is a weirdo and returns a GraphObject under the "data" key
       $data = $data['data'];
@@ -276,12 +282,14 @@ class GraphObjectFactory
    *
    * @param array $data The array of data to iterate over.
    * @param string|null $subclassName The GraphObject subclass to cast each item in the list to.
+   * @param string|null $parentKey The key of this data (Graph edge).
+   * @param string|null $parentNodeId The parent Graph node ID.
    *
    * @return GraphList
    *
    * @throws FacebookSDKException
    */
-  public function safelyMakeGraphList(array $data, $subclassName = null)
+  public function safelyMakeGraphList(array $data, $subclassName = null, $parentKey = null, $parentNodeId = null)
   {
     if ( ! isset($data['data'])) {
       throw new FacebookSDKException(
@@ -291,13 +299,29 @@ class GraphObjectFactory
 
     $dataList = [];
     foreach ($data['data'] as $graphNode) {
-      $dataList[] = $this->safelyMakeGraphObject($graphNode, $subclassName);
+      $dataList[] = $this->safelyMakeGraphObject($graphNode, $subclassName, $parentKey, $parentNodeId);
     }
 
-    // @TODO: Look for meta data here
-    $metaData = [];
+    $metaData = $this->getMetaData($data);
 
-    return new GraphList($dataList, $metaData);
+    // We'll need to make an edge endpoint for this in case it's a GraphList (for cursor pagination)
+    $parentGraphEdgeEndpoint = $parentNodeId && $parentKey ? '/' . $parentNodeId . '/' . $parentKey : null;
+    
+    return new GraphList($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
+  }
+
+  /**
+   * Get the meta data from a list in a Graph response.
+   *
+   * @param array $data The Graph response.
+   *
+   * @return array
+   */
+  public function getMetaData(array $data)
+  {
+    unset($data['data']);
+
+    return $data;
   }
 
   /**

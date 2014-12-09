@@ -24,23 +24,33 @@
 namespace Facebook\Tests\Entities;
 
 use Facebook\Entities\FacebookApp;
+use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookResponse;
 
 class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testAnEmptyResponseEntityCanInstantiate()
+  /**
+   * @var \Facebook\Entities\FacebookRequest
+   */
+  protected $request;
+
+  public function setUp()
   {
     $app = new FacebookApp('123', 'foo_secret');
-    $response = new FacebookResponse($app);
-
-    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $response);
+    $this->request = new FacebookRequest(
+      $app,
+      'foo_token',
+      'GET',
+      '/me/photos?keep=me',
+      ['foo' => 'bar'],
+      'foo_eTag',
+      'v1337');
   }
 
   public function testAnETagCanBeProperlyAccessed()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $response = new FacebookResponse($app, 200, ['ETag' => 'foo_tag']);
+    $response = new FacebookResponse($this->request, '', 200, ['ETag' => 'foo_tag']);
 
     $eTag = $response->getETag();
 
@@ -49,8 +59,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testAProperAppSecretProofCanBeGenerated()
   {
-    $app = new FacebookApp('123', 'foo_secret');
-    $response = new FacebookResponse($app, 200, [], '', 'foo_token');
+    $response = new FacebookResponse($this->request);
 
     $appSecretProof = $response->getAppSecretProof();
 
@@ -59,9 +68,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testASuccessfulJsonResponseWillBeDecodedToAGraphObject()
   {
-    $app = new FacebookApp('123', 'foo_secret');
     $graphResponseJson = '{"id":"123","name":"Foo"}';
-    $response = new FacebookResponse($app, 200, [], $graphResponseJson);
+    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
     $decodedResponse = $response->getDecodedBody();
     $graphObject = $response->getGraphObject();
@@ -76,9 +84,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
   {
-    $app = new FacebookApp('123', 'foo_secret');
     $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
-    $response = new FacebookResponse($app, 200, [], $graphResponseJson);
+    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
     $graphObjectList = $response->getGraphList();
 
@@ -89,9 +96,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()
   {
-    $app = new FacebookApp('123', 'foo_secret');
     $graphResponseKeyValuePairs = 'id=123&name=Foo';
-    $response = new FacebookResponse($app, 200, [], $graphResponseKeyValuePairs);
+    $response = new FacebookResponse($this->request, $graphResponseKeyValuePairs, 200);
 
     $decodedResponse = $response->getDecodedBody();
 
@@ -104,9 +110,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 
   public function testErrorStatusCanBeCheckedWhenAnErrorResponseIsReturned()
   {
-    $app = new FacebookApp('123', 'foo_secret');
     $graphResponse = '{"error":{"message":"Foo error.","type":"OAuthException","code":190,"error_subcode":463}}';
-    $response = new FacebookResponse($app, 401, [], $graphResponse);
+    $response = new FacebookResponse($this->request, $graphResponse, 401);
 
     $exception = $response->getThrownException();
 

@@ -31,31 +31,18 @@ interface FacebookHttpClientInterface
 {
 
   /**
-   * The headers returned in the response.
-   *
-   * @return array
-   */
-  public function getResponseHeaders();
-
-  /**
-   * The HTTP status response code.
-   *
-   * @return int
-   */
-  public function getResponseHttpStatusCode();
-
-  /**
    * Sends a request to the server and returns the raw response.
    *
    * @param string $url The endpoint to send the request to.
    * @param string $method The request method.
-   * @param array  $parameters The key value pairs to be sent in the body.
+   * @param string $body The body of the request.
    * @param array  $headers The request headers.
+   * @param int    $timeOut The timeout in seconds for the request.
    *
-   * @return string Raw response from the server.
+   * @return \Facebook\Http\GraphRawResponse Raw response from the server.
    *
    * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function send($url, $method = 'GET', array $parameters = [], array $headers = []);
+  public function send($url, $method, $body, array $headers, $timeOut);
 
 }

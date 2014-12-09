@@ -23,6 +23,8 @@
  */
 namespace Facebook\Exceptions;
 
+use Facebook\Entities\FacebookResponse;
+
 /**
  * Class FacebookResponseException
  * @package Facebook
@@ -33,54 +35,50 @@ class FacebookResponseException extends FacebookSDKException
 {
 
   /**
-   * @var int Status code for the response causing the exception
+   * @var FacebookResponse The response that threw the exception.
    */
-  private $statusCode;
+  protected $response;
 
   /**
-   * @var string Raw response
+   * @var array Decoded response.
    */
-  private $rawResponse;
-
-  /**
-   * @var array Decoded response
-   */
-  private $responseData;
+  protected $responseData;
 
   /**
    * Creates a FacebookResponseException.
    *
-   * @param string $rawResponse The raw response from the Graph API
-   * @param array $responseData The decoded response from the Graph API
-   * @param int $statusCode
+   * @param FacebookResponse $response The response that threw the exception.
+   * @param FacebookSDKException $previousException The more detailed exception.
    */
-  public function __construct($rawResponse, $responseData, $statusCode)
+  public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null)
   {
-    $this->rawResponse = $rawResponse;
-    $this->statusCode = $statusCode;
-    $this->responseData = self::convertToArray($responseData);
-    parent::__construct(
-      $this->get('message', 'Unknown Exception'), $this->get('code', -1), null
-    );
+    $this->response = $response;
+    $this->responseData = $response->getDecodedBody();
+
+    $errorMessage = $this->get('message', 'Unknown error from Graph.');
+    $errorCode = $this->get('code', -1);
+
+    parent::__construct($errorMessage, $errorCode, $previousException);
   }
 
   /**
-   * Process an error payload from the Graph API and return the appropriate
-   *   exception subclass.
+   * A factory for creating the appropriate exception based on the response from Graph.
    *
-   * @param string $raw the raw response from the Graph API
-   * @param array $data the decoded response from the Graph API
-   * @param int $statusCode the HTTP response code
+   * @param FacebookResponse $response The response that threw the exception.
    *
    * @return FacebookResponseException
    */
-  public static function create($raw, $data, $statusCode)
+  public static function create(FacebookResponse $response)
   {
-    $data = self::convertToArray($data);
-    if (!isset($data['error']['code']) && isset($data['code'])) {
+    $data = $response->getDecodedBody();
+
+    if ( ! isset($data['error']['code']) && isset($data['code'])) {
       $data = ['error' => $data];
     }
-    $code = (isset($data['error']['code']) ? $data['error']['code'] : null);
+    $code = isset($data['error']['code']) ? $data['error']['code'] : null;
+    $message = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown error from Graph.';
+
+    $previousException = null;
 
     if (isset($data['error']['error_subcode'])) {
       switch ($data['error']['error_subcode']) {
@@ -91,7 +89,7 @@ class FacebookResponseException extends FacebookSDKException
         case 463:
         case 464:
         case 467:
-          return new FacebookAuthorizationException($raw, $data, $statusCode);
+          return new static($response, new FacebookAuthorizationException($message, $code));
           break;
       }
     }
@@ -101,41 +99,41 @@ class FacebookResponseException extends FacebookSDKException
       case 100:
       case 102:
       case 190:
-        return new FacebookAuthorizationException($raw, $data, $statusCode);
+        return new static($response, new FacebookAuthorizationException($message, $code));
         break;
 
       // Server issue, possible downtime
       case 1:
       case 2:
-        return new FacebookServerException($raw, $data, $statusCode);
+        return new static($response, new FacebookServerException($message, $code));
         break;
 
       // API Throttling
       case 4:
       case 17:
       case 341:
-        return new FacebookThrottleException($raw, $data, $statusCode);
+        return new static($response, new FacebookThrottleException($message, $code));
         break;
 
       // Duplicate Post
       case 506:
-        return new FacebookClientException($raw, $data, $statusCode);
+        return new static($response, new FacebookClientException($message, $code));
         break;
     }
 
     // Missing Permissions
     if ($code == 10 || ($code >= 200 && $code <= 299)) {
-      return new FacebookPermissionException($raw, $data, $statusCode);
+      return new static($response, new FacebookPermissionException($message, $code));
     }
 
     // OAuth authentication error
     if (isset($data['error']['type'])
       and $data['error']['type'] === 'OAuthException') {
-      return new FacebookAuthorizationException($raw, $data, $statusCode);
+      return new static($response, new FacebookAuthorizationException($message, $code));
     }
 
     // All others
-    return new FacebookOtherException($raw, $data, $statusCode);
+    return new static($response, new FacebookOtherException($message, $code));
   }
 
   /**
@@ -161,7 +159,7 @@ class FacebookResponseException extends FacebookSDKException
    */
   public function getHttpStatusCode()
   {
-    return $this->statusCode;
+    return $this->response->getHttpStatusCode();
   }
 
   /**
@@ -191,7 +189,7 @@ class FacebookResponseException extends FacebookSDKException
    */
   public function getRawResponse()
   {
-    return $this->rawResponse;
+    return $this->response->getBody();
   }
 
   /**
@@ -199,24 +197,19 @@ class FacebookResponseException extends FacebookSDKException
    *
    * @return array
    */
-  public function getResponse()
+  public function getResponseData()
   {
     return $this->responseData;
   }
 
   /**
-   * Converts a stdClass object to an array
+   * Returns the response entity used to create the exception.
    *
-   * @param mixed $object
-   *
-   * @return array
+   * @return FacebookResponse
    */
-  private static function convertToArray($object)
+  public function getResponse()
   {
-    if ($object instanceof \stdClass) {
-      return get_object_vars($object);
-    }
-    return $object;
+    return $this->response;
   }
 
 }

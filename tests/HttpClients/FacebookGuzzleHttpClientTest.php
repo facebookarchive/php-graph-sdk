@@ -25,6 +25,10 @@ namespace Facebook\Tests\HttpClients;
 
 use Mockery as m;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
+use GuzzleHttp\Message\Request;
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Exception\RequestException;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
@@ -45,50 +49,47 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);
   }
 
-  public function tearDown()
-  {
-    (new FacebookGuzzleHttpClient()); // Resets the static dependency injection
-  }
-
   public function testCanSendNormalRequest()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
-    $requestMock
-      ->shouldReceive('setHeader')
-      ->once()
-      ->with('X-foo', 'bar')
-      ->andReturn(null);
+    $request = new Request('GET', 'http://foo.com');
 
-    $responseMock = m::mock('GuzzleHttp\Message\ResponseInterface');
-    $responseMock
-      ->shouldReceive('getStatusCode')
-      ->once()
-      ->andReturn(200);
-    $responseMock
-      ->shouldReceive('getHeaders')
-      ->once()
-      ->andReturn($this->fakeHeadersAsArray);
-    $responseMock
-      ->shouldReceive('getBody')
-      ->once()
-      ->andReturn($this->fakeRawBody);
+    $body = Stream::factory($this->fakeRawBody);
+    $response = new Response(200, $this->fakeHeadersAsArray, $body);
 
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', [])
-      ->andReturn($requestMock);
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            $caInfo = array_diff_assoc($arg, [
+                'headers' => ['X-foo' => 'bar'],
+                'body' => 'foo_body',
+                'timeout' => 123,
+                'connect_timeout' => 10,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+              return false;
+            }
+
+            return true;
+          }))
+      ->andReturn($request);
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()
-      ->with($requestMock)
-      ->andReturn($responseMock);
+      ->with($request)
+      ->andReturn($response);
 
-    $responseBody = $this->guzzleClient->send('http://foo.com/', 'GET', [], ['X-foo' => 'bar']);
+    $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
-    $this->assertEquals($responseBody, $this->fakeRawBody);
-    $this->assertEquals($this->guzzleClient->getResponseHeaders(), $this->fakeHeadersAsArray);
-    $this->assertEquals(200, $this->guzzleClient->getResponseHttpStatusCode());
+    $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
+    $this->assertEquals($this->fakeRawBody, $response->getBody());
+    $this->assertEquals($this->fakeHeadersAsArray, $response->getHeaders());
+    $this->assertEquals(200, $response->getHttpResponseCode());
   }
 
   /**
@@ -96,28 +97,37 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
    */
   public function testThrowsExceptionOnClientError()
   {
-    $requestMock = m::mock('GuzzleHttp\Message\RequestInterface');
-    $exceptionMock = m::mock(
-                      'GuzzleHttp\Exception\RequestException',
-                        [
-                          'Foo Error',
-                          $requestMock,
-                          null,
-                          m::mock('GuzzleHttp\Exception\AdapterException'),
-                        ]);
+    $request = new Request('GET', 'http://foo.com');
 
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', [])
-      ->andReturn($requestMock);
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            $caInfo = array_diff_assoc($arg, [
+                'headers' => [],
+                'body' => 'foo_body',
+                'timeout' => 60,
+                'connect_timeout' => 10,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+              return false;
+            }
+
+            return true;
+          }))
+      ->andReturn($request);
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()
-      ->with($requestMock)
-      ->andThrow($exceptionMock);
+      ->with($request)
+      ->andThrow(new RequestException('Foo', $request));
 
-    $this->guzzleClient->send('http://foo.com/');
+    $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
   }
 
 }

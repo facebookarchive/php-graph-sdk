@@ -27,10 +27,14 @@ use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\FacebookBatchRequest;
+use Facebook\FileUpload\FacebookFile;
 
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 {
 
+  /**
+   * @var FacebookApp
+   */
   private $app;
 
   public function setUp()
@@ -40,7 +44,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testABatchRequestWillInstantiateWithTheProperProperties()
   {
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', [], 'v0.1337');
+    $batchRequest = new FacebookBatchRequest($this->app, [], 'foo_token', 'v0.1337');
 
     $this->assertSame($this->app, $batchRequest->getApp());
     $this->assertEquals('foo_token', $batchRequest->getAccessToken());
@@ -98,7 +102,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
+   * @expectedException \InvalidArgumentException
    */
   public function testAnInvalidTypeGivenToAddWillThrow()
   {
@@ -159,7 +163,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
       new FacebookRequest(null, null, 'DELETE', '/baz'),
     ];
 
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token', $requests);
+    $batchRequest = new FacebookBatchRequest($this->app, $requests, 'foo_token');
     $formattedRequests = $batchRequest->getRequests();
 
     $this->assertRequestsMatch($requests, $formattedRequests);
@@ -170,7 +174,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
    */
   public function testAZeroRequestCountWithThrow()
   {
-    $batchRequest = new FacebookBatchRequest($this->app, 'foo_token');
+    $batchRequest = new FacebookBatchRequest($this->app, [], 'foo_token');
 
     $batchRequest->validateBatchRequestCount();
   }
@@ -205,7 +209,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
     $batchRequest->add($request, 'foo_name');
 
     $requests = $batchRequest->getRequests();
-    $batchRequestArray = FacebookBatchRequest::requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
+    $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
 
     $this->assertEquals($expectedArray, $batchRequestArray);
   }
@@ -246,6 +250,35 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
     ];
   }
 
+  public function testBatchRequestsWithFilesGetConvertedToAnArray()
+  {
+    $request = new FacebookRequest(null, null, 'POST', '/bar', [
+        'message' => 'foobar',
+        'source' => new FacebookFile(__DIR__ . '/../foo.txt'),
+      ]);
+
+    $batchRequest = $this->createBatchRequest();
+    $batchRequest->add($request, 'foo_name');
+
+    $requests = $batchRequest->getRequests();
+
+    $attachedFiles = $requests[0]['attached_files'];
+
+    $batchRequestArray = $batchRequest->requestEntityToBatchArray(
+      $requests[0]['request'],
+      $requests[0]['name'],
+      $attachedFiles);
+
+    $this->assertEquals([
+        'headers' => $this->defaultHeaders(),
+        'method' => 'POST',
+        'relative_url' => '/' . Facebook::DEFAULT_GRAPH_VERSION . '/bar',
+        'body' => 'message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+        'name' => 'foo_name',
+        'attached_files' => $attachedFiles,
+      ], $batchRequestArray);
+  }
+
   public function testPreppingABatchRequestProperlySetsThePostParams()
   {
     $batchRequest = $this->createBatchRequest();
@@ -260,6 +293,33 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
     $expectedBatchParams = [
       'batch' => '[{"headers":'.$expectedHeaders.',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
         .'{"headers":'.$expectedHeaders.',"method":"POST","relative_url":"\\/' . $version . '\\/bar","body":"foo=bar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9"}]',
+      'include_headers' => true,
+      'access_token' => 'foo_token',
+      'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+    ];
+    $this->assertEquals($expectedBatchParams, $params);
+  }
+
+  public function testPreppingABatchRequestProperlyMovesTheFiles()
+  {
+    $batchRequest = $this->createBatchRequest();
+    $batchRequest->add(new FacebookRequest(null, 'bar_token', 'GET', '/foo'), 'foo_name');
+    $batchRequest->add(new FacebookRequest(null, null, 'POST', '/me/photos', [
+          'message' => 'foobar',
+          'source' => new FacebookFile(__DIR__ . '/../foo.txt'),
+        ]));
+    $batchRequest->prepareRequestsForBatch();
+
+    $params = $batchRequest->getParams();
+    $files = $batchRequest->getFiles();
+
+    $attachedFiles = implode(',', array_keys($files));
+
+    $expectedHeaders = json_encode($this->defaultHeaders());
+    $version = Facebook::DEFAULT_GRAPH_VERSION;
+    $expectedBatchParams = [
+      'batch' => '[{"headers":'.$expectedHeaders.',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
+        .'{"headers":'.$expectedHeaders.',"method":"POST","relative_url":"\\/' . $version . '\\/me\\/photos","body":"message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9","attached_files":"' . $attachedFiles . '"}]',
       'include_headers' => true,
       'access_token' => 'foo_token',
       'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
@@ -294,7 +354,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
   private function createBatchRequest()
   {
-    return new FacebookBatchRequest($this->app, 'foo_token');
+    return new FacebookBatchRequest($this->app, [], 'foo_token');
   }
 
   private function createBatchRequestWithRequests(array $requests)

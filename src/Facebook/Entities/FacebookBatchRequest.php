@@ -23,13 +23,16 @@
  */
 namespace Facebook\Entities;
 
+use ArrayIterator;
+use IteratorAggregate;
+use ArrayAccess;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class BatchRequest
  * @package Facebook
  */
-class FacebookBatchRequest extends FacebookRequest
+class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate, ArrayAccess
 {
 
   /**
@@ -38,17 +41,22 @@ class FacebookBatchRequest extends FacebookRequest
   protected $requests;
 
   /**
+   * @var array An array of files to upload.
+   */
+  protected $attachedFiles;
+
+  /**
    * Creates a new Request entity.
    *
    * @param FacebookApp|null $app
-   * @param AccessToken|string|null $accessToken
    * @param array $requests
+   * @param AccessToken|string|null $accessToken
    * @param string|null $graphVersion
    */
   public function __construct(
     FacebookApp $app = null,
-    $accessToken = null,
     array $requests = [],
+    $accessToken = null,
     $graphVersion = null
   )
   {
@@ -65,7 +73,7 @@ class FacebookBatchRequest extends FacebookRequest
    *
    * @return FacebookBatchRequest
    *
-   * @throws FacebookSDKException
+   * @throws \InvalidArgumentException
    */
   public function add($request, $name = null)
   {
@@ -76,13 +84,21 @@ class FacebookBatchRequest extends FacebookRequest
       return $this;
     } elseif ($request instanceof FacebookRequest) {
       $this->addFallbackDefaults($request);
-      $this->requests[] = [
+      $requestToAdd = [
         'name' => $name,
         'request' => $request,
       ];
+
+      // File uploads
+      $attachedFiles = $this->extractFileAttachments($request);
+      if ($attachedFiles) {
+        $requestToAdd['attached_files'] = $attachedFiles;
+      }
+      $this->requests[] = $requestToAdd;
+
       return $this;
     }
-    throw new FacebookSDKException(
+    throw new \InvalidArgumentException(
       'Argument for add() must be of type array or FacebookRequest.'
     );
   }
@@ -114,6 +130,34 @@ class FacebookBatchRequest extends FacebookRequest
       }
       $request->setAccessToken($accessToken);
     }
+  }
+
+  /**
+   * Extracts the files from a request.
+   *
+   * @param FacebookRequest $request
+   *
+   * @return string|null
+   *
+   * @throws FacebookSDKException
+   */
+  public function extractFileAttachments(FacebookRequest $request)
+  {
+    if ( ! $request->containsFileUploads()) {
+      return null;
+    }
+    $files = $request->getFiles();
+    $fileNames = [];
+    foreach ($files as $file) {
+      $fileName = uniqid();
+      $this->addFile($fileName, $file);
+      $fileNames[] = $fileName;
+    }
+
+    $request->resetFiles();
+
+    // @TODO Does Graph support multiple uploads on one endpoint?
+    return implode(',', $fileNames);
   }
 
   /**
@@ -151,7 +195,8 @@ class FacebookBatchRequest extends FacebookRequest
   {
     $requests = [];
     foreach ($this->requests as $request) {
-      $requests[] = static::requestEntityToBatchArray($request['request'], $request['name']);
+      $attachedFiles = isset($request['attached_files']) ? $request['attached_files'] : null;
+      $requests[] = $this->requestEntityToBatchArray($request['request'], $request['name'], $attachedFiles);
     }
 
     return json_encode($requests);
@@ -182,10 +227,14 @@ class FacebookBatchRequest extends FacebookRequest
    *
    * @param FacebookRequest $request The request entity to convert.
    * @param string|null $requestName The name of the request.
+   * @param string|null $attachedFiles Names of files associated with the request.
    *
    * @return array
    */
-  public static function requestEntityToBatchArray(FacebookRequest $request, $requestName = null)
+  public function requestEntityToBatchArray(
+    FacebookRequest $request,
+    $requestName = null,
+    $attachedFiles = null)
   {
     $compiledHeaders = [];
     $headers = $request->getHeaders();
@@ -199,21 +248,68 @@ class FacebookBatchRequest extends FacebookRequest
       'relative_url' => $request->getUrl(),
     ];
 
-    $params = $request->getPostParams();
-    if ($params) {
-      $batch['body'] = http_build_query($params, null, '&');
+    // Since file uploads are moved to the root request of a batch request,
+    // the child requests will always be URL-encoded.
+    $body = $request->getUrlEncodedBody()->getBody();
+    if ($body) {
+      $batch['body'] = $body;
     }
 
     if (isset($requestName)) {
       $batch['name'] = $requestName;
     }
 
+    if (isset($attachedFiles)) {
+      $batch['attached_files'] = $attachedFiles;
+    }
+
     // @TODO Add support for "omit_response_on_success"
     // @TODO Add support for "depends_on"
-    // @TODO Add support for "attached_files"
     // @TODO Add support for JSONP with "callback"
 
     return $batch;
+  }
+
+  /**
+   * Get an iterator for the items.
+   *
+   * @return ArrayIterator
+   */
+  public function getIterator()
+  {
+    return new ArrayIterator($this->requests);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function offsetSet($offset, $value)
+  {
+    $this->add($value, $offset);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->requests[$offset]);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function offsetUnset($offset)
+  {
+    unset($this->requests[$offset]);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function offsetGet($offset)
+  {
+    return isset($this->requests[$offset]) ? $this->requests[$offset] : null;
   }
 
 }
