@@ -3,36 +3,36 @@
 
 This example covers getting profile information for the current user and printing their name, using the Graph API and the Facebook SDK for PHP.
 
-It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).
+It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers).
 
-For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`GraphUser`](/docs/php/GraphObject/#user-instance-methods), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
 
 </card>
 
 <card>
+## Example {#example}
 
 ~~~~
-use Facebook\FacebookRequest;
-use Facebook\GraphUser;
-use Facebook\FacebookResponseException;
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  ]);
 
-if($session) {
-
-  try {
-
-    $user_profile = (new FacebookRequest(
-      $session, 'GET', '/me'
-    ))->execute()->getGraphObject(GraphUser::className());
-
-    echo "Name: " . $user_profile->getName();
-
-  } catch(FacebookResponseException $e) {
-
-    echo "Exception occurred, code: " . $e->getCode();
-    echo " with message: " . $e->getMessage();
-
-  }   
-
+try {
+  // Returns a `Facebook\Entities\FacebookResponse` object
+  $response = $fb->get('/me?fields=id,name', '{access-token}');
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
 }
+
+$user = $response->getGraphUser();
+
+echo 'Name: ' . $user['name'];
+// OR
+// echo 'Name: ' . $user->getName();
 ~~~~
 </card>

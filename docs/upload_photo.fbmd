@@ -3,47 +3,37 @@
 
 This example covers uploading a photo to the current User's profile using the Graph API and the Facebook SDK for PHP.
 
-It assumes that you've already set your default app id and secret, and acquired a `FacebookSession` using an access token or one of the login helper classes found [here](/docs/php).  You must have requested the `publish_actions` scope when logging in the user for this to work.
+It assumes that you've already acquired an access token using one of the helper classes found [here](/docs/php/sdk_reference#helpers).  The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`GraphObject`](/docs/php/GraphObject), [`FacebookRequest`](/docs/php/FacebookRequest), and [`FacebookResponseException`](/docs/php/FacebookResponseException).
-
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FileUpload\FacebookFile`](/docs/php/FacebookFile), [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
 </card>
 
 <card>
+## Example {#example}
 
 ~~~~
-use Facebook\FacebookRequest;
-use Facebook\GraphObject;
-use Facebook\FacebookResponseException;
+$fb = new Facebook\Facebook(/* . . . */);
 
-if($session) {
+$data = [
+  'message' => 'My awesome photo upload example.',
+  'source' => $fb->fileToUpload('/path/to/photo.jpg'),
+];
 
-  try {
-
-    // Upload to a user's profile. The photo will be in the
-    // first album in the profile. You can also upload to
-    // a specific album by using /ALBUM_ID as the path     
-    $response = (new FacebookRequest(
-      $session, 'POST', '/me/photos', [
-      	'source' => new CURLFile('path/to/file.name', 'image/png'),
-      	'message' => 'User provided message'
-      ]
-    ))->execute()->getGraphObject();
-
-    // If you're not using PHP 5.5 or later, change the file reference to:
-    // 'source' => '@/path/to/file.name'
-
-    echo "Posted with id: " . $response->getProperty('id');
-
-  } catch(FacebookResponseException $e) {
-
-    echo "Exception occurred, code: " . $e->getCode();
-    echo " with message: " . $e->getMessage();
-
-  }   
-
+try {
+  // Returns a `Facebook\Entities\FacebookResponse` object
+  $response = $fb->post('/me/photos', $data);
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
 }
+
+$graphObject = $response->getGraphObject();
+
+echo 'Photo ID: ' . $graphObject['id'];
 ~~~~
 
-Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
+Note that the `message` field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
 </card>

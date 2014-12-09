@@ -145,9 +145,9 @@ Returns the instance of `Facebook\Entities\FacebookApp` for the instantiated ser
 <card>
 ### getClient() {#get-client}
 ~~~~
-public FacebookClient getClient()
+public Facebook\FacebookClient getClient()
 ~~~~
-Returns the instance of `Facebook\FacebookClient` for the instantiated service.
+Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) for the instantiated service.
 </card>
 
 <card>

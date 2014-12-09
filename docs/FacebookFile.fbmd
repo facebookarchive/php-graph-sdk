@@ -23,7 +23,7 @@ Alternatively, you can use the `fileToUpload()` factory on the `Facebook\Faceboo
 ~~~~
 $fb = new Facebook\Facebook(/* . . . */);
 
-$myFileToUpload = $fb->fileToUpload('/path/to/file.jpg'),
+$myFileToUpload = $fb->fileToUpload('/path/to/file.jpg');
 ~~~~
 </card>
 
