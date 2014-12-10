@@ -168,10 +168,11 @@ class FacebookRedirectLoginHelper
    */
   public function getAccessToken(FacebookClient $client, $redirectUrl = null)
   {
-    $this->validateCsrf();
     if ( ! $code = $this->getCode()) {
       return null;
     }
+
+    $this->validateCsrf();
 
     $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
     // At minimum we need to remove the state param
