@@ -49,8 +49,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', array())
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $arg['verify'])) {
+              return false;
+            }
+            return true;
+          }))
       ->andReturn($requestMock);
+
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()
@@ -83,8 +89,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     $this->guzzleMock
       ->shouldReceive('createRequest')
       ->once()
-      ->with('GET', 'http://foo.com/', array())
+      ->with('GET', 'http://foo.com/', m::on(function($arg) {
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $arg['verify'])) {
+              return false;
+            }
+            return true;
+          }))
       ->andReturn($requestMock);
+
     $this->guzzleMock
       ->shouldReceive('send')
       ->once()

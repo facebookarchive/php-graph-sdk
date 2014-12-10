@@ -9,7 +9,7 @@ class FacebookPageTabHelperTest extends PHPUnit_Framework_TestCase
 
   public function testPageDataCanBeAccessed()
   {
-    $_GET['signed_request'] = $this->rawSignedRequestAuthorized;
+    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
     $helper = new FacebookPageTabHelper('123', 'foo_app_secret');
 
     $this->assertTrue($helper->isLiked());
