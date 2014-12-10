@@ -119,23 +119,6 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
     new SignedRequest($this->app, $rawSignedRequest);
   }
 
-  public function testASignedRequestWillPassCsrfValidation()
-  {
-    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
-    $sr = new SignedRequest($this->app, $rawSignedRequest, 'foo_state');
-
-    $this->assertEquals($this->payloadData, $sr->getPayload());
-  }
-
-  /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
-   */
-  public function testASignedRequestWithIncorrectCsrfDataWillThrowAnException()
-  {
-    $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
-    new SignedRequest($this->app, $rawSignedRequest, 'invalid_foo_state');
-  }
-
   public function testAsRawSignedRequestCanBeValidatedAndDecoded()
   {
     $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;

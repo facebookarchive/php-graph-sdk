@@ -43,11 +43,6 @@ class SignedRequest
   protected $rawSignedRequest;
 
   /**
-   * @var string|null Pseudo-random string to prevent CSRF.
-   */
-  protected $state;
-
-  /**
    * @var array The payload from the decrypted signed request.
    */
   protected $payload;
@@ -57,9 +52,8 @@ class SignedRequest
    *
    * @param FacebookApp $facebookApp The FacebookApp entity.
    * @param string|null $rawSignedRequest The raw signed request.
-   * @param string|null $state Pseudo-random string to prevent CSRF.
    */
-  public function __construct(FacebookApp $facebookApp, $rawSignedRequest = null, $state = null)
+  public function __construct(FacebookApp $facebookApp, $rawSignedRequest = null)
   {
     $this->app = $facebookApp;
 
@@ -68,7 +62,6 @@ class SignedRequest
     }
 
     $this->rawSignedRequest = $rawSignedRequest;
-    $this->state = $state;
 
     $this->parse();
   }
@@ -106,6 +99,7 @@ class SignedRequest
     if (isset($this->payload[$key])) {
       return $this->payload[$key];
     }
+
     return $default;
   }
 
@@ -165,7 +159,6 @@ class SignedRequest
 
     // Payload validation
     $this->validateAlgorithm();
-    $this->validateCsrf();
   }
 
   /**
@@ -296,26 +289,6 @@ class SignedRequest
 
     throw new FacebookSDKException(
       'Signed request has an invalid signature.', 602
-    );
-  }
-
-  /**
-   * Validates a signed request against CSRF.
-   *
-   * @throws FacebookSDKException
-   */
-  protected function validateCsrf()
-  {
-    if ( ! $this->state) {
-      return;
-    }
-
-    if ($this->get('state') === $this->state) {
-      return;
-    }
-
-    throw new FacebookSDKException(
-      'Signed request did not pass CSRF validation.', 604
     );
   }
 
