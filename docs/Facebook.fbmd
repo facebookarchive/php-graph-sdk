@@ -295,6 +295,26 @@ $request = $fb->request('GET', '/{node-id}');
 </card>
 
 <card>
+### sendRequest() {#send-request}
+~~~~
+public Facebook\Entities\FacebookResponse sendRequest(
+  string $method,
+  string $endpoint,
+  array $params,
+  string|AccessToken|null $accessToken,
+  string|null $eTag,
+  string|null $graphVersion
+)
+~~~~
+
+Sends a request to the Graph API.
+
+~~~~
+$response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.2');
+~~~~
+</card>
+
+<card>
 ### sendBatchRequest() {#send-batch-request}
 ~~~~
 public Facebook\Entities\FacebookBatchResponse sendBatchRequest(
