@@ -110,7 +110,7 @@ class FacebookResponse
   /**
    * Return the access token that was used for this response.
    *
-   * @return string
+   * @return string|null
    */
   public function getAccessToken()
   {
@@ -160,7 +160,7 @@ class FacebookResponse
   /**
    * Get the app secret proof that was used for this response.
    *
-   * @return string
+   * @return string|null
    */
   public function getAppSecretProof()
   {

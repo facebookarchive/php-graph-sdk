@@ -58,9 +58,14 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->shouldReceive('setopt_array')
       ->with(m::on(function($arg) {
 
+            // array_diff() will sometimes trigger error on child-arrays
+            if (['X-Foo-Header: X-Bar'] !== $arg[CURLOPT_HTTPHEADER]) {
+              return false;
+            }
+            unset($arg[CURLOPT_HTTPHEADER]);
+
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_HTTPHEADER     => ['X-Foo-Header: X-Bar'],
                 CURLOPT_URL            => 'http://foo.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 123,
@@ -96,9 +101,14 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->shouldReceive('setopt_array')
       ->with(m::on(function($arg) {
 
+            // array_diff() will sometimes trigger error on child-arrays
+            if ([] !== $arg[CURLOPT_HTTPHEADER]) {
+              return false;
+            }
+            unset($arg[CURLOPT_HTTPHEADER]);
+
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'POST',
-                CURLOPT_HTTPHEADER     => [],
                 CURLOPT_URL            => 'http://bar.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 60,

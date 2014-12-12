@@ -60,8 +60,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->shouldReceive('createRequest')
       ->once()
       ->with('GET', 'http://foo.com/', m::on(function($arg) {
+
+            // array_diff_assoc() will sometimes trigger error on child-arrays
+            if (['X-foo' => 'bar'] !== $arg['headers']) {
+              return false;
+            }
+            unset($arg['headers']);
+
             $caInfo = array_diff_assoc($arg, [
-                'headers' => ['X-foo' => 'bar'],
                 'body' => 'foo_body',
                 'timeout' => 123,
                 'connect_timeout' => 10,
@@ -103,8 +109,14 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
       ->shouldReceive('createRequest')
       ->once()
       ->with('GET', 'http://foo.com/', m::on(function($arg) {
+
+            // array_diff_assoc() will sometimes trigger error on child-arrays
+            if ([] !== $arg['headers']) {
+              return false;
+            }
+            unset($arg['headers']);
+
             $caInfo = array_diff_assoc($arg, [
-                'headers' => [],
                 'body' => 'foo_body',
                 'timeout' => 60,
                 'connect_timeout' => 10,
