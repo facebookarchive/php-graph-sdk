@@ -108,6 +108,8 @@ class FacebookGuzzleHttpClient implements FacebookHttpable {
       $options = array('body' => $parameters);
     }
 
+    $options['verify'] = __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem';
+
     $request = self::$guzzleClient->createRequest($method, $url, $options);
 
     foreach($this->requestHeaders as $k => $v) {

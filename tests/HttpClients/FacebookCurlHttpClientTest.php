@@ -34,13 +34,29 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
-          CURLOPT_URL            => 'http://foo.com',
-          CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HEADER         => true,
-        ))
+      ->with(m::on(function($arg) {
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST  => 'GET',
+                CURLOPT_HTTPHEADER     => [],
+                CURLOPT_URL            => 'http://foo.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+              return false;
+            }
+
+            return true;
+          }))
       ->once()
       ->andReturn(null);
 
@@ -55,16 +71,31 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
-          CURLOPT_URL            => 'http://foo.com',
-          CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HEADER         => true,
-          CURLOPT_HTTPHEADER     => array(
-            'X-foo: bar',
-          ),
-        ))
+      ->with(m::on(function($arg) {
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST  => 'GET',
+                CURLOPT_HTTPHEADER     => array(
+                  'X-foo: bar',
+                ),
+                CURLOPT_URL            => 'http://foo.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+              return false;
+            }
+
+            return true;
+          }))
       ->once()
       ->andReturn(null);
 
@@ -80,16 +111,32 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
-          CURLOPT_URL            => 'http://bar.com',
-          CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HEADER         => true,
-          CURLOPT_POSTFIELDS     => array(
-            'baz' => 'bar',
-          ),
-        ))
+      ->with(m::on(function($arg) {
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST  => 'POST',
+                CURLOPT_HTTPHEADER     => [],
+                CURLOPT_URL            => 'http://bar.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_POSTFIELDS     => array(
+                  'baz' => 'bar',
+                ),
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+              return false;
+            }
+
+            return true;
+          }))
       ->once()
       ->andReturn(null);
 
@@ -104,17 +151,32 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
-          CURLOPT_URL            => 'http://baz.com',
-          CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HEADER         => true,
-          CURLOPT_CUSTOMREQUEST  => 'PUT',
-          CURLOPT_POSTFIELDS     => array(
-            'baz' => 'bar',
-          ),
-        ))
+      ->with(m::on(function($arg) {
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST  => 'PUT',
+                CURLOPT_HTTPHEADER     => [],
+                CURLOPT_URL            => 'http://baz.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_POSTFIELDS     => array(
+                  'baz' => 'bar',
+                ),
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+              return false;
+            }
+
+            return true;
+          }))
       ->once()
       ->andReturn(null);
 
@@ -129,32 +191,36 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->andReturn(null);
     $this->curlMock
       ->shouldReceive('setopt_array')
-      ->with(array(
-          CURLOPT_URL            => 'http://faz.com',
-          CURLOPT_CONNECTTIMEOUT => 10,
-          CURLOPT_TIMEOUT        => 60,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HEADER         => true,
-          CURLOPT_CUSTOMREQUEST  => 'DELETE',
-          CURLOPT_POSTFIELDS     => array(
-            'baz' => 'bar',
-          ),
-        ))
+      ->with(m::on(function($arg) {
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST  => 'DELETE',
+                CURLOPT_HTTPHEADER     => [],
+                CURLOPT_URL            => 'http://faz.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT        => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_POSTFIELDS     => array(
+                  'baz' => 'bar',
+                ),
+              ]);
+
+            if (count($caInfo) !== 1) {
+              return false;
+            }
+
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+              return false;
+            }
+
+            return true;
+          }))
       ->once()
       ->andReturn(null);
 
     $this->curlClient->openConnection('http://faz.com', 'DELETE', array('baz' => 'bar'));
-  }
-
-  public function testCanAddBundledCert()
-  {
-    $this->curlMock
-      ->shouldReceive('setopt')
-      ->with(CURLOPT_CAINFO, '/.fb_ca_chain_bundle\.crt$/')
-      ->once()
-      ->andReturn(null);
-
-    $this->curlClient->addBundledCert();
   }
 
   public function testCanCloseConnection()
