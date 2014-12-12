@@ -140,7 +140,7 @@ class FacebookStreamHttpClient implements FacebookHttpable {
    *
    * @return string
    */
-  public function compileHeader()
+ /* public function compileHeader()
   {
     $header = [];
     foreach($this->requestHeaders as $k => $v) {
@@ -148,7 +148,14 @@ class FacebookStreamHttpClient implements FacebookHttpable {
     }
 
     return implode("\r\n", $header);
-  }
+  }*/
+  public function compileHeader()
+{
+//$header = [];
+foreach($this->requestHeaders as $k => $v) {
+$header[] = $k . ': ' . $v;
+}
+}
 
   /**
    * Converts array of headers returned from the wrapper into

@@ -108,7 +108,10 @@ class GraphObject
       if (is_scalar($value)) {
         return $value;
       } else {
-        return (new GraphObject($value))->cast($type);
+        //return (new GraphObject($value))->cast($type);
+		$GraphObjProp1 = new GraphObject($value);
+        $GraphObjProp = $GraphObjProp1->cast($type);
+        return $GraphObjProp;
       }
     } else {
       return null;
@@ -142,7 +145,10 @@ class GraphObject
       if (is_scalar($value)) {
         $out[$key] = $value;
       } else {
-        $out[$key] = (new GraphObject($value))->cast($type);
+        //$out[$key] = (new GraphObject($value))->cast($type);
+		$GraphObjProp1 = new GraphObject($value);
+        $GraphObjProp = $GraphObjProp1->cast($type);
+        return $GraphObjProp;
       }
     }
     return $out;

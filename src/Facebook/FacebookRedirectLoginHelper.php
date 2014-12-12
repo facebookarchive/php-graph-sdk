@@ -167,12 +167,14 @@ class FacebookRedirectLoginHelper
           FacebookSession::_getTargetAppSecret($this->appSecret),
         'code' => $this->getCode()
       );
-      $response = (new FacebookRequest(
-        FacebookSession::newAppSession($this->appId, $this->appSecret),
-        'GET',
-        '/oauth/access_token',
-        $params
-      ))->execute()->getResponse();
+     $response1= (new FacebookRequest(
+FacebookSession::newAppSession($this->appId, $this->appSecret),
+'GET',
+'/oauth/access_token',
+$params
+));
+$response2 = $response1->execute();
+$response = $response2->getResponse();
       if (isset($response['access_token'])) {
         return new FacebookSession($response['access_token']);
       }
@@ -210,7 +212,7 @@ class FacebookRedirectLoginHelper
    *
    * @throws FacebookSDKException
    */
-  protected function storeState($state)
+  /*protected function storeState($state)
   {
     if ($this->checkForSessionStatus === true
       && session_status() !== PHP_SESSION_ACTIVE) {
@@ -219,7 +221,26 @@ class FacebookRedirectLoginHelper
       );
     }
     $_SESSION[$this->sessionPrefix . 'state'] = $state;
-  }
+  }*/
+  protected function storeState($state)
+{ $setting = 'session.use_trans_sid';
+$current = ini_get($setting);
+if (FALSE === $current)
+{
+throw new UnexpectedValueException(sprintf('Setting %s does not exists.', $setting));
+}
+$testate = "mix$current$current";
+$old = @ini_set($setting, $testate);
+$peek = @ini_set($setting, $current);
+$result = $peek === $current || $peek === FALSE;
+if ($this->checkForSessionStatus === true
+&& $result !== true) {
+throw new FacebookSDKException(
+'Session not active, could not store state.', 720
+);
+}
+$_SESSION[$this->sessionPrefix . 'state'] = $state;
+}
 
   /**
    * Loads a state string from session storage for CSRF validation.  May return
@@ -230,7 +251,7 @@ class FacebookRedirectLoginHelper
    *
    * @throws FacebookSDKException
    */
-  protected function loadState()
+  /*protected function loadState()
   {
     if ($this->checkForSessionStatus === true
       && session_status() !== PHP_SESSION_ACTIVE) {
@@ -243,7 +264,30 @@ class FacebookRedirectLoginHelper
       return $this->state;
     }
     return null;
-  }
+  }*/
+  protected function loadState()
+{ $setting = 'session.use_trans_sid';
+$current = ini_get($setting);
+if (FALSE === $current)
+{
+throw new UnexpectedValueException(sprintf('Setting %s does not exists.', $setting));
+}
+$testate = "mix$current$current";
+$old = @ini_set($setting, $testate);
+$peek = @ini_set($setting, $current);
+$result = $peek === $current || $peek === FALSE;
+if ($this->checkForSessionStatus === true
+&& $result !== true) {
+throw new FacebookSDKException(
+'Session not active, could not load state.', 721
+);
+}
+if (isset($_SESSION[$this->sessionPrefix . 'state'])) {
+$this->state = $_SESSION[$this->sessionPrefix . 'state'];
+return $this->state;
+}
+return null;
+}
   
   /**
    * Generate a cryptographically secure pseudrandom number
