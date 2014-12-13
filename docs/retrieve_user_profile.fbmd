@@ -5,7 +5,7 @@ This example covers getting profile information for the current user and printin
 
 It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers).
 
-For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
 
 </card>
 
@@ -19,7 +19,7 @@ $fb = new Facebook\Facebook([
   ]);
 
 try {
-  // Returns a `Facebook\Entities\FacebookResponse` object
+  // Returns a `Facebook\FacebookResponse` object
   $response = $fb->get('/me?fields=id,name', '{access-token}');
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
   echo 'Graph returned an error: ' . $e->getMessage();

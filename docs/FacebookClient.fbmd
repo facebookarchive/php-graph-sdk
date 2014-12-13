@@ -19,7 +19,7 @@ $fbClient = $fb->getClient();
 Alternatively you could instantiate a new `Facebook\FacebookClient` service directly.
 
 ~~~~
-$fbApp = new Facebook\Entities\FacebookApp('{app_id}', '{app_secret}');
+$fbApp = new Facebook\FacebookApp('{app_id}', '{app_secret}');
 $fbClient = new Facebook\FacebookClient($fbApp, $enableBeta = false);
 ~~~~
 
@@ -57,13 +57,13 @@ Tells the service to send requests to the beta URL's which include [https://grap
 <card>
 ### sendRequest() {#send-request}
 ~~~~
-public Facebook\Entities\FacebookResponse sendRequest(Facebook\Entities\FacebookRequest $request)
+public Facebook\FacebookResponse sendRequest(Facebook\FacebookRequest $request)
 ~~~~
 Sends a non-batch request to Graph.
 
-Takes a [`Facebook\Entities\FacebookRequest`](/docs/php/FacebookRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
+Takes a [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
 
-Returns the response from Graph in the form of a [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse).
+Returns the response from Graph in the form of a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse).
 
 If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) will be thrown.
 
@@ -73,13 +73,13 @@ If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookRe
 <card>
 ### sendBatchRequest() {#send-batch-request}
 ~~~~
-public Facebook\Entities\FacebookBatchResponse sendBatchRequest(Facebook\Entities\FacebookBatchRequest $batchRequest)
+public Facebook\FacebookBatchResponse sendBatchRequest(Facebook\FacebookBatchRequest $batchRequest)
 ~~~~
 Sends a batch request to Graph.
 
-Takes a [`Facebook\Entities\FacebookBatchRequest`](/docs/php/FacebookBatchRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
+Takes a [`Facebook\FacebookBatchRequest`](/docs/php/FacebookBatchRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
 
-Returns the response from Graph in the form of a [`Facebook\Entities\FacebookBatchResponse`](/docs/php/FacebookBatchResponse).
+Returns the response from Graph in the form of a [`Facebook\FacebookBatchResponse`](/docs/php/FacebookBatchResponse).
 
 If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) will be thrown.
 

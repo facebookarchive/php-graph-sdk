@@ -23,9 +23,9 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookResponse;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphObjectFactory;
 use Facebook\GraphNodes\GraphObject;
 
@@ -41,7 +41,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\Entities\FacebookRequest
+   * @var \Facebook\FacebookRequest
    */
   protected $request;
 

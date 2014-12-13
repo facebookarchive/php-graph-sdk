@@ -25,9 +25,9 @@ namespace Facebook\Tests;
 
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookBatchRequest;
+use \Facebook\FacebookApp;
+use \Facebook\FacebookRequest;
+use \Facebook\FacebookBatchRequest;
 use Facebook\FacebookClient;
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
@@ -148,7 +148,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $fbRequest = new FacebookRequest($this->fbApp, 'token', 'GET', '/foo');
     $response = $this->fbClient->sendRequest($fbRequest);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $response);
+    $this->assertInstanceOf('Facebook\FacebookResponse', $response);
     $this->assertEquals(200, $response->getHttpStatusCode());
     $this->assertEquals('{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}', $response->getBody());
   }
@@ -164,7 +164,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     $fbBatchClient = new FacebookClient(new MyFooBatchClientHandler());
     $response = $fbBatchClient->sendBatchRequest($fbBatchRequest);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookBatchResponse', $response);
+    $this->assertInstanceOf('Facebook\FacebookBatchResponse', $response);
     $this->assertEquals('GET', $response[0]->getRequest()->getMethod());
     $this->assertEquals('POST', $response[1]->getRequest()->getMethod());
   }

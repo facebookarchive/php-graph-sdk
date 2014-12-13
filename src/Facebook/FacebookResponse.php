@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Entities;
+namespace Facebook;
 
 use Facebook\GraphNodes\GraphObjectFactory;
 use Facebook\Exceptions\FacebookResponseException;

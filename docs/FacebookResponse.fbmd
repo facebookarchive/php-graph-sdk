@@ -5,9 +5,9 @@ Represents a response from the Graph API.
 </card>
 
 <card>
-## Facebook\Entities\FacebookResponse {#overview}
+## Facebook\FacebookResponse {#overview}
 
-After sending a request to the Graph API, the response will be returned in the form of a `Facebook\Entities\FacebookResponse` entity.
+After sending a request to the Graph API, the response will be returned in the form of a `Facebook\FacebookResponse` entity.
 
 Usage:
 
@@ -28,7 +28,7 @@ try {
 }
 
 var_dump($response);
-// class Facebook\Entities\FacebookResponse . . .
+// class Facebook\FacebookResponse . . .
 ~~~~
 </card>
 
@@ -37,9 +37,9 @@ var_dump($response);
 
 ### getRequest() {#get-request}
 ~~~~
-public Facebook\Entities\FacebookRequest getRequest()
+public Facebook\FacebookRequest getRequest()
 ~~~~
-Returns the original [`Facebook\Entities\FacebookRequest`](/docs/php/FacebookRequest) entity that was used to solicit this response.
+Returns the original [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity that was used to solicit this response.
 </card>
 
 <card>
@@ -53,9 +53,9 @@ Returns the access token that was used for the original request in the form of a
 <card>
 ### getApp() {#get-app}
 ~~~~
-public Facebook\Entities\FacebookApp getApp()
+public Facebook\FacebookApp getApp()
 ~~~~
-Returns the [`Facebook\Entities\FacebookApp`](/docs/php/FacebookApp) entity that was used with the original request.
+Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity that was used with the original request.
 </card>
 
 <card>

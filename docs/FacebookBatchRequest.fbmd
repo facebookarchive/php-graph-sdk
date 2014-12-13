@@ -5,34 +5,34 @@ Represents a batch request that will be sent to the Graph API.
 </card>
 
 <card>
-## Facebook\Entities\FacebookBatchRequest {#overview}
+## Facebook\FacebookBatchRequest {#overview}
 
 You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor.
 
 ~~~~
-use Facebook\Entities\FacebookBatchRequest;
+use Facebook\FacebookBatchRequest;
 
 $request = new FacebookBatchRequest(
-  Facebook\Entities\FacebookApp $app,
+  Facebook\FacebookApp $app,
   array $requests,
   string|null $accessToken,
   string|null $graphVersion
 );
 ~~~~
 
-The `$requests` array is an array of [`Facebook\Entities\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent as a batch request.
+The `$requests` array is an array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent as a batch request.
 
 The `FacebookBatchRequest` entity does not actually make any calls to the Graph API, but instead just represents a batch request that can be sent to the Graph API later. The batch request can be sent by using [`Facebook\Facebook::sendBatchRequest()`](/docs/php/Facebook#send-batch-request) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/php/FacebookClient#send-batch-request).
 
 Usage:
 
 ~~~~
-$fbApp = new Facebook\Entities\FacebookApp('{app-id}', '{app-secret}');
+$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 $requests = [
-  new Facebook\Entities\FacebookRequest(/* */),
-  new Facebook\Entities\FacebookRequest(/* */),
+  new Facebook\FacebookRequest(/* */),
+  new Facebook\FacebookRequest(/* */),
 ];
-$batchRequest = new Facebook\Entities\FacebookBatchRequest($fbApp, $requests, '{access-token}');
+$batchRequest = new Facebook\FacebookBatchRequest($fbApp, $requests, '{access-token}');
 
 // Send the batch request to Graph
 try {
@@ -82,16 +82,16 @@ foreach ($batchResponse as $key => $response) {
 <card>
 ## Instance Methods {#instance-methods}
 
-Since the `Facebook\Entities\FacebookBatchRequest` is extended from the [`Facebook\Entities\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
 
 ### add() {#add}
 ~~~~
 public add(
-  array|Facebook\Entities\FacebookBatchRequest $request,
+  array|Facebook\FacebookBatchRequest $request,
   string|null $name
   )
 ~~~~
-Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\Entities\FacebookRequest`](/docs/php/FacebookRequest) or an array of `Facebook\Entities\FacebookRequest`'s.
+Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) or an array of `Facebook\FacebookRequest`'s.
 
 The `$name` argument is optional and is used to identify the request in the batch.
 </card>
@@ -101,13 +101,13 @@ The `$name` argument is optional and is used to identify the request in the batc
 ~~~~
 public array getRequests()
 ~~~~
-Returns the array of [`Facebook\Entities\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
+Returns the array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
 </card>
 
 <card>
 ## Array Access {#array-access}
 
-Since `Facebook\Entities\FacebookBatchRequest` implements `\IteratorAggregate` and `\ArrayAccess`, the requests can be accessed via array syntax and can also be iterated over.
+Since `Facebook\FacebookBatchRequest` implements `\IteratorAggregate` and `\ArrayAccess`, the requests can be accessed via array syntax and can also be iterated over.
 
 ~~~~
 $fb = new Facebook\Facebook(/* . . . */);
@@ -115,13 +115,13 @@ $requests = [
   'foo' => $fb->request('GET', '/me'),
   'bar' => $fb->request('POST', '/me/feed', [/* */]),
 ];
-$batchRequest = new Facebook\Entities\FacebookBatchRequest($fb->getApp(), $requests, '{access-token}');
+$batchRequest = new Facebook\FacebookBatchRequest($fb->getApp(), $requests, '{access-token}');
 
 var_dump($batchRequest[0]);
 /*
 array(2) {
   'name' => string(3) "foo"
-  'request' => class Facebook\Entities\FacebookRequest
+  'request' => class Facebook\FacebookRequest
   . . .
 */
 ~~~~

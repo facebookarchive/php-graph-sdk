@@ -23,7 +23,7 @@
  */
 namespace Facebook\Exceptions;
 
-use Facebook\Entities\FacebookResponse;
+use Facebook\FacebookResponse;
 
 /**
  * Class FacebookResponseException

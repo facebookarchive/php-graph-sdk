@@ -21,12 +21,12 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
 use Facebook\Facebook;
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookBatchRequest;
+use \Facebook\FacebookApp;
+use \Facebook\FacebookRequest;
+use \Facebook\FacebookBatchRequest;
 use Facebook\FileUpload\FacebookFile;
 
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
@@ -254,7 +254,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
   {
     $request = new FacebookRequest(null, null, 'POST', '/bar', [
         'message' => 'foobar',
-        'source' => new FacebookFile(__DIR__ . '/../foo.txt'),
+        'source' => new FacebookFile(__DIR__ . '/foo.txt'),
       ]);
 
     $batchRequest = $this->createBatchRequest();
@@ -306,7 +306,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
     $batchRequest->add(new FacebookRequest(null, 'bar_token', 'GET', '/foo'), 'foo_name');
     $batchRequest->add(new FacebookRequest(null, null, 'POST', '/me/photos', [
           'message' => 'foobar',
-          'source' => new FacebookFile(__DIR__ . '/../foo.txt'),
+          'source' => new FacebookFile(__DIR__ . '/foo.txt'),
         ]));
     $batchRequest->prepareRequestsForBatch();
 

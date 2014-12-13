@@ -24,7 +24,7 @@
 namespace Facebook\Tests\Helpers;
 
 use Mockery as m;
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
@@ -101,13 +101,13 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
     $accessToken = $this->helper->getAccessToken($client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
     $this->assertEquals('foo_token', (string) $accessToken);
   }
 
   public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsACode()
   {
-    $response = m::mock('Facebook\Entities\FacebookResponse');
+    $response = m::mock('Facebook\FacebookResponse');
     $response
       ->shouldReceive('getDecodedBody')
       ->once()
@@ -118,14 +118,14 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
     $client = m::mock('Facebook\FacebookClient');
     $client
       ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->with(m::type('Facebook\FacebookRequest'))
       ->once()
       ->andReturn($response);
 
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
     $accessToken = $this->helper->getAccessToken($client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
     $this->assertEquals('access_token_from_code', (string) $accessToken);
   }
 

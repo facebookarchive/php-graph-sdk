@@ -21,9 +21,8 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Entities;
+namespace Facebook;
 
-use Facebook\Facebook;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;

@@ -30,13 +30,13 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\Entities\FacebookResponse
+   * @var \Facebook\FacebookResponse
    */
   protected $responseMock;
 
   public function setUp()
   {
-    $this->responseMock = m::mock('\\Facebook\\Entities\\FacebookResponse');
+    $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
   }
 
   public function testDatesGetCastToDateTime()

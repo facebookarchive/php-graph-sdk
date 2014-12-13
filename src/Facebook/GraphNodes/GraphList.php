@@ -23,7 +23,7 @@
  */
 namespace Facebook\GraphNodes;
 
-use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookRequest;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\Exceptions\FacebookSDKException;
 

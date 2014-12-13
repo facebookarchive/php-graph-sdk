@@ -21,17 +21,17 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookResponse;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 
 class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\Entities\FacebookRequest
+   * @var \Facebook\FacebookRequest
    */
   protected $request;
 

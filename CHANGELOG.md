@@ -12,7 +12,7 @@ As you may have already noticed, the Facebook SDK v4 does not follow strict [sem
   - Moved response collection objects to `GraphNodes\*` directory
   - Moved helpers to `Helpers\*` directory
   - Moved `FacebookRequest` and `FacebookResponse` to `Entities\*` directory
-  - Killed `FacebookSession` in favor of `Facebook\Entities\AccessToken`
+  - Killed `FacebookSession` in favor of `Facebook\AccessToken`
   - Added `FacebookClient` service
   - Renamed `FacebookRequestException` to `FacebookResponseException`
   - Renamed `FacebookHttpable` to `FacebookHttpClientInterface`
@@ -21,7 +21,7 @@ As you may have already noticed, the Facebook SDK v4 does not follow strict [sem
   - Added support for "rerequest" authorization
   - [`AccessToken`] Added serialization support
   - Added `ext-mbstring` to composer require
-  - Added `Facebook\Entities\FacebookApp` entity
+  - Added `Facebook\FacebookApp` entity
   - Namespaced tests
   - Grouped functional tests under `functional` group
   - Added `Facebook\Facebook` super service

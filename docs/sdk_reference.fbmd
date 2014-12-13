@@ -33,31 +33,31 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
-      '`[Facebook\Entities\AccessToken](/docs/php/AccessToken)`',
+      '`[Facebook\AccessToken](/docs/php/AccessToken)`',
       'An entity that represents an access token and is required to send requests to Graph.',
     ],
     [
-      '`[Facebook\Entities\FacebookApp](/docs/php/FacebookApp)`',
+      '`[Facebook\FacebookApp](/docs/php/FacebookApp)`',
       'An entity that represents a Facebook app and is required to send requests to Graph.',
     ],
     [
-      '`[Facebook\Entities\FacebookBatchRequest](/docs/php/FacebookBatchRequest)`',
+      '`[Facebook\FacebookBatchRequest](/docs/php/FacebookBatchRequest)`',
       'An entity that represents a batch request to be sent to Graph.',
     ],
     [
-      '`[Facebook\Entities\FacebookBatchResponse](/docs/php/FacebookBatchResponse)`',
+      '`[Facebook\FacebookBatchResponse](/docs/php/FacebookBatchResponse)`',
       'An entity that represents a response from Graph after sending a batch request.',
     ],
     [
-      '`[Facebook\Entities\FacebookRequest](/docs/php/FacebookRequest)`',
+      '`[Facebook\FacebookRequest](/docs/php/FacebookRequest)`',
       'An entity that represents a request to be sent to Graph.',
     ],
     [
-      '`[Facebook\Entities\FacebookResponse](/docs/php/FacebookResponse)`',
+      '`[Facebook\FacebookResponse](/docs/php/FacebookResponse)`',
       'An entity that represents a response from Graph.',
     ],
     [
-      '`[Facebook\Entities\SignedRequest](/docs/php/SignedRequest)`',
+      '`[Facebook\SignedRequest](/docs/php/SignedRequest)`',
       'An entity that represents a signed request.',
     ],
   ],
