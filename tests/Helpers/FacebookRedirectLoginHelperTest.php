@@ -28,6 +28,14 @@ use Facebook\Facebook;
 use Facebook\Entities\FacebookApp;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
+
+class FooPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
+{
+  public function getPseudoRandomString($length) {
+    return 'csprs123';
+  }
+}
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,14 +66,12 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $params = [
       'client_id' => '123',
       'redirect_uri' => self::REDIRECT_URL,
-      'state' => $_SESSION['FBRLH_state'],
+      'state' => $this->persistentDataHandler->get('state'),
       'sdk' => 'php-sdk-' . Facebook::VERSION,
       'scope' => implode(',', $scope),
     ];
     foreach ($params as $key => $value) {
-      $this->assertTrue(
-        strpos($loginUrl, $key . '=' . urlencode($value)) !== false
-      );
+      $this->assertContains($key . '=' . urlencode($value), $loginUrl);
     }
   }
 
@@ -119,16 +125,25 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals('access_token_from_code', (string) $accessToken);
   }
   
-  public function testCSPRNG()
+  public function testACustomCsprsgCanBeInjected()
+  {
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $fooPrsg = new FooPseudoRandomStringGenerator();
+    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler, null, $fooPrsg);
+
+    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
+
+    $this->assertContains('state=csprs123', $loginUrl);
+  }
+
+  public function testThePseudoRandomStringGeneratorWillAutoDetectCsprsg()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
     $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
-    
-    $class = new \ReflectionClass('Facebook\\Helpers\\FacebookRedirectLoginHelper');
-    $method = $class->getMethod('random');
-    $method->setAccessible(true);
-
-    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $method->invoke($helper, 32)));
+    $this->assertInstanceOf(
+      'Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface',
+      $helper->getPseudoRandomStringGenerator()
+    );
   }
 
 }

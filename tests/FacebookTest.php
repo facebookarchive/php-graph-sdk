@@ -29,6 +29,7 @@ use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Url\UrlDetectionInterface;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\Entities\FacebookRequest;
 use Facebook\Entities\AccessToken;
 use Facebook\GraphNodes\GraphList;
@@ -52,6 +53,13 @@ class FooPersistentDataInterface implements PersistentDataInterface
 class FooUrlDetectionInterface implements UrlDetectionInterface
 {
   public function getCurrentUrl() { return 'https://foo.bar'; }
+}
+
+class FooBarPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
+{
+  public function getPseudoRandomString($length) {
+    return 'csprs123';
+  }
 }
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
@@ -186,6 +194,74 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   /**
    * @expectedException \InvalidArgumentException
    */
+  public function testSettingAnInvalidPseudoRandomStringGeneratorThrows()
+  {
+    $config = array_merge($this->config, [
+        'pseudo_random_string_generator' => 'foo_generator',
+      ]);
+    new Facebook($config);
+  }
+
+  public function testMcryptCsprgCanBeForced()
+  {
+    if ( ! function_exists('mcrypt_create_iv')) {
+      $this->markTestSkipped(
+        'Mcrypt must be installed to test mcrypt_create_iv().'
+      );
+    }
+
+    $config = array_merge($this->config, [
+        'persistent_data_handler' => 'memory', // To keep session errors from happening
+        'pseudo_random_string_generator' => 'mcrypt'
+      ]);
+    $fb = new Facebook($config);
+    $this->assertInstanceOf('Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator',
+      $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator());
+  }
+
+  public function testOpenSslCsprgCanBeForced()
+  {
+    if ( ! function_exists('openssl_random_pseudo_bytes')) {
+      $this->markTestSkipped(
+        'The OpenSSL extension must be enabled to test openssl_random_pseudo_bytes().'
+      );
+    }
+
+    $config = array_merge($this->config, [
+        'persistent_data_handler' => 'memory', // To keep session errors from happening
+        'pseudo_random_string_generator' => 'openssl'
+      ]);
+    $fb = new Facebook($config);
+    $this->assertInstanceOf('Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator',
+      $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator());
+  }
+
+  public function testUrandomCsprgCanBeForced()
+  {
+    if (ini_get('open_basedir')) {
+      $this->markTestSkipped(
+        'Cannot test /dev/urandom generator due to open_basedir constraint.'
+      );
+    }
+
+    if ( ! is_readable('/dev/urandom')) {
+      $this->markTestSkipped(
+        '/dev/urandom not found or is not readable.'
+      );
+    }
+    
+    $config = array_merge($this->config, [
+        'persistent_data_handler' => 'memory', // To keep session errors from happening
+        'pseudo_random_string_generator' => 'urandom'
+      ]);
+    $fb = new Facebook($config);
+    $this->assertInstanceOf('Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator',
+      $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
   public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
   {
     $config = array_merge($this->config, [
@@ -198,27 +274,38 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
   {
     $config = array_merge($this->config, [
         'default_access_token' => 'foo_token',
-        'http_client_handler' => new FooClientInterface(),
-        'persistent_data_handler' => new FooPersistentDataInterface(),
-        'url_detection_handler' => new FooUrlDetectionInterface(),
         'enable_beta_mode' => true,
         'default_graph_version' => 'v1337',
       ]);
     $fb = new Facebook($config);
 
     $request = $fb->request('FOO_VERB', '/foo');
+    $this->assertEquals('1337', $request->getApp()->getId());
+    $this->assertEquals('foo_secret', $request->getApp()->getSecret());
+    $this->assertEquals('foo_token', (string) $request->getAccessToken());
+    $this->assertEquals('v1337', $request->getGraphVersion());
+    $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA,
+      $fb->getClient()->getBaseGraphUrl());
+  }
+
+  public function testCanInjectCustomHandlers()
+  {
+    $config = array_merge($this->config, [
+        'http_client_handler' => new FooClientInterface(),
+        'persistent_data_handler' => new FooPersistentDataInterface(),
+        'url_detection_handler' => new FooUrlDetectionInterface(),
+        'pseudo_random_string_generator' => new FooBarPseudoRandomStringGenerator(),
+      ]);
+    $fb = new Facebook($config);
+
     $this->assertInstanceOf('Facebook\Tests\FooClientInterface',
       $fb->getClient()->getHttpClientHandler());
     $this->assertInstanceOf('Facebook\Tests\FooPersistentDataInterface',
       $fb->getRedirectLoginHelper()->getPersistentDataHandler());
     $this->assertInstanceOf('Facebook\Tests\FooUrlDetectionInterface',
       $fb->getRedirectLoginHelper()->getUrlDetectionHandler());
-    $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA,
-      $fb->getClient()->getBaseGraphUrl());
-    $this->assertEquals('1337', $request->getApp()->getId());
-    $this->assertEquals('foo_secret', $request->getApp()->getSecret());
-    $this->assertEquals('foo_token', (string) $request->getAccessToken());
-    $this->assertEquals('v1337', $request->getGraphVersion());
+    $this->assertInstanceOf('Facebook\Tests\FooBarPseudoRandomStringGenerator',
+      $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator());
   }
 
   public function testPaginationReturnsProperResponse()

@@ -34,6 +34,10 @@ use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphList;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
+use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
+use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
+use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
@@ -92,6 +96,12 @@ class Facebook
   protected $urlDetectionHandler;
 
   /**
+   * @var PseudoRandomStringGeneratorInterface|null The cryptographically secure
+   *                                                pseudo-random string generator.
+   */
+  protected $pseudoRandomStringGenerator;
+
+  /**
    * @var AccessToken|null The default access token to use with requests.
    */
   protected $defaultAccessToken;
@@ -110,13 +120,6 @@ class Facebook
    * @var FacebookResponse|FacebookBatchResponse|null Stores the last request made to Graph.
    */
   protected $lastResponse;
-
-  /**
-   * @TODO Add FacebookInputInterface
-   * @TODO Add FacebookRandomGeneratorInterface
-   * @TODO Add FacebookRequestInterface
-   * @TODO Add FacebookResponseInterface
-   */
 
   /**
    * Instantiates a new Facebook super-class object.
@@ -176,6 +179,22 @@ class Facebook
         throw new \InvalidArgumentException(
           'The url_detection_handler must be an instance of Facebook\Url\UrlDetectionInterface'
           );
+      }
+    }
+
+    if (isset($config['pseudo_random_string_generator'])) {
+      if ($config['pseudo_random_string_generator'] instanceof PseudoRandomStringGeneratorInterface) {
+        $this->pseudoRandomStringGenerator = $config['pseudo_random_string_generator'];
+      } elseif ($config['pseudo_random_string_generator'] === 'mcrypt') {
+        $this->pseudoRandomStringGenerator = new McryptPseudoRandomStringGenerator();
+      } elseif ($config['pseudo_random_string_generator'] === 'openssl') {
+        $this->pseudoRandomStringGenerator = new OpenSslPseudoRandomStringGenerator();
+      } elseif ($config['pseudo_random_string_generator'] === 'urandom') {
+        $this->pseudoRandomStringGenerator = new UrandomPseudoRandomStringGenerator();
+      } else {
+        throw new \InvalidArgumentException(
+          'The pseudo_random_string_generator must be an instance of Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface'
+        );
       }
     }
 
@@ -302,7 +321,8 @@ class Facebook
     return new FacebookRedirectLoginHelper(
       $this->app,
       $this->persistentDataHandler,
-      $this->urlDetectionHandler
+      $this->urlDetectionHandler,
+      $this->pseudoRandomStringGenerator
     );
   }
 
