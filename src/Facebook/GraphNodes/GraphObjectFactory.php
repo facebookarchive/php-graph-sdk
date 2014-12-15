@@ -23,7 +23,7 @@
  */
 namespace Facebook\GraphNodes;
 
-use Facebook\Entities\FacebookResponse;
+use Facebook\FacebookResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**

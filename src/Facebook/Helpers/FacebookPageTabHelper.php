@@ -23,7 +23,7 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 
 /**
  * Class FacebookPageTabHelper

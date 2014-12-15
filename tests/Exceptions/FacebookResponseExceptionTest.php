@@ -23,9 +23,9 @@
  */
 namespace Facebook\Tests\Exceptions;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookResponse;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 use Facebook\Exceptions\FacebookResponseException;
 
 class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase

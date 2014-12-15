@@ -23,12 +23,6 @@
  */
 namespace Facebook;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\AccessToken;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookBatchRequest;
-use Facebook\Entities\FacebookResponse;
-use Facebook\Entities\FacebookBatchResponse;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphList;
@@ -297,7 +291,7 @@ class Facebook
 
     throw new \InvalidArgumentException(
       'The default access token must be of type "string"'
-      . ' or Facebook\Entities\AccessToken'
+      . ' or Facebook\AccessToken'
     );
   }
 

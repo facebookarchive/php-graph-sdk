@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Entities;
+namespace Facebook;
 
 use Facebook\Exceptions\FacebookSDKException;
 

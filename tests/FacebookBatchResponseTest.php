@@ -21,24 +21,24 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookResponse;
-use Facebook\Entities\FacebookBatchRequest;
-use Facebook\Entities\FacebookBatchResponse;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+use Facebook\FacebookBatchRequest;
+use Facebook\FacebookBatchResponse;
 
 class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\Entities\FacebookApp
+   * @var \Facebook\FacebookApp
    */
   protected $app;
 
   /**
-   * @var \Facebook\Entities\FacebookRequest
+   * @var \Facebook\FacebookRequest
    */
   protected $request;
 
@@ -108,7 +108,7 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 
     foreach ($batchResponse as $key => $responseEntity) {
       $this->assertTrue(in_array($key, ['req_one', 'req_two', 'req_three']));
-      $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $responseEntity);
+      $this->assertInstanceOf('Facebook\FacebookResponse', $responseEntity);
     }
   }
 
@@ -130,8 +130,8 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
     $batchRequest = new FacebookBatchRequest($this->app, $requests);
     $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookResponse', $batchResponse[0]);
-    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $batchResponse[0]->getRequest());
+    $this->assertInstanceOf('Facebook\FacebookResponse', $batchResponse[0]);
+    $this->assertInstanceOf('Facebook\FacebookRequest', $batchResponse[0]->getRequest());
     $this->assertEquals('foo_token_one', $batchResponse[0]->getAccessToken());
     $this->assertEquals('foo_token_two', $batchResponse[1]->getAccessToken());
     $this->assertEquals('foo_token_three', $batchResponse[2]->getAccessToken());

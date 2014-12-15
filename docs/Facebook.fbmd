@@ -67,7 +67,7 @@ The ID of your Facebook app (required).
 The secret of your Facebook app (required).
 
 ### `default_access_token`
-The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\Entities\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
+The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
 
 ### `enable_beta_mode`
 Enable [beta mode](https://developers.facebook.com/docs/support/beta-tier/) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
@@ -163,7 +163,7 @@ $fb = new Facebook\Facebook();
 ~~~~
 public FacebookApp getApp()
 ~~~~
-Returns the instance of `Facebook\Entities\FacebookApp` for the instantiated service.
+Returns the instance of `Facebook\FacebookApp` for the instantiated service.
 </card>
 
 <card>
@@ -177,34 +177,34 @@ Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) fo
 <card>
 ### getLastResponse() {#get-last-response}
 ~~~~
-public Facebook\Entities\FacebookResponse|Facebook\Entities\FacebookBatchResponse|null getLastResponse()
+public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
 ~~~~
-Returns the last response received from the Graph API in the form of a `Facebook\Entities\FacebookResponse` or `Facebook\Entities\FacebookBatchResponse`.
+Returns the last response received from the Graph API in the form of a `Facebook\FacebookResponse` or `Facebook\FacebookBatchResponse`.
 </card>
 
 <card>
 ### getDefaultAccessToken() {#get-default-access-token}
 ~~~~
-public Facebook\Entities\AccessToken|null getDefaultAccessToken()
+public Facebook\AccessToken|null getDefaultAccessToken()
 ~~~~
 
-Returns the default fallback `Facebook\Entities\AccessToken` entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
+Returns the default fallback `Facebook\AccessToken` entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
 </card>
 
 <card>
 ### setDefaultAccessToken() {#set-default-access-token}
 ~~~~
-public setDefaultAccessToken(string|Facebook\Entities\AccessToken $accessToken)
+public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
 ~~~~
 
-Sets the default access token to be use with all requests sent to Graph. The access token can be in string or `Facebook\Entities\AccessToken` format.
+Sets the default access token to be use with all requests sent to Graph. The access token can be in string or `Facebook\AccessToken` format.
 
 ~~~~
 $fb->setDefaultAccessToken('{my-access-token}');
 
 // . . . OR . . .
 
-$accessToken = new Facebook\Entities\AccessToken('{my-access-token}');
+$accessToken = new Facebook\AccessToken('{my-access-token}');
 $fb->setDefaultAccessToken($accessToken);
 ~~~~
 
@@ -222,7 +222,7 @@ Returns the default version of Graph. If the `default_graph_version` configurati
 <card>
 ### get() {#get}
 ~~~~
-public Facebook\Entities\FacebookResponse get(
+public Facebook\FacebookResponse get(
   string $endpoint,
   string|AccessToken|null $accessToken,
   string|null $eTag,
@@ -230,7 +230,7 @@ public Facebook\Entities\FacebookResponse get(
 )
 ~~~~
 
-Sends a GET request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+Sends a GET request to Graph and returns a `Facebook\FacebookResponse`.
 
 `$endpoint`
 The url to send to Graph without the version prefix (required).
@@ -240,7 +240,7 @@ $fb->get('/me');
 ~~~
 
 `$accessToken`
-The access token (as a `string` or `Facebook\Entities\AccessToken`) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
+The access token (as a `string` or `Facebook\AccessToken`) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
 
 `$eTag`
 [Graph supports eTags](https://developers.facebook.com/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
@@ -252,7 +252,7 @@ Set the Graph version to something other than what was set in the `default_graph
 <card>
 ### post() {#post}
 ~~~~
-public Facebook\Entities\FacebookResponse post(
+public Facebook\FacebookResponse post(
   string $endpoint,
   array $params,
   string|AccessToken|null $accessToken,
@@ -261,7 +261,7 @@ public Facebook\Entities\FacebookResponse post(
 )
 ~~~~
 
-Sends a POST request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+Sends a POST request to Graph and returns a `Facebook\FacebookResponse`.
 
 The arguments are the same as `get()` above with the exception of `$params`.
 
@@ -276,7 +276,7 @@ $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 <card>
 ### delete() {#delete}
 ~~~~
-public Facebook\Entities\FacebookResponse delete(
+public Facebook\FacebookResponse delete(
   string $endpoint,
   string|AccessToken|null $accessToken,
   string|null $eTag,
@@ -284,7 +284,7 @@ public Facebook\Entities\FacebookResponse delete(
 )
 ~~~~
 
-Sends a DELETE request to Graph and returns a `Facebook\Entities\FacebookResponse`.
+Sends a DELETE request to Graph and returns a `Facebook\FacebookResponse`.
 
 The arguments are the same as `get()` above.
 
@@ -296,7 +296,7 @@ $response = $fb->delete('/{node-id}');
 <card>
 ### request() {#request}
 ~~~~
-public Facebook\Entities\FacebookRequest request(
+public Facebook\FacebookRequest request(
   string $method,
   string $endpoint,
   array $params,
@@ -306,7 +306,7 @@ public Facebook\Entities\FacebookRequest request(
 )
 ~~~~
 
-Instantiates a new `Facebook\Entities\FacebookRequest` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
+Instantiates a new `Facebook\FacebookRequest` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
 
 The arguments are the same as `post()` above with the exception of `$method`.
 
@@ -321,7 +321,7 @@ $request = $fb->request('GET', '/{node-id}');
 <card>
 ### sendRequest() {#send-request}
 ~~~~
-public Facebook\Entities\FacebookResponse sendRequest(
+public Facebook\FacebookResponse sendRequest(
   string $method,
   string $endpoint,
   array $params,
@@ -341,19 +341,19 @@ $response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.2')
 <card>
 ### sendBatchRequest() {#send-batch-request}
 ~~~~
-public Facebook\Entities\FacebookBatchResponse sendBatchRequest(
+public Facebook\FacebookBatchResponse sendBatchRequest(
   array $requests,
   string|AccessToken|null $accessToken,
   string|null $graphVersion
 )
 ~~~~
 
-Sends an array of `Facebook\Entities\FacebookRequest` entities as a batch request to Graph.
+Sends an array of `Facebook\FacebookRequest` entities as a batch request to Graph.
 
 The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 
 `$requests`
-An array of `Facebook\Entities\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be of type `Facebook\Entities\FacebookRequest`.
+An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be of type `Facebook\FacebookRequest`.
 
 If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 

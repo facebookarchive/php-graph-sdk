@@ -24,8 +24,8 @@
 namespace Facebook\Helpers;
 
 use Facebook\Facebook;
-use Facebook\Entities\AccessToken;
-use Facebook\Entities\FacebookApp;
+use \Facebook\AccessToken;
+use \Facebook\FacebookApp;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;

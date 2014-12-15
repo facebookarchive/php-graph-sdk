@@ -23,9 +23,9 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\SignedRequest;
-use Facebook\Entities\AccessToken;
+use Facebook\FacebookApp;
+use Facebook\SignedRequest;
+use Facebook\AccessToken;
 use Facebook\FacebookClient;
 
 /**

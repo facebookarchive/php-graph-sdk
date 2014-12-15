@@ -5,9 +5,9 @@ Represents a batch response returned from the Graph API.
 </card>
 
 <card>
-## Facebook\Entities\FacebookBatchResponse {#overview}
+## Facebook\FacebookBatchResponse {#overview}
 
-After sending a batch request to the Graph API, the response will be returned in the form of a `Facebook\Entities\FacebookBatchResponse` entity.
+After sending a batch request to the Graph API, the response will be returned in the form of a `Facebook\FacebookBatchResponse` entity.
 
 Usage:
 
@@ -41,26 +41,26 @@ foreach ($batchResponse as $key => $response) {
 }
 
 var_dump($batchResponse);
-// class Facebook\Entities\FacebookBatchResponse . . .
+// class Facebook\FacebookBatchResponse . . .
 ~~~~
 </card>
 
 <card>
 ## Instance Methods {#instance-methods}
 
-Since the `Facebook\Entities\FacebookBatchResponse` is extended from the [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
 
 ### getResponses() {#get-responses}
 ~~~~
 public array getResponses()
 ~~~~
-Returns the array of [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
+Returns the array of [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
 </card>
 
 <card>
 ## Array Access {#array-access}
 
-Since `Facebook\Entities\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
+Since `Facebook\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
 
 ~~~~
 $requests = [
@@ -79,6 +79,6 @@ foreach ($batchResponse as $key => $response) {
 }
 
 var_dump($batchResponse['foo']);
-// class Facebook\Entities\FacebookResponse . . .
+// class Facebook\FacebookResponse . . .
 ~~~~
 </card>

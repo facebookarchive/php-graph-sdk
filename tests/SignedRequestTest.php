@@ -21,10 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\SignedRequest;
+use Facebook\FacebookApp;
+use Facebook\SignedRequest;
 
 class SignedRequestTest extends \PHPUnit_Framework_TestCase
 {

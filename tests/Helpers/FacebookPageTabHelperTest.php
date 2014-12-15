@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests\Helpers;
 
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\Helpers\FacebookPageTabHelper;
 
 class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase

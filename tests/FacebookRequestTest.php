@@ -21,11 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
 use Facebook\Facebook;
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
+use \Facebook\FacebookApp;
+use \Facebook\FacebookRequest;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 
@@ -37,7 +37,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     $app = new FacebookApp('123', 'foo_secret');
     $request = new FacebookRequest($app);
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $request);
+    $this->assertInstanceOf('Facebook\FacebookRequest', $request);
   }
 
   /**
@@ -172,7 +172,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testAFileCanBeAddedToParams()
   {
-    $myFile = new FacebookFile(__DIR__ . '/../foo.txt');
+    $myFile = new FacebookFile(__DIR__ . '/foo.txt');
     $params = [
       'name' => 'Foo Bar',
       'source' => $myFile,
@@ -190,7 +190,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 
   public function testAVideoCanBeAddedToParams()
   {
-    $myFile = new FacebookVideo(__DIR__ . '/../foo.txt');
+    $myFile = new FacebookVideo(__DIR__ . '/foo.txt');
     $params = [
       'name' => 'Foo Bar',
       'source' => $myFile,

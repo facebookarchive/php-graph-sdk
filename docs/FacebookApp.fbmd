@@ -1,19 +1,19 @@
 <card>
 # FacebookApp for the Facebook SDK for PHP
 
-In order to make requests to the Graph API, you need to [create a Facebook app](https://developers.facebook.com/apps) and obtain the app ID and the app secret. The `Facebook\Entities\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
+In order to make requests to the Graph API, you need to [create a Facebook app](https://developers.facebook.com/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
 </card>
 
 <card>
-## Facebook\Entities\FacebookApp {#overview}
+## Facebook\FacebookApp {#overview}
 
-To instantiate a new `Facebook\Entities\FacebookApp` entity, pass the app ID and app secret to the constructor.
+To instantiate a new `Facebook\FacebookApp` entity, pass the app ID and app secret to the constructor.
 
 ~~~~
-$fbApp = new Facebook\Entities\FacebookApp('{app-id}', '{app-secret}');
+$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 ~~~~
 
-Alternatively you can obtain the `Facebook\Entities\FacebookApp` entity from the [`Facebook\Facebook`](/docs/php/Facebook) super service class.
+Alternatively you can obtain the `Facebook\FacebookApp` entity from the [`Facebook\Facebook`](/docs/php/Facebook) super service class.
 
 ~~~~
 $fb = new Facebook\Facebook([/* . . . */]);
@@ -28,9 +28,9 @@ In the most common cases, you'll rarely be using the `FacebookApp` entity direct
 
 ### getAccessToken() {#get-access-token}
 ~~~~
-public Facebook\Entities\AccessToken getAccessToken()
+public Facebook\AccessToken getAccessToken()
 ~~~~
-Returns an app access token in the form of a [`Facebook\Entities\AccessToken`](/docs/php/AccessToken) entity.
+Returns an app access token in the form of a [`Facebook\AccessToken`](/docs/php/AccessToken) entity.
 </card>
 
 <card>
@@ -52,13 +52,13 @@ Returns an the app secret.
 <card>
 ## Serialization {#serialization}
 
-The `Facebook\Entities\FacebookApp` entity implements the `\Serializable` interface so it can be serialized and unserialized.
+The `Facebook\FacebookApp` entity implements the `\Serializable` interface so it can be serialized and unserialized.
 
 ~~~~
-$fbApp = new Facebook\Entities\FacebookApp('foo-app-id', 'foo-app-secret');
+$fbApp = new Facebook\FacebookApp('foo-app-id', 'foo-app-secret');
 
 $serializedFacebookApp = serialize($fbApp);
-// C:29:"Facebook\\Entities\\FacebookApp":54:{a:2:{i:0;s:10:"foo-app-id";i:1;s:14:"foo-app-secret";}}
+// C:29:"Facebook\\FacebookApp":54:{a:2:{i:0;s:10:"foo-app-id";i:1;s:14:"foo-app-secret";}}
 
 $unserializedFacebookApp = unserialize($serializedFacebookApp);
 echo $unserializedFacebookApp->getAccessToken();

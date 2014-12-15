@@ -23,10 +23,6 @@
  */
 namespace Facebook;
 
-use Facebook\Entities\FacebookRequest;
-use Facebook\Entities\FacebookBatchRequest;
-use Facebook\Entities\FacebookResponse;
-use Facebook\Entities\FacebookBatchResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;

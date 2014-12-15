@@ -23,15 +23,15 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphList;
 
 class GraphListTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\Entities\FacebookRequest
+   * @var \Facebook\FacebookRequest
    */
   protected $request;
 
@@ -106,8 +106,8 @@ class GraphListTest extends \PHPUnit_Framework_TestCase
     $nextPage = $graphList->getNextPageRequest();
     $prevPage = $graphList->getPreviousPageRequest();
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $nextPage);
-    $this->assertInstanceOf('Facebook\Entities\FacebookRequest', $prevPage);
+    $this->assertInstanceOf('Facebook\FacebookRequest', $nextPage);
+    $this->assertInstanceOf('Facebook\FacebookRequest', $prevPage);
     $this->assertNotSame($this->request, $nextPage);
     $this->assertNotSame($this->request, $prevPage);
     $this->assertEquals('/v1337/1234567890/likes?access_token=foo_token&after=bar_after_cursor&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&foo=bar&keep=me', $nextPage->getUrl());

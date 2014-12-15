@@ -21,11 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Entities;
+namespace Facebook;
 
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\FacebookClient;
 use Facebook\GraphNodes\GraphSessionInfo;
 
 /**

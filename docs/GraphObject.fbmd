@@ -15,13 +15,13 @@ This base class has several subclasses:
 [__GraphLocation__](#location-instance-methods)
 [__GraphSessionInfo__](#sessioninfo-instance-methods)
 
-`GraphObject`'s are obtained from a [`Facebook\Entities\FacebookResponse`](/docs/php/FacebookResponse) object which represents a response from the Graph API.
+`GraphObject`'s are obtained from a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) object which represents a response from the Graph API.
 
 Usage:
 
 ~~~~
 $fb = new Facebook\Facebook(\* *\);
-// Returns a `Facebook\Entities\FacebookResponse` object
+// Returns a `Facebook\FacebookResponse` object
 $response = $fb->get('/something');
 
 // Get the base class GraphObject from the response

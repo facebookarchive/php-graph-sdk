@@ -106,10 +106,10 @@ require_once __DIR__ . '/facebook-sdk-v4.1/autoload.php';
 
 ### The `FacebookApp` entity
 
-Before we can send requests to the Graph API, we need to load our app configuration into a `Facebook\Entities\FacebookApp` entity.
+Before we can send requests to the Graph API, we need to load our app configuration into a `Facebook\FacebookApp` entity.
 
 ~~~
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 
 $facebookApp = new FacebookApp('{app-id}', '{app-secret}');
 ~~~
@@ -143,7 +143,7 @@ For most websites, you'll use the `[Facebook\Helpers\FacebookRedirectLoginHelper
 
 ~~~
 # login.php
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 $facebookApp = new FacebookApp('{app-id}', '{app-secret}');
@@ -157,7 +157,7 @@ echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 
 ~~~
 # login-callback.php
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookResponseException;
@@ -182,10 +182,10 @@ if (isset($accessToken)) {
 }
 ~~~
 
-If your app is on Facebook Canvas, use the `getAccessToken()` method on [FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper) to get an `Facebook\Entities\AccessToken` entity for the user.
+If your app is on Facebook Canvas, use the `getAccessToken()` method on [FacebookCanvasLoginHelper](/docs/php/FacebookCanvasLoginHelper) to get an `Facebook\AccessToken` entity for the user.
 
 ~~~
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookCanvasLoginHelper;
 use Facebook\Exceptions\FacebookResponseException;
@@ -212,10 +212,10 @@ if (isset($accessToken)) {
 }
 ~~~
 
-If you're already using the Facebook SDK for JavaScript to authenticate users, you can also log them in on the server side with the [FacebookJavaScriptLoginHelper](/docs/php/FacebookJavaScriptLoginHelper).  The `getAccessToken()` method will return a `Facebook\Entities\AccessToken` entity.
+If you're already using the Facebook SDK for JavaScript to authenticate users, you can also log them in on the server side with the [FacebookJavaScriptLoginHelper](/docs/php/FacebookJavaScriptLoginHelper).  The `getAccessToken()` method will return a `Facebook\AccessToken` entity.
 
 ~~~
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookJavaScriptLoginHelper;
 use Facebook\Exceptions\FacebookResponseException;
@@ -240,10 +240,10 @@ if (isset($accessToken)) {
 }
 ~~~
 
-You can also create a `Facebook\Entities\AccessToken` entity with an access token you've acquired through some other means, by passing it to the constructor.
+You can also create a `Facebook\AccessToken` entity with an access token you've acquired through some other means, by passing it to the constructor.
 
 ~~~
-use Facebook\Entities\AccessToken;
+use Facebook\AccessToken;
 
 $accessToken = new AccessToken('{access-token}');
 ~~~
@@ -252,11 +252,11 @@ $accessToken = new AccessToken('{access-token}');
 <card>
 ## Making Requests to the Graph API {#making-requests}
 
-Once you have created a `Facebook\Entities\FacebookApp` entity, instantiated a `Facebook\FacebookClient` and obtained an access token, you can begin making calls to the Graph API with the [`Facebook\Entities\FacebookRequest`](/docs/php/FacebookRequest) entity.
+Once you have created a `Facebook\FacebookApp` entity, instantiated a `Facebook\FacebookClient` and obtained an access token, you can begin making calls to the Graph API with the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity.
 
 ~~~
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
 use Facebook\FacebookClient;
 use Facebook\GraphNodes\GraphUser;
 use Facebook\Exceptions\FacebookResponseException;

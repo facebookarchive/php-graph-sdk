@@ -21,9 +21,9 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
-use Facebook\Entities\FacebookApp;
+use Facebook\FacebookApp;
 
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,7 +52,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
   {
     $accessToken = $this->app->getAccessToken();
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
     $this->assertEquals('id|secret', (string) $accessToken);
   }
 
@@ -60,7 +60,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
   {
     $newApp = unserialize(serialize($this->app));
 
-    $this->assertInstanceOf('Facebook\Entities\FacebookApp', $newApp);
+    $this->assertInstanceOf('Facebook\FacebookApp', $newApp);
     $this->assertEquals('id', $newApp->getId());
     $this->assertEquals('secret', $newApp->getSecret());
   }

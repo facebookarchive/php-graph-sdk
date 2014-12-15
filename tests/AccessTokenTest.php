@@ -21,11 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Entities;
+namespace Facebook\Tests;
 
 use Mockery as m;
-use Facebook\Entities\FacebookApp;
-use Facebook\Entities\AccessToken;
+use Facebook\FacebookApp;
+use Facebook\AccessToken;
 use Facebook\GraphNodes\GraphSessionInfo;
 
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
@@ -133,7 +133,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $longLivedAccessToken = $accessToken->extend($app, $client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $longLivedAccessToken);
+    $this->assertInstanceOf('Facebook\AccessToken', $longLivedAccessToken);
     $this->assertEquals('long_token', (string)$longLivedAccessToken);
     $this->assertEquals('foo_machine', $longLivedAccessToken->getMachineId());
     $this->assertEquals(time() + 123, $longLivedAccessToken->getExpiresAt()->getTimeStamp());
@@ -164,7 +164,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
     $accessTokenFromCode = AccessToken::getAccessTokenFromCode('foo_code', $app, $client);
 
-    $this->assertInstanceOf('Facebook\Entities\AccessToken', $accessTokenFromCode);
+    $this->assertInstanceOf('Facebook\AccessToken', $accessTokenFromCode);
     $this->assertEquals('new_long_token', (string)$accessTokenFromCode);
     $this->assertEquals('foo_machine', $accessTokenFromCode->getMachineId());
     $this->assertEquals(time() + 123, $accessTokenFromCode->getExpiresAt()->getTimeStamp());
@@ -201,7 +201,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     $client = m::mock('Facebook\FacebookClient');
     $client
       ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\Entities\FacebookRequest'))
+      ->with(m::type('Facebook\FacebookRequest'))
       ->once()
       ->andReturn($response);
     return $client;
@@ -219,7 +219,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
   private function createFacebookResponseMock()
   {
-    return m::mock('Facebook\Entities\FacebookResponse');
+    return m::mock('Facebook\FacebookResponse');
   }
 
   private function createFacebookResponseMockWithNoExpiresAt()

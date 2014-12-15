@@ -4,7 +4,7 @@
 The `FacebookCanvasHelper` is used to obtain an access token or signed request when working within the context of an [app canvas](https://developers.facebook.com/docs/games/canvas).
 
 ~~~
-Facebook\Helpers\FacebookCanvasHelper( Facebook\Entities\FacebookApp $facebookApp )
+Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 ~~~
 </card>
 
@@ -67,7 +67,7 @@ if (isset($accessToken)) {
 
 ### __construct() {#construct}
 ~~~~
-public FacebookCanvasHelper __construct( Facebook\Entities\FacebookApp $app )
+public FacebookCanvasHelper __construct( Facebook\FacebookApp $app )
 ~~~~
 Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed request that was sent via POST if present.
 </card>
@@ -75,7 +75,7 @@ Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed req
 <card>
 ### getAccessToken() {#get-access-token}
 ~~~
-public Facebook\Entities\AccessToken|null getAccessToken( Facebook\FacebookClient $client )
+public Facebook\AccessToken|null getAccessToken( Facebook\FacebookClient $client )
 ~~~
 Checks the signed request for authentication data and tries to obtain an access token access token.
 </card>
@@ -119,9 +119,9 @@ Gets the value that is set in the `app_data` property if present.
 <card>
 ### getSignedRequest() {#get-signed-request}
 ~~~
-public Facebook\Entities\SignedRequest|null getSignedRequest()
+public Facebook\SignedRequest|null getSignedRequest()
 ~~~
-Returns the signed request as a [`Facebook\Entities\SignedRequest`](/docs/php/SignedRequest) entity if present.
+Returns the signed request as a [`Facebook\SignedRequest`](/docs/php/SignedRequest) entity if present.
 </card>
 
 <card>

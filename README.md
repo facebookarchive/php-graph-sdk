@@ -22,7 +22,7 @@ $fb = new Facebook\Facebook([
   //'default_access_token' => '{access-token}', // optional
 ]);
 
-// Use one of the helper classes to get a Facebook\Entities\AccessToken entity.
+// Use one of the helper classes to get a Facebook\AccessToken entity.
 //   $helper = $fb->getRedirectLoginHelper();
 //   $helper = $fb->getJavaScriptHelper();
 //   $helper = $fb->getCanvasHelper();

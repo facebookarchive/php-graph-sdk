@@ -5,15 +5,15 @@ Represents a request that will be sent to the Graph API.
 </card>
 
 <card>
-## Facebook\Entities\FacebookRequest {#overview}
+## Facebook\FacebookRequest {#overview}
 
 You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
 ~~~~
-use Facebook\Entities\FacebookRequest;
+use Facebook\FacebookRequest;
 
 $request = new FacebookRequest(  
-  Facebook\Entities\FacebookApp $app,
+  Facebook\FacebookApp $app,
   string $accessToken,
   string $method,
   string $endpoint,
@@ -30,8 +30,8 @@ The `FacebookRequest` entity does not actually make any calls to the Graph API, 
 Usage:
 
 ~~~~
-$fbApp = new Facebook\Entities\FacebookApp('{app-id}', '{app-secret}');
-$request = new Facebook\Entities\FacebookRequest($fbApp, '{access-token}', 'GET', '/me');
+$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
+$request = new Facebook\FacebookRequest($fbApp, '{access-token}', 'GET', '/me');
 
 // OR
 
@@ -62,7 +62,7 @@ echo 'User name: ' . $object['name'];
 
 ### setAccessToken() {#set-access-token}
 ~~~~
-public setAccessToken(string|Facebook\Entities\AccessToken $accessToken)
+public setAccessToken(string|Facebook\AccessToken $accessToken)
 ~~~~
 Sets the access token to be used for the request.
 </card>
@@ -78,17 +78,17 @@ Returns the access token to be used for the request in the form of a string.
 <card>
 ### setApp() {#set-app}
 ~~~~
-public setApp(Facebook\Entities\FacebookApp $app)
+public setApp(Facebook\FacebookApp $app)
 ~~~~
-Sets the [`Facebook\Entities\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
+Sets the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 </card>
 
 <card>
 ### getApp() {#get-app}
 ~~~~
-public Facebook\Entities\FacebookApp getApp()
+public Facebook\FacebookApp getApp()
 ~~~~
-Returns the [`Facebook\Entities\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
+Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 </card>
 
 <card>
