@@ -39,6 +39,7 @@ class GraphUser extends GraphObject
     'hometown' => 'Facebook\\GraphNodes\\GraphPage',
     'location' => 'Facebook\\GraphNodes\\GraphPage',
     'significant_other' => 'Facebook\\GraphNodes\\GraphUser',
+    'picture' => 'Facebook\\GraphNodes\\GraphPicture',
   ];
 
   /**
@@ -139,6 +140,16 @@ class GraphUser extends GraphObject
   public function getSignificantOther()
   {
     return $this->getProperty('significant_other');
+  }
+
+  /**
+   * Returns the picture of the user as a GraphPicture
+   *
+   * @return GraphPicture|null
+   */
+  public function getPicture()
+  {
+    return $this->getProperty('picture');
   }
 
 }
