@@ -86,6 +86,16 @@ class GraphUser extends GraphObject
   {
     return $this->getProperty('last_name');
   }
+  
+  /**
+   * Returns the gender for the user as a string if present.
+   *
+   * @return string|null
+   */
+  public function getGender()
+  {
+    return $this->getProperty('gender');
+  }
 
   /**
    * Returns the Facebook URL for the user as a string if available.
