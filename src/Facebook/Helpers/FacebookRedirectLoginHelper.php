@@ -159,14 +159,16 @@ class FacebookRedirectLoginHelper
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
-   * @param array $params Provide custom parameters
+   * @param array $scope List of permissions to request during login.
    * @param boolean $rerequest Toggle for this authentication to be a rerequest.
    * @param string $version Optional Graph API version if not default (v2.0).
    * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
-  public function getLoginUrl($params = [],
+  public function getLoginUrl($redirectUrl,
+                              array $scope = [],
+                              $rerequest = false,
                               $version = null,
                               $separator = '&')
   {
@@ -175,21 +177,18 @@ class FacebookRedirectLoginHelper
     $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
     $this->persistentDataHandler->set('state', $state);
 
-    // if 'scope' is passed as an array, convert to comma separated list
-    $scopeParams = isset($params['scope']) ? $params['scope'] : null;
-    if ($scopeParams && is_array($scopeParams)) {
-      $params['scope'] = implode(',', $scopeParams);
-    }
+    $params = [
+      'client_id' => $this->app->getId(),
+      'redirect_uri' => $redirectUrl,
+      'state' => $state,
+      'response_type' => 'code',
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
+      'scope' => implode(',', $scope)
+    ];
 
-    $params = array_merge(
-      [
-        'client_id' => $this->app->getId(),
-        'state' => $state,
-        'response_type' => 'code',
-        'sdk' => 'php-sdk-' . Facebook::VERSION,
-      ],
-      $params
-    );
+    if ($rerequest) {
+      $params['auth_type'] = 'rerequest';
+    }
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
       http_build_query($params, null, $separator);
