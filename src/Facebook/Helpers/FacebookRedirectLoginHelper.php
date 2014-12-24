@@ -171,12 +171,12 @@ class FacebookRedirectLoginHelper
     $this->persistentDataHandler->set('state', $state);
 
     $params += [
-        'client_id' => $this->app->getId(),
-        'state' => $state,
-        'response_type' => 'code',
-        'sdk' => 'php-sdk-' . Facebook::VERSION,
-        'redirect_uri' => $redirectUrl,
-        'scope' => implode(',', $scope)
+      'client_id' => $this->app->getId(),
+      'state' => $state,
+      'response_type' => 'code',
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
+      'redirect_uri' => $redirectUrl,
+      'scope' => implode(',', $scope)
     ];
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
@@ -239,9 +239,8 @@ class FacebookRedirectLoginHelper
                                   $separator = '&')
   {
     $params = [
-        'auth_type' => 'rerequest'
+      'auth_type' => 'rerequest'
     ];
-
     return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
   }
 
@@ -263,9 +262,8 @@ class FacebookRedirectLoginHelper
                                          $separator = '&')
   {
     $params = [
-        'auth_type' => 'reauthenticate'
+      'auth_type' => 'reauthenticate'
     ];
-
     return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
 
   }
