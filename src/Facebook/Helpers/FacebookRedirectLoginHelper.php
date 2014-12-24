@@ -180,7 +180,7 @@ class FacebookRedirectLoginHelper
     ];
 
     return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-    http_build_query($params, null, $separator);
+      http_build_query($params, null, $separator);
   }
 
   /**
@@ -265,7 +265,6 @@ class FacebookRedirectLoginHelper
       'auth_type' => 'reauthenticate'
     ];
     return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
-
   }
 
   /**
