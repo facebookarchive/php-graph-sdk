@@ -58,7 +58,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCount()
     {
-        return$this->getProperty('count');
+        return $this->getProperty('count');
     }
 
     /**
@@ -68,7 +68,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCoverPhoto()
     {
-        return$this->getProperty('cover_photo');
+        return $this->getProperty('cover_photo');
     }
 
     /**
@@ -106,7 +106,7 @@ class GraphAlbum extends GraphObject
      */
     public function getDescription()
     {
-        return$this->getProperty('description');
+        return $this->getProperty('description');
     }
 
     /**
@@ -126,7 +126,7 @@ class GraphAlbum extends GraphObject
      */
     public function getLink()
     {
-        return$this->getProperty('link');
+        return $this->getProperty('link');
     }
 
     /**
@@ -136,7 +136,7 @@ class GraphAlbum extends GraphObject
      */
     public function getLocation()
     {
-        return$this->getProperty('location');
+        return $this->getProperty('location');
     }
 
     /**
@@ -146,7 +146,7 @@ class GraphAlbum extends GraphObject
      */
     public function getName()
     {
-        return$this->getProperty('name');
+        return $this->getProperty('name');
     }
 
     /**
@@ -156,7 +156,7 @@ class GraphAlbum extends GraphObject
      */
     public function getPrivacy()
     {
-        return$this->getProperty('privacy');
+        return $this->getProperty('privacy');
     }
 
     /**
@@ -166,7 +166,7 @@ class GraphAlbum extends GraphObject
      */
     public function getType()
     {
-        return$this->getProperty('type');
+        return $this->getProperty('type');
     }
 
     //TODO: public function getPlace() that should return GraphPage
