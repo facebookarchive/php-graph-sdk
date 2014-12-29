@@ -32,6 +32,21 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testReRequestUrlContainsState()
+  {
+    $helper = new FacebookRedirectLoginHelper(
+      self::REDIRECT_URL,
+      FacebookTestCredentials::$appId,
+      FacebookTestCredentials::$appSecret
+    );
+    $helper->disableSessionStatusCheck();
+
+    $reRequestUrl = $helper->getReRequestUrl();
+    $state = $_SESSION['FBRLH_state'];
+
+    $this->assertContains('state=' . urlencode($state), $reRequestUrl);
+  }
+
   public function testLogoutURL()
   {
     $helper = new FacebookRedirectLoginHelper(
