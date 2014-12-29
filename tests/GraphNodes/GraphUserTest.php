@@ -23,6 +23,7 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
+use Facebook\FacebookResponse;
 use Mockery as m;
 use Facebook\GraphNodes\GraphObjectFactory;
 
@@ -30,7 +31,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
 
   /**
-   * @var \Facebook\FacebookResponse
+   * @var FacebookResponse
    */
   protected $responseMock;
 
@@ -109,4 +110,32 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
   }
 
+  public function testPicturePropertiesWillGetCastAsGraphPictureObjects()
+  {
+    $dataFromGraph = [
+        'id' => '123',
+        'name' => 'Foo User',
+        'picture' => [
+            'is_silhouette' => true,
+            'url' => 'http://foo.bar',
+            'width' => 200,
+            'height' => 200,
+        ],
+    ];
+
+    $this->responseMock
+        ->shouldReceive('getDecodedBody')
+        ->once()
+        ->andReturn($dataFromGraph);
+    $factory = new GraphObjectFactory($this->responseMock);
+    $graphObject = $factory->makeGraphUser();
+
+    $Picture = $graphObject->getPicture();
+
+    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPicture', $Picture);
+    $this->assertTrue($Picture->isSilhouette());
+    $this->assertEquals(200, $Picture->getWidth());
+    $this->assertEquals(200, $Picture->getHeight());
+    $this->assertEquals('http://foo.bar', $Picture->getUrl());
+  }
 }
