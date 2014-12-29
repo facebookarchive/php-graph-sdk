@@ -153,14 +153,42 @@ class FacebookRedirectLoginHelper
    * Stores CSRF state and returns a URL to which the user should be sent to
    *   in order to continue the login process with Facebook.  The
    *   provided redirectUrl should invoke the handleRedirect method.
-   *   If a previous request to certain permission(s) was declined
-   *   by the user, rerequest should be set to true or the permission(s)
-   *   will not be re-asked.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
    * @param array $scope List of permissions to request during login.
-   * @param boolean $rerequest Toggle for this authentication to be a rerequest.
+   * @param string $version Optional Graph API version if not default (v2.0).
+   * @param string $separator The separator to use in http_build_query().
+   * @param array $params Array of parameters to generate URL.
+   *
+   * @return string
+   */
+  private function makeUrl($redirectUrl, array $scope, $version, $separator,  array $params = [])
+  {
+    $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
+
+    $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
+    $this->persistentDataHandler->set('state', $state);
+
+    $params += [
+      'client_id' => $this->app->getId(),
+      'state' => $state,
+      'response_type' => 'code',
+      'sdk' => 'php-sdk-' . Facebook::VERSION,
+      'redirect_uri' => $redirectUrl,
+      'scope' => implode(',', $scope)
+    ];
+
+    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
+      http_build_query($params, null, $separator);
+  }
+
+  /**
+   * Returns the URL to send the user in order to login to Facebook.
+   *
+   * @param string $redirectUrl The URL Facebook should redirect users to
+   *                            after login.
+   * @param array $scope List of permissions to request during login.
    * @param string $version Optional Graph API version if not default (v2.0).
    * @param string $separator The separator to use in http_build_query().
    *
@@ -168,30 +196,10 @@ class FacebookRedirectLoginHelper
    */
   public function getLoginUrl($redirectUrl,
                               array $scope = [],
-                              $rerequest = false,
                               $version = null,
                               $separator = '&')
   {
-    $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
-
-    $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
-    $this->persistentDataHandler->set('state', $state);
-
-    $params = [
-      'client_id' => $this->app->getId(),
-      'redirect_uri' => $redirectUrl,
-      'state' => $state,
-      'response_type' => 'code',
-      'sdk' => 'php-sdk-' . Facebook::VERSION,
-      'scope' => implode(',', $scope)
-    ];
-
-    if ($rerequest) {
-      $params['auth_type'] = 'rerequest';
-    }
-
-    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-      http_build_query($params, null, $separator);
+    return $this->makeUrl($redirectUrl, $scope, $version, $separator);
   }
 
   /**
@@ -211,6 +219,52 @@ class FacebookRedirectLoginHelper
       'access_token' => (string) $accessToken,
     ];
     return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, $separator);
+  }
+
+  /**
+   * Returns the URL to send the user in order to login to Facebook with
+   * permission(s) to be re-asked.
+   *
+   * @param string $redirectUrl The URL Facebook should redirect users to
+   *                            after login.
+   * @param array $scope List of permissions to request during login.
+   * @param string $version Optional Graph API version if not default (v2.0).
+   * @param string $separator The separator to use in http_build_query().
+   *
+   * @return string
+   */
+  public function getReRequestUrl($redirectUrl,
+                                  array $scope = [],
+                                  $version = null,
+                                  $separator = '&')
+  {
+    $params = [
+      'auth_type' => 'rerequest'
+    ];
+    return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
+  }
+
+  /**
+   * Returns the URL to send the user in order to login to Facebook with
+   * user to be re-authenticated.
+   *
+   * @param string $redirectUrl The URL Facebook should redirect users to
+   *                            after login.
+   * @param array $scope List of permissions to request during login.
+   * @param string $version Optional Graph API version if not default (v2.0).
+   * @param string $separator The separator to use in http_build_query().
+   *
+   * @return string
+   */
+  public function getReAuthenticationUrl($redirectUrl,
+                                         array $scope = [],
+                                         $version = null,
+                                         $separator = '&')
+  {
+    $params = [
+      'auth_type' => 'reauthenticate'
+    ];
+    return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
   }
 
   /**
