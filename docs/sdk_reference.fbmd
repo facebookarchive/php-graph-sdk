@@ -73,8 +73,12 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
+      '`[Facebook\Exceptions\FacebookAuthenticationException](/docs/php/FacebookAuthenticationException)`',
+      'Thrown when Graph returns an authentication error.',
+    ],
+    [
       '`[Facebook\Exceptions\FacebookAuthorizationException](/docs/php/FacebookAuthorizationException)`',
-      'Thrown when Graph returns an authorization error.',
+      'Thrown when Graph returns a user permissions error.',
     ],
     [
       '`[Facebook\Exceptions\FacebookClientException](/docs/php/FacebookClientException)`',
@@ -83,10 +87,6 @@ FB(devsite:markdown-wiki:table {
     [
       '`[Facebook\Exceptions\FacebookOtherException](/docs/php/FacebookOtherException)`',
       'Thrown when Graph returns an error that is unknown to the SDK.',
-    ],
-    [
-      '`[Facebook\Exceptions\FacebookPermissionException](/docs/php/FacebookPermissionException)`',
-      'Thrown when Graph returns a user permissions error.',
     ],
     [
       '`[Facebook\Exceptions\FacebookResponseException](/docs/php/FacebookResponseException)`',

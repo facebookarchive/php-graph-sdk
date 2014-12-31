@@ -9,9 +9,9 @@ Represents an exception thrown by executing a Facebook request.
 
 This base class has several subclasses:
 
-`FacebookAuthorizationException`  
+`FacebookAuthenticationException`  
 `FacebookClientException`  
-`FacebookPermissionException`  
+`FacebookAuthorizationException`  
 `FacebookServerException`  
 `FacebookThrottleException`  
 `FacebookOtherException`  

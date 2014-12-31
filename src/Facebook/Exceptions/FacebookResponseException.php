@@ -89,7 +89,7 @@ class FacebookResponseException extends FacebookSDKException
         case 463:
         case 464:
         case 467:
-          return new static($response, new FacebookAuthorizationException($message, $code));
+          return new static($response, new FacebookAuthenticationException($message, $code));
           break;
       }
     }
@@ -99,7 +99,7 @@ class FacebookResponseException extends FacebookSDKException
       case 100:
       case 102:
       case 190:
-        return new static($response, new FacebookAuthorizationException($message, $code));
+        return new static($response, new FacebookAuthenticationException($message, $code));
         break;
 
       // Server issue, possible downtime
@@ -123,13 +123,13 @@ class FacebookResponseException extends FacebookSDKException
 
     // Missing Permissions
     if ($code == 10 || ($code >= 200 && $code <= 299)) {
-      return new static($response, new FacebookPermissionException($message, $code));
+      return new static($response, new FacebookAuthorizationException($message, $code));
     }
 
     // OAuth authentication error
     if (isset($data['error']['type'])
-      and $data['error']['type'] === 'OAuthException') {
-      return new static($response, new FacebookAuthorizationException($message, $code));
+      && $data['error']['type'] === 'OAuthException') {
+      return new static($response, new FacebookAuthenticationException($message, $code));
     }
 
     // All others
