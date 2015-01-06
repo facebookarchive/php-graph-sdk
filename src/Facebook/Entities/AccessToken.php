@@ -374,10 +374,7 @@ class AccessToken
    */
   public function isAppSession()
   {
-    if (strpos($this->accessToken, "|") !== FALSE) {
-      return true;
-    }
-    return false;
+    return strpos($this->accessToken, "|") !== false;
   }
 
 }

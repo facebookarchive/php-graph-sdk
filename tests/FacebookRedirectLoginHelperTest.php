@@ -80,14 +80,11 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       FacebookTestCredentials::$appSecret
     );
     $helper->disableSessionStatusCheck();
-    $session = FacebookSession::newAppSession(
-      FacebookTestCredentials::$appId,
-      FacebookTestCredentials::$appSecret
-    );
+    $session = FacebookTestHelper::getAppSession();
     $this->setExpectedException(
       'Facebook\\FacebookSDKException', 'Cannot generate a Logout URL with an App Session.'
     );
-    $logoutUrl = $helper->getLogoutUrl(
+    $helper->getLogoutUrl(
       $session, self::REDIRECT_URL
     );
   }
