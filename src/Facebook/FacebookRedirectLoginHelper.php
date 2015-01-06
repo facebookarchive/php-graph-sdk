@@ -143,9 +143,16 @@ class FacebookRedirectLoginHelper
    *   a successful logout
    *
    * @return string
+   *
+   * @throws FacebookSDKException
    */
   public function getLogoutUrl(FacebookSession $session, $next)
   {
+    if ($session->getAccessToken()->isAppSession()) {
+      throw new FacebookSDKException(
+        'Cannot generate a Logout URL with an App Session.', 722
+      );
+    }
     $params = array(
       'next' => $next,
       'access_token' => $session->getToken()

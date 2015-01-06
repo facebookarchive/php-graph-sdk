@@ -367,4 +367,17 @@ class AccessToken
     return $this->accessToken;
   }
 
+  /**
+   * Returns true if the access token is an app session token.
+   *
+   * @return bool
+   */
+  public function isAppSession()
+  {
+    if (strpos($this->accessToken, "|") !== FALSE) {
+      return true;
+    }
+    return false;
+  }
+
 }
