@@ -132,4 +132,17 @@ class GraphUser extends GraphObject
     return $this->getProperty('location', GraphLocation::className());
   }
 
+  /*
+  *Returns the user profile picture url
+  *
+  *@return string
+  */
+  public function getProfilePicture($width = null, $height = null)
+  {
+    $url = 'http://graph.facebook.com/'. $this->getProperty('id') .'/picture';
+    if ($width & $height)
+      $url .= '?width='. $width .'&height='. $height;
+    return $url; 
+  }
+
 }
