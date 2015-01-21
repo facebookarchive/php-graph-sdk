@@ -61,7 +61,7 @@ $loginUrl = $helper->getLoginUrl();
 ~~~~
 
 ~~~~
-$helper = new FacebookRedirectLoginHelper();
+$helper = new FacebookRedirectLoginHelper('your redirect URL here');
 try {
   $session = $helper->getSessionFromRedirect();
 } catch(FacebookRequestException $ex) {
