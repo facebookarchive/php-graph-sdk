@@ -23,9 +23,10 @@
  */
 namespace Facebook\Tests\Helpers;
 
-use Mockery as m;
 use Facebook\Facebook;
-use \Facebook\FacebookApp;
+use Facebook\FacebookApp;
+use Facebook\FacebookClient;
+use Facebook\Authentication\OAuth2Client;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
@@ -37,6 +38,13 @@ class FooPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInter
   }
 }
 
+class FooRedirectLoginOAuth2Client extends OAuth2Client
+{
+  public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null) {
+    return 'foo_token_from_code|' . $code . '|' . $redirectUri;
+  }
+}
+
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -45,20 +53,26 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
    */
   protected $persistentDataHandler;
 
+  /**
+   * @var FacebookRedirectLoginHelper
+   */
+  protected $redirectLoginHelper;
+
   const REDIRECT_URL = 'http://invalid.zzz';
 
   public function setUp()
   {
     $this->persistentDataHandler = new FacebookMemoryPersistentDataHandler();
+
+    $app = new FacebookApp('123', 'foo_app_secret');
+    $oAuth2Client = new FooRedirectLoginOAuth2Client($app, new FacebookClient(), 'v1337');
+    $this->redirectLoginHelper = new FacebookRedirectLoginHelper($oAuth2Client, $this->persistentDataHandler);
   }
 
   public function testLoginURL()
   {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
-
     $scope = ['foo','bar'];
-    $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL, $scope, true, 'v1337');
+    $loginUrl = $this->redirectLoginHelper->getLoginUrl(self::REDIRECT_URL, $scope);
 
     $expectedUrl = 'https://www.facebook.com/v1337/dialog/oauth?';
     $this->assertTrue(strpos($loginUrl, $expectedUrl) === 0, 'Unexpected base login URL returned from getLoginUrl().');
@@ -77,10 +91,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testLogoutURL()
   {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
-
-    $logoutUrl = $helper->getLogoutUrl('foo_token', self::REDIRECT_URL);
+    $logoutUrl = $this->redirectLoginHelper->getLogoutUrl('foo_token', self::REDIRECT_URL);
     $expectedUrl = 'https://www.facebook.com/logout.php?';
     $this->assertTrue(strpos($logoutUrl, $expectedUrl) === 0, 'Unexpected base logout URL returned from getLogoutUrl().');
 
@@ -101,35 +112,17 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $_GET['state'] = 'foo_state';
     $_GET['code'] = 'foo_code';
 
-    $response = m::mock('Facebook\FacebookResponse');
-    $response
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn([
-          'access_token' => 'access_token_from_code',
-          'expires' => 555,
-        ]);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
+    $accessToken = $this->redirectLoginHelper->getAccessToken(self::REDIRECT_URL);
 
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
-
-    $accessToken = $helper->getAccessToken($client, self::REDIRECT_URL);
-
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
-    $this->assertEquals('access_token_from_code', (string) $accessToken);
+    $this->assertEquals('foo_token_from_code|foo_code|' . self::REDIRECT_URL, (string) $accessToken);
   }
   
   public function testACustomCsprsgCanBeInjected()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
+    $accessTokenClient = new FooRedirectLoginOAuth2Client($app, new FacebookClient(), 'v1337');
     $fooPrsg = new FooPseudoRandomStringGenerator();
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler, null, $fooPrsg);
+    $helper = new FacebookRedirectLoginHelper($accessTokenClient, $this->persistentDataHandler, null, $fooPrsg);
 
     $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
 
@@ -138,11 +131,9 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
   public function testThePseudoRandomStringGeneratorWillAutoDetectCsprsg()
   {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookRedirectLoginHelper($app, $this->persistentDataHandler);
     $this->assertInstanceOf(
       'Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface',
-      $helper->getPseudoRandomStringGenerator()
+      $this->redirectLoginHelper->getPseudoRandomStringGenerator()
     );
   }
 

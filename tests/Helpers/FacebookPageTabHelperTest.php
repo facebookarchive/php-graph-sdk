@@ -24,6 +24,7 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
+use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookPageTabHelper;
 
 class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
@@ -36,7 +37,7 @@ class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
     $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
 
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookPageTabHelper($app);
+    $helper = new FacebookPageTabHelper($app, new FacebookClient());
 
     $this->assertFalse($helper->isAdmin());
     $this->assertEquals('42', $helper->getPageId());

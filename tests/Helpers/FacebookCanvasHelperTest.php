@@ -24,6 +24,7 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
+use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookCanvasHelper;
 
 class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
@@ -39,7 +40,7 @@ class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
   public function setUp()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $this->helper = new FacebookCanvasHelper($app);
+    $this->helper = new FacebookCanvasHelper($app, new FacebookClient());
   }
 
   public function testSignedRequestDataCanBeRetrievedFromPostData()

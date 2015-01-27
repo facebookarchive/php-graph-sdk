@@ -24,6 +24,7 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
+use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookJavaScriptHelper;
 
 class FacebookJavaScriptLoginHelperTest extends \PHPUnit_Framework_TestCase
@@ -36,7 +37,7 @@ class FacebookJavaScriptLoginHelperTest extends \PHPUnit_Framework_TestCase
     $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
 
     $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookJavaScriptHelper($app);
+    $helper = new FacebookJavaScriptHelper($app, new FacebookClient());
 
     $rawSignedRequest = $helper->getRawSignedRequest();
 

@@ -30,8 +30,8 @@ use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
-use \Facebook\FacebookRequest;
-use \Facebook\AccessToken;
+use Facebook\FacebookRequest;
+use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphList;
 
 class FooClientInterface implements FacebookHttpClientInterface
@@ -177,7 +177,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $fb->setDefaultAccessToken('foo_token');
     $accessToken = $fb->getDefaultAccessToken();
 
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
     $this->assertEquals('foo_token', (string) $accessToken);
   }
 
@@ -187,7 +187,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     $fb->setDefaultAccessToken(new AccessToken('bar_token'));
     $accessToken = $fb->getDefaultAccessToken();
 
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
     $this->assertEquals('bar_token', (string) $accessToken);
   }
 
