@@ -132,20 +132,6 @@ abstract class FacebookSignedRequestFromInputHelper
   abstract public function getRawSignedRequest();
 
   /**
-   * Get raw signed request from GET input.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequestFromGet()
-  {
-    if (isset($_GET['signed_request'])) {
-      return $_GET['signed_request'];
-    }
-
-    return null;
-  }
-
-  /**
    * Get raw signed request from POST input.
    *
    * @return string|null
