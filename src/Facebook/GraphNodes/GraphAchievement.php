@@ -51,7 +51,7 @@ class GraphAchievement extends GraphObject
     /**
      * Returns the user who achieved this.
      *
-     * @return string|null
+     * @return GraphUser|null
      */
     public function getFrom()
     {
@@ -61,7 +61,7 @@ class GraphAchievement extends GraphObject
     /**
      * Returns the time at which this was achieved.
      *
-     * @return string|null
+     * @return \DateTime|null
      */
     public function getPublishTime()
     {
@@ -71,7 +71,7 @@ class GraphAchievement extends GraphObject
     /**
      * Returns the app in which the user achieved this.
      *
-     * @return string|null
+     * @return GraphApplication|null
      */
     public function getApplication()
     {
@@ -82,7 +82,7 @@ class GraphAchievement extends GraphObject
      * Returns information about the achievement type this instance is
      * connected with.
      *
-     * @return string|null
+     * @return array|null
      */
     public function getData()
     {
@@ -105,10 +105,10 @@ class GraphAchievement extends GraphObject
      * Indicates whether gaining the achievement published a feed story for
      * the user.
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function isNoFeedStory()
     {
-        return (bool) $this->getProperty('no_feed_story');
+        return $this->getProperty('no_feed_story');
     }
 }

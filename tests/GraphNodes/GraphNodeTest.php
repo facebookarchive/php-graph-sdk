@@ -29,7 +29,7 @@ use Facebook\GraphNodes\GraphObjectFactory;
 abstract class GraphNodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Facebook\FacebookResponse
+     * @var \Facebook\FacebookResponse|\Mockery\MockInterface
      */
     protected $responseMock;
 
