@@ -25,7 +25,7 @@ namespace Facebook\Tests\Helpers;
 
 use Mockery as m;
 use Facebook\Facebook;
-use \Facebook\FacebookApp;
+use Facebook\FacebookApp;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
@@ -124,7 +124,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
     $this->assertEquals('access_token_from_code', (string) $accessToken);
   }
-  
+
   public function testACustomCsprsgCanBeInjected()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
