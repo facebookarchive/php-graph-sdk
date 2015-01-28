@@ -41,8 +41,6 @@ use Facebook\FacebookClient;
 /**
  * Class FacebookRedirectLoginHelper
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
  */
 class FacebookRedirectLoginHelper
 {

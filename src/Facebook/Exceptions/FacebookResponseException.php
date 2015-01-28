@@ -28,8 +28,6 @@ use Facebook\FacebookResponse;
 /**
  * Class FacebookResponseException
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
  */
 class FacebookResponseException extends FacebookSDKException
 {
