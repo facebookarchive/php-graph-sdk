@@ -92,6 +92,18 @@ class GraphObjectFactory
   }
 
   /**
+   * Convenience method for creating a GraphAchievement collection.
+   *
+   * @return GraphAchievement
+   *
+   * @throws FacebookSDKException
+   */
+  public function makeGraphAchievement()
+  {
+    return $this->makeGraphObject(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphAchievement');
+  }
+
+  /**
    * Convenience method for creating a GraphAlbum collection.
    *
    * @return GraphAlbum
@@ -306,7 +318,7 @@ class GraphObjectFactory
 
     // We'll need to make an edge endpoint for this in case it's a GraphList (for cursor pagination)
     $parentGraphEdgeEndpoint = $parentNodeId && $parentKey ? '/' . $parentNodeId . '/' . $parentKey : null;
-    
+
     return new GraphList($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
   }
 
