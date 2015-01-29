@@ -51,15 +51,6 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
     $this->helper = new FooSignedRequestHelper($app);
   }
 
-  public function testSignedRequestDataCanBeRetrievedFromGetData()
-  {
-    $_GET['signed_request'] = 'foo_signed_request';
-
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromGet();
-
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
-  }
-
   public function testSignedRequestDataCanBeRetrievedFromPostData()
   {
     $_POST['signed_request'] = 'foo_signed_request';
