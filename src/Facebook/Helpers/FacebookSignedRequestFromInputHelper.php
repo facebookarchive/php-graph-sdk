@@ -23,10 +23,12 @@
  */
 namespace Facebook\Helpers;
 
+use Facebook\Facebook;
 use Facebook\FacebookApp;
-use Facebook\SignedRequest;
-use Facebook\AccessToken;
 use Facebook\FacebookClient;
+use Facebook\SignedRequest;
+use Facebook\Authentication\AccessToken;
+use Facebook\Authentication\OAuth2Client;
 
 /**
  * Class FacebookSignedRequestFromInputHelper
@@ -46,13 +48,22 @@ abstract class FacebookSignedRequestFromInputHelper
   protected $app;
 
   /**
+   * @var OAuth2Client The OAuth 2.0 client service.
+   */
+  protected $oAuth2Client;
+
+  /**
    * Initialize the helper and process available signed request data.
    *
    * @param FacebookApp $app The FacebookApp entity.
+   * @param FacebookClient $client The client to make HTTP requests.
+   * @param string|null $graphVersion The version of Graph to use.
    */
-  public function __construct(FacebookApp $app)
+  public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
   {
     $this->app = $app;
+    $graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
+    $this->oAuth2Client = new OAuth2Client($this->app, $client, $graphVersion);
 
     $this->instantiateSignedRequest();
   }
@@ -76,20 +87,18 @@ abstract class FacebookSignedRequestFromInputHelper
   /**
    * Returns an AccessToken entity from the signed request.
    *
-   * @param FacebookClient $client The Facebook client.
-   *
    * @return AccessToken|null
    *
    * @throws \Facebook\Exceptions\FacebookSDKException
    */
-  public function getAccessToken(FacebookClient $client)
+  public function getAccessToken()
   {
     if ($this->signedRequest && $this->signedRequest->hasOAuthData()) {
       $code = $this->signedRequest->get('code');
       $accessToken = $this->signedRequest->get('oauth_token');
 
-      if ($code && !$accessToken) {
-        return AccessToken::getAccessTokenFromCode($code, $this->app, $client);
+      if ($code && ! $accessToken) {
+        return $this->oAuth2Client->getAccessTokenFromCode($code);
       }
 
       $expiresAt = $this->signedRequest->get('expires', 0);

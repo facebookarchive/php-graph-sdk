@@ -23,13 +23,27 @@
  */
 namespace Facebook\Tests\Helpers;
 
-use Mockery as m;
 use Facebook\FacebookApp;
+use Facebook\FacebookClient;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
   public function getRawSignedRequest() {
     return null;
+  }
+}
+
+class FooSignedRequestHelperFacebookClient extends FacebookClient
+{
+  public function sendRequest(FacebookRequest $request) {
+    $params = $request->getParams();
+    $rawResponse = json_encode([
+      'access_token' => 'foo_access_token_from:' . $params['code'],
+    ]);
+
+    return new FacebookResponse($request, $rawResponse, 200);
   }
 }
 
@@ -48,7 +62,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
   public function setUp()
   {
     $app = new FacebookApp('123', 'foo_app_secret');
-    $this->helper = new FooSignedRequestHelper($app);
+    $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperFacebookClient());
   }
 
   public function testSignedRequestDataCanBeRetrievedFromPostData()
@@ -71,53 +85,28 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
 
   public function testAccessTokenWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
   {
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->never();
-
     $this->helper->instantiateSignedRequest($this->rawSignedRequestUnauthorized);
-    $accessToken = $this->helper->getAccessToken($client);
+    $accessToken = $this->helper->getAccessToken();
 
     $this->assertNull($accessToken);
   }
 
   public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsAnAccessToken()
   {
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->never();
-
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
-    $accessToken = $this->helper->getAccessToken($client);
+    $accessToken = $this->helper->getAccessToken();
 
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
-    $this->assertEquals('foo_token', (string) $accessToken);
+    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+    $this->assertEquals('foo_token', $accessToken->getValue());
   }
 
   public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsACode()
   {
-    $response = m::mock('Facebook\FacebookResponse');
-    $response
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn([
-          'access_token' => 'access_token_from_code',
-          'expires' => 555,
-        ]);
-    $client = m::mock('Facebook\FacebookClient');
-    $client
-      ->shouldReceive('sendRequest')
-      ->with(m::type('Facebook\FacebookRequest'))
-      ->once()
-      ->andReturn($response);
-
     $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
-    $accessToken = $this->helper->getAccessToken($client);
+    $accessToken = $this->helper->getAccessToken();
 
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
-    $this->assertEquals('access_token_from_code', (string) $accessToken);
+    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+    $this->assertEquals('foo_access_token_from:foo_code', $accessToken->getValue());
   }
 
 }

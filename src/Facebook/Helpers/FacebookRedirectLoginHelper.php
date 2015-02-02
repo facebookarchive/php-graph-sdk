@@ -23,9 +23,8 @@
  */
 namespace Facebook\Helpers;
 
-use Facebook\Facebook;
-use Facebook\AccessToken;
-use Facebook\FacebookApp;
+use Facebook\Authentication\AccessToken;
+use Facebook\Authentication\OAuth2Client;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
@@ -36,7 +35,6 @@ use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
 use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
 use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\FacebookClient;
 
 /**
  * Class FacebookRedirectLoginHelper
@@ -51,9 +49,9 @@ class FacebookRedirectLoginHelper
   const CSRF_LENGTH = 32;
 
   /**
-   * @var FacebookApp The FacebookApp entity.
+   * @var OAuth2Client The OAuth 2.0 client service.
    */
-  protected $app;
+  protected $oAuth2Client;
 
   /**
    * @var UrlDetectionInterface The URL detection handler.
@@ -72,20 +70,18 @@ class FacebookRedirectLoginHelper
   protected $pseudoRandomStringGenerator;
 
   /**
-   * Constructs a RedirectLoginHelper for a given appId.
-   *
-   * @param FacebookApp $app The FacebookApp entity.
+   * @param OAuth2Client $oAuth2Client The OAuth 2.0 client service.
    * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
    * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
    * @param PseudoRandomStringGeneratorInterface|null $prsg The cryptographically secure
    *                                                        pseudo-random string generator.
    */
-  public function __construct(FacebookApp $app,
+  public function __construct(OAuth2Client $oAuth2Client,
                               PersistentDataInterface $persistentDataHandler = null,
                               UrlDetectionInterface $urlHandler = null,
                               PseudoRandomStringGeneratorInterface $prsg = null)
   {
-    $this->app = $app;
+    $this->oAuth2Client = $oAuth2Client;
     $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
     $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
     $this->pseudoRandomStringGenerator = $prsg ?: $this->detectPseudoRandomStringGenerator();
@@ -149,36 +145,22 @@ class FacebookRedirectLoginHelper
 
   /**
    * Stores CSRF state and returns a URL to which the user should be sent to
-   *   in order to continue the login process with Facebook.  The
-   *   provided redirectUrl should invoke the handleRedirect method.
+   *   in order to continue the login process with Facebook.
    *
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
    * @param array $scope List of permissions to request during login.
-   * @param string $version Optional Graph API version if not default (v2.0).
+   * @param array $params An array of parameters to generate URL.
    * @param string $separator The separator to use in http_build_query().
-   * @param array $params Array of parameters to generate URL.
    *
    * @return string
    */
-  private function makeUrl($redirectUrl, array $scope, $version, $separator,  array $params = [])
+  private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
   {
-    $version = $version ?: Facebook::DEFAULT_GRAPH_VERSION;
-
     $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
     $this->persistentDataHandler->set('state', $state);
 
-    $params += [
-      'client_id' => $this->app->getId(),
-      'state' => $state,
-      'response_type' => 'code',
-      'sdk' => 'php-sdk-' . Facebook::VERSION,
-      'redirect_uri' => $redirectUrl,
-      'scope' => implode(',', $scope)
-    ];
-
-    return 'https://www.facebook.com/' . $version . '/dialog/oauth?' .
-      http_build_query($params, null, $separator);
+    return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $scope, $state, $params, $separator);
   }
 
   /**
@@ -187,17 +169,15 @@ class FacebookRedirectLoginHelper
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
    * @param array $scope List of permissions to request during login.
-   * @param string $version Optional Graph API version if not default (v2.0).
    * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
   public function getLoginUrl($redirectUrl,
                               array $scope = [],
-                              $version = null,
                               $separator = '&')
   {
-    return $this->makeUrl($redirectUrl, $scope, $version, $separator);
+    return $this->makeUrl($redirectUrl, $scope, [], $separator);
   }
 
   /**
@@ -209,13 +189,24 @@ class FacebookRedirectLoginHelper
    * @param string $separator The separator to use in http_build_query().
    *
    * @return string
+   *
+   * @throws FacebookSDKException
    */
   public function getLogoutUrl($accessToken, $next, $separator = '&')
   {
+    if ( ! $accessToken instanceof AccessToken) {
+      $accessToken = new AccessToken($accessToken);
+    }
+
+    if ($accessToken->isAppAccessToken()) {
+      throw new FacebookSDKException('Cannot generate a logout URL with an app access token.', 722);
+    }
+
     $params = [
       'next' => $next,
-      'access_token' => (string) $accessToken,
+      'access_token' => $accessToken->getValue(),
     ];
+
     return 'https://www.facebook.com/logout.php?' . http_build_query($params, null, $separator);
   }
 
@@ -226,20 +217,17 @@ class FacebookRedirectLoginHelper
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
    * @param array $scope List of permissions to request during login.
-   * @param string $version Optional Graph API version if not default (v2.0).
    * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
   public function getReRequestUrl($redirectUrl,
                                   array $scope = [],
-                                  $version = null,
                                   $separator = '&')
   {
-    $params = [
-      'auth_type' => 'rerequest'
-    ];
-    return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
+    $params = ['auth_type' => 'rerequest'];
+
+    return $this->makeUrl($redirectUrl, $scope, $params, $separator);
   }
 
   /**
@@ -249,33 +237,29 @@ class FacebookRedirectLoginHelper
    * @param string $redirectUrl The URL Facebook should redirect users to
    *                            after login.
    * @param array $scope List of permissions to request during login.
-   * @param string $version Optional Graph API version if not default (v2.0).
    * @param string $separator The separator to use in http_build_query().
    *
    * @return string
    */
   public function getReAuthenticationUrl($redirectUrl,
                                          array $scope = [],
-                                         $version = null,
                                          $separator = '&')
   {
-    $params = [
-      'auth_type' => 'reauthenticate'
-    ];
-    return $this->makeUrl($redirectUrl, $scope, $version, $separator, $params);
+    $params = ['auth_type' => 'reauthenticate'];
+
+    return $this->makeUrl($redirectUrl, $scope, $params, $separator);
   }
 
   /**
    * Takes a valid code from a login redirect, and returns an AccessToken entity.
    *
-   * @param FacebookClient $client The Facebook client.
    * @param string|null $redirectUrl The redirect URL.
    *
    * @return AccessToken|null
    *
    * @throws FacebookSDKException
    */
-  public function getAccessToken(FacebookClient $client, $redirectUrl = null)
+  public function getAccessToken($redirectUrl = null)
   {
     if ( ! $code = $this->getCode()) {
       return null;
@@ -287,7 +271,7 @@ class FacebookRedirectLoginHelper
     // At minimum we need to remove the state param
     $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, ['state']);
 
-    return AccessToken::getAccessTokenFromCode($code, $this->app, $client, $redirectUrl);
+    return $this->oAuth2Client->getAccessTokenFromCode($code, $redirectUrl);
   }
 
   /**

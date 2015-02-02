@@ -52,7 +52,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
   {
     $accessToken = $this->app->getAccessToken();
 
-    $this->assertInstanceOf('Facebook\AccessToken', $accessToken);
+    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
     $this->assertEquals('id|secret', (string) $accessToken);
   }
 

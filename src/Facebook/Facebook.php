@@ -23,6 +23,8 @@
  */
 namespace Facebook;
 
+use Facebook\Authentication\AccessToken;
+use Facebook\Authentication\OAuth2Client;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphList;
@@ -83,6 +85,11 @@ class Facebook
    * @var FacebookClient The Facebook client service.
    */
   protected $client;
+
+  /**
+   * @var OAuth2Client The OAuth 2.0 client service.
+   */
+  protected $oAuth2Client;
 
   /**
    * @var UrlDetectionInterface|null The URL detection handler.
@@ -237,6 +244,22 @@ class Facebook
   }
 
   /**
+   * Returns the OAuth 2.0 client service.
+   *
+   * @return OAuth2Client
+   */
+  public function getOAuth2Client()
+  {
+    if ( ! $this->oAuth2Client instanceof OAuth2Client) {
+      $app = $this->getApp();
+      $client = $this->getClient();
+      $this->oAuth2Client = new OAuth2Client($app, $client, $this->defaultGraphVersion);
+    }
+
+    return $this->oAuth2Client;
+  }
+
+  /**
    * Returns the last response returned from Graph.
    *
    * @return FacebookResponse|FacebookBatchResponse|null
@@ -313,7 +336,7 @@ class Facebook
   public function getRedirectLoginHelper()
   {
     return new FacebookRedirectLoginHelper(
-      $this->app,
+      $this->getOAuth2Client(),
       $this->persistentDataHandler,
       $this->urlDetectionHandler,
       $this->pseudoRandomStringGenerator
@@ -327,7 +350,7 @@ class Facebook
    */
   public function getJavaScriptHelper()
   {
-    return new FacebookJavaScriptHelper($this->app);
+    return new FacebookJavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
   }
 
   /**
@@ -337,7 +360,7 @@ class Facebook
    */
   public function getCanvasHelper()
   {
-    return new FacebookCanvasHelper($this->app);
+    return new FacebookCanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
   }
 
   /**
@@ -347,7 +370,7 @@ class Facebook
    */
   public function getPageTabHelper()
   {
-    return new FacebookPageTabHelper($this->app);
+    return new FacebookPageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
   }
 
   /**

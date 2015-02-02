@@ -23,6 +23,7 @@
  */
 namespace Facebook;
 
+use Facebook\Authentication\AccessToken;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
@@ -122,8 +123,9 @@ class FacebookRequest
   public function setAccessToken($accessToken)
   {
     $this->accessToken = $accessToken instanceof AccessToken
-      ? (string) $accessToken
+      ? $accessToken->getValue()
       : $accessToken;
+
     return $this;
   }
 

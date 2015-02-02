@@ -24,6 +24,7 @@
 namespace Facebook\Helpers;
 
 use Facebook\FacebookApp;
+use Facebook\FacebookClient;
 
 /**
  * Class FacebookPageTabHelper
@@ -42,12 +43,14 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
    * Initialize the helper and process available signed request data.
    *
    * @param FacebookApp $app The FacebookApp entity.
+   * @param FacebookClient $client The client to make HTTP requests.
+   * @param string|null $graphVersion The version of Graph to use.
    */
-  public function __construct(FacebookApp $app)
+  public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
   {
-    parent::__construct($app);
+    parent::__construct($app, $client, $graphVersion);
 
-    if (!$this->signedRequest) {
+    if ( ! $this->signedRequest) {
       return;
     }
 
