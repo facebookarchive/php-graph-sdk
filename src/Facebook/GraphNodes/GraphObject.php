@@ -26,8 +26,6 @@ namespace Facebook\GraphNodes;
 /**
  * Class GraphObject
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
  */
 class GraphObject extends Collection
 {

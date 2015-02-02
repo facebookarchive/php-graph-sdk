@@ -34,9 +34,9 @@ class GraphPage extends GraphObject
    * @var array Maps object key names to Graph object types.
    */
   protected static $graphObjectMap = [
-    'best_page' => '\\Facebook\\GraphNodes\\GraphPage',
-    'global_brand_parent_page' => '\\Facebook\\GraphNodes\\GraphPage',
-    'location' => '\\Facebook\\GraphNodes\\GraphLocation',
+    'best_page' => '\Facebook\GraphNodes\GraphPage',
+    'global_brand_parent_page' => '\Facebook\GraphNodes\GraphPage',
+    'location' => '\Facebook\GraphNodes\GraphLocation',
   ];
 
   /**

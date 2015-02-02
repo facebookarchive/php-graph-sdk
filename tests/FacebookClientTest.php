@@ -25,9 +25,9 @@ namespace Facebook\Tests;
 
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
-use \Facebook\FacebookApp;
-use \Facebook\FacebookRequest;
-use \Facebook\FacebookBatchRequest;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookBatchRequest;
 use Facebook\FacebookClient;
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;

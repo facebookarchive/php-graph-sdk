@@ -24,8 +24,8 @@
 namespace Facebook\Helpers;
 
 use Facebook\Facebook;
-use \Facebook\AccessToken;
-use \Facebook\FacebookApp;
+use Facebook\AccessToken;
+use Facebook\FacebookApp;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
@@ -41,8 +41,6 @@ use Facebook\FacebookClient;
 /**
  * Class FacebookRedirectLoginHelper
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
  */
 class FacebookRedirectLoginHelper
 {
