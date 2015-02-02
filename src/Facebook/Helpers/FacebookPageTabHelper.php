@@ -71,19 +71,6 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
   }
 
   /**
-   * @TODO Deprecated: Remove after November 5, 2014
-   * @see https://developers.facebook.com/blog/post/2014/08/07/Graph-API-v2.1/
-   *
-   * Returns true if the page is liked by the user.
-   *
-   * @return boolean
-   */
-  public function isLiked()
-  {
-    return $this->getPageData('liked') === true;
-  }
-
-  /**
    * Returns true if the user is an admin.
    *
    * @return boolean
