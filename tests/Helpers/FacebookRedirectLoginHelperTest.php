@@ -116,7 +116,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
     $this->assertEquals('foo_token_from_code|foo_code|' . self::REDIRECT_URL, (string) $accessToken);
   }
-  
+
   public function testACustomCsprsgCanBeInjected()
   {
     $app = new FacebookApp('123', 'foo_app_secret');

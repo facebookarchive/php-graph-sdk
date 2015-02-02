@@ -306,7 +306,7 @@ class GraphObjectFactory
 
     // We'll need to make an edge endpoint for this in case it's a GraphList (for cursor pagination)
     $parentGraphEdgeEndpoint = $parentNodeId && $parentKey ? '/' . $parentNodeId . '/' . $parentKey : null;
-    
+
     return new GraphList($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
   }
 

@@ -24,9 +24,9 @@
 namespace Facebook\Tests;
 
 use Facebook\Facebook;
-use \Facebook\FacebookApp;
-use \Facebook\FacebookRequest;
-use \Facebook\FacebookBatchRequest;
+use Facebook\FacebookApp;
+use Facebook\FacebookRequest;
+use Facebook\FacebookBatchRequest;
 use Facebook\FileUpload\FacebookFile;
 
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase

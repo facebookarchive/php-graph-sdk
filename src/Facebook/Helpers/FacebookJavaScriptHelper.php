@@ -26,8 +26,6 @@ namespace Facebook\Helpers;
 /**
  * Class FacebookJavaScriptLoginHelper
  * @package Facebook
- * @author Fosco Marotto <fjm@fb.com>
- * @author David Poll <depoll@fb.com>
  */
 class FacebookJavaScriptHelper extends FacebookSignedRequestFromInputHelper
 {

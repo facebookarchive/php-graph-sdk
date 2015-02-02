@@ -35,8 +35,8 @@ class GraphAlbum extends GraphObject
    * @var array Maps object key names to Graph object types.
    */
   protected static $graphObjectMap = [
-    'from' => '\\Facebook\\GraphNodes\\GraphUser',
-    'place' => '\\Facebook\\GraphNodes\\GraphPage',
+    'from' => '\Facebook\GraphNodes\GraphUser',
+    'place' => '\Facebook\GraphNodes\GraphPage',
   ];
 
   /**

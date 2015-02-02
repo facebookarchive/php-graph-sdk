@@ -249,7 +249,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         '/dev/urandom not found or is not readable.'
       );
     }
-    
+
     $config = array_merge($this->config, [
         'persistent_data_handler' => 'memory', // To keep session errors from happening
         'pseudo_random_string_generator' => 'urandom'
