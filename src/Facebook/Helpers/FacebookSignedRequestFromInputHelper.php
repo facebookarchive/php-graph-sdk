@@ -46,11 +46,6 @@ abstract class FacebookSignedRequestFromInputHelper
   protected $app;
 
   /**
-   * @var string|null Random string to prevent CSRF.
-   */
-  public $state;
-
-  /**
    * Initialize the helper and process available signed request data.
    *
    * @param FacebookApp $app The FacebookApp entity.
@@ -75,7 +70,7 @@ abstract class FacebookSignedRequestFromInputHelper
       return;
     }
 
-    $this->signedRequest = new SignedRequest($this->app, $rawSignedRequest, $this->state);
+    $this->signedRequest = new SignedRequest($this->app, $rawSignedRequest);
   }
 
   /**
@@ -130,20 +125,6 @@ abstract class FacebookSignedRequestFromInputHelper
    * @return string|null
    */
   abstract public function getRawSignedRequest();
-
-  /**
-   * Get raw signed request from GET input.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequestFromGet()
-  {
-    if (isset($_GET['signed_request'])) {
-      return $_GET['signed_request'];
-    }
-
-    return null;
-  }
 
   /**
    * Get raw signed request from POST input.
