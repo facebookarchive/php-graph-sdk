@@ -103,7 +103,7 @@ class FacebookRedirectLoginHelper
       'scope' => implode(',', $scope)
     );
 
-    if (in_array($authType, array(true, 'reauthenticate', 'https'))) {
+    if (in_array($authType, array(true, 'reauthenticate', 'https'), true)) {
       $params['auth_type'] = $reauthenticate === true ? 'reauthenticate' : $reauthenticate;
     }
     
