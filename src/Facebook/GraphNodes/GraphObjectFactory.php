@@ -92,6 +92,18 @@ class GraphObjectFactory
   }
 
   /**
+   * Convenience method for creating a GraphAchievement collection.
+   *
+   * @return GraphAchievement
+   *
+   * @throws FacebookSDKException
+   */
+  public function makeGraphAchievement()
+  {
+    return $this->makeGraphObject(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphAchievement');
+  }
+
+  /**
    * Convenience method for creating a GraphAlbum collection.
    *
    * @return GraphAlbum

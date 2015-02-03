@@ -150,6 +150,7 @@ class GraphObject extends Collection
         'issued_at',
         'expires_at',
         'birthday',
+        'publish_time'
       ], true);
   }
 
