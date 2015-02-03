@@ -88,7 +88,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false)
+  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false, $reauthenticate = false)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -100,6 +100,10 @@ class FacebookRedirectLoginHelper
       'sdk' => 'php-sdk-' . FacebookRequest::VERSION,
       'scope' => implode(',', $scope)
     );
+
+    if (!empty($reauthenticate)) {
+      $params['auth_type'] = $reauthenticate === true ? 'reauthenticate' : $reauthenticate;
+    }
     
     if ($displayAsPopup)
     {
