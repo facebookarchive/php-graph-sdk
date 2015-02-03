@@ -6,6 +6,8 @@ php:
   - 5.6
   - hhvm
 
+sudo: false
+
 before_install:
   - composer self-update
 
