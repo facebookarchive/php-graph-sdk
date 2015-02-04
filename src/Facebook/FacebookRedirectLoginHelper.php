@@ -85,10 +85,12 @@ class FacebookRedirectLoginHelper
    * @param array $scope List of permissions to request during login
    * @param string $version Optional Graph API version if not default (v2.0)
    * @param boolean $displayAsPopup Indicate if the page will be displayed as a popup
+   * @param bool|string $authType 'reauthenticate' or 'https', true is equivalent to 'reauthenticate',
+   *                              false or invalid value will not add auth type parameter
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false, $reauthenticate = false)
+  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false, $authType = false)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -101,7 +103,7 @@ class FacebookRedirectLoginHelper
       'scope' => implode(',', $scope)
     );
 
-    if (!empty($reauthenticate)) {
+    if (in_array($authType, array(true, 'reauthenticate', 'https'), true)) {
       $params['auth_type'] = $reauthenticate === true ? 'reauthenticate' : $reauthenticate;
     }
     
