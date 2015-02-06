@@ -132,4 +132,13 @@ class GraphUser extends GraphObject
     return $this->getProperty('location', GraphLocation::className());
   }
 
+  /**
+   * Returns the timezone for the user as a int if present.
+   *
+   * @return string|null
+   */
+  public function getTimezone()
+  {
+    return $this->getProperty('timezone');
+  }
 }
