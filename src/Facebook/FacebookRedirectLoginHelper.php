@@ -104,7 +104,7 @@ class FacebookRedirectLoginHelper
     );
 
     if (in_array($authType, array(true, 'reauthenticate', 'https'), true)) {
-      $params['auth_type'] = $reauthenticate === true ? 'reauthenticate' : $reauthenticate;
+      $params['auth_type'] = $authType === true ? 'reauthenticate' : $authType;
     }
     
     if ($displayAsPopup)
