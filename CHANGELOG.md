@@ -5,7 +5,7 @@ As you may have already noticed, the Facebook SDK v4 does not follow strict [sem
 
 ## 4.1.x
 
-- 4.1.0 (2014-??-??)
+- 4.1.0 (2015-??-??)
   - Added batch support
   - Added `graph.beta.facebook.com` support
   - Moved exception classes to `Exception\*` directory

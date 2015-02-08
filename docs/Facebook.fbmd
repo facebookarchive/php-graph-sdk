@@ -13,6 +13,7 @@ To instantiate a new `Facebook\Facebook` service, pass an array of configuration
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.2',
   // . . .
   ]);
 ~~~~
@@ -175,6 +176,14 @@ Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) fo
 </card>
 
 <card>
+### getOAuth2Client() {#get-oauth2-client}
+~~~~
+public Facebook\Authentication\OAuth2Client getOAuth2Client()
+~~~~
+Returns an instance of [`Facebook\Authentication\OAuth2Client`](/docs/php/OAuth2Client).
+</card>
+
+<card>
 ### getLastResponse() {#get-last-response}
 ~~~~
 public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
@@ -183,12 +192,20 @@ Returns the last response received from the Graph API in the form of a `Facebook
 </card>
 
 <card>
+### getUrlDetectionHandler() {#get-url-detection-handler}
+~~~~
+public Facebook\Url\UrlDetectionInterface getUrlDetectionHandler()
+~~~~
+Returns an instance of [`Facebook\Url\UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
+</card>
+
+<card>
 ### getDefaultAccessToken() {#get-default-access-token}
 ~~~~
-public Facebook\AccessToken|null getDefaultAccessToken()
+public Facebook\Authentication\AccessToken|null getDefaultAccessToken()
 ~~~~
 
-Returns the default fallback `Facebook\AccessToken` entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
+Returns the default fallback [`AccessToken`](/docs/php/AccessToken) entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
 </card>
 
 <card>
@@ -197,18 +214,18 @@ Returns the default fallback `Facebook\AccessToken` entity that is being used wi
 public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
 ~~~~
 
-Sets the default access token to be use with all requests sent to Graph. The access token can be in string or `Facebook\AccessToken` format.
+Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](/docs/php/AccessToken).
 
 ~~~~
 $fb->setDefaultAccessToken('{my-access-token}');
 
 // . . . OR . . .
 
-$accessToken = new Facebook\AccessToken('{my-access-token}');
+$accessToken = new Facebook\Authentication\AccessToken('{my-access-token}');
 $fb->setDefaultAccessToken($accessToken);
 ~~~~
 
-This setting will overwrite the value from `default_access_token` if it was passed to the `Facebook\Facebook` constructor.
+This setting will overwrite the value from `default_access_token` option if it was passed to the `Facebook\Facebook` constructor.
 </card>
 
 <card>
@@ -240,13 +257,13 @@ $fb->get('/me');
 ~~~
 
 `$accessToken`
-The access token (as a `string` or `Facebook\AccessToken`) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
+The access token (as a string or `AccessToken` entity) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
 
 `$eTag`
 [Graph supports eTags](https://developers.facebook.com/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
 
 `$graphVersion`
-Set the Graph version to something other than what was set in the `default_graph_version` configuration option or `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
+This will overwrite the Graph version that was set in the `default_graph_version` configuration option.
 </card>
 
 <card>
@@ -353,7 +370,7 @@ Sends an array of `Facebook\FacebookRequest` entities as a batch request to Grap
 The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 
 `$requests`
-An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be of type `Facebook\FacebookRequest`.
+An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be an instance of `Facebook\FacebookRequest`.
 
 If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
@@ -365,6 +382,8 @@ $requests = [
 ];
 $batchResponse = $fb->sendBatchRequest($requests);
 ~~~~
+
+[See a full batch example](/docs/php/howto/example_batch_request).
 </card>
 
 <card>
@@ -425,7 +444,7 @@ $helper = $fb->getPageTabHelper();
 public Facebook\GraphNodes\GraphList|null next(Facebook\GraphNodes\GraphList $graphList)
 ~~~~
 
-Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) object. If the next page returns no results, `null` will be returned.
+Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) collection. If the next page returns no results, `null` will be returned.
 
 ~~~~
 // Iterate over 5 pages max
@@ -461,7 +480,7 @@ if (count($photosList) > 0) {
 public Facebook\GraphNodes\GraphList|null previous(Facebook\GraphNodes\GraphList $graphList)
 ~~~~
 
-Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` object. Functions just like `next()` above, but in the opposite direction of pagination.
+Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` collection. Functions just like `next()` above, but in the opposite direction of pagination.
 </card>
 
 <card>
@@ -470,7 +489,7 @@ Requests and returns the previous page of results in a `Facebook\GraphNodes\Grap
 public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
 ~~~~
 
-When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` that can be used in the params in a POST request to Graph.
+When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` entity that can be used in the params in a POST request to Graph.
 
 ~~~~
 // Upload a photo for a user

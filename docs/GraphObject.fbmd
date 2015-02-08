@@ -13,9 +13,10 @@ This base class has several subclasses:
 [__GraphPage__](#page-instance-methods)
 [__GraphAlbum__](#album-instance-methods)
 [__GraphLocation__](#location-instance-methods)
-[__GraphSessionInfo__](#sessioninfo-instance-methods)
+[__GraphPicture__](#picture-instance-methods)
+[__GraphAchievement__](#achievement-instance-methods)
 
-`GraphObject`'s are obtained from a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) object which represents a response from the Graph API.
+`GraphObject`'s are obtained from a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) object which represents an HTTP response from the Graph API.
 
 Usage:
 
@@ -25,7 +26,7 @@ $fb = new Facebook\Facebook(\* *\);
 $response = $fb->get('/something');
 
 // Get the base class GraphObject from the response
-$object = $response->getGraphObject();
+$node = $response->getGraphObject();
 
 // Get the response typed as a GraphUser
 $user = $response->getGraphUser());
@@ -34,16 +35,12 @@ $user = $response->getGraphUser());
 $page = $response->getGraphPage();
 
 // User example
-echo $object->getProperty('name');
-echo $user->getName();
+echo $node->getProperty('name'); // From GraphObject
+echo $user->getName(); // From GraphUser
 
 // Location example
-echo $object->getProperty('country');
-echo $loc->getCountry();
-
-// SessionInfo example
-$info = $session->getSessionInfo());
-echo $info->getExpiresAt();
+echo $node->getProperty('country'); // From GraphObject
+echo $location->getCountry(); // From GraphLocation
 ~~~~
 </card>
 
@@ -423,49 +420,25 @@ Returns the `longitude` property for the location as a float if present.
 </card>
 
 <card>
-## GraphSessionInfo Instance Methods {#sessioninfo-instance-methods}
+## GraphPicture Instance Methods {#picture-instance-methods}
 
 All getter methods return `null` if the property does not exist on the node.
 
-### getAppId() {#sessioninfo-getappid}
+### getUrl() {#picture-geturl}
 ~~~~
-public string|null getAppId()
+public string|null getUrl()
 ~~~~
-Returns the `app_id` property for the session as a string if present.
+Returns the `url` property for the picture as a string if present.
+</card>
 
-### getApplication() {#sessioninfo-getapplication}
-~~~~
-public string|null getApplication()
-~~~~
-Returns the `application` property for the session as a string if present.
+<card>
+## GraphAchievement Instance Methods {#achievement-instance-methods}
 
-### getExpiresAt() {#sessioninfo-getexpiresat}
-~~~~
-public \DateTime|null getExpiresAt()
-~~~~
-Returns the `expires_at` property for the session as a `\DateTime` if present.
+All getter methods return `null` if the property does not exist on the node.
 
-### getIsValid() {#sessioninfo-getisvalid}
+### getId() {#achievement-getid}
 ~~~~
-public boolean|null getIsValid()
+public string|null getId()
 ~~~~
-Returns the `is_valid` property for the session as a boolean if present.
-
-### getIssuedAt() {#sessioninfo-getissuedat}
-~~~~
-public \DateTime|null getIssuedAt()
-~~~~
-Returns the `issued_at` property for the session as a `\DateTime` if present.
-
-### getScopes() {#sessioninfo-getscopes}
-~~~~
-public array|null getScopes()
-~~~~
-Returns the `scopes` property for the session as an array if present.
-
-### getUserId() {#sessioninfo-getuserid}
-~~~~
-public array|null getUserId()
-~~~~
-Returns the `user_id` property for the session as a string if present.
+Returns the `id` property for the achievement as a string if present.
 </card>
