@@ -29,28 +29,26 @@ namespace Facebook\PersistentData;
  */
 class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
 {
+    /**
+     * @var array The session data to keep in memory.
+     */
+    protected $sessionData = [];
 
-  /**
-   * @var array The session data to keep in memory.
-   */
-  protected $sessionData = [];
+    /**
+     * @inheritdoc
+     */
+    public function get($key)
+    {
+        return isset($this->sessionData[$key])
+            ? $this->sessionData[$key]
+            : null;
+    }
 
-  /**
-   * @inheritdoc
-   */
-  public function get($key)
-  {
-    return isset($this->sessionData[$key])
-      ? $this->sessionData[$key]
-      : null;
-  }
-
-  /**
-   * @inheritdoc
-   */
-  public function set($key, $value)
-  {
-    $this->sessionData[$key] = $value;
-  }
-
+    /**
+     * @inheritdoc
+     */
+    public function set($key, $value)
+    {
+        $this->sessionData[$key] = $value;
+    }
 }
