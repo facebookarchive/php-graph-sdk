@@ -63,6 +63,7 @@ class McryptPseudoRandomStringGenerator implements PseudoRandomStringGeneratorIn
                 'mcrypt_create_iv() returned an error.'
             );
         }
+
         return $this->binToHex($binaryString, $length);
     }
 }
