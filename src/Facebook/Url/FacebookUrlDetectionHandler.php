@@ -79,6 +79,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     protected function protocolWithActiveSsl($protocol)
     {
         $protocol = strtolower((string) $protocol);
+
         return in_array($protocol, array('on','1','https','ssl'), true);
     }
 
