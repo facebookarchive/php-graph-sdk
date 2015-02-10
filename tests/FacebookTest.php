@@ -34,6 +34,9 @@ use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphList;
 
+putenv(Facebook::APP_ID_ENV_NAME.'=234');
+putenv(Facebook::APP_SECRET_ENV_NAME.'=foo_secret');
+
 class FooClientInterface implements FacebookHttpClientInterface
 {
   public function send($url, $method, $body, array $headers, $timeOut) {
@@ -75,6 +78,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
    */
   public function testInstantiatingWithoutAppIdThrows()
   {
+    putenv(Facebook::APP_ID_ENV_NAME.'=');
     $config = [
       'app_secret' => 'foo_secret',
     ];
@@ -86,6 +90,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
    */
   public function testInstantiatingWithoutAppSecretThrows()
   {
+    putenv(Facebook::APP_SECRET_ENV_NAME.'=');
     $config = [
       'app_id' => 'foo_id',
     ];
