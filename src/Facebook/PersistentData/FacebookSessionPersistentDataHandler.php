@@ -31,45 +31,45 @@ use Facebook\Exceptions\FacebookSDKException;
  */
 class FacebookSessionPersistentDataHandler implements PersistentDataInterface
 {
+    /**
+     * @var string Prefix to use for session variables.
+     */
+    protected $sessionPrefix = 'FBRLH_';
 
-  /**
-   * @var string Prefix to use for session variables.
-   */
-  protected $sessionPrefix = 'FBRLH_';
-
-  /**
-   * Init the session handler.
-   *
-   * @param boolean $enableSessionCheck
-   *
-   * @throws FacebookSDKException
-   */
-  public function __construct($enableSessionCheck = true)
-  {
-    if ($enableSessionCheck
-      && session_status() !== PHP_SESSION_ACTIVE) {
-      throw new FacebookSDKException(
-        'Sessions are not active. Please make sure session_start() is at the top of your script.', 720
-      );
+    /**
+     * Init the session handler.
+     *
+     * @param boolean $enableSessionCheck
+     *
+     * @throws FacebookSDKException
+     */
+    public function __construct($enableSessionCheck = true)
+    {
+        if ($enableSessionCheck
+            && session_status() !== PHP_SESSION_ACTIVE) {
+            throw new FacebookSDKException(
+                'Sessions are not active. Please make sure session_start() is '.
+                ' at the top of your script.',
+                720
+            );
+        }
     }
-  }
 
-  /**
-   * @inheritdoc
-   */
-  public function get($key)
-  {
-    return isset($_SESSION[$this->sessionPrefix . $key])
-      ? $_SESSION[$this->sessionPrefix . $key]
-      : null;
-  }
+    /**
+     * @inheritdoc
+     */
+    public function get($key)
+    {
+        return isset($_SESSION[$this->sessionPrefix . $key])
+            ? $_SESSION[$this->sessionPrefix . $key]
+            : null;
+    }
 
-  /**
-   * @inheritdoc
-   */
-  public function set($key, $value)
-  {
-    $_SESSION[$this->sessionPrefix . $key] = $value;
-  }
-
+    /**
+     * @inheritdoc
+     */
+    public function set($key, $value)
+    {
+        $_SESSION[$this->sessionPrefix . $key] = $value;
+    }
 }
