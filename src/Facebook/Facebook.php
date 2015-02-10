@@ -194,7 +194,8 @@ class Facebook
         $this->pseudoRandomStringGenerator = new UrandomPseudoRandomStringGenerator();
       } else {
         throw new \InvalidArgumentException(
-          'The pseudo_random_string_generator must be an instance of Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface'
+          'The pseudo_random_string_generator must be set to "mcrypt", "openssl", or "urandom", '
+          . 'or be an instance of Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface'
         );
       }
     }
@@ -209,7 +210,7 @@ class Facebook
       } else {
         throw new \InvalidArgumentException(
           'The persistent_data_handler must be set to "session", "memory", '
-          . ' or be an instance of Facebook\PersistentData\PersistentDataInterface'
+          . 'or be an instance of Facebook\PersistentData\PersistentDataInterface'
         );
       }
     }
