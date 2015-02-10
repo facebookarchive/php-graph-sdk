@@ -147,6 +147,7 @@ class FacebookUrlManipulator
         if (!$string) {
             return $string;
         }
+
         return strpos($string, '/') === 0 ? $string : '/' . $string;
     }
 
