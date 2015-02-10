@@ -80,7 +80,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     {
         $protocol = strtolower((string) $protocol);
 
-        return in_array($protocol, array('on','1','https','ssl'), true);
+        return in_array($protocol, array('on', '1', 'https', 'ssl'), true);
     }
 
     /**
