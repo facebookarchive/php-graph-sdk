@@ -30,11 +30,10 @@ namespace Facebook\Url;
 interface UrlDetectionInterface
 {
 
-  /**
-   * Get the currently active URL.
-   *
-   * @return string
-   */
-  public function getCurrentUrl();
-
+    /**
+     * Get the currently active URL.
+     *
+     * @return string
+     */
+    public function getCurrentUrl();
 }
