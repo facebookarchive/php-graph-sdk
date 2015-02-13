@@ -32,8 +32,8 @@ class OpenSslPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
     /**
      * @const string The error message when generating the string fails.
      */
-    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure '
-        .'pseudo-random string from openssl_random_pseudo_bytes(). ';
+    const ERROR_MESSAGE =
+      'Unable to generate a cryptographically secure pseudo-random string from openssl_random_pseudo_bytes(). ';
 
     /**
      * @throws FacebookSDKException
