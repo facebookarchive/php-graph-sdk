@@ -30,11 +30,10 @@ namespace Facebook\Http;
 interface RequestBodyInterface
 {
 
-  /**
-   * Get the body of the request to send to Graph.
-   *
-   * @return string
-   */
-  public function getBody();
-
+    /**
+    * Get the body of the request to send to Graph.
+    *
+    * @return string
+    */
+    public function getBody();
 }
