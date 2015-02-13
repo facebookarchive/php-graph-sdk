@@ -126,6 +126,9 @@ class FacebookCurl
   public function close()
   {
     curl_close($this->curl);
+
+    // closed handle has to be initialized again
+    $this->curl = null;
   }
 
 }
