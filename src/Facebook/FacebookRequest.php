@@ -52,6 +52,11 @@ class FacebookRequest
   const BASE_GRAPH_URL = 'https://graph.facebook.com';
 
   /**
+   * @const string Graph API URL
+   */
+  const BASE_VIDEO_GRAPH_URL = 'https://graph-video.facebook.com';
+
+  /**
    * @var FacebookSession The session used for this request
    */
   private $session;
@@ -213,7 +218,13 @@ class FacebookRequest
    */
   protected function getRequestURL()
   {
-    return static::BASE_GRAPH_URL . '/' . $this->version . $this->path;
+    $lastInPath = end(explode('/', $this->path));
+    if ($lastInPath == 'videos' && $this->method === 'POST') {
+      $baseUrl = static::BASE_VIDEO_GRAPH_URL;
+    } else {
+      $baseUrl = static::BASE_GRAPH_URL;
+    }
+    return $baseUrl . '/' . $this->version . $this->path;
   }
 
   /**
