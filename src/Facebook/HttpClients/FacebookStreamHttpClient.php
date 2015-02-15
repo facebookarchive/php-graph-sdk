@@ -97,7 +97,7 @@ class FacebookStreamHttpClient implements FacebookHttpable {
    *
    * @throws \Facebook\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = array())
   {
     $options = array(
       'http' => array(
@@ -109,8 +109,8 @@ class FacebookStreamHttpClient implements FacebookHttpable {
         'verify_peer' => true,
         'verify_peer_name' => true,
         'allow_self_signed' => true, // All root certificates are self-signed
-        'cafile' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
-      ),
+        'cafile' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem'
+      )
     );
 
     if ($parameters) {

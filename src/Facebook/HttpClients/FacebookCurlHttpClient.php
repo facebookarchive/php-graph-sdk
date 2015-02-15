@@ -141,7 +141,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
    *
    * @throws \Facebook\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = array())
   {
     $this->openConnection($url, $method, $parameters);
     $this->tryToSendRequest();
@@ -167,7 +167,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
    * @param string $method The request method
    * @param array  $parameters The key value pairs to be sent in the body
    */
-  public function openConnection($url, $method = 'GET', $parameters = array())
+  public function openConnection($url, $method = 'GET', array $parameters = array())
   {
     $options = array(
       CURLOPT_URL            => $url,
@@ -177,17 +177,17 @@ class FacebookCurlHttpClient implements FacebookHttpable
       CURLOPT_HEADER         => true, // Enable header processing
       CURLOPT_SSL_VERIFYHOST => 2,
       CURLOPT_SSL_VERIFYPEER => true,
-      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
+      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem'
     );
 
-    if ($method !== "GET") {
+    if ($method !== 'GET') {
       $options[CURLOPT_POSTFIELDS] = $parameters;
     }
     if ($method === 'DELETE' || $method === 'PUT') {
       $options[CURLOPT_CUSTOMREQUEST] = $method;
     }
 
-    if (!empty($this->requestHeaders)) {
+    if (count($this->requestHeaders) > 0) {
       $options[CURLOPT_HTTPHEADER] = $this->compileRequestHeaders();
     }
 

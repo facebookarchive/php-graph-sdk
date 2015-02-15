@@ -33,9 +33,9 @@ class FacebookCurl
 {
 
   /**
-   * @var resource Curl resource instance
+   * @var resource|null Curl resource instance
    */
-  protected $curl = null;
+  protected $curl;
 
   /**
    * Make a new curl reference instance

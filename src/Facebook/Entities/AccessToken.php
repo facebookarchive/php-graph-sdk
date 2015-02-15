@@ -154,11 +154,10 @@ class AccessToken
     $machineIdIsValid = $tokenInfo->getProperty('machine_id') == $machineId;
     $accessTokenIsValid = $tokenInfo->isValid();
 
+    $accessTokenIsStillAlive = true;
     // Not all access tokens return an expiration. E.g. an app access token.
     if ($tokenInfo->getExpiresAt() instanceof \DateTime) {
       $accessTokenIsStillAlive = $tokenInfo->getExpiresAt()->getTimestamp() >= time();
-    } else {
-      $accessTokenIsStillAlive = true;
     }
 
     return $appIdIsValid && $machineIdIsValid && $accessTokenIsValid && $accessTokenIsStillAlive;
@@ -178,7 +177,7 @@ class AccessToken
   {
     $params = array(
       'code' => $code,
-      'redirect_uri' => '',
+      'redirect_uri' => ''
     );
 
     if ($machineId) {
@@ -203,7 +202,7 @@ class AccessToken
 
     $params = array(
       'access_token' => $accessToken,
-      'redirect_uri' => '',
+      'redirect_uri' => ''
     );
 
     return static::requestCode($params, $appId, $appSecret);
@@ -221,7 +220,7 @@ class AccessToken
   {
     $params = array(
       'grant_type' => 'fb_exchange_token',
-      'fb_exchange_token' => $this->accessToken,
+      'fb_exchange_token' => $this->accessToken
     );
 
     return static::requestAccessToken($params, $appId, $appSecret);
@@ -374,7 +373,7 @@ class AccessToken
    */
   public function isAppSession()
   {
-    return strpos($this->accessToken, "|") !== false;
+    return strpos($this->accessToken, '|') !== false;
   }
 
 }

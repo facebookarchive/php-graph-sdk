@@ -101,7 +101,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpable {
    *
    * @throws \Facebook\FacebookSDKException
    */
-  public function send($url, $method = 'GET', $parameters = array())
+  public function send($url, $method = 'GET', array $parameters = array())
   {
     $options = array();
     if ($parameters) {

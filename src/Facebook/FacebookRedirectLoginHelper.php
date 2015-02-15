@@ -90,7 +90,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getLoginUrl($scope = array(), $version = null, $displayAsPopup = false, $authType = false)
+  public function getLoginUrl(array $scope = array(), $version = null, $displayAsPopup = false, $authType = false)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -124,7 +124,7 @@ class FacebookRedirectLoginHelper
    *
    * @return string
    */
-  public function getReRequestUrl($scope = array(), $version = null)
+  public function getReRequestUrl(array $scope = array(), $version = null)
   {
     $version = ($version ?: FacebookRequest::GRAPH_API_VERSION);
     $this->state = $this->random(16);
@@ -276,12 +276,12 @@ class FacebookRedirectLoginHelper
   {
     if (!is_numeric($bytes)) {
       throw new FacebookSDKException(
-        "random() expects an integer"
+        'random() expects an integer'
       );
     }
     if ($bytes < 1) {
       throw new FacebookSDKException(
-        "random() expects an integer greater than zero"
+        'random() expects an integer greater than zero'
       );
     }
     $buf = '';
