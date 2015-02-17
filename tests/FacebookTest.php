@@ -34,7 +34,6 @@ use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphList;
 
-
 class FooClientInterface implements FacebookHttpClientInterface
 {
   public function send($url, $method, $body, array $headers, $timeOut) {
