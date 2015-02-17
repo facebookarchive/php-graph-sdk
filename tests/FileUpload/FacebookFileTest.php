@@ -28,27 +28,26 @@ use Facebook\FileUpload\FacebookFile;
 class FacebookFileTest extends \PHPUnit_Framework_TestCase
 {
 
-  protected $testFile = '';
+    protected $testFile = '';
 
-  public function setUp()
-  {
-    $this->testFile = __DIR__ . '/../foo.txt';
-  }
+    public function setUp()
+    {
+        $this->testFile = __DIR__ . '/../foo.txt';
+    }
 
-  public function testCanOpenAndReadAndCloseAFile()
-  {
-    $file = new FacebookFile($this->testFile);
-    $fileContents = $file->getContents();
+    public function testCanOpenAndReadAndCloseAFile()
+    {
+        $file = new FacebookFile($this->testFile);
+        $fileContents = $file->getContents();
 
-    $this->assertEquals('This is a text file used for testing. Let\'s dance.', $fileContents);
-  }
+        $this->assertEquals('This is a text file used for testing. Let\'s dance.', $fileContents);
+    }
 
-  /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
-   */
-  public function testTryingToOpenAFileThatDoesntExistsThrows()
-  {
-    new FacebookFile('does_not_exist.file');
-  }
-
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     */
+    public function testTryingToOpenAFileThatDoesntExistsThrows()
+    {
+        new FacebookFile('does_not_exist.file');
+    }
 }

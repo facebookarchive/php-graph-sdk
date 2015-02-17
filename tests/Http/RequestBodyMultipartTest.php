@@ -28,13 +28,12 @@ use Facebook\FileUpload\FacebookFile;
 
 class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCanProperlyEncodeAnArrayOfParams()
     {
         $message = new RequestBodyMultipart([
-                'foo' => 'bar',
-                'scawy_vawues' => '@FooBar is a real twitter handle.',
-            ], [], 'foo_boundary');
+            'foo' => 'bar',
+            'scawy_vawues' => '@FooBar is a real twitter handle.',
+        ], [], 'foo_boundary');
         $body = $message->getBody();
 
         $expectedBody = "--foo_boundary\r\n";
@@ -50,10 +49,10 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
     {
         $file = new FacebookFile(__DIR__ . '/../foo.txt');
         $message = new RequestBodyMultipart([
-                'foo' => 'bar',
-            ], [
-                'foo_file' => $file,
-            ], 'foo_boundary');
+            'foo' => 'bar',
+        ], [
+            'foo_file' => $file,
+        ], 'foo_boundary');
         $body = $message->getBody();
 
         $expectedBody = "--foo_boundary\r\n";

@@ -29,84 +29,85 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
-class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper {
-  public function getRawSignedRequest() {
-    return null;
-  }
+class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
+{
+    public function getRawSignedRequest()
+    {
+        return null;
+    }
 }
 
 class FooSignedRequestHelperFacebookClient extends FacebookClient
 {
-  public function sendRequest(FacebookRequest $request) {
-    $params = $request->getParams();
-    $rawResponse = json_encode([
-      'access_token' => 'foo_access_token_from:' . $params['code'],
-    ]);
+    public function sendRequest(FacebookRequest $request)
+    {
+        $params = $request->getParams();
+        $rawResponse = json_encode([
+            'access_token' => 'foo_access_token_from:' . $params['code'],
+        ]);
 
-    return new FacebookResponse($request, $rawResponse, 200);
-  }
+        return new FacebookResponse($request, $rawResponse, 200);
+    }
 }
 
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FooSignedRequestHelper
+     */
+    protected $helper;
 
-  /**
-   * @var FooSignedRequestHelper
-   */
-  protected $helper;
+    public $rawSignedRequestAuthorizedWithAccessToken = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+    public $rawSignedRequestAuthorizedWithCode = 'oBtmZlsFguNQvGRETDYQQu1-PhwcArgbBBEK4urbpRA=.eyJjb2RlIjoiZm9vX2NvZGUiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwNjMxMDc1MiwidXNlcl9pZCI6IjEyMyJ9';
+    public $rawSignedRequestUnauthorized = 'KPlyhz-whtYAhHWr15N5TkbS_avz-2rUJFpFkfXKC88=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwMjU1MTA4Nn0=';
 
-  public $rawSignedRequestAuthorizedWithAccessToken = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
-  public $rawSignedRequestAuthorizedWithCode = 'oBtmZlsFguNQvGRETDYQQu1-PhwcArgbBBEK4urbpRA=.eyJjb2RlIjoiZm9vX2NvZGUiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwNjMxMDc1MiwidXNlcl9pZCI6IjEyMyJ9';
-  public $rawSignedRequestUnauthorized = 'KPlyhz-whtYAhHWr15N5TkbS_avz-2rUJFpFkfXKC88=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwMjU1MTA4Nn0=';
+    public function setUp()
+    {
+        $app = new FacebookApp('123', 'foo_app_secret');
+        $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperFacebookClient());
+    }
 
-  public function setUp()
-  {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperFacebookClient());
-  }
+    public function testSignedRequestDataCanBeRetrievedFromPostData()
+    {
+        $_POST['signed_request'] = 'foo_signed_request';
 
-  public function testSignedRequestDataCanBeRetrievedFromPostData()
-  {
-    $_POST['signed_request'] = 'foo_signed_request';
+        $rawSignedRequest = $this->helper->getRawSignedRequestFromPost();
 
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromPost();
+        $this->assertEquals('foo_signed_request', $rawSignedRequest);
+    }
 
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
-  }
+    public function testSignedRequestDataCanBeRetrievedFromCookieData()
+    {
+        $_COOKIE['fbsr_123'] = 'foo_signed_request';
 
-  public function testSignedRequestDataCanBeRetrievedFromCookieData()
-  {
-    $_COOKIE['fbsr_123'] = 'foo_signed_request';
+        $rawSignedRequest = $this->helper->getRawSignedRequestFromCookie();
 
-    $rawSignedRequest = $this->helper->getRawSignedRequestFromCookie();
+        $this->assertEquals('foo_signed_request', $rawSignedRequest);
+    }
 
-    $this->assertEquals('foo_signed_request', $rawSignedRequest);
-  }
+    public function testAccessTokenWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
+    {
+        $this->helper->instantiateSignedRequest($this->rawSignedRequestUnauthorized);
+        $accessToken = $this->helper->getAccessToken();
 
-  public function testAccessTokenWillBeNullWhenAUserHasNotYetAuthorizedTheApp()
-  {
-    $this->helper->instantiateSignedRequest($this->rawSignedRequestUnauthorized);
-    $accessToken = $this->helper->getAccessToken();
+        $this->assertNull($accessToken);
+    }
 
-    $this->assertNull($accessToken);
-  }
+    public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsAnAccessToken()
+    {
+        $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
+        $accessToken = $this->helper->getAccessToken();
 
-  public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsAnAccessToken()
-  {
-    $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
-    $accessToken = $this->helper->getAccessToken();
+        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertEquals('foo_token', $accessToken->getValue());
+    }
 
-    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
-    $this->assertEquals('foo_token', $accessToken->getValue());
-  }
+    public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsACode()
+    {
+        $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
+        $accessToken = $this->helper->getAccessToken();
 
-  public function testAnAccessTokenCanBeInstantiatedWhenRedirectReturnsACode()
-  {
-    $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
-    $accessToken = $this->helper->getAccessToken();
-
-    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
-    $this->assertEquals('foo_access_token_from:foo_code', $accessToken->getValue());
-  }
-
+        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertEquals('foo_access_token_from:foo_code', $accessToken->getValue());
+    }
 }

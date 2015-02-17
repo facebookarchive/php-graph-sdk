@@ -33,7 +33,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $accessToken = new AccessToken('foo_token');
 
         $this->assertEquals('foo_token', $accessToken->getValue());
-        $this->assertEquals('foo_token', (string) $accessToken);
+        $this->assertEquals('foo_token', (string)$accessToken);
     }
 
     public function testAnAppSecretProofWillBeProperlyGenerated()
@@ -100,7 +100,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
 
         $newAccessToken = unserialize(serialize($accessToken));
 
-        $this->assertEquals((string) $accessToken, (string) $newAccessToken);
+        $this->assertEquals((string)$accessToken, (string)$newAccessToken);
         $this->assertEquals($accessToken->getExpiresAt(), $newAccessToken->getExpiresAt());
     }
 

@@ -27,110 +27,108 @@ use Facebook\Url\FacebookUrlDetectionHandler;
 
 class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testProperlyGeneratesUrlFromCommonScenario()
+    {
+        $_SERVER = [
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '80',
+            'REQUEST_URI' => '/baz?foo=123',
+        ];
 
-  public function testProperlyGeneratesUrlFromCommonScenario()
-  {
-    $_SERVER = [
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '80',
-      'REQUEST_URI' => '/baz?foo=123',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('http://foo.bar/baz?foo=123', $currentUri);
+    }
 
-    $this->assertEquals('http://foo.bar/baz?foo=123', $currentUri);
-  }
+    public function testProperlyGeneratesSecureUrlFromCommonScenario()
+    {
+        $_SERVER = [
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '443',
+            'REQUEST_URI' => '/baz?foo=123',
+        ];
 
-  public function testProperlyGeneratesSecureUrlFromCommonScenario()
-  {
-    $_SERVER = [
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '443',
-      'REQUEST_URI' => '/baz?foo=123',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('https://foo.bar/baz?foo=123', $currentUri);
+    }
 
-    $this->assertEquals('https://foo.bar/baz?foo=123', $currentUri);
-  }
+    public function testProperlyGeneratesUrlFromProxy()
+    {
+        $_SERVER = [
+            'HTTP_X_FORWARDED_PORT' => '80',
+            'HTTP_X_FORWARDED_PROTO' => 'http',
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '80',
+            'REQUEST_URI' => '/baz?foo=123',
+        ];
 
-  public function testProperlyGeneratesUrlFromProxy()
-  {
-    $_SERVER = [
-      'HTTP_X_FORWARDED_PORT' => '80',
-      'HTTP_X_FORWARDED_PROTO' => 'http',
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '80',
-      'REQUEST_URI' => '/baz?foo=123',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('http://foo.bar/baz?foo=123', $currentUri);
+    }
 
-    $this->assertEquals('http://foo.bar/baz?foo=123', $currentUri);
-  }
+    public function testProperlyGeneratesSecureUrlFromProxy()
+    {
+        $_SERVER = [
+            'HTTP_X_FORWARDED_PORT' => '443',
+            'HTTP_X_FORWARDED_PROTO' => 'https',
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '80',
+            'REQUEST_URI' => '/baz?foo=123',
+        ];
 
-  public function testProperlyGeneratesSecureUrlFromProxy()
-  {
-    $_SERVER = [
-      'HTTP_X_FORWARDED_PORT' => '443',
-      'HTTP_X_FORWARDED_PROTO' => 'https',
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '80',
-      'REQUEST_URI' => '/baz?foo=123',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('https://foo.bar/baz?foo=123', $currentUri);
+    }
 
-    $this->assertEquals('https://foo.bar/baz?foo=123', $currentUri);
-  }
+    public function testProperlyGeneratesUrlWithCustomPort()
+    {
+        $_SERVER = [
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '1337',
+            'REQUEST_URI' => '/foo.php',
+        ];
 
-  public function testProperlyGeneratesUrlWithCustomPort()
-  {
-    $_SERVER = [
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '1337',
-      'REQUEST_URI' => '/foo.php',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('http://foo.bar:1337/foo.php', $currentUri);
+    }
 
-    $this->assertEquals('http://foo.bar:1337/foo.php', $currentUri);
-  }
+    public function testProperlyGeneratesSecureUrlWithCustomPort()
+    {
+        $_SERVER = [
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '1337',
+            'REQUEST_URI' => '/foo.php',
+            'HTTPS' => 'On',
+        ];
 
-  public function testProperlyGeneratesSecureUrlWithCustomPort()
-  {
-    $_SERVER = [
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '1337',
-      'REQUEST_URI' => '/foo.php',
-      'HTTPS' => 'On',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
+        $this->assertEquals('https://foo.bar:1337/foo.php', $currentUri);
+    }
 
-    $this->assertEquals('https://foo.bar:1337/foo.php', $currentUri);
-  }
+    public function testProperlyGeneratesUrlWithCustomPortFromProxy()
+    {
+        $_SERVER = [
+            'HTTP_X_FORWARDED_PORT' => '8888',
+            'HTTP_X_FORWARDED_PROTO' => 'http',
+            'HTTP_HOST' => 'foo.bar',
+            'SERVER_PORT' => '80',
+            'REQUEST_URI' => '/foo.php',
+        ];
 
-  public function testProperlyGeneratesUrlWithCustomPortFromProxy()
-  {
-    $_SERVER = [
-      'HTTP_X_FORWARDED_PORT' => '8888',
-      'HTTP_X_FORWARDED_PROTO' => 'http',
-      'HTTP_HOST' => 'foo.bar',
-      'SERVER_PORT' => '80',
-      'REQUEST_URI' => '/foo.php',
-    ];
+        $urlHandler = new FacebookUrlDetectionHandler();
+        $currentUri = $urlHandler->getCurrentUrl();
 
-    $urlHandler = new FacebookUrlDetectionHandler();
-    $currentUri = $urlHandler->getCurrentUrl();
-
-    $this->assertEquals('http://foo.bar:8888/foo.php', $currentUri);
-  }
-
+        $this->assertEquals('http://foo.bar:8888/foo.php', $currentUri);
+    }
 }

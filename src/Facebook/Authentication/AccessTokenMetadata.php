@@ -27,14 +27,14 @@ use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class AccessTokenMetadata
- * @package Facebook
  *
  * Represents metadata from an access token.
- * @see https://developers.facebook.com/docs/graph-api/reference/debug_token
+ *
+ * @package Facebook
+ * @see     https://developers.facebook.com/docs/graph-api/reference/debug_token
  */
 class AccessTokenMetadata
 {
-
     /**
      * The access token metadata.
      *
@@ -56,7 +56,7 @@ class AccessTokenMetadata
      */
     public function __construct(array $metadata)
     {
-        if (! isset($metadata['data'])) {
+        if (!isset($metadata['data'])) {
             throw new FacebookSDKException('Unexpected debug token response data.', 401);
         }
 
@@ -68,8 +68,8 @@ class AccessTokenMetadata
     /**
      * Returns a value from the metadata.
      *
-     * @param string $field The property to retrieve.
-     * @param mixed $default The default to return if the property doesn't exist.
+     * @param string $field   The property to retrieve.
+     * @param mixed  $default The default to return if the property doesn't exist.
      *
      * @return mixed
      */
@@ -86,18 +86,18 @@ class AccessTokenMetadata
      * Returns a value from a child property in the metadata.
      *
      * @param string $parentField The parent property.
-     * @param string $field The property to retrieve.
-     * @param mixed $default The default to return if the property doesn't exist.
+     * @param string $field       The property to retrieve.
+     * @param mixed  $default     The default to return if the property doesn't exist.
      *
      * @return mixed
      */
     public function getChildProperty($parentField, $field, $default = null)
     {
-        if (! isset($this->metadata[$parentField])) {
+        if (!isset($this->metadata[$parentField])) {
             return $default;
         }
 
-        if (! isset($this->metadata[$parentField][$field])) {
+        if (!isset($this->metadata[$parentField][$field])) {
             return $default;
         }
 
@@ -107,8 +107,8 @@ class AccessTokenMetadata
     /**
      * Returns a value from the error metadata.
      *
-     * @param string $field The property to retrieve.
-     * @param mixed $default The default to return if the property doesn't exist.
+     * @param string $field   The property to retrieve.
+     * @param mixed  $default The default to return if the property doesn't exist.
      *
      * @return mixed
      */
@@ -120,8 +120,8 @@ class AccessTokenMetadata
     /**
      * Returns a value from the "metadata" metadata. *Brain explodes*
      *
-     * @param string $field The property to retrieve.
-     * @param mixed $default The default to return if the property doesn't exist.
+     * @param string $field   The property to retrieve.
+     * @param mixed  $default The default to return if the property doesn't exist.
      *
      * @return mixed
      */
@@ -216,6 +216,7 @@ class AccessTokenMetadata
      *
      * Note that the issued_at field is not returned
      * for short-lived access tokens.
+     *
      * @see https://developers.facebook.com/docs/facebook-login/access-tokens#debug
      *
      * @return \DateTime|null
@@ -335,7 +336,7 @@ class AccessTokenMetadata
      */
     public function validateExpiration()
     {
-        if (! $this->getExpiresAt() instanceof \DateTime) {
+        if (!$this->getExpiresAt() instanceof \DateTime) {
             return;
         }
 

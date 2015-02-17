@@ -25,139 +25,138 @@ namespace Facebook\GraphNodes;
 
 /**
  * Class GraphUser
+ *
  * @package Facebook
  */
 class GraphUser extends GraphObject
 {
+    /**
+     * @var array Maps object key names to Graph object types.
+     */
+    protected static $graphObjectMap = [
+        'hometown' => '\Facebook\GraphNodes\GraphPage',
+        'location' => '\Facebook\GraphNodes\GraphPage',
+        'significant_other' => '\Facebook\GraphNodes\GraphUser',
+        'picture' => '\Facebook\GraphNodes\GraphPicture',
+    ];
 
-  /**
-   * @var array Maps object key names to Graph object types.
-   */
-  protected static $graphObjectMap = [
-    'hometown' => '\Facebook\GraphNodes\GraphPage',
-    'location' => '\Facebook\GraphNodes\GraphPage',
-    'significant_other' => '\Facebook\GraphNodes\GraphUser',
-    'picture' => '\Facebook\GraphNodes\GraphPicture',
-  ];
+    /**
+     * Returns the ID for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getId()
+    {
+        return $this->getProperty('id');
+    }
 
-  /**
-   * Returns the ID for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getId()
-  {
-    return $this->getProperty('id');
-  }
+    /**
+     * Returns the name for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->getProperty('name');
+    }
 
-  /**
-   * Returns the name for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getName()
-  {
-    return $this->getProperty('name');
-  }
+    /**
+     * Returns the first name for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getFirstName()
+    {
+        return $this->getProperty('first_name');
+    }
 
-  /**
-   * Returns the first name for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getFirstName()
-  {
-    return $this->getProperty('first_name');
-  }
+    /**
+     * Returns the middle name for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getMiddleName()
+    {
+        return $this->getProperty('middle_name');
+    }
 
-  /**
-   * Returns the middle name for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getMiddleName()
-  {
-    return $this->getProperty('middle_name');
-  }
+    /**
+     * Returns the last name for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getLastName()
+    {
+        return $this->getProperty('last_name');
+    }
 
-  /**
-   * Returns the last name for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getLastName()
-  {
-    return $this->getProperty('last_name');
-  }
+    /**
+     * Returns the gender for the user as a string if present.
+     *
+     * @return string|null
+     */
+    public function getGender()
+    {
+        return $this->getProperty('gender');
+    }
 
-  /**
-   * Returns the gender for the user as a string if present.
-   *
-   * @return string|null
-   */
-  public function getGender()
-  {
-    return $this->getProperty('gender');
-  }
+    /**
+     * Returns the Facebook URL for the user as a string if available.
+     *
+     * @return string|null
+     */
+    public function getLink()
+    {
+        return $this->getProperty('link');
+    }
 
-  /**
-   * Returns the Facebook URL for the user as a string if available.
-   *
-   * @return string|null
-   */
-  public function getLink()
-  {
-    return $this->getProperty('link');
-  }
+    /**
+     * Returns the users birthday, if available.
+     *
+     * @return \DateTime|null
+     */
+    public function getBirthday()
+    {
+        return $this->getProperty('birthday');
+    }
 
-  /**
-   * Returns the users birthday, if available.
-   *
-   * @return \DateTime|null
-   */
-  public function getBirthday()
-  {
-    return $this->getProperty('birthday');
-  }
+    /**
+     * Returns the current location of the user as a GraphPage.
+     *
+     * @return GraphPage|null
+     */
+    public function getLocation()
+    {
+        return $this->getProperty('location');
+    }
 
-  /**
-   * Returns the current location of the user as a GraphPage.
-   *
-   * @return GraphPage|null
-   */
-  public function getLocation()
-  {
-    return $this->getProperty('location');
-  }
+    /**
+     * Returns the current location of the user as a GraphPage.
+     *
+     * @return GraphPage|null
+     */
+    public function getHometown()
+    {
+        return $this->getProperty('hometown');
+    }
 
-  /**
-   * Returns the current location of the user as a GraphPage.
-   *
-   * @return GraphPage|null
-   */
-  public function getHometown()
-  {
-    return $this->getProperty('hometown');
-  }
+    /**
+     * Returns the current location of the user as a GraphUser.
+     *
+     * @return GraphUser|null
+     */
+    public function getSignificantOther()
+    {
+        return $this->getProperty('significant_other');
+    }
 
-  /**
-   * Returns the current location of the user as a GraphUser.
-   *
-   * @return GraphUser|null
-   */
-  public function getSignificantOther()
-  {
-    return $this->getProperty('significant_other');
-  }
-
-  /**
-   * Returns the picture of the user as a GraphPicture
-   *
-   * @return GraphPicture|null
-   */
-  public function getPicture()
-  {
-    return $this->getProperty('picture');
-  }
-
+    /**
+     * Returns the picture of the user as a GraphPicture
+     *
+     * @return GraphPicture|null
+     */
+    public function getPicture()
+    {
+        return $this->getProperty('picture');
+    }
 }

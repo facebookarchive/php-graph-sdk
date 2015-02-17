@@ -29,94 +29,93 @@ use Facebook\FacebookResponse;
 
 class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Facebook\FacebookRequest
+     */
+    protected $request;
 
-  /**
-   * @var \Facebook\FacebookRequest
-   */
-  protected $request;
+    public function setUp()
+    {
+        $app = new FacebookApp('123', 'foo_secret');
+        $this->request = new FacebookRequest(
+            $app,
+            'foo_token',
+            'GET',
+            '/me/photos?keep=me',
+            ['foo' => 'bar'],
+            'foo_eTag',
+            'v1337'
+        );
+    }
 
-  public function setUp()
-  {
-    $app = new FacebookApp('123', 'foo_secret');
-    $this->request = new FacebookRequest(
-      $app,
-      'foo_token',
-      'GET',
-      '/me/photos?keep=me',
-      ['foo' => 'bar'],
-      'foo_eTag',
-      'v1337');
-  }
+    public function testAnETagCanBeProperlyAccessed()
+    {
+        $response = new FacebookResponse($this->request, '', 200, ['ETag' => 'foo_tag']);
 
-  public function testAnETagCanBeProperlyAccessed()
-  {
-    $response = new FacebookResponse($this->request, '', 200, ['ETag' => 'foo_tag']);
+        $eTag = $response->getETag();
 
-    $eTag = $response->getETag();
+        $this->assertEquals('foo_tag', $eTag);
+    }
 
-    $this->assertEquals('foo_tag', $eTag);
-  }
+    public function testAProperAppSecretProofCanBeGenerated()
+    {
+        $response = new FacebookResponse($this->request);
 
-  public function testAProperAppSecretProofCanBeGenerated()
-  {
-    $response = new FacebookResponse($this->request);
+        $appSecretProof = $response->getAppSecretProof();
 
-    $appSecretProof = $response->getAppSecretProof();
+        $this->assertEquals('df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9', $appSecretProof);
+    }
 
-    $this->assertEquals('df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9', $appSecretProof);
-  }
+    public function testASuccessfulJsonResponseWillBeDecodedToAGraphObject()
+    {
+        $graphResponseJson = '{"id":"123","name":"Foo"}';
+        $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
-  public function testASuccessfulJsonResponseWillBeDecodedToAGraphObject()
-  {
-    $graphResponseJson = '{"id":"123","name":"Foo"}';
-    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
+        $decodedResponse = $response->getDecodedBody();
+        $graphObject = $response->getGraphObject();
 
-    $decodedResponse = $response->getDecodedBody();
-    $graphObject = $response->getGraphObject();
+        $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
+        $this->assertEquals([
+            'id' => '123',
+            'name' => 'Foo',
+        ], $decodedResponse);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+    }
 
-    $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-    $this->assertEquals([
-      'id' => '123',
-      'name' => 'Foo',
-    ], $decodedResponse);
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
-  }
+    public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
+    {
+        $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
+        $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
-  public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
-  {
-    $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
-    $response = new FacebookResponse($this->request, $graphResponseJson, 200);
+        $graphObjectList = $response->getGraphList();
 
-    $graphObjectList = $response->getGraphList();
+        $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[0]);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[1]);
+    }
 
-    $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[0]);
-    $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[1]);
-  }
+    public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()
+    {
+        $graphResponseKeyValuePairs = 'id=123&name=Foo';
+        $response = new FacebookResponse($this->request, $graphResponseKeyValuePairs, 200);
 
-  public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()
-  {
-    $graphResponseKeyValuePairs = 'id=123&name=Foo';
-    $response = new FacebookResponse($this->request, $graphResponseKeyValuePairs, 200);
+        $decodedResponse = $response->getDecodedBody();
 
-    $decodedResponse = $response->getDecodedBody();
+        $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
+        $this->assertEquals([
+            'id' => '123',
+            'name' => 'Foo',
+        ], $decodedResponse);
+    }
 
-    $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-    $this->assertEquals([
-        'id' => '123',
-        'name' => 'Foo',
-      ], $decodedResponse);
-  }
+    public function testErrorStatusCanBeCheckedWhenAnErrorResponseIsReturned()
+    {
+        $graphResponse = '{"error":{"message":"Foo error.","type":"OAuthException","code":190,"error_subcode":463}}';
+        $response = new FacebookResponse($this->request, $graphResponse, 401);
 
-  public function testErrorStatusCanBeCheckedWhenAnErrorResponseIsReturned()
-  {
-    $graphResponse = '{"error":{"message":"Foo error.","type":"OAuthException","code":190,"error_subcode":463}}';
-    $response = new FacebookResponse($this->request, $graphResponse, 401);
+        $exception = $response->getThrownException();
 
-    $exception = $response->getThrownException();
-
-    $this->assertTrue($response->isError(), 'Expected Response to return an error.');
-    $this->assertInstanceOf('Facebook\Exceptions\FacebookResponseException', $exception);
-  }
-
+        $this->assertTrue($response->isError(), 'Expected Response to return an error.');
+        $this->assertInstanceOf('Facebook\Exceptions\FacebookResponseException', $exception);
+    }
 }

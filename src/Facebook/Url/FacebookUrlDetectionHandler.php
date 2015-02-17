@@ -25,11 +25,11 @@ namespace Facebook\Url;
 
 /**
  * Class FacebookUrlDetectionHandler
+ *
  * @package Facebook
  */
 class FacebookUrlDetectionHandler implements UrlDetectionInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -66,7 +66,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
             return $this->protocolWithActiveSsl($protocol);
         }
 
-        return (string) $this->getServerVar('SERVER_PORT') === '443';
+        return (string)$this->getServerVar('SERVER_PORT') === '443';
     }
 
     /**
@@ -78,14 +78,16 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
      */
     protected function protocolWithActiveSsl($protocol)
     {
-        $protocol = strtolower((string) $protocol);
+        $protocol = strtolower((string)$protocol);
 
-        return in_array($protocol, array('on', '1', 'https', 'ssl'), true);
+        return in_array($protocol, ['on', '1', 'https', 'ssl'], true);
     }
 
     /**
      * Tries to detect the host name of the server.
+     *
      * Some elements adapted from
+     *
      * @see https://github.com/symfony/HttpFoundation/blob/master/Request.php
      *
      * @return string
@@ -112,8 +114,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
         $appendPort = ':' . $port;
 
         // Don't append port number if a normal port.
-        if (($scheme == 'http' && $port == '80')
-            || ($scheme == 'https' && $port == '443')) {
+        if (($scheme == 'http' && $port == '80') || ($scheme == 'https' && $port == '443')) {
             $appendPort = '';
         }
 
@@ -125,15 +126,15 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
         // Check for proxy first
         $port = $this->getHeader('X_FORWARDED_PORT');
         if ($port) {
-            return (string) $port;
+            return (string)$port;
         }
 
-        $protocol = (string) $this->getHeader('X_FORWARDED_PROTO');
+        $protocol = (string)$this->getHeader('X_FORWARDED_PROTO');
         if ($protocol === 'https') {
             return '443';
         }
 
-        return (string) $this->getServerVar('SERVER_PORT');
+        return (string)$this->getServerVar('SERVER_PORT');
     }
 
     /**

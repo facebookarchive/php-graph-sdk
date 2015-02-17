@@ -28,87 +28,86 @@ use Facebook\GraphNodes\Collection;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
 
-  public function testAnExistingPropertyCanBeAccessed()
-  {
-    $graphObject = new Collection(['foo' => 'bar']);
-    $property = $graphObject->getProperty('foo');
+    public function testAnExistingPropertyCanBeAccessed()
+    {
+        $graphObject = new Collection(['foo' => 'bar']);
+        $property = $graphObject->getProperty('foo');
 
-    $this->assertEquals('bar', $property);
-  }
-
-  public function testAMissingPropertyWillReturnNull()
-  {
-    $graphObject = new Collection(['foo' => 'bar']);
-    $property = $graphObject->getProperty('baz');
-
-    $this->assertNull($property, 'Expected the property to return null.');
-  }
-
-  public function testAMissingPropertyWillReturnTheDefault()
-  {
-    $graphObject = new Collection(['foo' => 'bar']);
-    $property = $graphObject->getProperty('baz', 'faz');
-
-    $this->assertEquals('faz', $property);
-  }
-
-  public function testTheKeysFromTheCollectionCanBeReturned()
-  {
-    $graphObject = new Collection([
-      'key1' => 'foo',
-      'key2' => 'bar',
-      'key3' => 'baz',
-    ]);
-    $propertyKeys = $graphObject->getPropertyNames();
-
-    $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
-  }
-
-  public function testAnArrayCanBeInjectedViaTheConstructor()
-  {
-    $collection = new Collection(['foo', 'bar']);
-    $this->assertEquals(['foo', 'bar'], $collection->asArray());
-  }
-
-  public function testACollectionCanBeConvertedToProperJson()
-  {
-    $collection = new Collection(['foo', 'bar', 123]);
-
-    $collectionAsString = $collection->asJson();
-
-    $this->assertEquals('["foo","bar",123]', $collectionAsString);
-  }
-
-  public function testACollectionCanBeCounted()
-  {
-    $collection = new Collection(['foo', 'bar', 'baz']);
-
-    $collectionCount = count($collection);
-
-    $this->assertEquals(3, $collectionCount);
-  }
-
-  public function testACollectionCanBeAccessedAsAnArray()
-  {
-    $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
-
-    $this->assertEquals('bar', $collection['foo']);
-    $this->assertEquals('baz', $collection['faz']);
-  }
-
-  public function testACollectionCanBeIteratedOver()
-  {
-    $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
-
-    $this->assertInstanceOf('IteratorAggregate', $collection);
-
-    $newArray = [];
-
-    foreach ($collection as $k => $v) {
-      $newArray[$k] = $v;
+        $this->assertEquals('bar', $property);
     }
 
-    $this->assertEquals(['foo' => 'bar', 'faz' => 'baz'], $newArray);
-  }
+    public function testAMissingPropertyWillReturnNull()
+    {
+        $graphObject = new Collection(['foo' => 'bar']);
+        $property = $graphObject->getProperty('baz');
 
+        $this->assertNull($property, 'Expected the property to return null.');
+    }
+
+    public function testAMissingPropertyWillReturnTheDefault()
+    {
+        $graphObject = new Collection(['foo' => 'bar']);
+        $property = $graphObject->getProperty('baz', 'faz');
+
+        $this->assertEquals('faz', $property);
+    }
+
+    public function testTheKeysFromTheCollectionCanBeReturned()
+    {
+        $graphObject = new Collection([
+            'key1' => 'foo',
+            'key2' => 'bar',
+            'key3' => 'baz',
+        ]);
+        $propertyKeys = $graphObject->getPropertyNames();
+
+        $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
+    }
+
+    public function testAnArrayCanBeInjectedViaTheConstructor()
+    {
+        $collection = new Collection(['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], $collection->asArray());
+    }
+
+    public function testACollectionCanBeConvertedToProperJson()
+    {
+        $collection = new Collection(['foo', 'bar', 123]);
+
+        $collectionAsString = $collection->asJson();
+
+        $this->assertEquals('["foo","bar",123]', $collectionAsString);
+    }
+
+    public function testACollectionCanBeCounted()
+    {
+        $collection = new Collection(['foo', 'bar', 'baz']);
+
+        $collectionCount = count($collection);
+
+        $this->assertEquals(3, $collectionCount);
+    }
+
+    public function testACollectionCanBeAccessedAsAnArray()
+    {
+        $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertEquals('bar', $collection['foo']);
+        $this->assertEquals('baz', $collection['faz']);
+    }
+
+    public function testACollectionCanBeIteratedOver()
+    {
+        $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertInstanceOf('IteratorAggregate', $collection);
+
+        $newArray = [];
+
+        foreach ($collection as $k => $v) {
+            $newArray[$k] = $v;
+        }
+
+        $this->assertEquals(['foo' => 'bar', 'faz' => 'baz'], $newArray);
+    }
 }

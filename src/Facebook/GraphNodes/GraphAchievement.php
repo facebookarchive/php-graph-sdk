@@ -25,6 +25,7 @@ namespace Facebook\GraphNodes;
 
 /**
  * Class GraphAchievement
+ *
  * @package Facebook
  */
 
@@ -79,8 +80,7 @@ class GraphAchievement extends GraphObject
     }
 
     /**
-     * Returns information about the achievement type this instance is
-     * connected with.
+     * Returns information about the achievement type this instance is connected with.
      *
      * @return array|null
      */
@@ -102,8 +102,7 @@ class GraphAchievement extends GraphObject
     }
 
     /**
-     * Indicates whether gaining the achievement published a feed story for
-     * the user.
+     * Indicates whether gaining the achievement published a feed story for the user.
      *
      * @return boolean|null
      */

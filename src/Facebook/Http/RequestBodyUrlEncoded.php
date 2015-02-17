@@ -25,11 +25,11 @@ namespace Facebook\Http;
 
 /**
  * Class RequestBodyUrlEncoded
+ *
  * @package Facebook
  */
 class RequestBodyUrlEncoded implements RequestBodyInterface
 {
-
     /**
      * @var array The parameters to send with this request.
      */

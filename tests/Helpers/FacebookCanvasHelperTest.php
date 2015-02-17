@@ -27,29 +27,27 @@ use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookCanvasHelper;
 
-class FacebookCanvasLoginHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookCanvasHelperTest extends \PHPUnit_Framework_TestCase
 {
+    public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
 
-  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+    /**
+     * @var FacebookCanvasHelper
+     */
+    protected $helper;
 
-  /**
-   * @var FacebookCanvasHelper
-   */
-  protected $helper;
+    public function setUp()
+    {
+        $app = new FacebookApp('123', 'foo_app_secret');
+        $this->helper = new FacebookCanvasHelper($app, new FacebookClient());
+    }
 
-  public function setUp()
-  {
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $this->helper = new FacebookCanvasHelper($app, new FacebookClient());
-  }
+    public function testSignedRequestDataCanBeRetrievedFromPostData()
+    {
+        $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
 
-  public function testSignedRequestDataCanBeRetrievedFromPostData()
-  {
-    $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
+        $rawSignedRequest = $this->helper->getRawSignedRequest();
 
-    $rawSignedRequest = $this->helper->getRawSignedRequest();
-
-    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
-  }
-
+        $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
+    }
 }

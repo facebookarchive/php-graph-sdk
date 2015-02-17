@@ -25,11 +25,11 @@ namespace Facebook\Url;
 
 /**
  * Interface UrlDetectionInterface
+ *
  * @package Facebook
  */
 interface UrlDetectionInterface
 {
-
     /**
      * Get the currently active URL.
      *

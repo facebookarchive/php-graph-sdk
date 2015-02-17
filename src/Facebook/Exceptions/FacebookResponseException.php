@@ -27,11 +27,11 @@ use Facebook\FacebookResponse;
 
 /**
  * Class FacebookResponseException
+ *
  * @package Facebook
  */
 class FacebookResponseException extends FacebookSDKException
 {
-
     /**
      * @var FacebookResponse The response that threw the exception.
      */
@@ -45,7 +45,7 @@ class FacebookResponseException extends FacebookSDKException
     /**
      * Creates a FacebookResponseException.
      *
-     * @param FacebookResponse $response The response that threw the exception.
+     * @param FacebookResponse     $response          The response that threw the exception.
      * @param FacebookSDKException $previousException The more detailed exception.
      */
     public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null)
@@ -70,7 +70,7 @@ class FacebookResponseException extends FacebookSDKException
     {
         $data = $response->getDecodedBody();
 
-        if (! isset($data['error']['code']) && isset($data['code'])) {
+        if (!isset($data['error']['code']) && isset($data['code'])) {
             $data = ['error' => $data];
         }
 
@@ -121,8 +121,7 @@ class FacebookResponseException extends FacebookSDKException
         }
 
         // OAuth authentication error
-        if (isset($data['error']['type'])
-            && $data['error']['type'] === 'OAuthException') {
+        if (isset($data['error']['type']) && $data['error']['type'] === 'OAuthException') {
             return new static($response, new FacebookAuthenticationException($message, $code));
         }
 
@@ -134,7 +133,7 @@ class FacebookResponseException extends FacebookSDKException
      * Checks isset and returns that or a default value.
      *
      * @param string $key
-     * @param mixed $default
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -143,7 +142,7 @@ class FacebookResponseException extends FacebookSDKException
         if (isset($this->responseData['error'][$key])) {
             return $this->responseData['error'][$key];
         }
-        
+
         return $default;
     }
 

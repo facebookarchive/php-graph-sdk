@@ -27,26 +27,24 @@ use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 
 class UrandomPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCanGenerateRandomStringOfArbitraryLength()
+    {
+        if (ini_get('open_basedir')) {
+            $this->markTestSkipped(
+                'Cannot test /dev/urandom generator due to open_basedir constraint.'
+            );
+        }
 
-  public function testCanGenerateRandomStringOfArbitraryLength()
-  {
-    if (ini_get('open_basedir')) {
-      $this->markTestSkipped(
-        'Cannot test /dev/urandom generator due to open_basedir constraint.'
-      );
+        if (!is_readable('/dev/urandom')) {
+            $this->markTestSkipped(
+                '/dev/urandom not found or is not readable.'
+            );
+        }
+
+        $prsg = new UrandomPseudoRandomStringGenerator();
+        $randomString = $prsg->getPseudoRandomString(10);
+
+        $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
+        $this->assertEquals(10, mb_strlen($randomString));
     }
-
-    if ( ! is_readable('/dev/urandom')) {
-      $this->markTestSkipped(
-        '/dev/urandom not found or is not readable.'
-      );
-    }
-
-    $prsg = new UrandomPseudoRandomStringGenerator();
-    $randomString = $prsg->getPseudoRandomString(10);
-
-    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
-    $this->assertEquals(10, mb_strlen($randomString));
-  }
-
 }

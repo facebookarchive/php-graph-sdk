@@ -28,37 +28,35 @@ use Facebook\GraphNodes\GraphObjectFactory;
 
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Facebook\FacebookResponse
+     */
+    protected $responseMock;
 
-  /**
-   * @var \Facebook\FacebookResponse
-   */
-  protected $responseMock;
+    public function setUp()
+    {
+        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+    }
 
-  public function setUp()
-  {
-    $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
-  }
+    public function testDatesGetCastToDateTime()
+    {
+        $dataFromGraph = [
+            'expires_at' => 123,
+            'issued_at' => 1337,
+        ];
 
-  public function testDatesGetCastToDateTime()
-  {
-    $dataFromGraph = [
-      'expires_at' => 123,
-      'issued_at' => 1337,
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphSessionInfo();
 
-    $graphObject = $factory->makeGraphSessionInfo();
+        $expires = $graphObject->getExpiresAt();
+        $issuedAt = $graphObject->getIssuedAt();
 
-    $expires = $graphObject->getExpiresAt();
-    $issuedAt = $graphObject->getIssuedAt();
-
-    $this->assertInstanceOf('DateTime', $expires);
-    $this->assertInstanceOf('DateTime', $issuedAt);
-  }
-
+        $this->assertInstanceOf('DateTime', $expires);
+        $this->assertInstanceOf('DateTime', $issuedAt);
+    }
 }

@@ -26,17 +26,16 @@ namespace Facebook\Http;
 use Facebook\FileUpload\FacebookFile;
 
 /**
- * Some things copied from Guzzle
- * @see https://github.com/guzzle/guzzle/blob/master/src/Post/MultipartBody.php
- */
-
-/**
  * Class RequestBodyMultipartt
+ *
+ * Some things copied from Guzzle
+ *
  * @package Facebook
+ *
+ * @see https://github.com/guzzle/guzzle/blob/master/src/Post/MultipartBody.php
  */
 class RequestBodyMultipart implements RequestBodyInterface
 {
-
     /**
      * @var string The boundary.
      */
@@ -100,7 +99,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * Get the string needed to transfer a file.
      *
-     * @param string $name
+     * @param string       $name
      * @param FacebookFile $file
      *
      * @return string

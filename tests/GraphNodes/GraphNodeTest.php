@@ -45,6 +45,7 @@ abstract class GraphNodeTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($data);
+
         return new GraphObjectFactory($this->responseMock);
     }
 }

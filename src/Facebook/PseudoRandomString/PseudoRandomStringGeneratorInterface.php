@@ -25,6 +25,7 @@ namespace Facebook\PseudoRandomString;
 
 /**
  * Interface
+ *
  * @package Facebook
  */
 interface PseudoRandomStringGeneratorInterface

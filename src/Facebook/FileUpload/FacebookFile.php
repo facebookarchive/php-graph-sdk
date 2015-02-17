@@ -27,112 +27,109 @@ use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class FacebookFile
+ *
  * @package Facebook
  */
 class FacebookFile
 {
+    /**
+     * @var string The path to the file on the system.
+     */
+    protected $path;
 
-  /**
-   * @var string The path to the file on the system.
-   */
-  protected $path;
+    /**
+     * @var resource The stream pointing to the file.
+     */
+    protected $stream;
 
-  /**
-   * @var resource The stream pointing to the file.
-   */
-  protected $stream;
-
-  /**
-   * Creates a new FacebookFile entity.
-   *
-   * @param string $filePath
-   *
-   * @throws FacebookSDKException
-   */
-  public function __construct($filePath)
-  {
-    $this->path = $filePath;
-    $this->open();
-  }
-
-  /**
-   * Closes the stream when destructed.
-   */
-  public function __destruct()
-  {
-    $this->close();
-  }
-
-  /**
-   * Opens a stream for the file.
-   *
-   * @throws FacebookSDKException
-   */
-  public function open()
-  {
-    if ( ! $this->isRemoteFile($this->path)
-      && ! is_readable($this->path) ) {
-      throw new FacebookSDKException('Failed to create FacebookFile entity. '
-        . 'Unable to read resource: ' . $this->path . '.');
+    /**
+     * Creates a new FacebookFile entity.
+     *
+     * @param string $filePath
+     *
+     * @throws FacebookSDKException
+     */
+    public function __construct($filePath)
+    {
+        $this->path = $filePath;
+        $this->open();
     }
-    $this->stream = fopen($this->path, 'r');
 
-    if ( ! $this->stream) {
-      throw new FacebookSDKException('Failed to create FacebookFile entity. '
-        . 'Unable to open resource: ' . $this->path . '.');
+    /**
+     * Closes the stream when destructed.
+     */
+    public function __destruct()
+    {
+        $this->close();
     }
-  }
 
-  /**
-   * Stops the file stream.
-   */
-  public function close()
-  {
-    if (is_resource($this->stream)) {
-      fclose($this->stream);
+    /**
+     * Opens a stream for the file.
+     *
+     * @throws FacebookSDKException
+     */
+    public function open()
+    {
+        if (!$this->isRemoteFile($this->path) && !is_readable($this->path)) {
+            throw new FacebookSDKException('Failed to create FacebookFile entity. Unable to read resource: ' . $this->path . '.');
+        }
+
+        $this->stream = fopen($this->path, 'r');
+
+        if (!$this->stream) {
+            throw new FacebookSDKException('Failed to create FacebookFile entity. Unable to open resource: ' . $this->path . '.');
+        }
     }
-  }
 
-  /**
-   * Return the contents of the file.
-   *
-   * @return string
-   */
-  public function getContents()
-  {
-    return stream_get_contents($this->stream);
-  }
+    /**
+     * Stops the file stream.
+     */
+    public function close()
+    {
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+        }
+    }
 
-  /**
-   * Return the name of the file.
-   *
-   * @return string
-   */
-  public function getFileName()
-  {
-    return basename($this->path);
-  }
+    /**
+     * Return the contents of the file.
+     *
+     * @return string
+     */
+    public function getContents()
+    {
+        return stream_get_contents($this->stream);
+    }
 
-  /**
-   * Return the mimetype of the file.
-   *
-   * @return string
-   */
-  public function getMimetype()
-  {
-    return Mimetypes::getInstance()->fromFilename($this->path) ?: 'text/plain';
-  }
+    /**
+     * Return the name of the file.
+     *
+     * @return string
+     */
+    public function getFileName()
+    {
+        return basename($this->path);
+    }
 
-  /**
-   * Returns true if the path to the file is remote.
-   *
-   * @param string $pathToFile
-   *
-   * @return boolean
-   */
-  protected function isRemoteFile($pathToFile)
-  {
-    return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
-  }
+    /**
+     * Return the mimetype of the file.
+     *
+     * @return string
+     */
+    public function getMimetype()
+    {
+        return Mimetypes::getInstance()->fromFilename($this->path) ?: 'text/plain';
+    }
 
+    /**
+     * Returns true if the path to the file is remote.
+     *
+     * @param string $pathToFile
+     *
+     * @return boolean
+     */
+    protected function isRemoteFile($pathToFile)
+    {
+        return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
+    }
 }

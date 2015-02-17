@@ -26,8 +26,8 @@ namespace Facebook\Tests\GraphNodes;
 class GraphAchievementTest extends GraphNodeTest
 {
 
-  public function testIdIsString()
-  {
+    public function testIdIsString()
+    {
         $dataFromGraph = [
             'id' => '1337'
         ];
@@ -38,10 +38,10 @@ class GraphAchievementTest extends GraphNodeTest
         $id = $graphObject->getId();
 
         $this->assertEquals($dataFromGraph['id'], $id);
-  }
+    }
 
-  public function testTypeIsAlwaysString()
-  {
+    public function testTypeIsAlwaysString()
+    {
         $dataFromGraph = [
             'id' => '1337'
         ];
@@ -52,12 +52,12 @@ class GraphAchievementTest extends GraphNodeTest
         $type = $graphObject->getType();
 
         $this->assertEquals('game.achievement', $type);
-  }
+    }
 
-  public function testNoFeedStoryIsBoolean()
-  {
+    public function testNoFeedStoryIsBoolean()
+    {
         $dataFromGraph = [
-            'no_feed_story' => (rand(0,1) == 1)
+            'no_feed_story' => (rand(0, 1) == 1)
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
@@ -66,10 +66,10 @@ class GraphAchievementTest extends GraphNodeTest
         $isNoFeedStory = $graphObject->isNoFeedStory();
 
         $this->assertTrue(is_bool($isNoFeedStory));
-  }
+    }
 
-  public function testDatesGetCastToDateTime()
-  {
+    public function testDatesGetCastToDateTime()
+    {
         $dataFromGraph = [
             'publish_time' => '2014-07-15T03:54:34+0000'
         ];
@@ -80,10 +80,10 @@ class GraphAchievementTest extends GraphNodeTest
         $publishTime = $graphObject->getPublishTime();
 
         $this->assertInstanceOf('DateTime', $publishTime);
-  }
+    }
 
-  public function testFromGetsCastAsGraphUser()
-  {
+    public function testFromGetsCastAsGraphUser()
+    {
         $dataFromGraph = [
             'from' => [
                 'id' => '1337',
@@ -97,10 +97,10 @@ class GraphAchievementTest extends GraphNodeTest
         $from = $graphObject->getFrom();
 
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphUser', $from);
-  }
+    }
 
-  public function testApplicationGetsCastAsGraphApplication()
-  {
+    public function testApplicationGetsCastAsGraphApplication()
+    {
         $dataFromGraph = [
             'application' => [
                 'id' => '1337'
@@ -113,5 +113,5 @@ class GraphAchievementTest extends GraphNodeTest
         $app = $graphObject->getApplication();
 
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphApplication', $app);
-  }
+    }
 }

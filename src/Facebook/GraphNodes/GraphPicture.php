@@ -25,11 +25,11 @@ namespace Facebook\GraphNodes;
 
 /**
  * Class GraphPicture
+ *
  * @package Facebook
  */
 class GraphPicture extends GraphObject
 {
-
     /**
      * Returns true if user picture is silhouette.
      *
@@ -69,5 +69,4 @@ class GraphPicture extends GraphObject
     {
         return $this->getProperty('height');
     }
-
 }

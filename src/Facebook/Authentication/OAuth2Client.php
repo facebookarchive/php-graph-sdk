@@ -33,11 +33,11 @@ use Facebook\Exceptions\FacebookSDKException;
 
 /**
  * Class OAuth2Client
+ *
  * @package Facebook
  */
 class OAuth2Client
 {
-
     /**
      * @const string The base authorization URL.
      */
@@ -72,9 +72,9 @@ class OAuth2Client
     protected $lastRequest;
 
     /**
-     * @param FacebookApp $app
+     * @param FacebookApp    $app
      * @param FacebookClient $client
-     * @param string|null $graphVersion The version of the Graph API to use.
+     * @param string|null    $graphVersion The version of the Graph API to use.
      */
     public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
     {
@@ -103,10 +103,7 @@ class OAuth2Client
      */
     public function debugToken($accessToken)
     {
-        $accessToken = $accessToken instanceof AccessToken
-            ? $accessToken->getValue()
-            : $accessToken;
-
+        $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = ['input_token' => $accessToken];
 
         $this->lastRequest = new FacebookRequest(
@@ -128,10 +125,10 @@ class OAuth2Client
      * Generates an authorization URL to begin the process of authenticating a user.
      *
      * @param string $redirectUrl The callback URL to redirect to.
-     * @param array $scope An array of permissions to request.
-     * @param string $state The CSPRNG-generated CSRF value.
-     * @param array $params An array of parameters to generate URL.
-     * @param string $separator The separator to use in http_build_query().
+     * @param array  $scope       An array of permissions to request.
+     * @param string $state       The CSPRNG-generated CSRF value.
+     * @param array  $params      An array of parameters to generate URL.
+     * @param string $separator   The separator to use in http_build_query().
      *
      * @return string
      */
@@ -146,8 +143,7 @@ class OAuth2Client
             'scope' => implode(',', $scope)
         ];
 
-        return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' .
-                        http_build_query($params, null, $separator);
+        return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . http_build_query($params, null, $separator);
     }
 
     /**
@@ -181,10 +177,7 @@ class OAuth2Client
      */
     public function getLongLivedAccessToken($accessToken)
     {
-        $accessToken = $accessToken instanceof AccessToken
-            ? $accessToken->getValue()
-            : $accessToken;
-
+        $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = [
             'grant_type' => 'fb_exchange_token',
             'fb_exchange_token' => $accessToken,
@@ -197,7 +190,7 @@ class OAuth2Client
      * Get a valid code from an access token.
      *
      * @param AccessToken|string $accessToken
-     * @param string $redirectUri
+     * @param string             $redirectUri
      *
      * @return AccessToken
      *
@@ -212,7 +205,7 @@ class OAuth2Client
         $response = $this->sendRequestWithClientParams('/oauth/client_code', $params, $accessToken);
         $data = $response->getDecodedBody();
 
-        if (! isset($data['code'])) {
+        if (!isset($data['code'])) {
             throw new FacebookSDKException('Code was not returned from Graph.', 401);
         }
 
@@ -233,7 +226,7 @@ class OAuth2Client
         $response = $this->sendRequestWithClientParams('/oauth/access_token', $params);
         $data = $response->getDecodedBody();
 
-        if (! isset($data['access_token'])) {
+        if (!isset($data['access_token'])) {
             throw new FacebookSDKException('Access token was not returned from Graph.', 401);
         }
 
@@ -257,8 +250,8 @@ class OAuth2Client
     /**
      * Send a request to Graph with an app access token.
      *
-     * @param string $endpoint
-     * @param array $params
+     * @param string      $endpoint
+     * @param array       $params
      * @param string|null $accessToken
      *
      * @return FacebookResponse

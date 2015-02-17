@@ -25,100 +25,101 @@ namespace Facebook\GraphNodes;
 
 /**
  * Class GraphPage
+ *
  * @package Facebook
- * @author Artur Luiz <artur@arturluiz.com.br>
  */
 class GraphPage extends GraphObject
 {
-  /**
-   * @var array Maps object key names to Graph object types.
-   */
-  protected static $graphObjectMap = [
-    'best_page' => '\Facebook\GraphNodes\GraphPage',
-    'global_brand_parent_page' => '\Facebook\GraphNodes\GraphPage',
-    'location' => '\Facebook\GraphNodes\GraphLocation',
-  ];
+    /**
+     * @var array Maps object key names to Graph object types.
+     */
+    protected static $graphObjectMap = [
+        'best_page' => '\Facebook\GraphNodes\GraphPage',
+        'global_brand_parent_page' => '\Facebook\GraphNodes\GraphPage',
+        'location' => '\Facebook\GraphNodes\GraphLocation',
+    ];
 
-  /**
-   * Returns the ID for the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getId()
-  {
-    return $this->getProperty('id');
-  }
+    /**
+     * Returns the ID for the user's page as a string if present.
+     *
+     * @return string|null
+     */
+    public function getId()
+    {
+        return $this->getProperty('id');
+    }
 
-  /**
-   * Returns the Category for the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getCategory()
-  {
-    return $this->getProperty('category');
-  }
+    /**
+     * Returns the Category for the user's page as a string if present.
+     *
+     * @return string|null
+     */
+    public function getCategory()
+    {
+        return $this->getProperty('category');
+    }
 
-  /**
-   * Returns the Name of the user's page as a string if present.
-   *
-   * @return string|null
-   */
-  public function getName()
-  {
-    return $this->getProperty('name');
-  }
+    /**
+     * Returns the Name of the user's page as a string if present.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->getProperty('name');
+    }
 
-  /**
-   * Returns the best available Page on Facebook.
-   *
-   * @return GraphPage|null
-   */
-  public function getBestPage()
-  {
-    return $this->getProperty('best_page');
-  }
+    /**
+     * Returns the best available Page on Facebook.
+     *
+     * @return GraphPage|null
+     */
+    public function getBestPage()
+    {
+        return $this->getProperty('best_page');
+    }
 
-  /**
-   * Returns the brand's global (parent) Page.
-   *
-   * @return GraphPage|null
-   */
-  public function getGlobalBrandParentPage()
-  {
-    return $this->getProperty('global_brand_parent_page');
-  }
+    /**
+     * Returns the brand's global (parent) Page.
+     *
+     * @return GraphPage|null
+     */
+    public function getGlobalBrandParentPage()
+    {
+        return $this->getProperty('global_brand_parent_page');
+    }
 
-  /**
-   * Returns the location of this place.
-   *
-   * @return GraphLocation|null
-   */
-  public function getLocation()
-  {
-    return $this->getProperty('location');
-  }
+    /**
+     * Returns the location of this place.
+     *
+     * @return GraphLocation|null
+     */
+    public function getLocation()
+    {
+        return $this->getProperty('location');
+    }
 
-  /**
-   * Returns the page access token for the admin user.
-   * Only available in the `/me/accounts` context.
-   *
-   * @return string|null
-   */
-  public function getAccessToken()
-  {
-    return $this->getProperty('access_token');
-  }
+    /**
+     * Returns the page access token for the admin user.
+     *
+     * Only available in the `/me/accounts` context.
+     *
+     * @return string|null
+     */
+    public function getAccessToken()
+    {
+        return $this->getProperty('access_token');
+    }
 
-  /**
-   * Returns the roles of the page admin user.
-   * Only available in the `/me/accounts` context.
-   *
-   * @return array|null
-   */
-  public function getPerms()
-  {
-    return $this->getProperty('perms');
-  }
-
+    /**
+     * Returns the roles of the page admin user.
+     *
+     * Only available in the `/me/accounts` context.
+     *
+     * @return array|null
+     */
+    public function getPerms()
+    {
+        return $this->getProperty('perms');
+    }
 }
