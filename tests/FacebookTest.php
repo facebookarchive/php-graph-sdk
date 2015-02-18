@@ -75,6 +75,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
    */
   public function testInstantiatingWithoutAppIdThrows()
   {
+    // unset value so there is no fallback to test expected Exception
+    putenv(Facebook::APP_ID_ENV_NAME.'=');
     $config = [
       'app_secret' => 'foo_secret',
     ];
@@ -86,6 +88,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
    */
   public function testInstantiatingWithoutAppSecretThrows()
   {
+    // unset value so there is no fallback to test expected Exception
+    putenv(Facebook::APP_SECRET_ENV_NAME.'=');
     $config = [
       'app_id' => 'foo_id',
     ];
