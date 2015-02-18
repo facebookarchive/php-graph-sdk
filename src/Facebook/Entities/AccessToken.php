@@ -177,7 +177,7 @@ class AccessToken
   {
     $params = array(
       'code' => $code,
-      'redirect_uri' => ''
+      'redirect_uri' => '',
     );
 
     if ($machineId) {
@@ -202,7 +202,7 @@ class AccessToken
 
     $params = array(
       'access_token' => $accessToken,
-      'redirect_uri' => ''
+      'redirect_uri' => '',
     );
 
     return static::requestCode($params, $appId, $appSecret);
@@ -220,7 +220,7 @@ class AccessToken
   {
     $params = array(
       'grant_type' => 'fb_exchange_token',
-      'fb_exchange_token' => $this->accessToken
+      'fb_exchange_token' => $this->accessToken,
     );
 
     return static::requestAccessToken($params, $appId, $appSecret);

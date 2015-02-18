@@ -80,7 +80,7 @@ class FacebookRequestException extends FacebookSDKException
     if (!isset($data['error']['code']) && isset($data['code'])) {
       $data = array('error' => $data);
     }
-    $code = (isset($data['error']['code']) ? (int)$data['error']['code'] : null);
+    $code = (isset($data['error']['code']) ? (int) $data['error']['code'] : null);
 
     if (isset($data['error']['error_subcode'])) {
       switch ($data['error']['error_subcode']) {

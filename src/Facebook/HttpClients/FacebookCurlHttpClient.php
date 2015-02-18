@@ -177,7 +177,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
       CURLOPT_HEADER         => true, // Enable header processing
       CURLOPT_SSL_VERIFYHOST => 2,
       CURLOPT_SSL_VERIFYPEER => true,
-      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem'
+      CURLOPT_CAINFO         => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
     );
 
     if ($method !== 'GET') {

@@ -50,7 +50,7 @@ abstract class FacebookSignedRequestFromInputHelper
   /**
    * @var string|null Random string to prevent CSRF.
    */
-  public $state;
+  public $state = null;
 
   /**
    * Initialize the helper and process available signed request data.

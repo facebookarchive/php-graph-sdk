@@ -194,10 +194,10 @@ class FacebookRequest
 
     $params = ($parameters ?: array());
     if ($session
-      && !isset($params['access_token'])) {
+      && ! isset($params['access_token'])) {
       $params['access_token'] = $session->getToken();
     }
-    if (!isset($params['appsecret_proof'])
+    if (! isset($params['appsecret_proof'])
       && FacebookSession::useAppSecretProof()) {
       $params['appsecret_proof'] = $this->getAppSecretProof(
         $params['access_token']
@@ -249,7 +249,7 @@ class FacebookRequest
 
     static::$requestCount++;
 
-    $etagHit = (304 === $connection->getResponseHttpStatusCode());
+    $etagHit = 304 === $connection->getResponseHttpStatusCode();
 
     $headers = $connection->getResponseHeaders();
     $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
