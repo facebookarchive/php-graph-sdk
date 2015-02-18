@@ -5,28 +5,30 @@ The Facebook SDK for PHP is a library with powerful features that enable PHP dev
 
 Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook PHP SDK does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
 
-Take a look through our guide, [Getting Started with the Facebook SDK for PHP](/docs/php/gettingstarted), and then check out some of the examples below.
+For installation & implementation instructions, look through the [Getting Started with the Facebook SDK for PHP](/docs/php/gettingstarted) guide, and then check out some of the examples below.
 </card>
 
 <card>
 ## Examples {#examples}
 
-For more complete examples, check out the [examples from the official repo on GitHub](). @todo
+The following examples demonstrate how you would accomplish common tasks with the Facebook PHP SDK.
 
 - **Authentication & Signed Requests**
-  - [Facebook Login (OAuth 2.0)](/docs/php/howto/example_facebook_login) @todo
-  - [Obtaining an access token from the JavaScript SDK](/docs/php/howto/example_access_token_from_javascript) @todo
-  - [Obtaining an access token within a Facebook Canvas context](/docs/php/howto/example_access_token_from_canvas) @todo
-  - [Obtaining an access token within a Facebook Page tab context](/docs/php/howto/example_access_token_from_page_tab) @todo
+  - [Facebook Login (OAuth 2.0)](/docs/php/howto/example_facebook_login)
+  - [Obtaining an access token from the JavaScript SDK](/docs/php/howto/example_access_token_from_javascript)
+  - [Obtaining an access token within a Facebook Canvas context](/docs/php/howto/example_access_token_from_canvas)
+  - [Obtaining an access token within a Facebook Page tab context](/docs/php/howto/example_access_token_from_page_tab)
 - **User profile**
   - [Retrieve a user's profile](/docs/php/howto/example_retrieve_user_profile)
   - [Post a link to a user's feed](/docs/php/howto/example_post_links)
 - **File Uploads**
   - [Upload a photo to a user's profile](/docs/php/howto/example_upload_photo)
-  - [Upload a video to a user's profile](/docs/php/howto/example_upload_video) @todo
+  - [Upload a video to a user's profile](/docs/php/howto/example_upload_video)
 - **Batch Requests**
-  - [Sending requests in a batch](/docs/php/howto/example_batch_request) @todo
-  - [Uploading files in a batch](/docs/php/howto/example_batch_upload) @todo
+  - [Sending requests in a batch](/docs/php/howto/example_batch_request)
+  - [Uploading files in a batch](/docs/php/howto/example_batch_upload)
+- **Pagination**
+  - [Basic pagination](/docs/php/howto/example_pagination_basic)
 </card>
 
 <card>

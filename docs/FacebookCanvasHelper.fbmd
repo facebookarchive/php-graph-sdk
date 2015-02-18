@@ -14,15 +14,8 @@ Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 If your app is loaded through Canvas, Facebook sends a POST request to your app with a signed request.  This helper will handle validating and decrypting the signed request.
 
 ~~~
-use Facebook\Helpers\FacebookCanvasHelper;
-
-$fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  ]);
-$facebookApp = $fb->getApp();
-
-$canvasHelper = new FacebookCanvasHelper($facebookApp);
+$fb = new Facebook\Facebook([/* */]);
+$canvasHelper = $fb->getCanvasHelper();
 $signedRequest = $canvasHelper->getSignedRequest();
 
 if ($signedRequest) {
@@ -34,24 +27,15 @@ if ($signedRequest) {
 If a user has already authenticated your app, you can also obtain an access token.
 
 ~~~
-use Facebook\Helpers\FacebookCanvasHelper;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
-
-$fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  ]);
-$facebookApp = $fb->getApp();
-$facebookClient = $fb->getClient();
+$fb = new Facebook\Facebook([/* */]);
+$canvasHelper = $fb->getCanvasHelper();
 
 try {
-  $canvasHelper = new FacebookCanvasHelper($facebookApp);
-  $accessToken = $canvasHelper->getAccessToken($facebookClient);
-} catch(FacebookResponseException $e) {
+  $accessToken = $canvasHelper->getAccessToken();
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
-} catch(FacebookSDKException $e) {
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
 }
@@ -60,6 +44,8 @@ if (isset($accessToken)) {
   // Logged in.
 }
 ~~~
+
+The `$accessToken` will be `null` if the signed request did not contain any OAuth 2.0 data to obtain the access token.
 </card>
 
 <card>
@@ -67,7 +53,7 @@ if (isset($accessToken)) {
 
 ### __construct() {#construct}
 ~~~~
-public FacebookCanvasHelper __construct( Facebook\FacebookApp $app )
+public FacebookCanvasHelper __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
 ~~~~
 Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed request that was sent via POST if present.
 </card>
@@ -75,7 +61,7 @@ Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed req
 <card>
 ### getAccessToken() {#get-access-token}
 ~~~
-public Facebook\AccessToken|null getAccessToken( Facebook\FacebookClient $client )
+public Facebook\AccessToken|null getAccessToken()
 ~~~
 Checks the signed request for authentication data and tries to obtain an access token access token.
 </card>
@@ -121,7 +107,7 @@ Gets the value that is set in the `app_data` property if present.
 ~~~
 public Facebook\SignedRequest|null getSignedRequest()
 ~~~
-Returns the signed request as a [`Facebook\SignedRequest`](/docs/php/SignedRequest) entity if present.
+Returns the signed request as an instance of [`Facebook\SignedRequest`](/docs/php/SignedRequest) if present.
 </card>
 
 <card>
@@ -129,7 +115,5 @@ Returns the signed request as a [`Facebook\SignedRequest`](/docs/php/SignedReque
 ~~~
 public string|null getRawSignedRequest()
 ~~~
-Gets the raw, unencrypted signed request that was sent via POST if present.
-
-Returns a an encrypted signed request as a `string` or `null`.
+Returns the raw encoded signed request as a `string` if present in the POST variables or `null`.
 </card>

@@ -41,11 +41,11 @@ FB(devsite:markdown-wiki:table {
       'An entity that represents an access token.',
     ],
     [
-      '[`Facebook\Authentication\AccessTokenMetadata`](/docs/php/AccessTokenMetadata)',
+      '`Facebook\Authentication\AccessTokenMetadata`',
       'An entity that represents metadata from an access token.',
     ],
     [
-      '[`Facebook\Authentication\OAuth2Client`](/docs/php/OAuth2Client)',
+      '`Facebook\Authentication\OAuth2Client`',
       'An OAuth 2.0 client that sends and receives HTTP requests related to user authentication.',
     ],
   ],
@@ -78,7 +78,7 @@ FB(devsite:markdown-wiki:table {
     ],
     [
       '[`Facebook\FacebookClient`](/docs/php/FacebookClient)',
-      'A service object to send HTTP requests and receive HTTP responses to and from the Graph API.',
+      'A service object that sends HTTP requests and receives HTTP responses to and from the Graph API.',
     ],
   ],
 })
@@ -197,30 +197,6 @@ FB(devsite:markdown-wiki:table {
 </card>
 
 <card>
-# HTTP Clients {#http-clients}
-
-Various HTTP clients that can be implemented to send and receive HTTP requests to and HTTP responses from Graph.
-
-FB(devsite:markdown-wiki:table {
-  columns: ['Class name','Description',],
-  rows: [
-    [
-      '[`Facebook\HttpClients\FacebookStreamHttpClient`](/docs/php/FacebookStreamHttpClient)',
-      'The stream wrapper HTTP client implementation.',
-    ],
-    [
-      '[`Facebook\HttpClients\FacebookHttpCurlClient`](/docs/php/FacebookHttpCurlClient)',
-      'The cURL HTTP client implementation.',
-    ],
-    [
-      '[`Facebook\HttpClients\FacebookGuzzleHttpClient`](/docs/php/FacebookGuzzleHttpClient)',
-      'The Guzzle HTTP client implementation. (Requires installing Guzzle with Composer.)',
-    ],
-  ],
-})
-</card>
-
-<card>
 # Extensibility {#extensibility}
 
 You can overwrite certain functionality of the SDK by coding to an interface and injecting an instance of your custom functionality.
@@ -229,11 +205,11 @@ FB(devsite:markdown-wiki:table {
   columns: ['Interface name','Description',],
   rows: [
     [
-      '[`Facebook\HttpClients\FacebookHttpClientInterface`](/docs/php/FacebookHttpClientInterface)',
+      '`Facebook\HttpClients\FacebookHttpClientInterface`',
       'An interface to code your own HTTP client implementation.',
     ],
     [
-      '[`Facebook\Http\GraphRawResponse`](/docs/php/GraphRawResponse)',
+      '`Facebook\Http\GraphRawResponse`',
       'An entity that is returned from an instance of a `FacebookHttpClientInterface` that represents a raw HTTP response from the Graph API.',
     ],
     [

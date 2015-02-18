@@ -12,18 +12,17 @@ You most likely won't be working with the `Facebook\FacebookClient` service dire
 You can grab an instance of a `Facebook\FacebookClient` service, from the `Facebook\Facebook` super service class.
 
 ~~~~
-$fb = new Facebook\Facebook(/* */);
+$fb = new Facebook\Facebook([/* */]);
 $fbClient = $fb->getClient();
 ~~~~
 
 Alternatively you could instantiate a new `Facebook\FacebookClient` service directly.
 
 ~~~~
-$fbApp = new Facebook\FacebookApp('{app_id}', '{app_secret}');
-$fbClient = new Facebook\FacebookClient($fbApp, $enableBeta = false);
+$fbClient = new Facebook\FacebookClient($httpClientHandler, $enableBeta = false);
 ~~~~
 
-The Graph API has a number of different base URL's based on what request you're trying to send. For example, if you wanted to send requests to the beta version of Graph, you'd need to send requests to [https://graph.beta.facebook.com](https://graph.beta.facebook.com) instead [https://graph.facebook.com](https://graph.facebook.com). And if you wanted to upload a video, that request would need to be sent to [https://graph-video.facebook.com](https://graph-video.facebook.com).
+The Graph API has a number of different base URL's based on what request you want to send. For example, if you wanted to send requests to the beta version of Graph, you'd need to send requests to [https://graph.beta.facebook.com](https://graph.beta.facebook.com) instead [https://graph.facebook.com](https://graph.facebook.com). And if you wanted to upload a video, that request would need to be sent to [https://graph-video.facebook.com](https://graph-video.facebook.com).
 
 The `Facebook\FacebookClient` service takes the guess-work out of managing those base URL's by automatically sending your requests to the proper URL.
 </card>

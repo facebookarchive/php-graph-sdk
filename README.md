@@ -1,16 +1,26 @@
-Facebook SDK for PHP
-====================
+# Facebook SDK for PHP
 
 [![Build Status](https://img.shields.io/travis/facebook/facebook-php-sdk-v4/master.svg)](https://travis-ci.org/facebook/facebook-php-sdk-v4)
 [![Development Version](https://img.shields.io/badge/Development%20Version-4.1.0-orange.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
 
 
-This repository contains the open source PHP SDK that allows you to access Facebook
-Platform from your PHP app.
+This repository contains the open source PHP SDK that allows you to access the Facebook Platform from your PHP app.
 
 
-Usage
------
+## Installation
+
+The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/). Add the Facebook PHP SDK package to your `composer.json` file.
+
+```json
+{
+    "require": {
+        "facebook/php-sdk-v4": "~4.1.0"
+    }
+}
+```
+
+
+## Usage
 
 > **Note:** This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
 
@@ -20,10 +30,11 @@ Simple GET example of a user's profile.
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.2',
   //'default_access_token' => '{access-token}', // optional
 ]);
 
-// Use one of the helper classes to get a Facebook\AccessToken entity.
+// Use one of the helper classes to get a Facebook\Authentication\AccessToken entity.
 //   $helper = $fb->getRedirectLoginHelper();
 //   $helper = $fb->getJavaScriptHelper();
 //   $helper = $fb->getCanvasHelper();
@@ -47,38 +58,31 @@ $me = $response->getGraphUser();
 echo 'Logged in as ' . $me->getName();
 ```
 
-Complete documentation, installation instructions, and examples are available at:
-[https://developers.facebook.com/docs/php](https://developers.facebook.com/docs/php)
+Complete documentation, installation instructions, and examples are available at: [https://developers.facebook.com/docs/php](https://developers.facebook.com/docs/php)
 
 
-Tests
------
+## Tests
 
-1) [Composer](https://getcomposer.org/) is a prerequisite for running the tests.
-
-Install composer globally, then run `composer install` to install required files.
-
-2) Create a test app on [Facebook Developers](https://developers.facebook.com), then
-create `tests/FacebookTestCredentials.php` from `tests/FacebookTestCredentials.php.dist`
-and edit it to add your credentials.
-
-3) The tests can be executed by running this command from the root directory:
+1. [Composer](https://getcomposer.org/) is a prerequisite for running the tests. Install composer globally, then run `composer install` to install required files.
+2. Create a test app on [Facebook Developers](https://developers.facebook.com), then create `tests/FacebookTestCredentials.php` from `tests/FacebookTestCredentials.php.dist` and edit it to add your credentials.
+3. The tests can be executed by running this command from the root directory:
 
 ```bash
-./vendor/bin/phpunit
+$ ./vendor/bin/phpunit
+```
+
+By default the tests will send live HTTP requests to the Graph API. If you are without an internet connection you can skip these tests by excluding the `integration` group.
+
+```bash
+$ ./vendor/bin/phpunit --exclude-group integration
 ```
 
 
-Contributing
-------------
+## Contributing
 
-For us to accept contributions you will have to first have signed the
-[Contributor License Agreement](https://developers.facebook.com/opensource/cla).
+For us to accept contributions you will have to first have signed the [Contributor License Agreement](https://developers.facebook.com/opensource/cla). Please see [CONTRIBUTING](https://github.com/facebook/facebook-php-sdk-v4/blob/master/CONTRIBUTING.md) for details.
 
-When committing, keep all lines to less than 80 characters, and try to
-follow the existing style.
 
-Before creating a pull request, squash your commits into a single commit.
+## License
 
-Add the comments where needed, and provide ample explanation in the
-commit message.
+Please see the [license file](https://github.com/facebook/facebook-php-sdk-v4/blob/master/LICENSE) for more information.

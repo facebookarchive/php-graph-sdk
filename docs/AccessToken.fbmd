@@ -1,7 +1,7 @@
 <card>
 # AccessToken for the Facebook SDK for PHP
 
-Requests to the Graph API need to have an access token sent with them to identify the app, user and/or Page that is making the request. The `Facebook\Authentication\AccessToken` entity represents an access token.
+Requests to the Graph API need to have an access token sent with them to identify the app, user and/or page that is making the request. The `Facebook\Authentication\AccessToken` entity represents an access token.
 </card>
 
 <card>

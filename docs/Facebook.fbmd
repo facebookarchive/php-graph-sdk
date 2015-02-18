@@ -466,7 +466,7 @@ if (count($photosList) > 0) {
       do {
         echo '<p>Likes:</p>' . "\n\n";
         var_dump($likes->asArray());
-      } while ($likes = $fqb->next($likes));
+      } while ($likes = $fb->next($likes));
     }
     $pageCount++;
   } while ($pageCount < $maxPages && $photosList = $fb->next($photosList));

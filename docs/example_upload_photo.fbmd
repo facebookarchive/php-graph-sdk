@@ -5,14 +5,18 @@ This example covers uploading a photo to the current User's profile using the Gr
 
 It assumes that you've already acquired an access token using one of the helper classes found [here](/docs/php/sdk_reference#helpers).  The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FileUpload\FacebookFile`](/docs/php/FacebookFile), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FileUpload\FacebookFile`](/docs/php/FacebookFile), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
 </card>
 
 <card>
 ## Example {#example}
 
 ~~~~
-$fb = new Facebook\Facebook(/* . . . */);
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.2',
+  ]);
 
 $data = [
   'message' => 'My awesome photo upload example.',
@@ -21,7 +25,7 @@ $data = [
 
 try {
   // Returns a `Facebook\FacebookResponse` object
-  $response = $fb->post('/me/photos', $data);
+  $response = $fb->post('/me/photos', $data, '{access-token}');
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
