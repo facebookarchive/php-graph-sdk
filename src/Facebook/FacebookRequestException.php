@@ -80,7 +80,7 @@ class FacebookRequestException extends FacebookSDKException
     if (!isset($data['error']['code']) && isset($data['code'])) {
       $data = array('error' => $data);
     }
-    $code = (isset($data['error']['code']) ? $data['error']['code'] : null);
+    $code = (isset($data['error']['code']) ? (int) $data['error']['code'] : null);
 
     if (isset($data['error']['error_subcode'])) {
       switch ($data['error']['error_subcode']) {
@@ -124,7 +124,7 @@ class FacebookRequestException extends FacebookSDKException
     }
 
     // Missing Permissions
-    if ($code == 10 || ($code >= 200 && $code <= 299)) {
+    if ($code === 10 || ($code >= 200 && $code <= 299)) {
       return new FacebookPermissionException($raw, $data, $statusCode);
     }
 

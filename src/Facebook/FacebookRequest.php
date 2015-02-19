@@ -199,13 +199,13 @@ class FacebookRequest
 
     $params = ($parameters ?: array());
     if ($session
-      && !isset($params["access_token"])) {
-      $params["access_token"] = $session->getToken();
+      && ! isset($params['access_token'])) {
+      $params['access_token'] = $session->getToken();
     }
-    if (FacebookSession::useAppSecretProof()
-      && !isset($params["appsecret_proof"])) {
-      $params["appsecret_proof"] = $this->getAppSecretProof(
-        $params["access_token"]
+    if (! isset($params['appsecret_proof'])
+      && FacebookSession::useAppSecretProof()) {
+      $params['appsecret_proof'] = $this->getAppSecretProof(
+        $params['access_token']
       );
     }
     $this->params = $params;
@@ -240,7 +240,7 @@ class FacebookRequest
     $url = $this->getRequestURL();
     $params = $this->getParameters();
 
-    if ($this->method === "GET") {
+    if ($this->method === 'GET') {
       $url = self::appendParamsToUrl($url, $params);
       $params = array();
     }
@@ -250,7 +250,7 @@ class FacebookRequest
     $connection->addRequestHeader('Accept-Encoding', '*'); // Support all available encodings.
 
     // ETag
-    if (isset($this->etag)) {
+    if (null !== $this->etag) {
       $connection->addRequestHeader('If-None-Match', $this->etag);
     }
 
@@ -260,7 +260,7 @@ class FacebookRequest
 
     static::$requestCount++;
 
-    $etagHit = 304 == $connection->getResponseHttpStatusCode();
+    $etagHit = 304 === $connection->getResponseHttpStatusCode();
 
     $headers = $connection->getResponseHeaders();
     $etagReceived = isset($headers['ETag']) ? $headers['ETag'] : null;
@@ -302,7 +302,7 @@ class FacebookRequest
    *
    * @return string
    */
-  public static function appendParamsToUrl($url, $params = array())
+  public static function appendParamsToUrl($url, array $params = array())
   {
     if (!$params) {
       return $url;
