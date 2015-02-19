@@ -25,19 +25,18 @@ namespace Facebook\Helpers;
 
 /**
  * Class FacebookJavaScriptLoginHelper
+ *
  * @package Facebook
  */
 class FacebookJavaScriptHelper extends FacebookSignedRequestFromInputHelper
 {
-
-  /**
-   * Get raw signed request from the cookie.
-   *
-   * @return string|null
-   */
-  public function getRawSignedRequest()
-  {
-    return $this->getRawSignedRequestFromCookie();
-  }
-
+    /**
+     * Get raw signed request from the cookie.
+     *
+     * @return string|null
+     */
+    public function getRawSignedRequest()
+    {
+        return $this->getRawSignedRequestFromCookie();
+    }
 }

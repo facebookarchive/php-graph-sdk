@@ -25,6 +25,7 @@ namespace Facebook\PersistentData;
 
 /**
  * Class FacebookMemoryPersistentDataHandler
+ *
  * @package Facebook
  */
 class FacebookMemoryPersistentDataHandler implements PersistentDataInterface

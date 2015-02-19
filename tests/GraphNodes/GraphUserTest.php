@@ -29,113 +29,112 @@ use Facebook\GraphNodes\GraphObjectFactory;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FacebookResponse
+     */
+    protected $responseMock;
 
-  /**
-   * @var FacebookResponse
-   */
-  protected $responseMock;
+    public function setUp()
+    {
+        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+    }
 
-  public function setUp()
-  {
-    $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
-  }
+    public function testDatesGetCastToDateTime()
+    {
+        $dataFromGraph = [
+            'birthday' => '1984-01-01',
+        ];
 
-  public function testDatesGetCastToDateTime()
-  {
-    $dataFromGraph = [
-      'birthday' => '1984-01-01',
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphUser();
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphUser();
+        $birthday = $graphObject->getBirthday();
 
-    $birthday = $graphObject->getBirthday();
+        $this->assertInstanceOf('DateTime', $birthday);
+    }
 
-    $this->assertInstanceOf('DateTime', $birthday);
-  }
+    public function testPagePropertiesWillGetCastAsGraphPageObjects()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo User',
+            'hometown' => [
+                'id' => '1',
+                'name' => 'Foo Place',
+            ],
+            'location' => [
+                'id' => '2',
+                'name' => 'Bar Place',
+            ],
+        ];
 
-  public function testPagePropertiesWillGetCastAsGraphPageObjects()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'name' => 'Foo User',
-      'hometown' => [
-        'id' => '1',
-        'name' => 'Foo Place',
-      ],
-      'location' => [
-        'id' => '2',
-        'name' => 'Bar Place',
-      ],
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphUser();
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphUser();
+        $hometown = $graphObject->getHometown();
+        $location = $graphObject->getLocation();
 
-    $hometown = $graphObject->getHometown();
-    $location = $graphObject->getLocation();
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $hometown);
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $location);
+    }
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $hometown);
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $location);
-  }
+    public function testUserPropertiesWillGetCastAsGraphUserObjects()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo User',
+            'significant_other' => [
+                'id' => '1337',
+                'name' => 'Bar User',
+            ],
+        ];
 
-  public function testUserPropertiesWillGetCastAsGraphUserObjects()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'name' => 'Foo User',
-      'significant_other' => [
-        'id' => '1337',
-        'name' => 'Bar User',
-      ],
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphUser();
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphUser();
+        $significantOther = $graphObject->getSignificantOther();
 
-    $significantOther = $graphObject->getSignificantOther();
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
+    }
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
-  }
+    public function testPicturePropertiesWillGetCastAsGraphPictureObjects()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo User',
+            'picture' => [
+                'is_silhouette' => true,
+                'url' => 'http://foo.bar',
+                'width' => 200,
+                'height' => 200,
+            ],
+        ];
 
-  public function testPicturePropertiesWillGetCastAsGraphPictureObjects()
-  {
-    $dataFromGraph = [
-        'id' => '123',
-        'name' => 'Foo User',
-        'picture' => [
-            'is_silhouette' => true,
-            'url' => 'http://foo.bar',
-            'width' => 200,
-            'height' => 200,
-        ],
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphUser();
 
-    $this->responseMock
-        ->shouldReceive('getDecodedBody')
-        ->once()
-        ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphUser();
+        $Picture = $graphObject->getPicture();
 
-    $Picture = $graphObject->getPicture();
-
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPicture', $Picture);
-    $this->assertTrue($Picture->isSilhouette());
-    $this->assertEquals(200, $Picture->getWidth());
-    $this->assertEquals(200, $Picture->getHeight());
-    $this->assertEquals('http://foo.bar', $Picture->getUrl());
-  }
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPicture', $Picture);
+        $this->assertTrue($Picture->isSilhouette());
+        $this->assertEquals(200, $Picture->getWidth());
+        $this->assertEquals(200, $Picture->getHeight());
+        $this->assertEquals('http://foo.bar', $Picture->getUrl());
+    }
 }

@@ -25,9 +25,9 @@ namespace Facebook\Exceptions;
 
 /**
  * Class FacebookSDKException
+ *
  * @package Facebook
  */
 class FacebookSDKException extends \Exception
 {
-
 }

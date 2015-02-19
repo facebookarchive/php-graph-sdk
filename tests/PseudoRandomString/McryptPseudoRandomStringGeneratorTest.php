@@ -27,20 +27,18 @@ use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
 
 class McryptPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCanGenerateRandomStringOfArbitraryLength()
+    {
+        if (!function_exists('mcrypt_create_iv')) {
+            $this->markTestSkipped(
+                'Mcrypt must be installed to test mcrypt_create_iv().'
+            );
+        }
 
-  public function testCanGenerateRandomStringOfArbitraryLength()
-  {
-    if ( ! function_exists('mcrypt_create_iv')) {
-      $this->markTestSkipped(
-        'Mcrypt must be installed to test mcrypt_create_iv().'
-      );
+        $prsg = new McryptPseudoRandomStringGenerator();
+        $randomString = $prsg->getPseudoRandomString(10);
+
+        $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
+        $this->assertEquals(10, mb_strlen($randomString));
     }
-
-    $prsg = new McryptPseudoRandomStringGenerator();
-    $randomString = $prsg->getPseudoRandomString(10);
-
-    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
-    $this->assertEquals(10, mb_strlen($randomString));
-  }
-
 }

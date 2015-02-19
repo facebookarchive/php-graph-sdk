@@ -25,159 +25,159 @@ namespace Facebook\GraphNodes;
 
 /**
  * Class GraphAlbum
+ *
  * @package Facebook
- * @author Daniele Grosso <daniele.grosso@gmail.com>
  */
 
 class GraphAlbum extends GraphObject
 {
-  /**
-   * @var array Maps object key names to Graph object types.
-   */
-  protected static $graphObjectMap = [
-    'from' => '\Facebook\GraphNodes\GraphUser',
-    'place' => '\Facebook\GraphNodes\GraphPage',
-  ];
+    /**
+     * @var array Maps object key names to Graph object types.
+     */
+    protected static $graphObjectMap = [
+        'from' => '\Facebook\GraphNodes\GraphUser',
+        'place' => '\Facebook\GraphNodes\GraphPage',
+    ];
 
-  /**
-   * Returns the ID for the album.
-   *
-   * @return string|null
-   */
-  public function getId()
-  {
-    return $this->getProperty('id');
-  }
+    /**
+     * Returns the ID for the album.
+     *
+     * @return string|null
+     */
+    public function getId()
+    {
+        return $this->getProperty('id');
+    }
 
-  /**
-   * Returns whether the viewer can upload photos to this album.
-   *
-   * @return boolean|null
-   */
-  public function getCanUpload()
-  {
-    return $this->getProperty('can_upload');
-  }
+    /**
+     * Returns whether the viewer can upload photos to this album.
+     *
+     * @return boolean|null
+     */
+    public function getCanUpload()
+    {
+        return $this->getProperty('can_upload');
+    }
 
-  /**
-   * Returns the number of photos in this album.
-   *
-   * @return int|null
-   */
-  public function getCount()
-  {
-    return $this->getProperty('count');
-  }
+    /**
+     * Returns the number of photos in this album.
+     *
+     * @return int|null
+     */
+    public function getCount()
+    {
+        return $this->getProperty('count');
+    }
 
-  /**
-   * Returns the ID of the album's cover photo.
-   *
-   * @return string|null
-   */
-  public function getCoverPhoto()
-  {
-    return $this->getProperty('cover_photo');
-  }
+    /**
+     * Returns the ID of the album's cover photo.
+     *
+     * @return string|null
+     */
+    public function getCoverPhoto()
+    {
+        return $this->getProperty('cover_photo');
+    }
 
-  /**
-   * Returns the time the album was initially created.
-   *
-   * @return \DateTime|null
-   */
-  public function getCreatedTime()
-  {
-    return $this->getProperty('created_time');
-  }
+    /**
+     * Returns the time the album was initially created.
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedTime()
+    {
+        return $this->getProperty('created_time');
+    }
 
-  /**
-   * Returns the time the album was updated.
-   *
-   * @return \DateTime|null
-   */
-  public function getUpdatedTime()
-  {
-    return $this->getProperty('updated_time');
-  }
+    /**
+     * Returns the time the album was updated.
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedTime()
+    {
+        return $this->getProperty('updated_time');
+    }
 
-  /**
-   * Returns the description of the album.
-   *
-   * @return string|null
-   */
-  public function getDescription()
-  {
-    return $this->getProperty('description');
-  }
+    /**
+     * Returns the description of the album.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->getProperty('description');
+    }
 
-  /**
-   * Returns profile that created the album.
-   *
-   * @return GraphUser|null
-   */
-  public function getFrom()
-  {
-    return $this->getProperty('from');
-  }
+    /**
+     * Returns profile that created the album.
+     *
+     * @return GraphUser|null
+     */
+    public function getFrom()
+    {
+        return $this->getProperty('from');
+    }
 
-  /**
-   * Returns profile that created the album.
-   *
-   * @return GraphPage|null
-   */
-  public function getPlace()
-  {
-    return $this->getProperty('place');
-  }
+    /**
+     * Returns profile that created the album.
+     *
+     * @return GraphPage|null
+     */
+    public function getPlace()
+    {
+        return $this->getProperty('place');
+    }
 
-  /**
-   * Returns a link to this album on Facebook.
-   *
-   * @return string|null
-   */
-  public function getLink()
-  {
-    return $this->getProperty('link');
-  }
+    /**
+     * Returns a link to this album on Facebook.
+     *
+     * @return string|null
+     */
+    public function getLink()
+    {
+        return $this->getProperty('link');
+    }
 
-  /**
-   * Returns the textual location of the album.
-   *
-   * @return string|null
-   */
-  public function getLocation()
-  {
-    return $this->getProperty('location');
-  }
+    /**
+     * Returns the textual location of the album.
+     *
+     * @return string|null
+     */
+    public function getLocation()
+    {
+        return $this->getProperty('location');
+    }
 
-  /**
-   * Returns the title of the album.
-   *
-   * @return string|null
-   */
-  public function getName()
-  {
-    return $this->getProperty('name');
-  }
+    /**
+     * Returns the title of the album.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->getProperty('name');
+    }
 
-  /**
-   * Returns the privacy settings for the album.
-   *
-   * @return string|null
-   */
-  public function getPrivacy()
-  {
-    return $this->getProperty('privacy');
-  }
+    /**
+     * Returns the privacy settings for the album.
+     *
+     * @return string|null
+     */
+    public function getPrivacy()
+    {
+        return $this->getProperty('privacy');
+    }
 
-  /**
-   * Returns the type of the album.
-   * enum{ profile, mobile, wall, normal, album }
-   *
-   * @return string|null
-   */
-  public function getType()
-  {
-    return $this->getProperty('type');
-  }
-
+    /**
+     * Returns the type of the album.
+     *
+     * enum{ profile, mobile, wall, normal, album }
+     *
+     * @return string|null
+     */
+    public function getType()
+    {
+        return $this->getProperty('type');
+    }
 }

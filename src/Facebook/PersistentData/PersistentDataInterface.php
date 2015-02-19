@@ -25,6 +25,7 @@ namespace Facebook\PersistentData;
 
 /**
  * Interface PersistentDataInterface
+ *
  * @package Facebook
  */
 interface PersistentDataInterface
@@ -42,7 +43,7 @@ interface PersistentDataInterface
      * Set a value in the persistent data store.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function set($key, $value);
 }

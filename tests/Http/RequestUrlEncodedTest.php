@@ -25,18 +25,16 @@ namespace Facebook\Tests\Http;
 
 use Facebook\Http\RequestBodyUrlEncoded;
 
-class RequestBodyUrlEncodedTest extends \PHPUnit_Framework_TestCase
+class RequestUrlEncodedTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCanProperlyEncodeAnArrayOfParams()
+    {
+        $message = new RequestBodyUrlEncoded([
+            'foo' => 'bar',
+            'scawy_vawues' => '@FooBar is a real twitter handle.',
+        ]);
+        $body = $message->getBody();
 
-  public function testCanProperlyEncodeAnArrayOfParams()
-  {
-    $message = new RequestBodyUrlEncoded([
-        'foo' => 'bar',
-        'scawy_vawues' => '@FooBar is a real twitter handle.',
-      ]);
-    $body = $message->getBody();
-
-    $this->assertEquals('foo=bar&scawy_vawues=%40FooBar+is+a+real+twitter+handle.', $body);
-  }
-
+        $this->assertEquals('foo=bar&scawy_vawues=%40FooBar+is+a+real+twitter+handle.', $body);
+    }
 }

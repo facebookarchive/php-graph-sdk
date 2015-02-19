@@ -1,7 +1,4 @@
 vendor/
 composer.lock
-composer.phar
-.DS_Store
-.idea/
 tests/FacebookTestCredentials.php
 

@@ -29,82 +29,81 @@ use Facebook\GraphNodes\GraphObjectFactory;
 class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
 
-  /**
-   * @var \Facebook\FacebookResponse
-   */
-  protected $responseMock;
+    /**
+     * @var \Facebook\FacebookResponse
+     */
+    protected $responseMock;
 
-  public function setUp()
-  {
-    $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
-  }
+    public function setUp()
+    {
+        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+    }
 
-  public function testDatesGetCastToDateTime()
-  {
-    $dataFromGraph = [
-      'created_time' => '2014-07-15T03:54:34+0000',
-      'updated_time' => '2014-07-12T01:24:09+0000',
-      'id' => '123',
-      'name' => 'Bar',
-    ];
+    public function testDatesGetCastToDateTime()
+    {
+        $dataFromGraph = [
+            'created_time' => '2014-07-15T03:54:34+0000',
+            'updated_time' => '2014-07-12T01:24:09+0000',
+            'id' => '123',
+            'name' => 'Bar',
+        ];
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphAlbum();
 
-    $createdTime = $graphObject->getCreatedTime();
-    $updatedTime = $graphObject->getUpdatedTime();
+        $createdTime = $graphObject->getCreatedTime();
+        $updatedTime = $graphObject->getUpdatedTime();
 
-    $this->assertInstanceOf('DateTime', $createdTime);
-    $this->assertInstanceOf('DateTime', $updatedTime);
-  }
+        $this->assertInstanceOf('DateTime', $createdTime);
+        $this->assertInstanceOf('DateTime', $updatedTime);
+    }
 
-  public function testFromGetsCastAsGraphUser()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'from' => [
-        'id' => '1337',
-        'name' => 'Foo McBar',
-      ],
-    ];
+    public function testFromGetsCastAsGraphUser()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'from' => [
+                'id' => '1337',
+                'name' => 'Foo McBar',
+            ],
+        ];
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphAlbum();
 
-    $from = $graphObject->getFrom();
+        $from = $graphObject->getFrom();
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
-  }
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
+    }
 
-  public function testPlacePropertyWillGetCastAsGraphPageObject()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'name' => 'Foo Album',
-      'place' => [
-        'id' => '1',
-        'name' => 'For Bar Place',
-      ]
-    ];
+    public function testPlacePropertyWillGetCastAsGraphPageObject()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo Album',
+            'place' => [
+                'id' => '1',
+                'name' => 'For Bar Place',
+            ]
+        ];
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphAlbum();
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphAlbum();
 
-    $place = $graphObject->getPlace();
+        $place = $graphObject->getPlace();
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
-  }
-
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
+    }
 }

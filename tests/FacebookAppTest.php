@@ -27,42 +27,40 @@ use Facebook\FacebookApp;
 
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FacebookApp
+     */
+    private $app;
 
-  /**
-   * @var FacebookApp
-   */
-  private $app;
+    public function setUp()
+    {
+        $this->app = new FacebookApp('id', 'secret');
+    }
 
-  public function setUp()
-  {
-    $this->app = new FacebookApp('id', 'secret');
-  }
+    public function testGetId()
+    {
+        $this->assertEquals('id', $this->app->getId());
+    }
 
-  public function testGetId()
-  {
-    $this->assertEquals('id', $this->app->getId());
-  }
+    public function testGetSecret()
+    {
+        $this->assertEquals('secret', $this->app->getSecret());
+    }
 
-  public function testGetSecret()
-  {
-    $this->assertEquals('secret', $this->app->getSecret());
-  }
+    public function testAnAppAccessTokenCanBeGenerated()
+    {
+        $accessToken = $this->app->getAccessToken();
 
-  public function testAnAppAccessTokenCanBeGenerated()
-  {
-    $accessToken = $this->app->getAccessToken();
+        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertEquals('id|secret', (string)$accessToken);
+    }
 
-    $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
-    $this->assertEquals('id|secret', (string) $accessToken);
-  }
+    public function testSerialization()
+    {
+        $newApp = unserialize(serialize($this->app));
 
-  public function testSerialization()
-  {
-    $newApp = unserialize(serialize($this->app));
-
-    $this->assertInstanceOf('Facebook\FacebookApp', $newApp);
-    $this->assertEquals('id', $newApp->getId());
-    $this->assertEquals('secret', $newApp->getSecret());
-  }
-
+        $this->assertInstanceOf('Facebook\FacebookApp', $newApp);
+        $this->assertEquals('id', $newApp->getId());
+        $this->assertEquals('secret', $newApp->getSecret());
+    }
 }

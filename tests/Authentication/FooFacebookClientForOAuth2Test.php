@@ -21,27 +21,38 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Tests\Authentication;
 
-/**
- * Interface FacebookHttpClientInterface
- *
- * @package Facebook
- */
-interface FacebookHttpClientInterface
+use Facebook\FacebookClient;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+
+class FooFacebookClientForOAuth2Test extends FacebookClient
 {
-    /**
-     * Sends a request to the server and returns the raw response.
-     *
-     * @param string $url     The endpoint to send the request to.
-     * @param string $method  The request method.
-     * @param string $body    The body of the request.
-     * @param array  $headers The request headers.
-     * @param int    $timeOut The timeout in seconds for the request.
-     *
-     * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-     *
-     * @throws \Facebook\Exceptions\FacebookSDKException
-     */
-    public function send($url, $method, $body, array $headers, $timeOut);
+    protected $response = '';
+
+    public function setMetadataResponse()
+    {
+        $this->response = '{"data":{"user_id":"444"}}';
+    }
+
+    public function setAccessTokenResponse()
+    {
+        $this->response = '{"access_token":"my_access_token","expires":"1422115200"}';
+    }
+
+    public function setCodeResponse()
+    {
+        $this->response = '{"code":"my_neat_code"}';
+    }
+
+    public function sendRequest(FacebookRequest $request)
+    {
+        return new FacebookResponse(
+            $request,
+            $this->response,
+            200,
+            []
+        );
+    }
 }

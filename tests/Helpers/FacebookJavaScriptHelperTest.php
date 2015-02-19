@@ -27,21 +27,19 @@ use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookJavaScriptHelper;
 
-class FacebookJavaScriptLoginHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookJavaScriptHelperTest extends \PHPUnit_Framework_TestCase
 {
+    public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
 
-  public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';
+    public function testARawSignedRequestCanBeRetrievedFromCookieData()
+    {
+        $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
 
-  public function testARawSignedRequestCanBeRetrievedFromCookieData()
-  {
-    $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
+        $app = new FacebookApp('123', 'foo_app_secret');
+        $helper = new FacebookJavaScriptHelper($app, new FacebookClient());
 
-    $app = new FacebookApp('123', 'foo_app_secret');
-    $helper = new FacebookJavaScriptHelper($app, new FacebookClient());
+        $rawSignedRequest = $helper->getRawSignedRequest();
 
-    $rawSignedRequest = $helper->getRawSignedRequest();
-
-    $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
-  }
-
+        $this->assertEquals($this->rawSignedRequestAuthorized, $rawSignedRequest);
+    }
 }

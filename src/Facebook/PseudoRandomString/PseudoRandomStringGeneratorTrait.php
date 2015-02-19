@@ -35,15 +35,11 @@ trait PseudoRandomStringGeneratorTrait
     public function validateLength($length)
     {
         if (!is_int($length)) {
-            throw new \InvalidArgumentException(
-                'getPseudoRandomString() expects an integer for the string length'
-            );
+            throw new \InvalidArgumentException('getPseudoRandomString() expects an integer for the string length');
         }
 
         if ($length < 1) {
-            throw new \InvalidArgumentException(
-                'getPseudoRandomString() expects a length greater than 1'
-            );
+            throw new \InvalidArgumentException('getPseudoRandomString() expects a length greater than 1');
         }
     }
 
@@ -51,7 +47,7 @@ trait PseudoRandomStringGeneratorTrait
      * Converts binary data to hexadecimal of arbitrary length.
      *
      * @param string $binaryData The binary data to convert to hex.
-     * @param int $length The length of the string to return.
+     * @param int    $length     The length of the string to return.
      *
      * @return string
      */

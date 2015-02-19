@@ -25,9 +25,9 @@ namespace Facebook\FileUpload;
 
 /**
  * Class FacebookVideo
+ *
  * @package Facebook
  */
 class FacebookVideo extends FacebookFile
 {
-  // The class left intentionally blank.
 }

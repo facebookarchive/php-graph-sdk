@@ -27,22 +27,20 @@ use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 
 class FacebookMemoryPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCanGetAndSetAVirtualValue()
+    {
+        $handler = new FacebookMemoryPersistentDataHandler();
+        $handler->set('foo', 'bar');
+        $value = $handler->get('foo');
 
-  public function testCanGetAndSetAVirtualValue()
-  {
-    $handler = new FacebookMemoryPersistentDataHandler();
-    $handler->set('foo', 'bar');
-    $value = $handler->get('foo');
+        $this->assertEquals('bar', $value);
+    }
 
-    $this->assertEquals('bar', $value);
-  }
+    public function testGettingAValueThatDoesntExistWillReturnNull()
+    {
+        $handler = new FacebookMemoryPersistentDataHandler();
+        $value = $handler->get('does_not_exist');
 
-  public function testGettingAValueThatDoesntExistWillReturnNull()
-  {
-    $handler = new FacebookMemoryPersistentDataHandler();
-    $value = $handler->get('does_not_exist');
-
-    $this->assertNull($value);
-  }
-
+        $this->assertNull($value);
+    }
 }

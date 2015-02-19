@@ -28,70 +28,68 @@ use Facebook\GraphNodes\GraphObjectFactory;
 
 class GraphPageTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Facebook\FacebookResponse
+     */
+    protected $responseMock;
 
-  /**
-   * @var \Facebook\FacebookResponse
-   */
-  protected $responseMock;
+    public function setUp()
+    {
+        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+    }
 
-  public function setUp()
-  {
-    $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
-  }
+    public function testPagePropertiesReturnGraphPageObjects()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo Page',
+            'best_page' => [
+                'id' => '1',
+                'name' => 'Bar Page',
+            ],
+            'global_brand_parent_page' => [
+                'id' => '2',
+                'name' => 'Faz Page',
+            ],
+        ];
 
-  public function testPagePropertiesReturnGraphPageObjects()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'name' => 'Foo Page',
-      'best_page' => [
-        'id' => '1',
-        'name' => 'Bar Page',
-      ],
-      'global_brand_parent_page' => [
-        'id' => '2',
-        'name' => 'Faz Page',
-      ],
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphPage();
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphPage();
+        $bestPage = $graphObject->getBestPage();
+        $globalBrandParentPage = $graphObject->getGlobalBrandParentPage();
 
-    $bestPage = $graphObject->getBestPage();
-    $globalBrandParentPage = $graphObject->getGlobalBrandParentPage();
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
+    }
 
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
-  }
+    public function testLocationPropertyWillGetCastAsGraphLocationObject()
+    {
+        $dataFromGraph = [
+            'id' => '123',
+            'name' => 'Foo Page',
+            'location' => [
+                'city' => 'Washington',
+                'country' => 'United States',
+                'latitude' => 38.881634205431,
+                'longitude' => -77.029121075722,
+                'state' => 'DC',
+            ],
+        ];
 
-  public function testLocationPropertyWillGetCastAsGraphLocationObject()
-  {
-    $dataFromGraph = [
-      'id' => '123',
-      'name' => 'Foo Page',
-      'location' => [
-        'city' => 'Washington',
-        'country' => 'United States',
-        'latitude' => 38.881634205431,
-        'longitude' => -77.029121075722,
-        'state' => 'DC',
-      ],
-    ];
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($dataFromGraph);
+        $factory = new GraphObjectFactory($this->responseMock);
+        $graphObject = $factory->makeGraphPage();
 
-    $this->responseMock
-      ->shouldReceive('getDecodedBody')
-      ->once()
-      ->andReturn($dataFromGraph);
-    $factory = new GraphObjectFactory($this->responseMock);
-    $graphObject = $factory->makeGraphPage();
+        $location = $graphObject->getLocation();
 
-    $location = $graphObject->getLocation();
-
-    $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
-  }
-
+        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
+    }
 }

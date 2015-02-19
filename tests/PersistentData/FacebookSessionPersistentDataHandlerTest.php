@@ -27,38 +27,36 @@ use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 
 class FacebookSessionPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     */
+    public function testInactiveSessionsWillThrow()
+    {
+        $handler = new FacebookSessionPersistentDataHandler();
+    }
 
-  /**
-   * @expectedException \Facebook\Exceptions\FacebookSDKException
-   */
-  public function testInactiveSessionsWillThrow()
-  {
-    $handler = new FacebookSessionPersistentDataHandler();
-  }
+    public function testCanSetAValue()
+    {
+        $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+        $handler->set('foo', 'bar');
 
-  public function testCanSetAValue()
-  {
-    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
-    $handler->set('foo', 'bar');
+        $this->assertEquals('bar', $_SESSION['FBRLH_foo']);
+    }
 
-    $this->assertEquals('bar', $_SESSION['FBRLH_foo']);
-  }
+    public function testCanGetAValue()
+    {
+        $_SESSION['FBRLH_faz'] = 'baz';
+        $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+        $value = $handler->get('faz');
 
-  public function testCanGetAValue()
-  {
-    $_SESSION['FBRLH_faz'] = 'baz';
-    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
-    $value = $handler->get('faz');
+        $this->assertEquals('baz', $value);
+    }
 
-    $this->assertEquals('baz', $value);
-  }
+    public function testGettingAValueThatDoesntExistWillReturnNull()
+    {
+        $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
+        $value = $handler->get('does_not_exist');
 
-  public function testGettingAValueThatDoesntExistWillReturnNull()
-  {
-    $handler = new FacebookSessionPersistentDataHandler($enableSessionCheck = false);
-    $value = $handler->get('does_not_exist');
-
-    $this->assertNull($value);
-  }
-
+        $this->assertNull($value);
+    }
 }

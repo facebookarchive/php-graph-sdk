@@ -27,20 +27,18 @@ use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
 
 class OpenSslPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCanGenerateRandomStringOfArbitraryLength()
+    {
+        if (!function_exists('openssl_random_pseudo_bytes')) {
+            $this->markTestSkipped(
+                'The OpenSSL extension must be enabled to test openssl_random_pseudo_bytes().'
+            );
+        }
 
-  public function testCanGenerateRandomStringOfArbitraryLength()
-  {
-    if ( ! function_exists('openssl_random_pseudo_bytes')) {
-      $this->markTestSkipped(
-        'The OpenSSL extension must be enabled to test openssl_random_pseudo_bytes().'
-      );
+        $prsg = new OpenSslPseudoRandomStringGenerator();
+        $randomString = $prsg->getPseudoRandomString(10);
+
+        $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
+        $this->assertEquals(10, mb_strlen($randomString));
     }
-
-    $prsg = new OpenSslPseudoRandomStringGenerator();
-    $randomString = $prsg->getPseudoRandomString(10);
-
-    $this->assertEquals(1, preg_match('/^([0-9a-f]+)$/', $randomString));
-    $this->assertEquals(10, mb_strlen($randomString));
-  }
-
 }

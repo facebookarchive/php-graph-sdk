@@ -24,12 +24,12 @@
 namespace Facebook\FileUpload;
 
 /**
- * Taken from Guzzle
- * @see https://github.com/guzzle/guzzle/blob/master/src/Mimetypes.php
- */
-
-/**
  * Provides mappings of file extensions to mimetypes
+ *
+ * Taken from Guzzle
+ *
+ * @see https://github.com/guzzle/guzzle/blob/master/src/Mimetypes.php
+ *
  * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
  */
 class Mimetypes
@@ -38,7 +38,7 @@ class Mimetypes
     protected static $instance;
 
     /** @var array Mapping of extension to mimetype */
-    protected $mimetypes = array(
+    protected $mimetypes = [
         '3dml' => 'text/vnd.in3d.3dml',
         '3g2' => 'video/3gpp2',
         '3gp' => 'video/3gpp',
@@ -942,7 +942,7 @@ class Mimetypes
         'zir' => 'application/vnd.zul',
         'zirz' => 'application/vnd.zul',
         'zmm' => 'application/vnd.handheld-entertainment+xml'
-    );
+    ];
 
     /**
      * Get a singleton instance of the class
@@ -965,15 +965,12 @@ class Mimetypes
      * @param string $extension File extension
      *
      * @return string|null
-     *
      */
     public function fromExtension($extension)
     {
         $extension = strtolower($extension);
 
-        return isset($this->mimetypes[$extension])
-            ? $this->mimetypes[$extension]
-            : null;
+        return isset($this->mimetypes[$extension]) ? $this->mimetypes[$extension] : null;
     }
 
     /**
