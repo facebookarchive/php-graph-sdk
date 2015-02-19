@@ -1,0 +1,9 @@
+<card>
+# Facebook\Helpers\FacebookPageTabHelper
+
+Page tabs are similar to the context to app canvases but are treated slightly differently. Use the `FacebookPageTabHelper` to obtain an access token or signed request within the context of a page tab.
+</card>
+
+<card>
+## Usage {#usage}
+</card>

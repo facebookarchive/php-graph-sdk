@@ -1,0 +1,23 @@
+<card>
+# Facebook SDK v4.1 for PHP
+
+The Facebook SDK for PHP provides developers with a modern, native library for accessing the Graph API and taking advantage of Facebook Login.  Usually this means you're developing with PHP for a Facebook Canvas app, building your own website, or adding server-side functionality to an app that already uses the [Facebook SDK for JavaScript](/docs/reference/javascript/).
+
+Take a look through our guide, [Getting Started with the Facebook SDK for PHP](/docs/php/gettingstarted), and then check out some of the examples below.
+</card>
+
+<card>
+## Examples {#examples}
+
+* [Retrieve a users profile](/docs/php/howto/profilewithgraphapi)
+* [Post a link to a users feed](/docs/php/howto/postwithgraphapi)
+* [Upload a photo to a users profile](/docs/php/howto/uploadphoto)
+
+</card>
+
+<card>
+## API Reference {#reference}
+
+For a full list of classes, see the API [reference page](/docs/php/reference).
+
+</card>

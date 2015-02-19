@@ -1,7 +1,8 @@
 Facebook SDK for PHP
 ====================
 
-[![Latest Stable Version](http://img.shields.io/packagist/v/facebook/php-sdk-v4.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
+[![Build Status](https://img.shields.io/travis/facebook/facebook-php-sdk-v4/master.svg)](https://travis-ci.org/facebook/facebook-php-sdk-v4)
+[![Development Version](https://img.shields.io/badge/Development%20Version-4.1.0-orange.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
 
 
 This repository contains the open source PHP SDK that allows you to access Facebook
@@ -11,38 +12,39 @@ Platform from your PHP app.
 Usage
 -----
 
-This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
+> **Note:** This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
 
-Minimal example:
+Simple GET example of a user's profile.
 
 ```php
-use Facebook\FacebookSession;
-use Facebook\FacebookRequest;
-use Facebook\GraphUser;
-use Facebook\FacebookRequestException;
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  //'default_access_token' => '{access-token}', // optional
+]);
 
-FacebookSession::setDefaultApplication('YOUR_APP_ID','YOUR_APP_SECRET');
-
-// Use one of the helper classes to get a FacebookSession object.
-//   FacebookRedirectLoginHelper
-//   FacebookCanvasLoginHelper
-//   FacebookJavaScriptLoginHelper
-// or create a FacebookSession with a valid access token:
-$session = new FacebookSession('access-token-here');
-
-// Get the GraphUser object for the current user:
+// Use one of the helper classes to get a Facebook\AccessToken entity.
+//   $helper = $fb->getRedirectLoginHelper();
+//   $helper = $fb->getJavaScriptHelper();
+//   $helper = $fb->getCanvasHelper();
+//   $helper = $fb->getPageTabHelper();
 
 try {
-  $me = (new FacebookRequest(
-    $session, 'GET', '/me'
-  ))->execute()->getGraphObject(GraphUser::className());
-  echo $me->getName();
-} catch (FacebookRequestException $e) {
-  // The Graph API returned an error
-} catch (\Exception $e) {
-  // Some other error occurred
+  // Get the Facebook\GraphNodes\GraphUser object for the current user.
+  // If you provided a 'default_access_token', the '{access-token}' is optional.
+  $response = $fb->get('/me', '{access-token}');
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  // When Graph returns an error
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  // When validation fails or other local issues
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
 }
 
+$me = $response->getGraphUser();
+echo 'Logged in as ' . $me->getName();
 ```
 
 Complete documentation, installation instructions, and examples are available at:

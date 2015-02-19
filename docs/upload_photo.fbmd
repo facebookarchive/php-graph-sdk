@@ -1,0 +1,39 @@
+<card>
+# Upload Photos to a User's Profile
+
+This example covers uploading a photo to the current User's profile using the Graph API and the Facebook SDK for PHP.
+
+It assumes that you've already acquired an access token using one of the helper classes found [here](/docs/php/sdk_reference#helpers).  The access token must have the `publish_actions` permission for this to work.
+
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FileUpload\FacebookFile`](/docs/php/FacebookFile), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
+</card>
+
+<card>
+## Example {#example}
+
+~~~~
+$fb = new Facebook\Facebook(/* . . . */);
+
+$data = [
+  'message' => 'My awesome photo upload example.',
+  'source' => $fb->fileToUpload('/path/to/photo.jpg'),
+];
+
+try {
+  // Returns a `Facebook\FacebookResponse` object
+  $response = $fb->post('/me/photos', $data);
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+
+echo 'Photo ID: ' . $graphObject['id'];
+~~~~
+
+Note that the `message` field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
+</card>
