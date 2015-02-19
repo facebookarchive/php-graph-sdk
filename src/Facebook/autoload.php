@@ -42,9 +42,10 @@ if (version_compare(PHP_VERSION, '5.4.0', '<')) {
  *
  * @return void
  */
-spl_autoload_register(function ($class) {
+spl_autoload_register(function ($class)
+{
     // project-specific namespace prefix
-    $prefix = '\Facebook\\';
+    $prefix = 'Facebook\\';
 
     // base directory for the namespace prefix
     $base_dir = defined('FACEBOOK_SDK_V4_SRC_DIR') ? FACEBOOK_SDK_V4_SRC_DIR : __DIR__ . '/';
