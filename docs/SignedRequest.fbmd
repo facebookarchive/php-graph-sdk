@@ -42,7 +42,7 @@ $signedRequest = $helper->getSignedRequest();
 ~~~~
 public string|null getRawSignedRequest()
 ~~~~
-Returns the original raw signed request in the form of a string.
+Returns the original raw encoded signed request in the form of a string.
 </card>
 
 <card>
@@ -58,7 +58,7 @@ Returns the [signed request payload](https://developers.facebook.com/docs/refere
 ~~~~
 public string|null get(string $key, string|null $default)
 ~~~~
-Returns a field from the signed request payload or `$default` if the value does not exist.
+Returns a [field from the signed request payload](https://developers.facebook.com/docs/reference/login/signed-request) or `$default` if the value does not exist.
 </card>
 
 <card>

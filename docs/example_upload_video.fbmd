@@ -1,0 +1,45 @@
+<card>
+# Video Upload Example
+
+This example covers uploading & posting a video to a user's timeline with the Facebook SDK for PHP.
+</card>
+
+<card>
+## Example {#example}
+
+%FB(devsite:markdown-wiki:info-card {
+  content: "Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.",
+  type: 'warning',
+})
+
+~~~~
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.2',
+  ]);
+
+$data = [
+  'title' => 'My Foo Video',
+  'description' => 'This video is full of foo and bar action.',
+  'source' => $fb->videoToUpload('/path/to/foo_bar.mp4'),
+];
+
+try {
+  $response = $fb->post('/me/videos', $data, 'user-access-token');
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  // When Graph returns an error
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  // When validation fails or other local issues
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
+}
+
+$graphObject = $response->getGraphObject();
+var_dump($graphObject);
+
+echo 'Video ID: ' . $graphObject['id'];
+~~~~
+</card>

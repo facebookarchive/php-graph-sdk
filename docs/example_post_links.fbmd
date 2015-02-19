@@ -5,7 +5,7 @@ This example covers posting a link to the current user's timeline using the Grap
 
 It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers). The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException).
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
 </card>
 
 <card>
@@ -15,6 +15,7 @@ For more information, see the documentation for [`Facebook\Facebook`](/docs/php/
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.2',
   ]);
 
 $linkData = [

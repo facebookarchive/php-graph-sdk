@@ -27,29 +27,8 @@ The `FacebookBatchRequest` entity does not actually make any calls to the Graph 
 Usage:
 
 ~~~~
-$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
-$requests = [
-  new Facebook\FacebookRequest(/* */),
-  new Facebook\FacebookRequest(/* */),
-];
-$batchRequest = new Facebook\FacebookBatchRequest($fbApp, $requests, '{access-token}');
-
-// Send the batch request to Graph
-try {
-  $batchResponse = $fb->getClient()->sendBatchRequest($batchRequest);
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
-}
-
-// OR
-
 $fb = new Facebook\Facebook(/* . . . */);
+
 $requests = [
   $fb->request('GET', '/me'),
   $fb->request('POST', '/me/feed', [/* */]),

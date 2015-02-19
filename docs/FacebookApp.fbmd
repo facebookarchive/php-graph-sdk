@@ -2,6 +2,11 @@
 # FacebookApp for the Facebook SDK for PHP
 
 In order to make requests to the Graph API, you need to [create a Facebook app](https://developers.facebook.com/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
+
+%FB(devsite:markdown-wiki:info-card {
+  content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\Facebook` service handles injecting it into the required classes for you.",
+  type: 'warning',
+})
 </card>
 
 <card>
@@ -20,7 +25,7 @@ $fb = new Facebook\Facebook([/* . . . */]);
 $fbApp = $fb->getApp();
 ~~~~
 
-In the most common cases, you'll rarely be using the `FacebookApp` entity directly but it plays an important role in the internal workings of the SDK.
+You'll rarely be using the `FacebookApp` entity directly unless you're doing some extreme customizations of the PHP SDK. But this entity plays an important role in the internal workings of the PHP SDK.
 </card>
 
 <card>
@@ -28,9 +33,9 @@ In the most common cases, you'll rarely be using the `FacebookApp` entity direct
 
 ### getAccessToken() {#get-access-token}
 ~~~~
-public Facebook\AccessToken getAccessToken()
+public Facebook\Authentication\AccessToken getAccessToken()
 ~~~~
-Returns an app access token in the form of a [`Facebook\AccessToken`](/docs/php/AccessToken) entity.
+Returns an app access token in the form of an [`AccessToken`](/docs/php/AccessToken) entity.
 </card>
 
 <card>
@@ -52,7 +57,7 @@ Returns an the app secret.
 <card>
 ## Serialization {#serialization}
 
-The `Facebook\FacebookApp` entity implements the `\Serializable` interface so it can be serialized and unserialized.
+The `Facebook\FacebookApp` entity can be serialized and unserialized.
 
 ~~~~
 $fbApp = new Facebook\FacebookApp('foo-app-id', 'foo-app-secret');

@@ -1,11 +1,11 @@
 # CHANGELOG
 
-As you may have already noticed, the Facebook SDK v4 does not follow strict [semver](http://semver.org/). The versioning format used for this SDK is more like `4.MAJOR.(MINOR|PATCH)`. The `MINOR` and `PATCH` versions are squashed together but there shouldn't be any breaking changes between `MINOR|PATCH` releases.
+As you may have already noticed, the Facebook SDK v4 does not follow strict [semver](http://semver.org/). The versioning format used for this SDK follows `4.MAJOR.(MINOR|PATCH)`. The `MINOR` and `PATCH` versions are squashed together but there shouldn't be any breaking changes between `MINOR|PATCH` releases.
 
 
 ## 4.1.x
 
-- 4.1.0 (2014-??-??)
+- 4.1.0 (2015-??-??)
   - Added batch support
   - Added `graph.beta.facebook.com` support
   - Moved exception classes to `Exception\*` directory

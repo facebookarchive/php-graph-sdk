@@ -54,7 +54,7 @@ $maxPages = 5;
 $pageCount = 0;
 
 do {
-  echo '<h1>Page #' . $page_count . ':</h1>' . "\n\n";
+  echo '<h1>Page #' . $pageCount . ':</h1>' . "\n\n";
 
   foreach ($listOfPages as $page) {
     var_dump($page->asArray());
