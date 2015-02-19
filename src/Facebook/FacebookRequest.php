@@ -218,7 +218,8 @@ class FacebookRequest
    */
   protected function getRequestURL()
   {
-    $lastInPath = end(explode('/', $this->path));
+    $explodedPath = explode('/', $this->path);
+    $lastInPath = end($explodedPath);
     if ($lastInPath == 'videos' && $this->method === 'POST') {
       $baseUrl = static::BASE_VIDEO_GRAPH_URL;
     } else {
