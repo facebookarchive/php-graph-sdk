@@ -37,8 +37,16 @@ $ ./vendor/bin/phpunit
 
 ## Running PHP Code Sniffer
 
+You can install [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) globally with composer.
+
 ``` bash
-$ ./vendor/bin/phpcs src --standard=psr2 -sp
+$ composer global require squizlabs/php_codesniffer
+```
+
+Then you can `cd` into the Facebook PHP SDK folder and run Code Sniffer against the `src/` directory.
+
+``` bash
+$ ~/.composer/vendor/bin/phpcs src --standard=psr2 -sp
 ```
 
 **Happy coding**!
