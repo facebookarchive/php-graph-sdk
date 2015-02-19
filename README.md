@@ -2,6 +2,7 @@ Facebook SDK for PHP
 ====================
 
 [![Build Status](https://img.shields.io/travis/facebook/facebook-php-sdk-v4/master.svg)](https://travis-ci.org/facebook/facebook-php-sdk-v4)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=master)
 [![Development Version](https://img.shields.io/badge/Development%20Version-4.1.0-orange.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
 
 
