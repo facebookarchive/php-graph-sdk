@@ -141,7 +141,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
    *
    * @throws \Facebook\FacebookSDKException
    */
-  public function send($url, $method = 'GET', array $parameters = array())
+  public function send($url, $method = 'GET', $parameters = array())
   {
     $this->openConnection($url, $method, $parameters);
     $this->tryToSendRequest();
