@@ -269,7 +269,19 @@ class FacebookRedirectLoginHelper
             throw new FacebookSDKException('Cross-site request forgery validation failed. Required param "state" missing.');
         }
 
-        if ($state !== $savedState) {
+        $savedLen = mb_strlen($savedState);
+        $givenLen = mb_strlen($state);
+
+        if ($savedLen !== $givenLen) {
+            throw new FacebookSDKException('Cross-site request forgery validation failed. Invalid "state" param provided.');
+        }
+
+        $result = 0;
+        for ($i = 0; $i < $savedLen; $i++) {
+          $result |= ord($state[$i]) ^ ord($savedState[$i]);
+        }
+
+        if ($result !== 0) {
             throw new FacebookSDKException('Cross-site request forgery validation failed. The "state" param from the URL and session do not match.');
         }
     }
