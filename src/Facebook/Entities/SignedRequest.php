@@ -325,8 +325,8 @@ class SignedRequest
   public static function validateCsrf(array $data, $state)
   {
     if (isset($data['state'])) {
-      $savedLen = mb_strlen($state);
-      $givenLen = mb_strlen($data['state']);
+      $savedLen = strlen($state);
+      $givenLen = strlen($data['state']);
       if ($savedLen == $givenLen) {
         $result = 0;
         for ($i = 0; $i < $savedLen; $i++) {
