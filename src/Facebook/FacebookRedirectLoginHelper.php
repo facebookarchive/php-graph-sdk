@@ -203,7 +203,7 @@ class FacebookRedirectLoginHelper
    */
   protected function isValidRedirect()
   {
-    $savedState = $this->getCode();
+    $savedState = $this->state;
     if (!$this->getCode() || !isset($_GET['state'])) {
       return false;
     }
