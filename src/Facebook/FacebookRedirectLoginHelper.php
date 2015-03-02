@@ -174,7 +174,6 @@ class FacebookRedirectLoginHelper
    */
   public function getSessionFromRedirect()
   {
-    $this->loadState();
     if ($this->isValidRedirect()) {
       $params = array(
         'client_id' => FacebookSession::_getTargetAppId($this->appId),
@@ -203,7 +202,7 @@ class FacebookRedirectLoginHelper
    */
   protected function isValidRedirect()
   {
-    $savedState = $this->state;
+    $savedState = $this->loadState();
     if (!$this->getCode() || !isset($_GET['state'])) {
       return false;
     }
