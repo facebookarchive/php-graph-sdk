@@ -69,7 +69,10 @@ class UrandomPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
                 'Unable to open stream to /dev/urandom.'
             );
         }
-        stream_set_read_buffer($stream, 0);
+
+        if (!defined('HHVM_VERSION')) {
+            stream_set_read_buffer($stream, 0);
+        }
 
         $binaryString = fread($stream, $length);
         fclose($stream);
