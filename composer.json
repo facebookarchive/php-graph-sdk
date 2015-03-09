@@ -19,6 +19,9 @@
         "mockery/mockery": "dev-master",
         "guzzlehttp/guzzle": "~4.0"
     },
+    "config": {
+        "bin-dir": "bin"
+    },
     "suggest": {
         "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
     },

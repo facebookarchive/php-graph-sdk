@@ -4,4 +4,5 @@ composer.phar
 .DS_Store
 .idea/
 tests/FacebookTestCredentials.php
+bin/
 
