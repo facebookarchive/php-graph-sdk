@@ -405,6 +405,7 @@ class Facebook
      * Sends a DELETE request to Graph and returns the result.
      *
      * @param string                  $endpoint
+	 * @param array                   $params
      * @param AccessToken|string|null $accessToken
      * @param string|null             $eTag
      * @param string|null             $graphVersion
@@ -413,12 +414,12 @@ class Facebook
      *
      * @throws FacebookSDKException
      */
-    public function delete($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
+    public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
         return $this->sendRequest(
             'DELETE',
             $endpoint,
-            $params = [],
+            $params,
             $accessToken,
             $eTag,
             $graphVersion
