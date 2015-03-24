@@ -405,7 +405,7 @@ class Facebook
      * Sends a DELETE request to Graph and returns the result.
      *
      * @param string                  $endpoint
-	 * @param array                   $params
+     * @param array                   $params
      * @param AccessToken|string|null $accessToken
      * @param string|null             $eTag
      * @param string|null             $graphVersion
