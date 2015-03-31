@@ -295,6 +295,7 @@ $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 ~~~~
 public Facebook\FacebookResponse delete(
   string $endpoint,
+  array $params,
   string|AccessToken|null $accessToken,
   string|null $eTag,
   string|null $graphVersion
@@ -303,10 +304,10 @@ public Facebook\FacebookResponse delete(
 
 Sends a DELETE request to Graph and returns a `Facebook\FacebookResponse`.
 
-The arguments are the same as `get()` above.
+The arguments are the same as `post()` above.
 
 ~~~~
-$response = $fb->delete('/{node-id}');
+$response = $fb->delete('/{node-id}', ['object' => '1234']);
 ~~~~
 </card>
 
