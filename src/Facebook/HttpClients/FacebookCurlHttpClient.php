@@ -181,7 +181,7 @@ class FacebookCurlHttpClient implements FacebookHttpable
     );
 
     if ($method !== 'GET') {
-      $options[CURLOPT_POSTFIELDS] = $parameters;
+      $options[CURLOPT_POSTFIELDS] = !$this->paramsHaveFile($parameters) ? http_build_query($parameters, null, '&') : $parameters;
     }
     if ($method === 'DELETE' || $method === 'PUT') {
       $options[CURLOPT_CUSTOMREQUEST] = $method;
@@ -324,6 +324,24 @@ class FacebookCurlHttpClient implements FacebookHttpable
     $version = $ver['version_number'];
 
     return $version < self::CURL_PROXY_QUIRK_VER;
+  }
+
+  /**
+   * Detect if the params have a file to upload.
+   *
+   * @param array $params
+   *
+   * @return boolean
+   */
+  private function paramsHaveFile(array $params)
+  {
+    foreach ($params as $value) {
+      if ($value instanceof \CURLFile) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

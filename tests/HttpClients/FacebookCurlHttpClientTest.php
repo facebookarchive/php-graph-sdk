@@ -37,7 +37,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->with(m::on(function($arg) {
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_HTTPHEADER     => [],
                 CURLOPT_URL            => 'http://foo.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 60,
@@ -72,11 +71,15 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     $this->curlMock
       ->shouldReceive('setopt_array')
       ->with(m::on(function($arg) {
+
+            // array_diff() will sometimes trigger error on multidimensional arrays
+            if (['X-foo: bar'] !== $arg[CURLOPT_HTTPHEADER]) {
+              return false;
+            }
+            unset($arg[CURLOPT_HTTPHEADER]);
+
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_HTTPHEADER     => array(
-                  'X-foo: bar',
-                ),
                 CURLOPT_URL            => 'http://foo.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 60,
@@ -114,7 +117,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->with(m::on(function($arg) {
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'POST',
-                CURLOPT_HTTPHEADER     => [],
                 CURLOPT_URL            => 'http://bar.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 60,
@@ -122,9 +124,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
                 CURLOPT_HEADER         => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
                 CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_POSTFIELDS     => array(
-                  'baz' => 'bar',
-                ),
+                CURLOPT_POSTFIELDS     => 'baz=bar&foo%5B0%5D=1&foo%5B1%5D=2&foo%5B2%5D=3',
               ]);
 
             if (count($caInfo) !== 1) {
@@ -140,47 +140,12 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->once()
       ->andReturn(null);
 
-    $this->curlClient->openConnection('http://bar.com', 'POST', array('baz' => 'bar'));
-  }
-
-  public function testCanOpenPutCurlConnection()
-  {
-    $this->curlMock
-      ->shouldReceive('init')
-      ->once()
-      ->andReturn(null);
-    $this->curlMock
-      ->shouldReceive('setopt_array')
-      ->with(m::on(function($arg) {
-            $caInfo = array_diff($arg, [
-                CURLOPT_CUSTOMREQUEST  => 'PUT',
-                CURLOPT_HTTPHEADER     => [],
-                CURLOPT_URL            => 'http://baz.com',
-                CURLOPT_CONNECTTIMEOUT => 10,
-                CURLOPT_TIMEOUT        => 60,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER         => true,
-                CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_POSTFIELDS     => array(
-                  'baz' => 'bar',
-                ),
-              ]);
-
-            if (count($caInfo) !== 1) {
-              return false;
-            }
-
-            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
-              return false;
-            }
-
-            return true;
-          }))
-      ->once()
-      ->andReturn(null);
-
-    $this->curlClient->openConnection('http://baz.com', 'PUT', array('baz' => 'bar'));
+    // Prove can support multidimensional params
+    $params = array(
+      'baz' => 'bar',
+      'foo' => array(1, 2, 3),
+    );
+    $this->curlClient->openConnection('http://bar.com', 'POST', $params);
   }
 
   public function testCanOpenDeleteCurlConnection()
@@ -194,7 +159,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
       ->with(m::on(function($arg) {
             $caInfo = array_diff($arg, [
                 CURLOPT_CUSTOMREQUEST  => 'DELETE',
-                CURLOPT_HTTPHEADER     => [],
                 CURLOPT_URL            => 'http://faz.com',
                 CURLOPT_CONNECTTIMEOUT => 10,
                 CURLOPT_TIMEOUT        => 60,
@@ -202,9 +166,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
                 CURLOPT_HEADER         => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
                 CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_POSTFIELDS     => array(
-                  'baz' => 'bar',
-                ),
+                CURLOPT_POSTFIELDS     => 'baz=bar',
               ]);
 
             if (count($caInfo) !== 1) {
