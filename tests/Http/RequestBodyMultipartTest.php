@@ -64,4 +64,48 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedBody, $body);
     }
+
+    public function testSupportsMultidimensionalParams()
+    {
+        $message = new RequestBodyMultipart([
+          'foo' => 'bar',
+          'faz' => [1,2,3],
+          'targeting' => [
+            'countries' => 'US,GB',
+            'age_min' => 13,
+          ],
+          'call_to_action' => [
+            'type' => 'LEARN_MORE',
+            'value' => [
+              'link' => 'http://example.com',
+              'sponsorship' => [
+                'image' => 'http://example.com/bar.jpg',
+              ],
+            ],
+          ],
+        ], [], 'foo_boundary');
+        $body = $message->getBody();
+
+        $expectedBody = "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"foo\"\r\n\r\nbar\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"faz[0]\"\r\n\r\n1\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"faz[1]\"\r\n\r\n2\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"faz[2]\"\r\n\r\n3\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"targeting[countries]\"\r\n\r\nUS,GB\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"targeting[age_min]\"\r\n\r\n13\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[type]\"\r\n\r\nLEARN_MORE\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][link]\"\r\n\r\nhttp://example.com\r\n";
+        $expectedBody .= "--foo_boundary\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][sponsorship][image]\"\r\n\r\nhttp://example.com/bar.jpg\r\n";
+        $expectedBody .= "--foo_boundary--\r\n";
+
+        $this->assertEquals($expectedBody, $body);
+    }
 }

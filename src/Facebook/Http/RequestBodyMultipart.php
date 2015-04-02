@@ -39,17 +39,17 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * @var string The boundary.
      */
-    protected $boundary;
+    private $boundary;
 
     /**
      * @var array The parameters to send with this request.
      */
-    protected $params = [];
+    private $params;
 
     /**
      * @var array The files to send with this request.
      */
-    protected $files = [];
+    private $files = [];
 
     /**
      * @param array  $params   The parameters to send with this request.
@@ -71,7 +71,8 @@ class RequestBodyMultipart implements RequestBodyInterface
         $body = '';
 
         // Compile normal params
-        foreach ($this->params as $k => $v) {
+        $params = $this->getNestedParams($this->params);
+        foreach ($params as $k => $v) {
             $body .= $this->getParamString($k, $v);
         }
 
@@ -132,6 +133,27 @@ class RequestBodyMultipart implements RequestBodyInterface
             $name,
             $value
         );
+    }
+
+    /**
+     * Returns the params as an array of nested params.
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    private function getNestedParams(array $params)
+    {
+        $query = http_build_query($params, null, '&');
+        $params = explode('&', $query);
+        $result = [];
+
+        foreach ($params as $param) {
+            list($key, $value) = explode('=', $param, 2);
+            $result[urldecode($key)] = urldecode($value);
+        }
+
+        return $result;
     }
 
     /**
