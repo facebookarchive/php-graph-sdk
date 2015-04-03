@@ -1,7 +1,7 @@
 Facebook SDK for PHP
 ====================
 
-[![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-4.0.20-blue.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
+[![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-4.0.23-blue.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
 
 
 This repository contains the open source PHP SDK that allows you to access Facebook
