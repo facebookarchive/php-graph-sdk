@@ -1,0 +1,8 @@
+filter:
+    paths:
+        - 'src/*'
+
+tools:
+    php_code_sniffer:
+        config:
+            standard: PSR2
