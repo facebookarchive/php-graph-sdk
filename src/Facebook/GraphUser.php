@@ -52,9 +52,24 @@ class GraphUser extends GraphObject
     return $this->getProperty('name');
   }
   
+  /**
+   * Returns the email for the user as a string if present.
+   *
+   * @return string|null
+   */
   public function getEmail()
   {
     return $this->getProperty('email');
+  }
+  
+  /**
+   * Returns the locale for the user as a string if present.
+   *
+   * @return string|null
+   */
+  public function getLocale()
+  {
+    return $this->getProperty('locale');
   }
 
   /**
