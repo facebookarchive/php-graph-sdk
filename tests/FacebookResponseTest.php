@@ -66,7 +66,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9', $appSecretProof);
     }
 
-    public function testASuccessfulJsonResponseWillBeDecodedToAGraphObject()
+    public function testASuccessfulJsonResponseWillBeDecodedToAGraphNode()
     {
         $graphResponseJson = '{"id":"123","name":"Foo"}';
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);

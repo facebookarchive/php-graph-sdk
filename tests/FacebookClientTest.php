@@ -255,7 +255,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         );
         $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphObject();
 
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObject);
         $this->assertNotNull($graphObject->getProperty('id'));
         $this->assertEquals('Foo Phpunit User', $graphObject->getProperty('name'));
 

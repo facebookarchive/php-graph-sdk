@@ -257,9 +257,9 @@ class FacebookResponse
     }
 
     /**
-     * Instantiate a new GraphObject from response.
+     * Instantiate a new GraphNode from response.
      *
-     * @param string|null $subclassName The GraphObject sub class to cast to.
+     * @param string|null $subclassName The GraphNode sub class to cast to.
      *
      * @return \Facebook\GraphNodes\GraphNode
      *
@@ -331,7 +331,7 @@ class FacebookResponse
     /**
      * Instantiate a new GraphEdge from response.
      *
-     * @param string|null $subclassName The GraphObject sub class to cast list items to.
+     * @param string|null $subclassName The GraphNode sub class to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
      * @return \Facebook\GraphNodes\GraphEdge

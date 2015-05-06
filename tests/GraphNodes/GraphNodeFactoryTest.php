@@ -61,7 +61,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAValidGraphObjectResponseWillNotThrow()
+    public function testAValidGraphNodeResponseWillNotThrow()
     {
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
@@ -73,7 +73,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Facebook\Exceptions\FacebookSDKException
      */
-    public function testANonGraphObjectResponseWillThrow()
+    public function testANonGraphNodeResponseWillThrow()
     {
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
         $res = new FacebookResponse($this->request, $data);
@@ -153,7 +153,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode', $fooObject);
     }
 
-    public function testAnUnknownGraphObjectWillBeCastAsAGenericGraphObject()
+    public function testAnUnknownGraphNodeWillBeCastAsAGenericGraphNode()
     {
         $data = json_encode([
             'id' => '123',
@@ -214,7 +214,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         ], $graphData[1]);
     }
 
-    public function testAGraphObjectWillBeCastAsAGraphObject()
+    public function testAGraphNodeWillBeCastAsAGraphNode()
     {
         $data = json_encode([
             'id' => '123',
@@ -235,7 +235,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         ], $graphData);
     }
 
-    public function testAGraphObjectWithARootDataKeyWillBeCastAsAGraphObject()
+    public function testAGraphNodeWithARootDataKeyWillBeCastAsAGraphNode()
     {
         $data = json_encode([
             'data' => [

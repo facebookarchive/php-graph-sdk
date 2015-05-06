@@ -27,7 +27,7 @@ use Facebook\GraphNodes\GraphNode;
 
 class GraphNodeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAnEmptyBaseGraphObjectCanInstantiate()
+    public function testAnEmptyBaseGraphNodeCanInstantiate()
     {
         $graphObject = new GraphNode();
         $backingData = $graphObject->asArray();
@@ -35,7 +35,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $backingData);
     }
 
-    public function testAGraphObjectCanInstantiateWithData()
+    public function testAGraphNodeCanInstantiateWithData()
     {
         $graphObject = new GraphNode(['foo' => 'bar']);
         $backingData = $graphObject->asArray();
@@ -94,7 +94,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1405395893, $timeStamp);
     }
 
-    public function testUncastingAGraphObjectWillUncastTheDateTimeObject()
+    public function testUncastingAGraphNodeWillUncastTheDateTimeObject()
     {
         $collectionOne = new GraphNode(['foo', 'bar']);
         $collectionTwo = new GraphNode([
@@ -112,7 +112,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
         ], $uncastArray);
     }
 
-    public function testGettingGraphObjectAsAnArrayWillNotUncastTheDateTimeObject()
+    public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
     {
         $collection = new GraphNode([
             'id' => '123',

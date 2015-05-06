@@ -50,18 +50,18 @@ class GraphEdge extends Collection
     protected $parentEdgeEndpoint;
 
     /**
-     * @var string|null The subclass of the child GraphObject's.
+     * @var string|null The subclass of the child GraphNode's.
      */
     protected $subclassName;
 
     /**
-     * Init this collection of GraphObject's.
+     * Init this collection of GraphNode's.
      *
      * @param FacebookRequest $request            The original request that generated this data.
-     * @param array           $data               An array of GraphObject's.
+     * @param array           $data               An array of GraphNode's.
      * @param array           $metaData           An array of Graph meta data like pagination, etc.
      * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
-     * @param string|null     $subclassName       The subclass of the child GraphObject's.
+     * @param string|null     $subclassName       The subclass of the child GraphNode's.
      */
     public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
     {
@@ -84,7 +84,7 @@ class GraphEdge extends Collection
     }
 
     /**
-     * Gets the subclass name that the child GraphObject's are cast as.
+     * Gets the subclass name that the child GraphNode's are cast as.
      *
      * @return string|null
      */

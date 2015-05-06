@@ -473,7 +473,7 @@ class Facebook
 
         $this->lastResponse = $this->client->sendRequest($paginationRequest);
 
-        // Keep the same GraphObject subclass
+        // Keep the same GraphNode subclass
         $subClassName = $graphList->getSubClassName();
         $graphList = $this->lastResponse->getGraphList($subClassName, false);
 
