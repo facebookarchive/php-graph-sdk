@@ -269,7 +269,7 @@ class FacebookResponse
     {
         $factory = new GraphNodeFactory($this);
 
-        return $factory->makeGraphObject($subclassName);
+        return $factory->makeGraphNode($subclassName);
     }
 
     /**
@@ -342,6 +342,6 @@ class FacebookResponse
     {
         $factory = new GraphNodeFactory($this);
 
-        return $factory->makeGraphList($subclassName, $auto_prefix);
+        return $factory->makeGraphEdge($subclassName, $auto_prefix);
     }
 }
