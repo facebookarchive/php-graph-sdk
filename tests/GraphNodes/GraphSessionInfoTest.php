@@ -24,7 +24,7 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
 
         $graphObject = $factory->makeGraphSessionInfo();
 

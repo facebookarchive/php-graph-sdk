@@ -23,7 +23,7 @@
  */
 namespace Facebook;
 
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 
@@ -267,7 +267,7 @@ class FacebookResponse
      */
     public function getGraphObject($subclassName = null)
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphObject($subclassName);
     }
@@ -281,7 +281,7 @@ class FacebookResponse
      */
     public function getGraphAlbum()
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphAlbum();
     }
@@ -295,7 +295,7 @@ class FacebookResponse
      */
     public function getGraphPage()
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphPage();
     }
@@ -309,7 +309,7 @@ class FacebookResponse
      */
     public function getGraphSessionInfo()
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphSessionInfo();
     }
@@ -323,7 +323,7 @@ class FacebookResponse
      */
     public function getGraphUser()
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphUser();
     }
@@ -340,7 +340,7 @@ class FacebookResponse
      */
     public function getGraphList($subclassName = null, $auto_prefix = true)
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphList($subclassName, $auto_prefix);
     }

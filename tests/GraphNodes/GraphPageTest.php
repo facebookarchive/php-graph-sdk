@@ -24,7 +24,7 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphPageTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphPage();
 
         $bestPage = $graphObject->getBestPage();
@@ -85,7 +85,7 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphPage();
 
         $location = $graphObject->getLocation();

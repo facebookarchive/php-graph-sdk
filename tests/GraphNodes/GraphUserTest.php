@@ -25,7 +25,7 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\FacebookResponse;
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphUser();
 
         $birthday = $graphObject->getBirthday();
@@ -76,7 +76,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphUser();
 
         $hometown = $graphObject->getHometown();
@@ -101,7 +101,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphUser();
 
         $significantOther = $graphObject->getSignificantOther();
@@ -126,7 +126,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphUser();
 
         $Picture = $graphObject->getPicture();
