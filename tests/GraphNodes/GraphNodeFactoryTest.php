@@ -26,7 +26,7 @@ namespace Facebook\Tests\GraphNodes;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphNode;
 
 class MyFooSubClassGraphNode extends GraphNode
@@ -40,7 +40,7 @@ class MyFooGraphNode extends GraphNode
     ];
 }
 
-class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
+class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Facebook\FacebookRequest
@@ -66,7 +66,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphObject();
     }
 
@@ -78,7 +78,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphObject();
     }
 
@@ -87,7 +87,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphList();
     }
 
@@ -99,15 +99,15 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphList();
     }
 
     public function testOnlyNumericArraysAreCastableAsAGraphList()
     {
-        $shouldPassOne = GraphObjectFactory::isCastableAsGraphList([]);
-        $shouldPassTwo = GraphObjectFactory::isCastableAsGraphList(['foo', 'bar']);
-        $shouldFail = GraphObjectFactory::isCastableAsGraphList(['faz' => 'baz']);
+        $shouldPassOne = GraphNodeFactory::isCastableAsGraphList([]);
+        $shouldPassTwo = GraphNodeFactory::isCastableAsGraphList(['foo', 'bar']);
+        $shouldFail = GraphNodeFactory::isCastableAsGraphList(['faz' => 'baz']);
 
         $this->assertTrue($shouldPassOne, 'Expected the given array to be castable as a GraphList.');
         $this->assertTrue($shouldPassTwo, 'Expected the given array to be castable as a GraphList.');
@@ -119,14 +119,14 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSubClassesWillThrow()
     {
-        GraphObjectFactory::validateSubclass('FooSubClass');
+        GraphNodeFactory::validateSubclass('FooSubClass');
     }
 
     public function testValidSubClassesWillNotThrow()
     {
-        GraphObjectFactory::validateSubclass('\Facebook\GraphNodes\GraphNode');
-        GraphObjectFactory::validateSubclass('\Facebook\GraphNodes\GraphAlbum');
-        GraphObjectFactory::validateSubclass('\Facebook\Tests\GraphNodes\MyFooGraphNode');
+        GraphNodeFactory::validateSubclass('\Facebook\GraphNodes\GraphNode');
+        GraphNodeFactory::validateSubclass('\Facebook\GraphNodes\GraphAlbum');
+        GraphNodeFactory::validateSubclass('\Facebook\Tests\GraphNodes\MyFooGraphNode');
     }
 
     public function testCastingAsASubClassObjectWillInstantiateTheSubClass()
@@ -134,7 +134,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
 
         $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
@@ -145,7 +145,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = '{"id":"123","name":"Foo Name","foo_object":{"id":"1337","name":"Should be sub classed!"}}';
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
         $fooObject = $mySubClassObject->getProperty('foo_object');
 
@@ -165,7 +165,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
 
         $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
         $unknownObject = $mySubClassObject->getProperty('unknown_object');
@@ -197,7 +197,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $graphList = $factory->makeGraphList();
         $graphData = $graphList->asArray();
 
@@ -223,7 +223,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $graphObject = $factory->makeGraphObject();
         $graphData = $graphObject->asArray();
 
@@ -247,7 +247,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $graphObject = $factory->makeGraphObject();
         $graphData = $graphObject->asArray();
 
@@ -343,7 +343,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $data = json_encode($dataFromGraph);
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $graphObject = $factory->makeGraphList();
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphObject);
 
@@ -420,7 +420,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $res = new FacebookResponse($this->request, $data);
 
-        $factory = new GraphObjectFactory($res);
+        $factory = new GraphNodeFactory($res);
         $graphList = $factory->makeGraphList();
         $topGraphEdge = $graphList->getParentGraphEdge();
         $childGraphEdgeOne = $graphList[0]['likes']->getParentGraphEdge();

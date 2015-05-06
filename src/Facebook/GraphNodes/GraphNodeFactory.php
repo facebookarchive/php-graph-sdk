@@ -40,7 +40,7 @@ use Facebook\Exceptions\FacebookSDKException;
  * GraphNode - MAY contain DateTime's "primitives"
  * GraphNode - MAY contain string's "primitives"
  */
-class GraphObjectFactory
+class GraphNodeFactory
 {
 
     /**
