@@ -7,7 +7,7 @@
         stopOnFailure="false"
         bootstrap="tests/bootstrap.php">
     <testsuites>
-        <testsuite name="Facebook PHP SDK v4 Test Suite">
+        <testsuite name="Facebook PHP SDK Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

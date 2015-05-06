@@ -17,6 +17,8 @@ We accept contributions via Pull Requests on [Github](https://github.com/faceboo
 
 - **Document any change in behaviour** - Make sure the README and the [documentation](https://github.com/facebook/facebook-php-sdk-v4/tree/master/docs) are kept up-to-date.
 
+- **Consider our release cycle** - As of version 5.0.0, we try to follow [SemVer](http://semver.org/). Randomly breaking public APIs is not an option.
+
 - **Create topic branches** - Don't ask us to pull from your master branch.
 
 - **One pull request per feature** - If you want to do more than one thing, send multiple pull requests.

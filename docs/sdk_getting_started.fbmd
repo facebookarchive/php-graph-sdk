@@ -7,7 +7,7 @@ Whether you're developing a website with Facebook login, creating a Facebook Can
 <card>
 ## Autoloading & namespaces {#psr-4}
 
-The Facebook PHP SDK v4.x is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
+The Facebook PHP SDK v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
 
 It would be advantageous to familiarize yourself with the concepts of [namespacing](http://php.net/manual/en/language.namespaces.rationale.php) and [autoloading](http://php.net/manual/en/function.spl-autoload-register.php) if you are not already acquainted with them.
 </card>
@@ -34,14 +34,14 @@ There are two methods to install the Facebook PHP SDK. The recommended installat
 ~~~
 {
   "require" : {
-    "facebook/php-sdk-v4" : "~4.1.0"
+    "facebook/php-sdk-v4" : "~5.0"
   }
 }
 ~~~
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "The Facebook SDK v4 does not follow [SemVer](http://semver.org/). The versioning format used for the SDK  is `4.MAJOR.(MINOR|PATCH)`. The `MINOR` and `PATCH` versions are squashed together but there shouldn't be any breaking changes between `MINOR|PATCH` releases. That's why it is important to use all three version numbers in composer when using the `~` operator, e.g. `~4.1.0`. This will ensure you don't inadvertently download a version with breaking changes in it.",
-  type: 'warning',
+  content: "The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.",
+  type: 'info',
 })
 
 Then run `composer install` from the command line, and composer will download the latest version of the SDK and put it in the `/vendor/` directory.
@@ -59,8 +59,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 First, download the source code and unzip it wherever you like in your project.
 
 %FB(devsite:markdown-wiki:button {
- text: 'Download the PHP SDK v4.1',
- href: 'https://github.com/facebook/facebook-php-sdk-v4/archive/4.1-dev.zip',
+ text: 'Download the PHP SDK v5.0',
+ href: 'https://github.com/facebook/facebook-php-sdk-v4/archive/5.0-dev.zip',
  size: 'large',
  use: 'special',
 })
@@ -85,21 +85,21 @@ The source code includes myriad files that aren't necessary for use in a product
 
 After downloading the source code with the button above, extract the files in a temporary directory.
 
-Move the folder `src/Facebook` to the root of your website installation or where ever you like to put 3rd-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v4.1`.
+Move the folder `src/Facebook` to the root of your website installation or where ever you like to put 3rd-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v5`.
 
-The path the the core SDK files should now be located in `/var/html/facebook-sdk-v4.1` and inside will also be the `autolaoder.php` file.
+The path the the core SDK files should now be located in `/var/html/facebook-sdk-v5` and inside will also be the `autolaoder.php` file.
 
 Assuming we have a script called `index.php` in the root of our web project, we need to include the autoloader at the top of our script.
 
 ~~~
-require_once __DIR__ . '/facebook-sdk-v4.1/autoload.php';
+require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ~~~
 
 If the autoloader is having trouble detecting the path to the source files, we can define the location of the source code before the `require_once` statement.
 
 ~~~
-define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v4.1/');
-require_once __DIR__ . '/facebook-sdk-v4.1/autoload.php';
+define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v5/');
+require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ~~~
 </card>
 
