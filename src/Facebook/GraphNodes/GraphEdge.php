@@ -28,11 +28,11 @@ use Facebook\Url\FacebookUrlManipulator;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
- * Class GraphList
+ * Class GraphEdge
  *
  * @package Facebook
  */
-class GraphList extends Collection
+class GraphEdge extends Collection
 {
     /**
      * @var FacebookRequest The original request that generated this data.
@@ -94,7 +94,7 @@ class GraphList extends Collection
     }
 
     /**
-     * Returns the raw meta data associated with this GraphList.
+     * Returns the raw meta data associated with this GraphEdge.
      *
      * @return array
      */

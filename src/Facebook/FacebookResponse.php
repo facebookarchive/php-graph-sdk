@@ -329,12 +329,12 @@ class FacebookResponse
     }
 
     /**
-     * Instantiate a new GraphList from response.
+     * Instantiate a new GraphEdge from response.
      *
      * @param string|null $subclassName The GraphObject sub class to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
-     * @return \Facebook\GraphNodes\GraphList
+     * @return \Facebook\GraphNodes\GraphEdge
      *
      * @throws FacebookSDKException
      */

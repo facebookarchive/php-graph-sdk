@@ -25,9 +25,9 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
-use Facebook\GraphNodes\GraphList;
+use Facebook\GraphNodes\GraphEdge;
 
-class GraphListTest extends \PHPUnit_Framework_TestCase
+class GraphEdgeTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -66,19 +66,19 @@ class GraphListTest extends \PHPUnit_Framework_TestCase
     public function testNonGetRequestsWillThrow()
     {
         $this->request->setMethod('POST');
-        $graphList = new GraphList($this->request);
-        $graphList->validateForPagination();
+        $graphEdge = new GraphEdge($this->request);
+        $graphEdge->validateForPagination();
     }
 
     public function testCanReturnGraphGeneratedPaginationEndpoints()
     {
-        $graphList = new GraphList(
+        $graphEdge = new GraphEdge(
             $this->request,
             [],
             ['paging' => $this->basePagination]
         );
-        $nextPage = $graphList->getPaginationUrl('next');
-        $prevPage = $graphList->getPaginationUrl('previous');
+        $nextPage = $graphEdge->getPaginationUrl('next');
+        $prevPage = $graphEdge->getPaginationUrl('previous');
 
         $this->assertEquals('/998899/photos?pretty=0&limit=25&after=foo_after_cursor', $nextPage);
         $this->assertEquals('/998899/photos?pretty=0&limit=25&before=foo_before_cursor', $prevPage);
@@ -86,14 +86,14 @@ class GraphListTest extends \PHPUnit_Framework_TestCase
 
     public function testCanGeneratePaginationEndpointsFromACursor()
     {
-        $graphList = new GraphList(
+        $graphEdge = new GraphEdge(
             $this->request,
             [],
             ['paging' => $this->cursorPagination],
             '/1234567890/likes'
         );
-        $nextPage = $graphList->getPaginationUrl('next');
-        $prevPage = $graphList->getPaginationUrl('previous');
+        $nextPage = $graphEdge->getPaginationUrl('next');
+        $prevPage = $graphEdge->getPaginationUrl('previous');
 
         $this->assertEquals('/1234567890/likes?access_token=foo_token&after=bar_after_cursor&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&foo=bar&keep=me', $nextPage);
         $this->assertEquals('/1234567890/likes?access_token=foo_token&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&before=bar_before_cursor&foo=bar&keep=me', $prevPage);
@@ -101,14 +101,14 @@ class GraphListTest extends \PHPUnit_Framework_TestCase
 
     public function testCanInstantiateNewPaginationRequest()
     {
-        $graphList = new GraphList(
+        $graphEdge = new GraphEdge(
             $this->request,
             [],
             ['paging' => $this->cursorPagination],
             '/1234567890/likes'
         );
-        $nextPage = $graphList->getNextPageRequest();
-        $prevPage = $graphList->getPreviousPageRequest();
+        $nextPage = $graphEdge->getNextPageRequest();
+        $prevPage = $graphEdge->getPreviousPageRequest();
 
         $this->assertInstanceOf('Facebook\FacebookRequest', $nextPage);
         $this->assertInstanceOf('Facebook\FacebookRequest', $prevPage);

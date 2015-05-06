@@ -32,11 +32,11 @@ use Facebook\Exceptions\FacebookSDKException;
  * @package Facebook
  *
  * ## Assumptions ##
- * GraphList - is ALWAYS a numeric array
- * GraphList - is ALWAYS an array of GraphNode types
+ * GraphEdge - is ALWAYS a numeric array
+ * GraphEdge - is ALWAYS an array of GraphNode types
  * GraphNode - is ALWAYS an associative array
  * GraphNode - MAY contain GraphNode's "recurrable"
- * GraphNode - MAY contain GraphList's "recurrable"
+ * GraphNode - MAY contain GraphEdge's "recurrable"
  * GraphNode - MAY contain DateTime's "primitives"
  * GraphNode - MAY contain string's "primitives"
  */
@@ -152,12 +152,12 @@ class GraphNodeFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphList.
+     * Tries to convert a FacebookResponse entity into a GraphEdge.
      *
      * @param string|null $subclassName The GraphNode sub class to cast the list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
-     * @return GraphList
+     * @return GraphEdge
      *
      * @throws FacebookSDKException
      */
@@ -194,14 +194,14 @@ class GraphNodeFactory
     {
         if (isset($this->decodedBody['data']) && static::isCastableAsGraphList($this->decodedBody['data'])) {
             throw new FacebookSDKException(
-                'Unable to convert response from Graph to a GraphNode because the response looks like a GraphList. Try using GraphObjectFactory::makeGraphList() instead.',
+                'Unable to convert response from Graph to a GraphNode because the response looks like a GraphEdge. Try using GraphObjectFactory::makeGraphList() instead.',
                 620
             );
         }
     }
 
     /**
-     * Validates that the return data can be cast as a GraphList.
+     * Validates that the return data can be cast as a GraphEdge.
      *
      * @throws FacebookSDKException
      */
@@ -209,7 +209,7 @@ class GraphNodeFactory
     {
         if (!(isset($this->decodedBody['data']) && static::isCastableAsGraphList($this->decodedBody['data']))) {
             throw new FacebookSDKException(
-                'Unable to convert response from Graph to a GraphList because the response does not look like a GraphList. Try using GraphObjectFactory::makeGraphObject() instead.',
+                'Unable to convert response from Graph to a GraphEdge because the response does not look like a GraphEdge. Try using GraphObjectFactory::makeGraphObject() instead.',
                 620
             );
         }
@@ -246,7 +246,7 @@ class GraphNodeFactory
                     ? $graphObjectMap[$k]
                     : null;
 
-                // Could be a GraphList or GraphNode
+                // Could be a GraphEdge or GraphNode
                 $items[$k] = $this->castAsGraphObjectOrGraphList($v, $objectSubClass, $k, $parentNodeId);
             } else {
                 $items[$k] = $v;
@@ -264,14 +264,14 @@ class GraphNodeFactory
      * @param string|null $parentKey    The key of this data (Graph edge).
      * @param string|null $parentNodeId The parent Graph node ID.
      *
-     * @return GraphNode|GraphList
+     * @return GraphNode|GraphEdge
      *
      * @throws FacebookSDKException
      */
     public function castAsGraphObjectOrGraphList(array $data, $subclassName = null, $parentKey = null, $parentNodeId = null)
     {
         if (isset($data['data'])) {
-            // Create GraphList
+            // Create GraphEdge
             if (static::isCastableAsGraphList($data['data'])) {
                 return $this->safelyMakeGraphList($data, $subclassName, $parentKey, $parentNodeId);
             }
@@ -291,14 +291,14 @@ class GraphNodeFactory
      * @param string|null $parentKey    The key of this data (Graph edge).
      * @param string|null $parentNodeId The parent Graph node ID.
      *
-     * @return GraphList
+     * @return GraphEdge
      *
      * @throws FacebookSDKException
      */
     public function safelyMakeGraphList(array $data, $subclassName = null, $parentKey = null, $parentNodeId = null)
     {
         if (!isset($data['data'])) {
-            throw new FacebookSDKException('Cannot cast data to GraphList. Expected a "data" key.', 620);
+            throw new FacebookSDKException('Cannot cast data to GraphEdge. Expected a "data" key.', 620);
         }
 
         $dataList = [];
@@ -308,10 +308,10 @@ class GraphNodeFactory
 
         $metaData = $this->getMetaData($data);
 
-        // We'll need to make an edge endpoint for this in case it's a GraphList (for cursor pagination)
+        // We'll need to make an edge endpoint for this in case it's a GraphEdge (for cursor pagination)
         $parentGraphEdgeEndpoint = $parentNodeId && $parentKey ? '/' . $parentNodeId . '/' . $parentKey : null;
 
-        return new GraphList($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
+        return new GraphEdge($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
     }
 
     /**
@@ -329,7 +329,7 @@ class GraphNodeFactory
     }
 
     /**
-     * Determines whether or not the data should be cast as a GraphList.
+     * Determines whether or not the data should be cast as a GraphEdge.
      *
      * @param array $data
      *
@@ -341,7 +341,7 @@ class GraphNodeFactory
             return true;
         }
 
-        // Checks for a sequential numeric array which would be a GraphList
+        // Checks for a sequential numeric array which would be a GraphEdge
         return array_keys($data) === range(0, count($data) - 1);
     }
 

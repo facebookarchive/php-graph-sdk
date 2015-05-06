@@ -82,7 +82,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->validateResponseCastableAsGraphObject();
     }
 
-    public function testAValidGraphListResponseWillNotThrow()
+    public function testAValidGraphEdgeResponseWillNotThrow()
     {
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
         $res = new FacebookResponse($this->request, $data);
@@ -94,7 +94,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Facebook\Exceptions\FacebookSDKException
      */
-    public function testANonGraphListResponseWillThrow()
+    public function testANonGraphEdgeResponseWillThrow()
     {
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
@@ -103,15 +103,15 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->validateResponseCastableAsGraphList();
     }
 
-    public function testOnlyNumericArraysAreCastableAsAGraphList()
+    public function testOnlyNumericArraysAreCastableAsAGraphEdge()
     {
         $shouldPassOne = GraphNodeFactory::isCastableAsGraphList([]);
         $shouldPassTwo = GraphNodeFactory::isCastableAsGraphList(['foo', 'bar']);
         $shouldFail = GraphNodeFactory::isCastableAsGraphList(['faz' => 'baz']);
 
-        $this->assertTrue($shouldPassOne, 'Expected the given array to be castable as a GraphList.');
-        $this->assertTrue($shouldPassTwo, 'Expected the given array to be castable as a GraphList.');
-        $this->assertFalse($shouldFail, 'Expected the given array to not be castable as a GraphList.');
+        $this->assertTrue($shouldPassOne, 'Expected the given array to be castable as a GraphEdge.');
+        $this->assertTrue($shouldPassTwo, 'Expected the given array to be castable as a GraphEdge.');
+        $this->assertFalse($shouldFail, 'Expected the given array to not be castable as a GraphEdge.');
     }
 
     /**
@@ -175,7 +175,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertNotInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $unknownObject);
     }
 
-    public function testAListFromGraphWillBeCastAsAGraphList()
+    public function testAListFromGraphWillBeCastAsAGraphEdge()
     {
         $data = json_encode([
             'data' => [
@@ -198,10 +198,10 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
-        $graphList = $factory->makeGraphList();
-        $graphData = $graphList->asArray();
+        $graphEdge = $factory->makeGraphList();
+        $graphData = $graphEdge->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphList);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $graphEdge);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -259,7 +259,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         ], $graphData);
     }
 
-    public function testAGraphListWillBeCastRecursively()
+    public function testAGraphEdgeWillBeCastRecursively()
     {
         $someUser = [
             'id' => '123',
@@ -345,13 +345,13 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GraphNodeFactory($res);
         $graphObject = $factory->makeGraphList();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $graphObject);
 
         // Story
         $storyObject = $graphObject[0];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $storyObject['from']);
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $storyObject['likes']);
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $storyObject['comments']);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $storyObject['likes']);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $storyObject['comments']);
 
         // Story Comments
         $storyComments = $storyObject['comments'];
@@ -360,12 +360,12 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Message
         $messageObject = $graphObject[1];
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $messageObject['to']);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $messageObject['to']);
         $toUsers = $messageObject['to'];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $toUsers[0]);
     }
 
-    public function testAGraphListWillGenerateTheProperParentGraphEdges()
+    public function testAGraphEdgeWillGenerateTheProperParentGraphEdges()
     {
         $likesList = [
             'data' => [
@@ -421,12 +421,12 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
-        $graphList = $factory->makeGraphList();
-        $topGraphEdge = $graphList->getParentGraphEdge();
-        $childGraphEdgeOne = $graphList[0]['likes']->getParentGraphEdge();
-        $childGraphEdgeTwo = $graphList[1]['likes']->getParentGraphEdge();
-        $childGraphEdgeThree = $graphList[1]['photos']->getParentGraphEdge();
-        $childGraphEdgeFour = $graphList[1]['photos'][0]['likes']->getParentGraphEdge();
+        $graphEdge = $factory->makeGraphList();
+        $topGraphEdge = $graphEdge->getParentGraphEdge();
+        $childGraphEdgeOne = $graphEdge[0]['likes']->getParentGraphEdge();
+        $childGraphEdgeTwo = $graphEdge[1]['likes']->getParentGraphEdge();
+        $childGraphEdgeThree = $graphEdge[1]['photos']->getParentGraphEdge();
+        $childGraphEdgeFour = $graphEdge[1]['photos'][0]['likes']->getParentGraphEdge();
 
         $this->assertNull($topGraphEdge);
         $this->assertEquals('/111/likes', $childGraphEdgeOne);

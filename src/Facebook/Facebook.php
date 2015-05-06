@@ -27,7 +27,7 @@ use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
-use Facebook\GraphNodes\GraphList;
+use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
@@ -429,13 +429,13 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphList The GraphEdge to paginate over.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function next(GraphList $graphList)
+    public function next(GraphEdge $graphList)
     {
         return $this->getPaginationResults($graphList, 'next');
     }
@@ -443,13 +443,13 @@ class Facebook
     /**
      * Sends a request to Graph for the previous page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphList The GraphEdge to paginate over.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function previous(GraphList $graphList)
+    public function previous(GraphEdge $graphList)
     {
         return $this->getPaginationResults($graphList, 'previous');
     }
@@ -457,14 +457,14 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphList The GraphEdge to paginate over.
      * @param string    $direction The direction of the pagination: next|previous.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function getPaginationResults(GraphList $graphList, $direction)
+    public function getPaginationResults(GraphEdge $graphList, $direction)
     {
         $paginationRequest = $graphList->getPaginationRequest($direction);
         if (!$paginationRequest) {
