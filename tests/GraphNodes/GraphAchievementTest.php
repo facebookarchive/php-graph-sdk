@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-class GraphAchievementTest extends GraphNodeTest
+class GraphAchievementTest extends AbstractGraphNode
 {
 
     public function testIdIsString()

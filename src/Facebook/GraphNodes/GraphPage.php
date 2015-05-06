@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphPage extends GraphObject
+class GraphPage extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.

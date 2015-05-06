@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphSessionInfo extends GraphObject
+class GraphSessionInfo extends GraphNode
 {
     /**
      * Returns the application id the token was issued for.

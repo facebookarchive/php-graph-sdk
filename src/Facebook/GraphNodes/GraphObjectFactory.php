@@ -33,12 +33,12 @@ use Facebook\Exceptions\FacebookSDKException;
  *
  * ## Assumptions ##
  * GraphList - is ALWAYS a numeric array
- * GraphList - is ALWAYS an array of GraphObject types
- * GraphObject - is ALWAYS an associative array
- * GraphObject - MAY contain GraphObject's "recurrable"
- * GraphObject - MAY contain GraphList's "recurrable"
- * GraphObject - MAY contain DateTime's "primitives"
- * GraphObject - MAY contain string's "primitives"
+ * GraphList - is ALWAYS an array of GraphNode types
+ * GraphNode - is ALWAYS an associative array
+ * GraphNode - MAY contain GraphNode's "recurrable"
+ * GraphNode - MAY contain GraphList's "recurrable"
+ * GraphNode - MAY contain DateTime's "primitives"
+ * GraphNode - MAY contain string's "primitives"
  */
 class GraphObjectFactory
 {
@@ -46,7 +46,7 @@ class GraphObjectFactory
     /**
      * @const string The base graph object class.
      */
-    const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphObject';
+    const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphNode';
 
     /**
      * @const string The graph object prefix.
@@ -75,11 +75,11 @@ class GraphObjectFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphObject.
+     * Tries to convert a FacebookResponse entity into a GraphNode.
      *
-     * @param string|null $subclassName The GraphObject sub class to cast to.
+     * @param string|null $subclassName The GraphNode sub class to cast to.
      *
-     * @return GraphObject
+     * @return GraphNode
      *
      * @throws FacebookSDKException
      */
@@ -154,7 +154,7 @@ class GraphObjectFactory
     /**
      * Tries to convert a FacebookResponse entity into a GraphList.
      *
-     * @param string|null $subclassName The GraphObject sub class to cast the list items to.
+     * @param string|null $subclassName The GraphNode sub class to cast the list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
      * @return GraphList
@@ -186,7 +186,7 @@ class GraphObjectFactory
     }
 
     /**
-     * Validates that the return data can be cast as a GraphObject.
+     * Validates that the return data can be cast as a GraphNode.
      *
      * @throws FacebookSDKException
      */
@@ -194,7 +194,7 @@ class GraphObjectFactory
     {
         if (isset($this->decodedBody['data']) && static::isCastableAsGraphList($this->decodedBody['data'])) {
             throw new FacebookSDKException(
-                'Unable to convert response from Graph to a GraphObject because the response looks like a GraphList. Try using GraphObjectFactory::makeGraphList() instead.',
+                'Unable to convert response from Graph to a GraphNode because the response looks like a GraphList. Try using GraphObjectFactory::makeGraphList() instead.',
                 620
             );
         }
@@ -216,12 +216,12 @@ class GraphObjectFactory
     }
 
     /**
-     * Safely instantiates a GraphObject of $subclassName.
+     * Safely instantiates a GraphNode of $subclassName.
      *
      * @param array       $data         The array of data to iterate over.
      * @param string|null $subclassName The subclass to cast this collection to.
      *
-     * @return GraphObject
+     * @return GraphNode
      *
      * @throws FacebookSDKException
      */
@@ -246,7 +246,7 @@ class GraphObjectFactory
                     ? $graphObjectMap[$k]
                     : null;
 
-                // Could be a GraphList or GraphObject
+                // Could be a GraphList or GraphNode
                 $items[$k] = $this->castAsGraphObjectOrGraphList($v, $objectSubClass, $k, $parentNodeId);
             } else {
                 $items[$k] = $v;
@@ -264,7 +264,7 @@ class GraphObjectFactory
      * @param string|null $parentKey    The key of this data (Graph edge).
      * @param string|null $parentNodeId The parent Graph node ID.
      *
-     * @return GraphObject|GraphList
+     * @return GraphNode|GraphList
      *
      * @throws FacebookSDKException
      */
@@ -275,19 +275,19 @@ class GraphObjectFactory
             if (static::isCastableAsGraphList($data['data'])) {
                 return $this->safelyMakeGraphList($data, $subclassName, $parentKey, $parentNodeId);
             }
-            // Sometimes Graph is a weirdo and returns a GraphObject under the "data" key
+            // Sometimes Graph is a weirdo and returns a GraphNode under the "data" key
             $data = $data['data'];
         }
 
-        // Create GraphObject
+        // Create GraphNode
         return $this->safelyMakeGraphObject($data, $subclassName);
     }
 
     /**
-     * Return an array of GraphObject's.
+     * Return an array of GraphNode's.
      *
      * @param array       $data         The array of data to iterate over.
-     * @param string|null $subclassName The GraphObject subclass to cast each item in the list to.
+     * @param string|null $subclassName The GraphNode subclass to cast each item in the list to.
      * @param string|null $parentKey    The key of this data (Graph edge).
      * @param string|null $parentNodeId The parent Graph node ID.
      *
@@ -348,7 +348,7 @@ class GraphObjectFactory
     /**
      * Ensures that the subclass in question is valid.
      *
-     * @param string $subclassName The GraphObject subclass to validate.
+     * @param string $subclassName The GraphNode subclass to validate.
      *
      * @throws FacebookSDKException
      */
@@ -358,6 +358,6 @@ class GraphObjectFactory
             return;
         }
 
-        throw new FacebookSDKException('The given subclass "' . $subclassName . '" is not valid. Cannot cast to an object that is not a GraphObject subclass.', 620);
+        throw new FacebookSDKException('The given subclass "' . $subclassName . '" is not valid. Cannot cast to an object that is not a GraphNode subclass.', 620);
     }
 }

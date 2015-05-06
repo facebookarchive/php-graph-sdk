@@ -261,7 +261,7 @@ class FacebookResponse
      *
      * @param string|null $subclassName The GraphObject sub class to cast to.
      *
-     * @return \Facebook\GraphNodes\GraphObject
+     * @return \Facebook\GraphNodes\GraphNode
      *
      * @throws FacebookSDKException
      */

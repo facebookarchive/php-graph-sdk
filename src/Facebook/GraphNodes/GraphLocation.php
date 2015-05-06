@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphLocation extends GraphObject
+class GraphLocation extends GraphNode
 {
     /**
      * Returns the street component of the location

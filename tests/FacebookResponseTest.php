@@ -79,7 +79,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
             'id' => '123',
             'name' => 'Foo',
         ], $decodedResponse);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObject);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObject);
     }
 
     public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
@@ -90,8 +90,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $graphObjectList = $response->getGraphList();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[0]);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphObject', $graphObjectList[1]);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObjectList[0]);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObjectList[1]);
     }
 
     public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()

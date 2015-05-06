@@ -21,52 +21,31 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\GraphNodes;
+namespace Facebook\Tests\GraphNodes;
 
-/**
- * Class GraphPicture
- *
- * @package Facebook
- */
-class GraphPicture extends GraphNode
+use Mockery as m;
+use Facebook\GraphNodes\GraphObjectFactory;
+
+abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Returns true if user picture is silhouette.
-     *
-     * @return bool|null
+     * @var \Facebook\FacebookResponse|\Mockery\MockInterface
      */
-    public function isSilhouette()
+    protected $responseMock;
+
+    public function setUp()
     {
-        return $this->getProperty('is_silhouette');
+        parent::setUp();
+        $this->responseMock = m::mock('\Facebook\FacebookResponse');
     }
 
-    /**
-     * Returns the url of user picture if it exists
-     *
-     * @return string|null
-     */
-    public function getUrl()
+    protected function makeFactoryWithData($data)
     {
-        return $this->getProperty('url');
-    }
+        $this->responseMock
+            ->shouldReceive('getDecodedBody')
+            ->once()
+            ->andReturn($data);
 
-    /**
-     * Returns the width of user picture if it exists
-     *
-     * @return int|null
-     */
-    public function getWidth()
-    {
-        return $this->getProperty('width');
-    }
-
-    /**
-     * Returns the height of user picture if it exists
-     *
-     * @return int|null
-     */
-    public function getHeight()
-    {
-        return $this->getProperty('height');
+        return new GraphObjectFactory($this->responseMock);
     }
 }

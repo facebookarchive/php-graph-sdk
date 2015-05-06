@@ -27,16 +27,16 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphObjectFactory;
-use Facebook\GraphNodes\GraphObject;
+use Facebook\GraphNodes\GraphNode;
 
-class MyFooSubClassGraphObject extends GraphObject
+class MyFooSubClassGraphNode extends GraphNode
 {
 }
 
-class MyFooGraphObject extends GraphObject
+class MyFooGraphNode extends GraphNode
 {
     protected static $graphObjectMap = [
-        'foo_object' => '\Facebook\Tests\GraphNodes\MyFooSubClassGraphObject',
+        'foo_object' => '\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode',
     ];
 }
 
@@ -124,9 +124,9 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testValidSubClassesWillNotThrow()
     {
-        GraphObjectFactory::validateSubclass('\Facebook\GraphNodes\GraphObject');
+        GraphObjectFactory::validateSubclass('\Facebook\GraphNodes\GraphNode');
         GraphObjectFactory::validateSubclass('\Facebook\GraphNodes\GraphAlbum');
-        GraphObjectFactory::validateSubclass('\Facebook\Tests\GraphNodes\MyFooGraphObject');
+        GraphObjectFactory::validateSubclass('\Facebook\Tests\GraphNodes\MyFooGraphNode');
     }
 
     public function testCastingAsASubClassObjectWillInstantiateTheSubClass()
@@ -135,9 +135,9 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphObjectFactory($res);
-        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphObject');
+        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
 
-        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphObject', $mySubClassObject);
+        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
     }
 
     public function testASubClassMappingWillAutomaticallyInstantiateSubClass()
@@ -146,11 +146,11 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphObjectFactory($res);
-        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphObject');
+        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
         $fooObject = $mySubClassObject->getProperty('foo_object');
 
-        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphObject', $mySubClassObject);
-        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooSubClassGraphObject', $fooObject);
+        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
+        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode', $fooObject);
     }
 
     public function testAnUnknownGraphObjectWillBeCastAsAGenericGraphObject()
@@ -167,12 +167,12 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GraphObjectFactory($res);
 
-        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphObject');
+        $mySubClassObject = $factory->makeGraphObject('\Facebook\Tests\GraphNodes\MyFooGraphNode');
         $unknownObject = $mySubClassObject->getProperty('unknown_object');
 
-        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphObject', $mySubClassObject);
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $unknownObject);
-        $this->assertNotInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphObject', $unknownObject);
+        $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $unknownObject);
+        $this->assertNotInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $unknownObject);
     }
 
     public function testAListFromGraphWillBeCastAsAGraphList()
@@ -227,7 +227,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $graphObject = $factory->makeGraphObject();
         $graphData = $graphObject->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $graphObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphObject);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -251,7 +251,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $graphObject = $factory->makeGraphObject();
         $graphData = $graphObject->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $graphObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphObject);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -349,20 +349,20 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
 
         // Story
         $storyObject = $graphObject[0];
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $storyObject['from']);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $storyObject['from']);
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $storyObject['likes']);
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $storyObject['comments']);
 
         // Story Comments
         $storyComments = $storyObject['comments'];
         $firstStoryComment = $storyComments[0];
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $firstStoryComment['from']);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $firstStoryComment['from']);
 
         // Message
         $messageObject = $graphObject[1];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $messageObject['to']);
         $toUsers = $messageObject['to'];
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $toUsers[0]);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $toUsers[0]);
     }
 
     public function testAGraphListWillGenerateTheProperParentGraphEdges()
