@@ -72,7 +72,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
         $decodedResponse = $response->getDecodedBody();
-        $graphObject = $response->getGraphObject();
+        $graphObject = $response->getGraphNode();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
         $this->assertEquals([

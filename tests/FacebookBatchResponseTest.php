@@ -80,7 +80,7 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 
         // Single Graph object.
         $this->assertFalse($decodedResponses[0]->isError(), 'Did not expect Response to return an error for single Graph object.');
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $decodedResponses[0]->getGraphObject());
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $decodedResponses[0]->getGraphNode());
         // Paginated list of Graph objects.
         $this->assertFalse($decodedResponses[1]->isError(), 'Did not expect Response to return an error for paginated list of Graph objects.');
         $graphList = $decodedResponses[1]->getGraphList();

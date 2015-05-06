@@ -42,11 +42,15 @@ use Facebook\Exceptions\FacebookSDKException;
  */
 class GraphNodeFactory
 {
-
     /**
      * @const string The base graph object class.
      */
     const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphNode';
+
+    /**
+     * @const string The base graph edge class.
+     */
+    const BASE_GRAPH_EDGE_CLASS = '\Facebook\GraphNodes\GraphEdge';
 
     /**
      * @const string The graph object prefix.
@@ -310,8 +314,9 @@ class GraphNodeFactory
 
         // We'll need to make an edge endpoint for this in case it's a GraphEdge (for cursor pagination)
         $parentGraphEdgeEndpoint = $parentNodeId && $parentKey ? '/' . $parentNodeId . '/' . $parentKey : null;
+        $className = static::BASE_GRAPH_EDGE_CLASS;
 
-        return new GraphEdge($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
+        return new $className($this->response->getRequest(), $dataList, $metaData, $parentGraphEdgeEndpoint, $subclassName);
     }
 
     /**

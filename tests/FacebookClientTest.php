@@ -241,7 +241,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
             $testUserPath,
             $params
         );
-        $response = static::$testFacebookClient->sendRequest($request)->getGraphObject();
+        $response = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
         $testUserId = $response->getProperty('id');
         $testUserAccessToken = $response->getProperty('access_token');
@@ -253,7 +253,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
             'GET',
             '/me'
         );
-        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphObject();
+        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
         $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObject);
         $this->assertNotNull($graphObject->getProperty('id'));
@@ -266,7 +266,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
             'DELETE',
             '/' . $testUserId
         );
-        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphObject();
+        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
         $this->assertTrue($graphObject->getProperty('success'));
     }

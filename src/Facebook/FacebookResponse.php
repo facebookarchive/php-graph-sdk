@@ -257,6 +257,23 @@ class FacebookResponse
     }
 
     /**
+     * Instantiate a new GraphObject from response.
+     *
+     * @param string|null $subclassName The GraphNode sub class to cast to.
+     *
+     * @return \Facebook\GraphNodes\GraphObject
+     *
+     * @throws FacebookSDKException
+     *
+     * @deprecated 5.0.0 getGraphObject() has been renamed to getGraphNode()
+     * @todo v6: Remove this method
+     */
+    public function getGraphObject($subclassName = null)
+    {
+        return $this->getGraphNode($subclassName);
+    }
+
+    /**
      * Instantiate a new GraphNode from response.
      *
      * @param string|null $subclassName The GraphNode sub class to cast to.
@@ -265,7 +282,7 @@ class FacebookResponse
      *
      * @throws FacebookSDKException
      */
-    public function getGraphObject($subclassName = null)
+    public function getGraphNode($subclassName = null)
     {
         $factory = new GraphNodeFactory($this);
 
@@ -329,6 +346,24 @@ class FacebookResponse
     }
 
     /**
+     * Instantiate a new GraphList from response.
+     *
+     * @param string|null $subclassName The GraphNode sub class to cast list items to.
+     * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
+     *
+     * @return \Facebook\GraphNodes\GraphList
+     *
+     * @throws FacebookSDKException
+     *
+     * @deprecated 5.0.0 getGraphList() has been renamed to getGraphEdge()
+     * @todo v6: Remove this method
+     */
+    public function getGraphList($subclassName = null, $auto_prefix = true)
+    {
+        return $this->getGraphEdge($subclassName, $auto_prefix);
+    }
+
+    /**
      * Instantiate a new GraphEdge from response.
      *
      * @param string|null $subclassName The GraphNode sub class to cast list items to.
@@ -338,7 +373,7 @@ class FacebookResponse
      *
      * @throws FacebookSDKException
      */
-    public function getGraphList($subclassName = null, $auto_prefix = true)
+    public function getGraphEdge($subclassName = null, $auto_prefix = true)
     {
         $factory = new GraphNodeFactory($this);
 
