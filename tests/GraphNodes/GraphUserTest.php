@@ -50,9 +50,9 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphUser();
+        $graphNode = $factory->makeGraphUser();
 
-        $birthday = $graphObject->getBirthday();
+        $birthday = $graphNode->getBirthday();
 
         $this->assertInstanceOf('DateTime', $birthday);
     }
@@ -77,10 +77,10 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphUser();
+        $graphNode = $factory->makeGraphUser();
 
-        $hometown = $graphObject->getHometown();
-        $location = $graphObject->getLocation();
+        $hometown = $graphNode->getHometown();
+        $location = $graphNode->getLocation();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $hometown);
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $location);
@@ -102,9 +102,9 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphUser();
+        $graphNode = $factory->makeGraphUser();
 
-        $significantOther = $graphObject->getSignificantOther();
+        $significantOther = $graphNode->getSignificantOther();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
     }
@@ -127,9 +127,9 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphUser();
+        $graphNode = $factory->makeGraphUser();
 
-        $Picture = $graphObject->getPicture();
+        $Picture = $graphNode->getPicture();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPicture', $Picture);
         $this->assertTrue($Picture->isSilhouette());

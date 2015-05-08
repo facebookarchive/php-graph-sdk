@@ -58,10 +58,10 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphPage();
+        $graphNode = $factory->makeGraphPage();
 
-        $bestPage = $graphObject->getBestPage();
-        $globalBrandParentPage = $graphObject->getGlobalBrandParentPage();
+        $bestPage = $graphNode->getBestPage();
+        $globalBrandParentPage = $graphNode->getGlobalBrandParentPage();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
@@ -86,9 +86,9 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphPage();
+        $graphNode = $factory->makeGraphPage();
 
-        $location = $graphObject->getLocation();
+        $location = $graphNode->getLocation();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
     }

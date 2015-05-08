@@ -30,36 +30,36 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAnExistingPropertyCanBeAccessed()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('foo');
+        $graphNode = new Collection(['foo' => 'bar']);
+        $property = $graphNode->getProperty('foo');
 
         $this->assertEquals('bar', $property);
     }
 
     public function testAMissingPropertyWillReturnNull()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('baz');
+        $graphNode = new Collection(['foo' => 'bar']);
+        $property = $graphNode->getProperty('baz');
 
         $this->assertNull($property, 'Expected the property to return null.');
     }
 
     public function testAMissingPropertyWillReturnTheDefault()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('baz', 'faz');
+        $graphNode = new Collection(['foo' => 'bar']);
+        $property = $graphNode->getProperty('baz', 'faz');
 
         $this->assertEquals('faz', $property);
     }
 
     public function testTheKeysFromTheCollectionCanBeReturned()
     {
-        $graphObject = new Collection([
+        $graphNode = new Collection([
             'key1' => 'foo',
             'key2' => 'bar',
             'key3' => 'baz',
         ]);
-        $propertyKeys = $graphObject->getPropertyNames();
+        $propertyKeys = $graphNode->getPropertyNames();
 
         $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
     }

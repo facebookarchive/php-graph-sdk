@@ -224,10 +224,10 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
-        $graphObject = $factory->makeGraphNode();
-        $graphData = $graphObject->asArray();
+        $graphNode = $factory->makeGraphNode();
+        $graphData = $graphNode->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphNode);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -248,10 +248,10 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
-        $graphObject = $factory->makeGraphNode();
-        $graphData = $graphObject->asArray();
+        $graphNode = $factory->makeGraphNode();
+        $graphData = $graphNode->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphObject);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphNode);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -344,11 +344,11 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
-        $graphObject = $factory->makeGraphEdge();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $graphObject);
+        $graphNode = $factory->makeGraphEdge();
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $graphNode);
 
         // Story
-        $storyObject = $graphObject[0];
+        $storyObject = $graphNode[0];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $storyObject['from']);
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $storyObject['likes']);
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $storyObject['comments']);
@@ -359,7 +359,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $firstStoryComment['from']);
 
         // Message
-        $messageObject = $graphObject[1];
+        $messageObject = $graphNode[1];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphEdge', $messageObject['to']);
         $toUsers = $messageObject['to'];
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $toUsers[0]);

@@ -53,10 +53,10 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $graphNode = $factory->makeGraphAlbum();
 
-        $createdTime = $graphObject->getCreatedTime();
-        $updatedTime = $graphObject->getUpdatedTime();
+        $createdTime = $graphNode->getCreatedTime();
+        $updatedTime = $graphNode->getUpdatedTime();
 
         $this->assertInstanceOf('DateTime', $createdTime);
         $this->assertInstanceOf('DateTime', $updatedTime);
@@ -77,9 +77,9 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $graphNode = $factory->makeGraphAlbum();
 
-        $from = $graphObject->getFrom();
+        $from = $graphNode->getFrom();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
     }
@@ -100,9 +100,9 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $graphNode = $factory->makeGraphAlbum();
 
-        $place = $graphObject->getPlace();
+        $place = $graphNode->getPlace();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
     }

@@ -29,50 +29,50 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testAnEmptyBaseGraphNodeCanInstantiate()
     {
-        $graphObject = new GraphNode();
-        $backingData = $graphObject->asArray();
+        $graphNode = new GraphNode();
+        $backingData = $graphNode->asArray();
 
         $this->assertEquals([], $backingData);
     }
 
     public function testAGraphNodeCanInstantiateWithData()
     {
-        $graphObject = new GraphNode(['foo' => 'bar']);
-        $backingData = $graphObject->asArray();
+        $graphNode = new GraphNode(['foo' => 'bar']);
+        $backingData = $graphNode->asArray();
 
         $this->assertEquals(['foo' => 'bar'], $backingData);
     }
 
     public function testDatesThatShouldBeCastAsDateTimeObjectsAreDetected()
     {
-        $graphObject = new GraphNode();
+        $graphNode = new GraphNode();
 
         // Should pass
-        $shouldPass = $graphObject->isIso8601DateString('1985-10-26T01:21:00+0000');
+        $shouldPass = $graphNode->isIso8601DateString('1985-10-26T01:21:00+0000');
         $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.');
 
-        $shouldPass = $graphObject->isIso8601DateString('1999-12-31');
+        $shouldPass = $graphNode->isIso8601DateString('1999-12-31');
         $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.');
 
-        $shouldPass = $graphObject->isIso8601DateString('2009-05-19T14:39Z');
+        $shouldPass = $graphNode->isIso8601DateString('2009-05-19T14:39Z');
         $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
 
-        $shouldPass = $graphObject->isIso8601DateString('2014-W36');
+        $shouldPass = $graphNode->isIso8601DateString('2014-W36');
         $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
 
         // Should fail
-        $shouldFail = $graphObject->isIso8601DateString('2009-05-19T14a39r');
+        $shouldFail = $graphNode->isIso8601DateString('2009-05-19T14a39r');
         $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
 
-        $shouldFail = $graphObject->isIso8601DateString('foo_time');
+        $shouldFail = $graphNode->isIso8601DateString('foo_time');
         $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
     }
 
     public function testATimeStampCanBeConvertedToADateTimeObject()
     {
         $someTimeStampFromGraph = 1405547020;
-        $graphObject = new GraphNode();
-        $dateTime = $graphObject->castToDateTime($someTimeStampFromGraph);
+        $graphNode = new GraphNode();
+        $dateTime = $graphNode->castToDateTime($someTimeStampFromGraph);
         $prettyDate = $dateTime->format(\DateTime::RFC1036);
         $timeStamp = $dateTime->getTimestamp();
 
@@ -84,8 +84,8 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
     public function testAGraphDateStringCanBeConvertedToADateTimeObject()
     {
         $someDateStringFromGraph = '2014-07-15T03:44:53+0000';
-        $graphObject = new GraphNode();
-        $dateTime = $graphObject->castToDateTime($someDateStringFromGraph);
+        $graphNode = new GraphNode();
+        $dateTime = $graphNode->castToDateTime($someDateStringFromGraph);
         $prettyDate = $dateTime->format(\DateTime::RFC1036);
         $timeStamp = $dateTime->getTimestamp();
 

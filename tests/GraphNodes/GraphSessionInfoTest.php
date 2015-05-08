@@ -51,10 +51,10 @@ class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
 
-        $graphObject = $factory->makeGraphSessionInfo();
+        $graphNode = $factory->makeGraphSessionInfo();
 
-        $expires = $graphObject->getExpiresAt();
-        $issuedAt = $graphObject->getIssuedAt();
+        $expires = $graphNode->getExpiresAt();
+        $issuedAt = $graphNode->getIssuedAt();
 
         $this->assertInstanceOf('DateTime', $expires);
         $this->assertInstanceOf('DateTime', $issuedAt);

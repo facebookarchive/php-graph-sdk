@@ -253,11 +253,11 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
             'GET',
             '/me'
         );
-        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphNode();
+        $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObject);
-        $this->assertNotNull($graphObject->getProperty('id'));
-        $this->assertEquals('Foo Phpunit User', $graphObject->getProperty('name'));
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
+        $this->assertNotNull($graphNode->getProperty('id'));
+        $this->assertEquals('Foo Phpunit User', $graphNode->getProperty('name'));
 
         // Delete test user
         $request = new FacebookRequest(
@@ -266,9 +266,9 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
             'DELETE',
             '/' . $testUserId
         );
-        $graphObject = static::$testFacebookClient->sendRequest($request)->getGraphNode();
+        $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
-        $this->assertTrue($graphObject->getProperty('success'));
+        $this->assertTrue($graphNode->getProperty('success'));
     }
 
     public function initializeTestApp()

@@ -72,14 +72,14 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
         $decodedResponse = $response->getDecodedBody();
-        $graphObject = $response->getGraphNode();
+        $graphNode = $response->getGraphNode();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo',
         ], $decodedResponse);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObject);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
     }
 
     public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
@@ -87,11 +87,11 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
-        $graphObjectList = $response->getGraphList();
+        $graphEdge = $response->getGraphList();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObjectList[0]);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphObjectList[1]);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[0]);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[1]);
     }
 
     public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()
