@@ -1,5 +1,5 @@
 <card>
-# Facebook SDK v4.1 for PHP
+# Facebook SDK v5 for PHP
 
 The Facebook SDK for PHP is a library with powerful features that enable PHP developers to easily integrate Facebook login and make requests to the Graph API. It also plays well with the [Facebook SDK for JavaScript](/docs/reference/javascript/) to give the front-end user the best possible user experience. But it doesn't end there, the Facebook PHP SDK makes it easy to upload photos and videos and send batch requests to the Graph API among other things. And PHP SDK has many extensibility points giving PHP developers full control of how the PHP SDK interacts with their specific hosting environment and web framework.
 
