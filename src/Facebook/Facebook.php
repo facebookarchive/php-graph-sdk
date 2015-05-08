@@ -430,44 +430,44 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphEdge $graphList The GraphEdge to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      *
      * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function next(GraphEdge $graphList)
+    public function next(GraphEdge $graphEdge)
     {
-        return $this->getPaginationResults($graphList, 'next');
+        return $this->getPaginationResults($graphEdge, 'next');
     }
 
     /**
      * Sends a request to Graph for the previous page of results.
      *
-     * @param GraphEdge $graphList The GraphEdge to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      *
      * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function previous(GraphEdge $graphList)
+    public function previous(GraphEdge $graphEdge)
     {
-        return $this->getPaginationResults($graphList, 'previous');
+        return $this->getPaginationResults($graphEdge, 'previous');
     }
 
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphEdge $graphList The GraphEdge to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      * @param string    $direction The direction of the pagination: next|previous.
      *
      * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function getPaginationResults(GraphEdge $graphList, $direction)
+    public function getPaginationResults(GraphEdge $graphEdge, $direction)
     {
-        $paginationRequest = $graphList->getPaginationRequest($direction);
+        $paginationRequest = $graphEdge->getPaginationRequest($direction);
         if (!$paginationRequest) {
             return null;
         }
@@ -475,10 +475,10 @@ class Facebook
         $this->lastResponse = $this->client->sendRequest($paginationRequest);
 
         // Keep the same GraphNode subclass
-        $subClassName = $graphList->getSubClassName();
-        $graphList = $this->lastResponse->getGraphList($subClassName, false);
+        $subClassName = $graphEdge->getSubClassName();
+        $graphEdge = $this->lastResponse->getGraphEdge($subClassName, false);
 
-        return count($graphList) > 0 ? $graphList : null;
+        return count($graphEdge) > 0 ? $graphEdge : null;
     }
 
     /**

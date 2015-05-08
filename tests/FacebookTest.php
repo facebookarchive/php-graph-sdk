@@ -354,7 +354,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $fb = new Facebook($config);
 
         $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
-        $graphList = new GraphEdge(
+        $graphEdge = new GraphEdge(
             $request,
             [],
             [
@@ -369,7 +369,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
             '\Facebook\GraphNodes\GraphUser'
         );
 
-        $nextPage = $fb->next($graphList);
+        $nextPage = $fb->next($graphEdge);
         $this->assertInstanceOf('Facebook\GraphNodes\GraphEdge', $nextPage);
         $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $nextPage[0]);
         $this->assertEquals('Foo', $nextPage[0]['name']);

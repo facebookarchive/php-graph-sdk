@@ -82,12 +82,12 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
     }
 
-    public function testASuccessfulJsonResponseWillBeDecodedToAGraphList()
+    public function testASuccessfulJsonResponseWillBeDecodedToAGraphEdge()
     {
         $graphResponseJson = '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}';
         $response = new FacebookResponse($this->request, $graphResponseJson, 200);
 
-        $graphEdge = $response->getGraphList();
+        $graphEdge = $response->getGraphEdge();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
         $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[0]);
