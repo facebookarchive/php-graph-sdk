@@ -16,8 +16,8 @@ $graphList = $request->getGraphList();
 Usage:
 
 ~~~~
-// Iterate over all the GraphObject in the list
-foreach ($graphList as $graphObject) {
+// Iterate over all the GraphNode's returned from the edge
+foreach ($graphList as $graphNode) {
   // . . .
 }
 ~~~~

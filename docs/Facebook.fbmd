@@ -506,9 +506,9 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Photo ID: ' . $graphObject['id'];
+echo 'Photo ID: ' . $graphNode['id'];
 ~~~~
 </card>
 
@@ -535,8 +535,8 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Video ID: ' . $graphObject['id'];
+echo 'Video ID: ' . $graphNode['id'];
 ~~~~
 </card>

@@ -47,9 +47,9 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Photo ID: ' . $graphObject['id'];
+echo 'Photo ID: ' . $graphNode['id'];
 ~~~~
 
 > **Note:** Although you can use `fileToUpload()` to upload a remote file, it is more efficient to just point the Graph request to the the remote file with the `url` param.

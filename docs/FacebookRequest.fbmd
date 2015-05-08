@@ -51,9 +51,9 @@ try {
   exit;
 }
 
-$object = $response->getGraphObject();
+$node = $response->getGraphNode();
 
-echo 'User name: ' . $object['name'];
+echo 'User name: ' . $node['name'];
 ~~~~
 </card>
 

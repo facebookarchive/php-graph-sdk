@@ -46,8 +46,8 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Video ID: ' . $graphObject['id'];
+echo 'Video ID: ' . $graphNode['id'];
 ~~~~
 </card>

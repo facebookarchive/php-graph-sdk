@@ -5,7 +5,7 @@ This example covers posting a link to the current user's timeline using the Grap
 
 It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers). The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
+For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphNode`](/docs/php/GraphNode), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
 </card>
 
 <card>
@@ -34,9 +34,9 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Posted with id: ' . $graphObject['id'];
+echo 'Posted with id: ' . $graphNode['id'];
 ~~~~
 
 Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).

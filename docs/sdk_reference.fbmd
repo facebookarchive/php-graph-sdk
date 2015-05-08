@@ -141,35 +141,35 @@ FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
-      '[`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject)',
+      '[`Facebook\GraphNodes\GraphNode`](/docs/php/GraphNode)',
       'The base collection object that represents a generic node.',
     ],
     [
       '[`Facebook\GraphNodes\GraphList`](/docs/php/GraphList)',
-      'A collection of GraphObject's with special methods to help paginate over the edge.',
+      'A collection of GraphNode's with special methods to help paginate over the edge.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphAchievement`](/docs/php/GraphObject#achievement-instance-methods)',
+      '[`Facebook\GraphNodes\GraphAchievement`](/docs/php/GraphNode#achievement-instance-methods)',
       'A collection that represents an Achievement node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphAlbum`](/docs/php/GraphObject#album-instance-methods)',
+      '[`Facebook\GraphNodes\GraphAlbum`](/docs/php/GraphNode#album-instance-methods)',
       'A collection that represents an Album node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphLocation`](/docs/php/GraphObject#location-instance-methods)',
+      '[`Facebook\GraphNodes\GraphLocation`](/docs/php/GraphNode#location-instance-methods)',
       'A collection that represents a Location node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphPage`](/docs/php/GraphObject#page-instance-methods)',
+      '[`Facebook\GraphNodes\GraphPage`](/docs/php/GraphNode#page-instance-methods)',
       'A collection that represents a Page node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphPicture`](/docs/php/GraphObject#picture-instance-methods)',
+      '[`Facebook\GraphNodes\GraphPicture`](/docs/php/GraphNode#picture-instance-methods)',
       'A collection that represents a Picture node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods)',
+      '[`Facebook\GraphNodes\GraphUser`](/docs/php/GraphNode#user-instance-methods)',
       'A collection that represents a User node.',
     ],
   ],

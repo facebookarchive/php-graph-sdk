@@ -309,7 +309,7 @@ echo 'Logged in as ' . $userNode->getName();
 
 The `get()` method will return a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) which is an entity that represents an HTTP response from the Graph API.
 
-To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods) entity which represents a user node.
+To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphNode#user-instance-methods) entity which represents a user node.
 
 If you don't care about fancy collections and just want the response as a plain-old array, you can call the `getDecodedBody()` method on the `FacebookResponse` entity.
 
