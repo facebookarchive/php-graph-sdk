@@ -199,6 +199,7 @@ class Facebook
         if (isset($config['default_graph_version'])) {
             $this->defaultGraphVersion = $config['default_graph_version'];
         } else {
+            // @todo v6: Throw an InvalidArgumentException if "default_graph_version" is not set
             $this->defaultGraphVersion = static::DEFAULT_GRAPH_VERSION;
         }
     }
