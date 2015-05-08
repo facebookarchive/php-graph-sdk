@@ -32,7 +32,7 @@ try {
 }
 
 // Page 1
-$feed = $response->getGraphList();
+$feed = $response->getGraphEdge();
 
 foreach ($feed as $status) {
   var_dump($status->asArray());

@@ -145,7 +145,7 @@ FB(devsite:markdown-wiki:table {
       'The base collection object that represents a generic node.',
     ],
     [
-      '[`Facebook\GraphNodes\GraphList`](/docs/php/GraphList)',
+      '[`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge)',
       'A collection of GraphNode's with special methods to help paginate over the edge.',
     ],
     [

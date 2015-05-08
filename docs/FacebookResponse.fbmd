@@ -179,9 +179,9 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphUser`](/do
 </card>
 
 <card>
-### getGraphList() {#get-graph-list}
+### getGraphEdge() {#get-graph-edge}
 ~~~~
-public Facebook\GraphNodes\GraphList getGraphList()
+public Facebook\GraphNodes\GraphEdge getGraphEdge()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection.
 </card>
