@@ -45,7 +45,7 @@ class GraphNodeFactory
     /**
      * @const string The base graph object class.
      */
-    const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphNode';
+    const BASE_GRAPH_NODE_CLASS = '\Facebook\GraphNodes\GraphNode';
 
     /**
      * @const string The base graph edge class.
@@ -231,7 +231,7 @@ class GraphNodeFactory
      */
     public function safelyMakeGraphNode(array $data, $subclassName = null)
     {
-        $subclassName = $subclassName ?: static::BASE_GRAPH_OBJECT_CLASS;
+        $subclassName = $subclassName ?: static::BASE_GRAPH_NODE_CLASS;
         static::validateSubclass($subclassName);
 
         // Remember the parent node ID
@@ -359,7 +359,7 @@ class GraphNodeFactory
      */
     public static function validateSubclass($subclassName)
     {
-        if ($subclassName == static::BASE_GRAPH_OBJECT_CLASS || is_subclass_of($subclassName, static::BASE_GRAPH_OBJECT_CLASS)) {
+        if ($subclassName == static::BASE_GRAPH_NODE_CLASS || is_subclass_of($subclassName, static::BASE_GRAPH_NODE_CLASS)) {
             return;
         }
 

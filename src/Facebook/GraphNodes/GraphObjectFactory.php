@@ -36,7 +36,7 @@ class GraphObjectFactory extends GraphNodeFactory
     /**
      * @const string The base graph object class.
      */
-    const BASE_GRAPH_OBJECT_CLASS = '\Facebook\GraphNodes\GraphObject';
+    const BASE_GRAPH_NODE_CLASS = '\Facebook\GraphNodes\GraphObject';
 
     /**
      * @const string The base graph edge class.
