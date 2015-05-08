@@ -57,7 +57,7 @@ class Facebook
     /**
      * @const string Version number of the Facebook PHP SDK.
      */
-    const VERSION = '4.1.0-dev';
+    const VERSION = '5.0.0';
 
     /**
      * @const string Default Graph API version for requests.
@@ -199,6 +199,7 @@ class Facebook
         if (isset($config['default_graph_version'])) {
             $this->defaultGraphVersion = $config['default_graph_version'];
         } else {
+            // @todo v6: Throw an InvalidArgumentException if "default_graph_version" is not set
             $this->defaultGraphVersion = static::DEFAULT_GRAPH_VERSION;
         }
     }

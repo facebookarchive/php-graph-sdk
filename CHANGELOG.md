@@ -1,37 +1,93 @@
 # CHANGELOG
 
-As you may have already noticed, the Facebook SDK v4 does not follow strict [semver](http://semver.org/). The versioning format used for this SDK follows `4.MAJOR.(MINOR|PATCH)`. The `MINOR` and `PATCH` versions are squashed together but there shouldn't be any breaking changes between `MINOR|PATCH` releases.
+Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org/).
 
 
-## 4.1.x
+## 5.0.x
 
-- 4.1.0 (2015-??-??)
-  - Added batch support
-  - Added `graph.beta.facebook.com` support
-  - Moved exception classes to `Exception\*` directory
-  - Moved response collection objects to `GraphNodes\*` directory
-  - Moved helpers to `Helpers\*` directory
-  - Moved `FacebookRequest` and `FacebookResponse` to `Entities\*` directory
-  - Killed `FacebookSession` in favor of `Facebook\AccessToken`
-  - Added `FacebookClient` service
-  - Renamed `FacebookRequestException` to `FacebookResponseException`
-  - Renamed `FacebookHttpable` to `FacebookHttpClientInterface`
-  - Updated the API for the helpers.
-  - Refactored request/response handling
-  - Added support for "rerequest" authorization
-  - [`AccessToken`] Added serialization support
-  - Added `ext-mbstring` to composer require
-  - Added `Facebook\FacebookApp` entity
-  - Namespaced tests
-  - Grouped functional tests under `functional` group
-  - Added `Facebook\Facebook` super service
-  - Added this CHANGELOG. Hi! :)
+Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+
+- 5.0 (2015-??-??)
+  - New features
+    - Added the `Facebook\Facebook` super service for an easier API
+    - Improved "reauthentication" and "rerequest" support
+    - Requests/Responses
+      - Added full batch support
+      - Added full file upload support for videos & photos
+      - Added methods to make pagination easier
+      - Added "deep" pagination support so that Graph edges embedded in a Graph node can be paginated over easily
+      - Beta support at `graph.beta.facebook.com`
+      - Added `getMetaData()` to `GraphList` to obtain all the metadata associated with a list of Graph nodes
+      - Full nested param support
+      - Many improvements to the Graph node subtypes
+    - New injectable interfaces
+      - Added a `PersistentDataInterface` for custom persistent data handling
+      - Added a `PseudoRandomStringGeneratorInterface` for customizable CSPRNG's 
+      - Added a `UrlDetectionInterface` for custom URL-detection logic 
+  - Codebase changes
+    - Moved exception classes to `Exception\*` directory
+    - Moved response collection objects to `GraphNodes\*` directory
+    - Moved helpers to `Helpers\*` directory
+    - Killed `FacebookSession` in favor of the `AccessToken` entity
+    - Added `FacebookClient` service
+    - Renamed `FacebookRequestException` to `FacebookResponseException`
+    - Renamed `FacebookHttpable` to `FacebookHttpClientInterface`
+    - Added `FacebookApp` entity that contains info about the Facebook app
+    - Updated the API for the helpers
+  - Tests
+    - Added namespaces to the tests
+    - Grouped functional tests under `functional` group
+  - Other changes
+    - Made PSR-2 compliant
+    - Adopted SemVer
+    - Completely refactored request/response handling
+    - Refactored the OAuth 2.0 logic
+    - Added `ext-mbstring` to composer require
+    - Added this CHANGELOG. Hi! :)
+
+
+## 4.1-dev
+
+Since the Facebook PHP SDK didn't follow SemVer in version 4.x, the master branch was going to be released as 4.1. However, the SDK switched to SemVer in v5.0. So any references on the internet to version 4.1 can be assumed to be an alias to version `5.0.0`
 
 
 ## 4.0.x
 
+Version 4.0 of the Facebook PHP SDK did not follow [SemVer](http://semver.org/). The versioning format used was as follows: `4.MAJOR.(MINOR|PATCH)`. The `MINOR` and `PATCH` versions were squashed together.
+
+- 4.0.23 (2015-04-03)
+  - Added support for new JSON response types in Graph v2.3 when requesting access tokens
+- 4.0.22 (2015-04-02)
+  - Fixed issues related to multidimensional params
+  - **Bumped default fallback Graph version to `v2.3`**
+- 4.0.21 (2015-03-31)
+  - Added a `FacebookPermissions` class to reference all the Facebook permissions
+- 4.0.20 (2015-03-02)
+  - Fixed a bug introduced in `4.0.19` related to CSRF comparisons
+- 4.0.19 (2015-03-02)
+  - Added stricter CSRF comparison checks to `SignedRequest` and `FacebookRedirectLoginHelper`
+- 4.0.18 (2015-02-24)
+  - [`FacebookHttpable`] Reverted a breaking change from `4.0.17` that changed the method signatures
+- 4.0.17 (2015-02-19)
+  - [`FacebookRedirectLoginHelper`] Added multiple auth types to `getLoginUrl()`
+  - [`GraphUser`] Added `getTimezone()`
+  - [`FacebookCurl`] Additional fix for `curl_init()` handling
+  - Added support for https://graph-video.facebook.com when path ends with `/videos`
+- 4.0.16 (2015-02-03)
+  - [`FacebookRedirectLoginHelper`] Added "reauthenticate" functionality to `getLoginUrl()`
+  - [`FacebookCurl`] Fixed `curl_init()` issue
+- 4.0.15 (2015-01-06)
+  - [`FacebookRedirectLoginHelper`] Added guard against accidental exposure of app secret via the logout link
+- 4.0.14 (2014-12-29)
+  - [`GraphUser`] Added `getGender()`
+  - [`FacebookRedirectLoginHelper`] Added CSRF protection for rerequest links
+  - [`GraphAlbum`] Fixed bugs in getter methods
+- 4.0.13 (2014-12-12)
+  - [`FacebookRedirectLoginHelper`] Added `$displayAsPopup` param to `getLoginUrl()`
+  - [`FacebookResponse`] Fixed minor pagination bug
+  - Removed massive cert bundle and replaced with `DigiCertHighAssuranceEVRootCA` for peer verification
 - 4.0.12 (2014-10-30)
-  - Added Graph v2.2 support
+  - **Updated default fallback Graph version to `v2.2`**
   - Fixed potential duplicate `type` param in URL's
   - [`FacebookRedirectLoginHelper`] Added `getReRequestUrl()`
   - [`GraphUser`] Added `getEmail()`
