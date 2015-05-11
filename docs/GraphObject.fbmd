@@ -40,7 +40,7 @@ echo $loc->getCountry();
 
 // SessionInfo example
 $info = $session->getSessionInfo());
-echo $info->getxpiresAt();
+echo $info->getExpiresAt();
 ~~~~
 
 </card>
