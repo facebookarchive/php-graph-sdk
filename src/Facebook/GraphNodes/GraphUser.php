@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphUser extends GraphObject
+class GraphUser extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.
@@ -47,7 +47,7 @@ class GraphUser extends GraphObject
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 
     /**
@@ -57,7 +57,7 @@ class GraphUser extends GraphObject
      */
     public function getName()
     {
-        return $this->getProperty('name');
+        return $this->getField('name');
     }
 
     /**
@@ -67,7 +67,7 @@ class GraphUser extends GraphObject
      */
     public function getFirstName()
     {
-        return $this->getProperty('first_name');
+        return $this->getField('first_name');
     }
 
     /**
@@ -77,7 +77,7 @@ class GraphUser extends GraphObject
      */
     public function getMiddleName()
     {
-        return $this->getProperty('middle_name');
+        return $this->getField('middle_name');
     }
 
     /**
@@ -87,7 +87,7 @@ class GraphUser extends GraphObject
      */
     public function getLastName()
     {
-        return $this->getProperty('last_name');
+        return $this->getField('last_name');
     }
 
     /**
@@ -97,7 +97,7 @@ class GraphUser extends GraphObject
      */
     public function getGender()
     {
-        return $this->getProperty('gender');
+        return $this->getField('gender');
     }
 
     /**
@@ -107,7 +107,7 @@ class GraphUser extends GraphObject
      */
     public function getLink()
     {
-        return $this->getProperty('link');
+        return $this->getField('link');
     }
 
     /**
@@ -117,7 +117,7 @@ class GraphUser extends GraphObject
      */
     public function getBirthday()
     {
-        return $this->getProperty('birthday');
+        return $this->getField('birthday');
     }
 
     /**
@@ -127,7 +127,7 @@ class GraphUser extends GraphObject
      */
     public function getLocation()
     {
-        return $this->getProperty('location');
+        return $this->getField('location');
     }
 
     /**
@@ -137,7 +137,7 @@ class GraphUser extends GraphObject
      */
     public function getHometown()
     {
-        return $this->getProperty('hometown');
+        return $this->getField('hometown');
     }
 
     /**
@@ -147,7 +147,7 @@ class GraphUser extends GraphObject
      */
     public function getSignificantOther()
     {
-        return $this->getProperty('significant_other');
+        return $this->getField('significant_other');
     }
 
     /**
@@ -157,6 +157,6 @@ class GraphUser extends GraphObject
      */
     public function getPicture()
     {
-        return $this->getProperty('picture');
+        return $this->getField('picture');
     }
 }

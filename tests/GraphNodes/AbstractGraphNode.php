@@ -26,37 +26,26 @@ namespace Facebook\Tests\GraphNodes;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
-class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Facebook\FacebookResponse
+     * @var \Facebook\FacebookResponse|\Mockery\MockInterface
      */
     protected $responseMock;
 
     public function setUp()
     {
-        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+        parent::setUp();
+        $this->responseMock = m::mock('\Facebook\FacebookResponse');
     }
 
-    public function testDatesGetCastToDateTime()
+    protected function makeFactoryWithData($data)
     {
-        $dataFromGraph = [
-            'expires_at' => 123,
-            'issued_at' => 1337,
-        ];
-
         $this->responseMock
             ->shouldReceive('getDecodedBody')
             ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+            ->andReturn($data);
 
-        $graphNode = $factory->makeGraphSessionInfo();
-
-        $expires = $graphNode->getExpiresAt();
-        $issuedAt = $graphNode->getIssuedAt();
-
-        $this->assertInstanceOf('DateTime', $expires);
-        $this->assertInstanceOf('DateTime', $issuedAt);
+        return new GraphNodeFactory($this->responseMock);
     }
 }

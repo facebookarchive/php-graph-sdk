@@ -17,7 +17,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
       - Added methods to make pagination easier
       - Added "deep" pagination support so that Graph edges embedded in a Graph node can be paginated over easily
       - Beta support at `graph.beta.facebook.com`
-      - Added `getMetaData()` to `GraphList` to obtain all the metadata associated with a list of Graph nodes
+      - Added `getMetaData()` to `GraphEdge` to obtain all the metadata associated with a list of Graph nodes
       - Full nested param support
       - Many improvements to the Graph node subtypes
     - New injectable interfaces

@@ -32,7 +32,7 @@ use Facebook\Url\UrlDetectionInterface;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
-use Facebook\GraphNodes\GraphList;
+use Facebook\GraphNodes\GraphEdge;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
@@ -354,7 +354,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $fb = new Facebook($config);
 
         $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
-        $graphList = new GraphList(
+        $graphEdge = new GraphEdge(
             $request,
             [],
             [
@@ -369,8 +369,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
             '\Facebook\GraphNodes\GraphUser'
         );
 
-        $nextPage = $fb->next($graphList);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphList', $nextPage);
+        $nextPage = $fb->next($graphEdge);
+        $this->assertInstanceOf('Facebook\GraphNodes\GraphEdge', $nextPage);
         $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $nextPage[0]);
         $this->assertEquals('Foo', $nextPage[0]['name']);
 

@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphSessionInfo extends GraphObject
+class GraphSessionInfo extends GraphNode
 {
     /**
      * Returns the application id the token was issued for.
@@ -37,7 +37,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getAppId()
     {
-        return $this->getProperty('app_id');
+        return $this->getField('app_id');
     }
 
     /**
@@ -47,7 +47,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getApplication()
     {
-        return $this->getProperty('application');
+        return $this->getField('application');
     }
 
     /**
@@ -57,7 +57,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getExpiresAt()
     {
-        return $this->getProperty('expires_at');
+        return $this->getField('expires_at');
     }
 
     /**
@@ -67,7 +67,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getIsValid()
     {
-        return $this->getProperty('is_valid');
+        return $this->getField('is_valid');
     }
 
     /**
@@ -77,7 +77,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getIssuedAt()
     {
-        return $this->getProperty('issued_at');
+        return $this->getField('issued_at');
     }
 
     /**
@@ -87,7 +87,7 @@ class GraphSessionInfo extends GraphObject
      */
     public function getScopes()
     {
-        return $this->getProperty('scopes');
+        return $this->getField('scopes');
     }
 
     /**
@@ -97,6 +97,6 @@ class GraphSessionInfo extends GraphObject
      */
     public function getUserId()
     {
-        return $this->getProperty('user_id');
+        return $this->getField('user_id');
     }
 }

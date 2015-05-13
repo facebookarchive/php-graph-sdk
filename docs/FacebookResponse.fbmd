@@ -139,11 +139,11 @@ Returns the [`Facebook\Exceptions\FacebookResponseException`](/docs/php/Facebook
 </card>
 
 <card>
-### getGraphObject() {#get-graph-object}
+### getGraphNode() {#get-graph-node}
 ~~~~
-public Facebook\GraphNodes\GraphObject getGraphObject()
+public Facebook\GraphNodes\GraphNode getGraphNode()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphObject`](/docs/php/GraphObject) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphNode`](/docs/php/GraphNode) collection.
 </card>
 
 <card>
@@ -151,7 +151,7 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphObject`](/
 ~~~~
 public Facebook\GraphNodes\GraphAlbum getGraphAlbum()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphAlbum`](/docs/php/GraphObject#album-instance-methods) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphAlbum`](/docs/php/GraphNode#album-instance-methods) collection.
 </card>
 
 <card>
@@ -159,7 +159,7 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphAlbum`](/d
 ~~~~
 public Facebook\GraphNodes\GraphPage getGraphPage()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphPage`](/docs/php/GraphObject#page-instance-methods) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphPage`](/docs/php/GraphNode#page-instance-methods) collection.
 </card>
 
 <card>
@@ -167,7 +167,7 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphPage`](/do
 ~~~~
 public Facebook\GraphNodes\GraphSessionInfo getGraphSessionInfo()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphSessionInfo`](/docs/php/GraphObject#sessioninfo-instance-methods) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphSessionInfo`](/docs/php/GraphNode#sessioninfo-instance-methods) collection.
 </card>
 
 <card>
@@ -175,13 +175,13 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphSessionInf
 ~~~~
 public Facebook\GraphNodes\GraphUser getGraphUser()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphObject#user-instance-methods) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphNode#user-instance-methods) collection.
 </card>
 
 <card>
-### getGraphList() {#get-graph-list}
+### getGraphEdge() {#get-graph-edge}
 ~~~~
-public Facebook\GraphNodes\GraphList getGraphList()
+public Facebook\GraphNodes\GraphEdge getGraphEdge()
 ~~~~
-Returns the response data in the form of a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) collection.
+Returns the response data in the form of a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection.
 </card>

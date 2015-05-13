@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphEvent extends GraphObject
+class GraphEvent extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.
@@ -48,7 +48,7 @@ class GraphEvent extends GraphObject
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 
     /**
@@ -58,7 +58,7 @@ class GraphEvent extends GraphObject
      */
     public function getCover()
     {
-        return $this->getProperty('cover');
+        return $this->getField('cover');
     }
 
     /**
@@ -68,17 +68,17 @@ class GraphEvent extends GraphObject
      */
     public function getDescription()
     {
-        return $this->getProperty('description');
+        return $this->getField('description');
     }
 
     /**
      * Returns the `end_time` (End time, if one has been set) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getEndTime()
     {
-        return $this->getProperty('end_time');
+        return $this->getField('end_time');
     }
 
     /**
@@ -88,7 +88,7 @@ class GraphEvent extends GraphObject
      */
     public function getIsDateOnly()
     {
-        return $this->getProperty('is_date_only');
+        return $this->getField('is_date_only');
     }
 
     /**
@@ -98,27 +98,27 @@ class GraphEvent extends GraphObject
      */
     public function getName()
     {
-        return $this->getProperty('name');
+        return $this->getField('name');
     }
 
     /**
      * Returns the `owner` (The profile that created the event) as GraphObject if present.
      *
-     * @return GraphObject|null
+     * @return GraphNode|null
      */
     public function getOwner()
     {
-        return $this->getProperty('owner');
+        return $this->getField('owner');
     }
 
     /**
      * Returns the `parent_group` (The group the event belongs to) as GraphObject if present.
      *
-     * @return GraphObject|null
+     * @return GraphNode|null
      */
     public function getParentGroup()
     {
-        return $this->getProperty('parent_group');
+        return $this->getField('parent_group');
     }
 
     /**
@@ -128,7 +128,7 @@ class GraphEvent extends GraphObject
      */
     public function getPlace()
     {
-        return $this->getProperty('place');
+        return $this->getField('place');
     }
 
     /**
@@ -138,17 +138,17 @@ class GraphEvent extends GraphObject
      */
     public function getPrivacy()
     {
-        return $this->getProperty('privacy');
+        return $this->getField('privacy');
     }
 
     /**
      * Returns the `start_time` (Start time) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getStartTime()
     {
-        return $this->getProperty('start_time');
+        return $this->getField('start_time');
     }
 
     /**
@@ -158,7 +158,7 @@ class GraphEvent extends GraphObject
      */
     public function getTicketUri()
     {
-        return $this->getProperty('ticket_uri');
+        return $this->getField('ticket_uri');
     }
 
     /**
@@ -168,17 +168,17 @@ class GraphEvent extends GraphObject
      */
     public function getTimezone()
     {
-        return $this->getProperty('timezone');
+        return $this->getField('timezone');
     }
 
     /**
      * Returns the `updated_time` (Last update time) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedTime()
     {
-        return $this->getProperty('updated_time');
+        return $this->getField('updated_time');
     }
 
     /**
@@ -188,7 +188,7 @@ class GraphEvent extends GraphObject
      */
     public function getPicture()
     {
-        return $this->getProperty('picture');
+        return $this->getField('picture');
     }
 
     /**
@@ -198,7 +198,7 @@ class GraphEvent extends GraphObject
      */
     public function getAttendingCount()
     {
-        return $this->getProperty('attending_count');
+        return $this->getField('attending_count');
     }
 
     /**
@@ -208,7 +208,7 @@ class GraphEvent extends GraphObject
      */
     public function getDeclinedCount()
     {
-        return $this->getProperty('declined_count');
+        return $this->getField('declined_count');
     }
 
     /**
@@ -218,7 +218,7 @@ class GraphEvent extends GraphObject
      */
     public function getMaybeCount()
     {
-        return $this->getProperty('maybe_count');
+        return $this->getField('maybe_count');
     }
 
     /**
@@ -228,7 +228,7 @@ class GraphEvent extends GraphObject
      */
     public function getNoreplyCount()
     {
-        return $this->getProperty('noreply_count');
+        return $this->getField('noreply_count');
     }
 
     /**
@@ -238,6 +238,6 @@ class GraphEvent extends GraphObject
      */
     public function getInvitedCount()
     {
-        return $this->getProperty('invited_count');
+        return $this->getField('invited_count');
     }
 }

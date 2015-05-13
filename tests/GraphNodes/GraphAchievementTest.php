@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-class GraphAchievementTest extends GraphNodeTest
+class GraphAchievementTest extends AbstractGraphNode
 {
 
     public function testIdIsString()
@@ -33,9 +33,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $id = $graphObject->getId();
+        $id = $graphNode->getId();
 
         $this->assertEquals($dataFromGraph['id'], $id);
     }
@@ -47,9 +47,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $type = $graphObject->getType();
+        $type = $graphNode->getType();
 
         $this->assertEquals('game.achievement', $type);
     }
@@ -61,9 +61,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $isNoFeedStory = $graphObject->isNoFeedStory();
+        $isNoFeedStory = $graphNode->isNoFeedStory();
 
         $this->assertTrue(is_bool($isNoFeedStory));
     }
@@ -75,9 +75,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $publishTime = $graphObject->getPublishTime();
+        $publishTime = $graphNode->getPublishTime();
 
         $this->assertInstanceOf('DateTime', $publishTime);
     }
@@ -92,9 +92,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $from = $graphObject->getFrom();
+        $from = $graphNode->getFrom();
 
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphUser', $from);
     }
@@ -108,9 +108,9 @@ class GraphAchievementTest extends GraphNodeTest
         ];
 
         $factory = $this->makeFactoryWithData($dataFromGraph);
-        $graphObject = $factory->makeGraphAchievement();
+        $graphNode = $factory->makeGraphAchievement();
 
-        $app = $graphObject->getApplication();
+        $app = $graphNode->getApplication();
 
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphApplication', $app);
     }

@@ -32,14 +32,14 @@ try {
 }
 
 // Page 1
-$feed = $response->getGraphList();
+$feedEdge = $response->getGraphEdge();
 
-foreach ($feed as $status) {
+foreach ($feedEdge as $status) {
   var_dump($status->asArray());
 }
 
 // Page 2 (next 5 results)
-$nextFeed = $fb->next($feed);
+$nextFeed = $fb->next($feedEdge);
 
 foreach ($nextFeed as $status) {
   var_dump($status->asArray());

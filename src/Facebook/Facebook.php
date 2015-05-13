@@ -27,7 +27,7 @@ use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
-use Facebook\GraphNodes\GraphList;
+use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
@@ -430,55 +430,55 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function next(GraphList $graphList)
+    public function next(GraphEdge $graphEdge)
     {
-        return $this->getPaginationResults($graphList, 'next');
+        return $this->getPaginationResults($graphEdge, 'next');
     }
 
     /**
      * Sends a request to Graph for the previous page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function previous(GraphList $graphList)
+    public function previous(GraphEdge $graphEdge)
     {
-        return $this->getPaginationResults($graphList, 'previous');
+        return $this->getPaginationResults($graphEdge, 'previous');
     }
 
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphList $graphList The GraphList to paginate over.
+     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
      * @param string    $direction The direction of the pagination: next|previous.
      *
-     * @return GraphList|null
+     * @return GraphEdge|null
      *
      * @throws FacebookSDKException
      */
-    public function getPaginationResults(GraphList $graphList, $direction)
+    public function getPaginationResults(GraphEdge $graphEdge, $direction)
     {
-        $paginationRequest = $graphList->getPaginationRequest($direction);
+        $paginationRequest = $graphEdge->getPaginationRequest($direction);
         if (!$paginationRequest) {
             return null;
         }
 
         $this->lastResponse = $this->client->sendRequest($paginationRequest);
 
-        // Keep the same GraphObject subclass
-        $subClassName = $graphList->getSubClassName();
-        $graphList = $this->lastResponse->getGraphList($subClassName, false);
+        // Keep the same GraphNode subclass
+        $subClassName = $graphEdge->getSubClassName();
+        $graphEdge = $this->lastResponse->getGraphEdge($subClassName, false);
 
-        return count($graphList) > 0 ? $graphList : null;
+        return count($graphEdge) > 0 ? $graphEdge : null;
     }
 
     /**

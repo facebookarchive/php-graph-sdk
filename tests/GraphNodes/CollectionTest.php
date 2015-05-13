@@ -30,38 +30,50 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAnExistingPropertyCanBeAccessed()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('foo');
+        $graphNode = new Collection(['foo' => 'bar']);
 
+        $field = $graphNode->getField('foo');
+        $this->assertEquals('bar', $field);
+
+        // @todo v6: Remove this assertion
+        $property = $graphNode->getProperty('foo');
         $this->assertEquals('bar', $property);
     }
 
     public function testAMissingPropertyWillReturnNull()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('baz');
+        $graphNode = new Collection(['foo' => 'bar']);
+        $field = $graphNode->getField('baz');
 
-        $this->assertNull($property, 'Expected the property to return null.');
+        $this->assertNull($field, 'Expected the property to return null.');
     }
 
     public function testAMissingPropertyWillReturnTheDefault()
     {
-        $graphObject = new Collection(['foo' => 'bar']);
-        $property = $graphObject->getProperty('baz', 'faz');
+        $graphNode = new Collection(['foo' => 'bar']);
 
+        $field = $graphNode->getField('baz', 'faz');
+        $this->assertEquals('faz', $field);
+
+        // @todo v6: Remove this assertion
+        $property = $graphNode->getProperty('baz', 'faz');
         $this->assertEquals('faz', $property);
     }
 
     public function testTheKeysFromTheCollectionCanBeReturned()
     {
-        $graphObject = new Collection([
+        $graphNode = new Collection([
             'key1' => 'foo',
             'key2' => 'bar',
             'key3' => 'baz',
         ]);
-        $propertyKeys = $graphObject->getPropertyNames();
 
-        $this->assertEquals(['key1', 'key2', 'key3'], $propertyKeys);
+        $fieldNames = $graphNode->getFieldNames();
+        $this->assertEquals(['key1', 'key2', 'key3'], $fieldNames);
+
+        // @todo v6: Remove this assertion
+        $propertyNames = $graphNode->getPropertyNames();
+        $this->assertEquals(['key1', 'key2', 'key3'], $propertyNames);
     }
 
     public function testAnArrayCanBeInjectedViaTheConstructor()

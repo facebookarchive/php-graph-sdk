@@ -13,7 +13,7 @@ To instantiate a new `Facebook\Facebook` service, pass an array of configuration
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.2',
+  'default_graph_version' => 'v2.3',
   // . . .
   ]);
 ~~~~
@@ -53,7 +53,7 @@ $fb = new Facebook\Facebook([
   'app_secret' => '{app-secret}',
   'default_access_token' => '{access-token}',
   'enable_beta_mode' => true,
-  'default_graph_version' => 'v2.2',
+  'default_graph_version' => 'v2.3',
   'http_client_handler' => 'guzzle',
   'persistent_data_handler' => 'memory',
   'url_detection_handler' => new MyUrlDetectionHandler(),
@@ -442,27 +442,27 @@ $helper = $fb->getPageTabHelper();
 <card>
 ### next() {#next}
 ~~~~
-public Facebook\GraphNodes\GraphList|null next(Facebook\GraphNodes\GraphList $graphList)
+public Facebook\GraphNodes\GraphEdge|null next(Facebook\GraphNodes\GraphEdge $graphEdge)
 ~~~~
 
-Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphList`](/docs/php/GraphList) collection. If the next page returns no results, `null` will be returned.
+Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection. If the next page returns no results, `null` will be returned.
 
 ~~~~
 // Iterate over 5 pages max
 $maxPages = 5;
 
-// Get a list of photo objects
+// Get a list of photo nodes from the /photos edge
 $response = $fb->get('/me/photos?fields=id,source,likes&limit=5');
 
-$photosList = $response->getGraphList();
+$photosEdge = $response->getGraphEdge();
 
-if (count($photosList) > 0) {
+if (count($photosEdge) > 0) {
   $pageCount = 0;
   do {
-    foreach ($photosList as $photo) {
+    foreach ($photosEdge as $photo) {
       var_dump($photo->asArray());
 
-      // Deep pagination is supported on child GraphList's
+      // Deep pagination is supported on child GraphEdge's
       $likes = $photo['likes'];
       do {
         echo '<p>Likes:</p>' . "\n\n";
@@ -470,7 +470,7 @@ if (count($photosList) > 0) {
       } while ($likes = $fb->next($likes));
     }
     $pageCount++;
-  } while ($pageCount < $maxPages && $photosList = $fb->next($photosList));
+  } while ($pageCount < $maxPages && $photosEdge = $fb->next($photosEdge));
 }
 ~~~~
 </card>
@@ -478,10 +478,10 @@ if (count($photosList) > 0) {
 <card>
 ### previous() {#previous}
 ~~~~
-public Facebook\GraphNodes\GraphList|null previous(Facebook\GraphNodes\GraphList $graphList)
+public Facebook\GraphNodes\GraphEdge|null previous(Facebook\GraphNodes\GraphEdge $graphEdge)
 ~~~~
 
-Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphList` collection. Functions just like `next()` above, but in the opposite direction of pagination.
+Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphEdge` collection. Functions just like `next()` above, but in the opposite direction of pagination.
 </card>
 
 <card>
@@ -506,9 +506,9 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Photo ID: ' . $graphObject['id'];
+echo 'Photo ID: ' . $graphNode['id'];
 ~~~~
 </card>
 
@@ -535,8 +535,8 @@ try {
   exit;
 }
 
-$graphObject = $response->getGraphObject();
+$graphNode = $response->getGraphNode();
 
-echo 'Video ID: ' . $graphObject['id'];
+echo 'Video ID: ' . $graphNode['id'];
 ~~~~
 </card>

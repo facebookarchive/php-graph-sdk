@@ -24,7 +24,7 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphPageTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,11 +57,11 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
-        $graphObject = $factory->makeGraphPage();
+        $factory = new GraphNodeFactory($this->responseMock);
+        $graphNode = $factory->makeGraphPage();
 
-        $bestPage = $graphObject->getBestPage();
-        $globalBrandParentPage = $graphObject->getGlobalBrandParentPage();
+        $bestPage = $graphNode->getBestPage();
+        $globalBrandParentPage = $graphNode->getGlobalBrandParentPage();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
@@ -85,10 +85,10 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
-        $graphObject = $factory->makeGraphPage();
+        $factory = new GraphNodeFactory($this->responseMock);
+        $graphNode = $factory->makeGraphPage();
 
-        $location = $graphObject->getLocation();
+        $location = $graphNode->getLocation();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
     }

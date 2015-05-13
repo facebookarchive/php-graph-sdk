@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphPage extends GraphObject
+class GraphPage extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.
@@ -46,7 +46,7 @@ class GraphPage extends GraphObject
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 
     /**
@@ -56,7 +56,7 @@ class GraphPage extends GraphObject
      */
     public function getCategory()
     {
-        return $this->getProperty('category');
+        return $this->getField('category');
     }
 
     /**
@@ -66,7 +66,7 @@ class GraphPage extends GraphObject
      */
     public function getName()
     {
-        return $this->getProperty('name');
+        return $this->getField('name');
     }
 
     /**
@@ -76,7 +76,7 @@ class GraphPage extends GraphObject
      */
     public function getBestPage()
     {
-        return $this->getProperty('best_page');
+        return $this->getField('best_page');
     }
 
     /**
@@ -86,7 +86,7 @@ class GraphPage extends GraphObject
      */
     public function getGlobalBrandParentPage()
     {
-        return $this->getProperty('global_brand_parent_page');
+        return $this->getField('global_brand_parent_page');
     }
 
     /**
@@ -96,7 +96,7 @@ class GraphPage extends GraphObject
      */
     public function getLocation()
     {
-        return $this->getProperty('location');
+        return $this->getField('location');
     }
 
     /**
@@ -108,7 +108,7 @@ class GraphPage extends GraphObject
      */
     public function getAccessToken()
     {
-        return $this->getProperty('access_token');
+        return $this->getField('access_token');
     }
 
     /**
@@ -120,6 +120,6 @@ class GraphPage extends GraphObject
      */
     public function getPerms()
     {
-        return $this->getProperty('perms');
+        return $this->getField('perms');
     }
 }

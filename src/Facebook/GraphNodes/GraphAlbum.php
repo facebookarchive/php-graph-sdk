@@ -29,7 +29,7 @@ namespace Facebook\GraphNodes;
  * @package Facebook
  */
 
-class GraphAlbum extends GraphObject
+class GraphAlbum extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.
@@ -46,7 +46,7 @@ class GraphAlbum extends GraphObject
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 
     /**
@@ -56,7 +56,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCanUpload()
     {
-        return $this->getProperty('can_upload');
+        return $this->getField('can_upload');
     }
 
     /**
@@ -66,7 +66,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCount()
     {
-        return $this->getProperty('count');
+        return $this->getField('count');
     }
 
     /**
@@ -76,7 +76,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCoverPhoto()
     {
-        return $this->getProperty('cover_photo');
+        return $this->getField('cover_photo');
     }
 
     /**
@@ -86,7 +86,7 @@ class GraphAlbum extends GraphObject
      */
     public function getCreatedTime()
     {
-        return $this->getProperty('created_time');
+        return $this->getField('created_time');
     }
 
     /**
@@ -96,7 +96,7 @@ class GraphAlbum extends GraphObject
      */
     public function getUpdatedTime()
     {
-        return $this->getProperty('updated_time');
+        return $this->getField('updated_time');
     }
 
     /**
@@ -106,7 +106,7 @@ class GraphAlbum extends GraphObject
      */
     public function getDescription()
     {
-        return $this->getProperty('description');
+        return $this->getField('description');
     }
 
     /**
@@ -116,7 +116,7 @@ class GraphAlbum extends GraphObject
      */
     public function getFrom()
     {
-        return $this->getProperty('from');
+        return $this->getField('from');
     }
 
     /**
@@ -126,7 +126,7 @@ class GraphAlbum extends GraphObject
      */
     public function getPlace()
     {
-        return $this->getProperty('place');
+        return $this->getField('place');
     }
 
     /**
@@ -136,7 +136,7 @@ class GraphAlbum extends GraphObject
      */
     public function getLink()
     {
-        return $this->getProperty('link');
+        return $this->getField('link');
     }
 
     /**
@@ -146,7 +146,7 @@ class GraphAlbum extends GraphObject
      */
     public function getLocation()
     {
-        return $this->getProperty('location');
+        return $this->getField('location');
     }
 
     /**
@@ -156,7 +156,7 @@ class GraphAlbum extends GraphObject
      */
     public function getName()
     {
-        return $this->getProperty('name');
+        return $this->getField('name');
     }
 
     /**
@@ -166,7 +166,7 @@ class GraphAlbum extends GraphObject
      */
     public function getPrivacy()
     {
-        return $this->getProperty('privacy');
+        return $this->getField('privacy');
     }
 
     /**
@@ -178,6 +178,6 @@ class GraphAlbum extends GraphObject
      */
     public function getType()
     {
-        return $this->getProperty('type');
+        return $this->getField('type');
     }
 }

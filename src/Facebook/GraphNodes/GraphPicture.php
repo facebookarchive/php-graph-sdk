@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphPicture extends GraphObject
+class GraphPicture extends GraphNode
 {
     /**
      * Returns true if user picture is silhouette.
@@ -37,7 +37,7 @@ class GraphPicture extends GraphObject
      */
     public function isSilhouette()
     {
-        return $this->getProperty('is_silhouette');
+        return $this->getField('is_silhouette');
     }
 
     /**
@@ -47,7 +47,7 @@ class GraphPicture extends GraphObject
      */
     public function getUrl()
     {
-        return $this->getProperty('url');
+        return $this->getField('url');
     }
 
     /**
@@ -57,7 +57,7 @@ class GraphPicture extends GraphObject
      */
     public function getWidth()
     {
-        return $this->getProperty('width');
+        return $this->getField('width');
     }
 
     /**
@@ -67,6 +67,6 @@ class GraphPicture extends GraphObject
      */
     public function getHeight()
     {
-        return $this->getProperty('height');
+        return $this->getField('height');
     }
 }

@@ -24,7 +24,7 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,11 +52,11 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $factory = new GraphNodeFactory($this->responseMock);
+        $graphNode = $factory->makeGraphAlbum();
 
-        $createdTime = $graphObject->getCreatedTime();
-        $updatedTime = $graphObject->getUpdatedTime();
+        $createdTime = $graphNode->getCreatedTime();
+        $updatedTime = $graphNode->getUpdatedTime();
 
         $this->assertInstanceOf('DateTime', $createdTime);
         $this->assertInstanceOf('DateTime', $updatedTime);
@@ -76,10 +76,10 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $factory = new GraphNodeFactory($this->responseMock);
+        $graphNode = $factory->makeGraphAlbum();
 
-        $from = $graphObject->getFrom();
+        $from = $graphNode->getFrom();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
     }
@@ -99,10 +99,10 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
-        $graphObject = $factory->makeGraphAlbum();
+        $factory = new GraphNodeFactory($this->responseMock);
+        $graphNode = $factory->makeGraphAlbum();
 
-        $place = $graphObject->getPlace();
+        $place = $graphNode->getPlace();
 
         $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
     }
