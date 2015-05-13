@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphCoverPhoto extends GraphObject
+class GraphCoverPhoto extends GraphNode
 {
     /**
      * Returns the id of cover if it exists

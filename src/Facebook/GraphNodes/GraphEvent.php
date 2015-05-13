@@ -28,7 +28,7 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphEvent extends GraphObject
+class GraphEvent extends GraphNode
 {
     /**
      * @var array Maps object key names to Graph object types.
@@ -74,7 +74,7 @@ class GraphEvent extends GraphObject
     /**
      * Returns the `end_time` (End time, if one has been set) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getEndTime()
     {
@@ -104,7 +104,7 @@ class GraphEvent extends GraphObject
     /**
      * Returns the `owner` (The profile that created the event) as GraphObject if present.
      *
-     * @return GraphObject|null
+     * @return GraphNode|null
      */
     public function getOwner()
     {
@@ -114,7 +114,7 @@ class GraphEvent extends GraphObject
     /**
      * Returns the `parent_group` (The group the event belongs to) as GraphObject if present.
      *
-     * @return GraphObject|null
+     * @return GraphNode|null
      */
     public function getParentGroup()
     {
@@ -144,7 +144,7 @@ class GraphEvent extends GraphObject
     /**
      * Returns the `start_time` (Start time) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getStartTime()
     {
@@ -174,7 +174,7 @@ class GraphEvent extends GraphObject
     /**
      * Returns the `updated_time` (Last update time) as DateTime if present.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
     public function getUpdatedTime()
     {

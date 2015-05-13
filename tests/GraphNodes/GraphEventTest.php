@@ -25,7 +25,7 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\FacebookResponse;
 use Mockery as m;
-use Facebook\GraphNodes\GraphObjectFactory;
+use Facebook\GraphNodes\GraphNodeFactory;
 
 class GraphEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +51,7 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphEvent();
 
         $end_time = $graphObject->getEndTime();
@@ -72,7 +72,7 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphEvent();
 
         $cover = $graphObject->getCover();
@@ -89,7 +89,7 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphEvent();
 
         $place = $graphObject->getPlace();
@@ -106,7 +106,7 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->shouldReceive('getDecodedBody')
             ->once()
             ->andReturn($dataFromGraph);
-        $factory = new GraphObjectFactory($this->responseMock);
+        $factory = new GraphNodeFactory($this->responseMock);
         $graphObject = $factory->makeGraphEvent();
 
         $picture = $graphObject->getPicture();

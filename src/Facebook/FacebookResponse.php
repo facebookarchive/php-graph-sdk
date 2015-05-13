@@ -354,7 +354,7 @@ class FacebookResponse
      */
     public function getGraphEvent()
     {
-        $factory = new GraphObjectFactory($this);
+        $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphEvent();
     }
