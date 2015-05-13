@@ -147,7 +147,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GraphNodeFactory($res);
         $mySubClassObject = $factory->makeGraphNode('\Facebook\Tests\GraphNodes\MyFooGraphNode');
-        $fooObject = $mySubClassObject->getProperty('foo_object');
+        $fooObject = $mySubClassObject->getField('foo_object');
 
         $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
         $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode', $fooObject);
@@ -168,7 +168,7 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new GraphNodeFactory($res);
 
         $mySubClassObject = $factory->makeGraphNode('\Facebook\Tests\GraphNodes\MyFooGraphNode');
-        $unknownObject = $mySubClassObject->getProperty('unknown_object');
+        $unknownObject = $mySubClassObject->getField('unknown_object');
 
         $this->assertInstanceOf('\Facebook\Tests\GraphNodes\MyFooGraphNode', $mySubClassObject);
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $unknownObject);

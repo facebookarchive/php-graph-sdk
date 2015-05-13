@@ -46,7 +46,7 @@ class GraphAchievement extends GraphNode
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 
     /**
@@ -56,7 +56,7 @@ class GraphAchievement extends GraphNode
      */
     public function getFrom()
     {
-        return $this->getProperty('from');
+        return $this->getField('from');
     }
 
     /**
@@ -66,7 +66,7 @@ class GraphAchievement extends GraphNode
      */
     public function getPublishTime()
     {
-        return $this->getProperty('publish_time');
+        return $this->getField('publish_time');
     }
 
     /**
@@ -76,7 +76,7 @@ class GraphAchievement extends GraphNode
      */
     public function getApplication()
     {
-        return $this->getProperty('application');
+        return $this->getField('application');
     }
 
     /**
@@ -86,7 +86,7 @@ class GraphAchievement extends GraphNode
      */
     public function getData()
     {
-        return $this->getProperty('data');
+        return $this->getField('data');
     }
 
     /**
@@ -108,6 +108,6 @@ class GraphAchievement extends GraphNode
      */
     public function isNoFeedStory()
     {
-        return $this->getProperty('no_feed_story');
+        return $this->getField('no_feed_story');
     }
 }

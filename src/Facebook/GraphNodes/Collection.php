@@ -56,14 +56,14 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * Gets the value of the named property for this graph object.
+     * Gets the value of a field from the Graph node.
      *
-     * @param string $name    The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $name    The field to retrieve.
+     * @param mixed  $default The default to return if the field doesn't exist.
      *
      * @return mixed
      */
-    public function getProperty($name, $default = null)
+    public function getField($name, $default = null)
     {
         if (isset($this->items[$name])) {
             return $this->items[$name];
@@ -73,13 +73,42 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * Returns a list of all properties set on the object.
+     * Gets the value of the named property for this graph object.
+     *
+     * @param string $name    The property to retrieve.
+     * @param mixed  $default The default to return if the property doesn't exist.
+     *
+     * @return mixed
+     *
+     * @deprecated 5.0.0 getProperty() has been renamed to getField()
+     * @todo v6: Remove this method
+     */
+    public function getProperty($name, $default = null)
+    {
+        return $this->getField($name, $default);
+    }
+
+    /**
+     * Returns a list of all fields set on the object.
      *
      * @return array
      */
-    public function getPropertyNames()
+    public function getFieldNames()
     {
         return array_keys($this->items);
+    }
+
+    /**
+     * Returns a list of all properties set on the object.
+     *
+     * @return array
+     *
+     * @deprecated 5.0.0 getPropertyNames() has been renamed to getFieldNames()
+     * @todo v6: Remove this method
+     */
+    public function getPropertyNames()
+    {
+        return $this->getFieldNames();
     }
 
     /**

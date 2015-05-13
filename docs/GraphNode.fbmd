@@ -35,11 +35,11 @@ $user = $response->getGraphUser());
 $page = $response->getGraphPage();
 
 // User example
-echo $graphNode->getProperty('name'); // From GraphNode
+echo $graphNode->getField('name'); // From GraphNode
 echo $user->getName(); // From GraphUser
 
 // Location example
-echo $graphNode->getProperty('country'); // From GraphNode
+echo $graphNode->getField('country'); // From GraphNode
 echo $location->getCountry(); // From GraphLocation
 ~~~~
 </card>
@@ -74,7 +74,7 @@ $total = count($graphNode);
 
 ### asArray {#as-array}
 `asArray()`  
-Returns the raw representation (associative arrays, nested) of this objects underlying data.
+Returns the raw representation (associative arrays, nested) of the node's underlying data.
 
 
 ### asJson {#as-json}
@@ -82,16 +82,16 @@ Returns the raw representation (associative arrays, nested) of this objects unde
 Returns the data as a JSON string.
 
 
-### getProperty {#get-property}
-`getProperty(string $name, string $default = 'foo')`
-Gets the value of a named key for this graph object.  If the value is a scalar (string, number, etc.) it will be returned.  If it's an associative array, it will be returned as a GraphNode.
+### getField {#get-field}
+`getField(string $name, string $default = 'foo')`
+Gets the value from the field of a Graph node.  If the value is a scalar (string, number, etc.) it will be returned.  If it's an associative array, it will be returned as a GraphNode.
 
-The second argument lets you define a default value to return if the property doesn't exist.
+The second argument lets you define a default value to return if the field doesn't exist.
 
 
-### getPropertyNames {#get-property-names}
-`getPropertyNames()`  
-Returns an array with the names of all properties present on this graph object.
+### getFieldNames {#get-field-names}
+`getFieldNames()`
+Returns an array with the names of all fields present on the graph node.
 
 
 ### map {#map}
@@ -481,13 +481,13 @@ Returns the `name` property (Event name) for the event as a string if present.
 
 ### getOwner() {#event-owner}
 ~~~~
-public GraphObject|null getOwner()~~~~
-Returns the `owner` property (The profile that created the event) for the event as a GraphObject if present.
+public GraphNode|null getOwner()~~~~
+Returns the `owner` property (The profile that created the event) for the event as a GraphNode if present.
 
 ### getParentGroup() {#event-parent_group}
 ~~~~
-public GraphObject|null getParentGroup()~~~~
-Returns the `parent_group` property (The group the event belongs to) for the event as a GraphObject if present.
+public GraphNode|null getParentGroup()~~~~
+Returns the `parent_group` property (The group the event belongs to) for the event as a GraphNode if present.
 
 ### getPlace() {#event-place}
 ~~~~

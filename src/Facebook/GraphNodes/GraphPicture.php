@@ -37,7 +37,7 @@ class GraphPicture extends GraphNode
      */
     public function isSilhouette()
     {
-        return $this->getProperty('is_silhouette');
+        return $this->getField('is_silhouette');
     }
 
     /**
@@ -47,7 +47,7 @@ class GraphPicture extends GraphNode
      */
     public function getUrl()
     {
-        return $this->getProperty('url');
+        return $this->getField('url');
     }
 
     /**
@@ -57,7 +57,7 @@ class GraphPicture extends GraphNode
      */
     public function getWidth()
     {
-        return $this->getProperty('width');
+        return $this->getField('width');
     }
 
     /**
@@ -67,6 +67,6 @@ class GraphPicture extends GraphNode
      */
     public function getHeight()
     {
-        return $this->getProperty('height');
+        return $this->getField('height');
     }
 }

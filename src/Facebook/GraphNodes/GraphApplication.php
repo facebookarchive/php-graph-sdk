@@ -38,6 +38,6 @@ class GraphApplication extends GraphNode
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
 }

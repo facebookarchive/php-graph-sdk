@@ -37,7 +37,7 @@ class GraphCoverPhoto extends GraphNode
      */
     public function getId()
     {
-        return $this->getProperty('id');
+        return $this->getField('id');
     }
     
     /**
@@ -47,7 +47,7 @@ class GraphCoverPhoto extends GraphNode
      */
     public function getSource()
     {
-        return $this->getProperty('source');
+        return $this->getField('source');
     }
 
     /**
@@ -57,7 +57,7 @@ class GraphCoverPhoto extends GraphNode
      */
     public function getOffsetX()
     {
-        return $this->getProperty('offset_x');
+        return $this->getField('offset_x');
     }
 
     /**
@@ -67,6 +67,6 @@ class GraphCoverPhoto extends GraphNode
      */
     public function getOffsetY()
     {
-        return $this->getProperty('offset_y');
+        return $this->getField('offset_y');
     }
 }
