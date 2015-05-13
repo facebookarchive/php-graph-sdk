@@ -346,6 +346,20 @@ class FacebookResponse
     }
 
     /**
+     * Convenience method for creating a GraphEvent collection.
+     *
+     * @return \Facebook\GraphNodes\GraphEvent
+     *
+     * @throws FacebookSDKException
+     */
+    public function getGraphEvent()
+    {
+        $factory = new GraphObjectFactory($this);
+
+        return $factory->makeGraphEvent();
+    }
+
+    /**
      * Instantiate a new GraphList from response.
      *
      * @param string|null $subclassName The GraphNode sub class to cast list items to.

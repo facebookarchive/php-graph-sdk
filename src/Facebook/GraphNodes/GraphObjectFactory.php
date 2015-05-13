@@ -56,6 +56,18 @@ class GraphObjectFactory extends GraphNodeFactory
     {
         return $this->makeGraphNode($subclassName);
     }
+    
+    /**
+     * Convenience method for creating a GraphEvent collection.
+     *
+     * @return GraphEvent
+     *
+     * @throws FacebookSDKException
+     */
+    public function makeGraphEvent()
+    {
+        return $this->makeGraphObject(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphEvent');
+    }
 
     /**
      * Tries to convert a FacebookResponse entity into a GraphEdge.
