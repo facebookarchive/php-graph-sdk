@@ -26,7 +26,7 @@ $fb = new Facebook\Facebook(\* *\);
 $response = $fb->get('/something');
 
 // Get the base class GraphNode from the response
-$node = $response->getGraphNode();
+$graphNode = $response->getGraphNode();
 
 // Get the response typed as a GraphUser
 $user = $response->getGraphUser());
@@ -35,11 +35,11 @@ $user = $response->getGraphUser());
 $page = $response->getGraphPage();
 
 // User example
-echo $node->getProperty('name'); // From GraphNode
+echo $graphNode->getProperty('name'); // From GraphNode
 echo $user->getName(); // From GraphUser
 
 // Location example
-echo $node->getProperty('country'); // From GraphNode
+echo $graphNode->getProperty('country'); // From GraphNode
 echo $location->getCountry(); // From GraphLocation
 ~~~~
 </card>

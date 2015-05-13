@@ -96,10 +96,10 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $res = new FacebookResponse($this->request, $data);
 
         $factory = new GraphObjectFactory($res);
-        $graphEdge = $factory->makeGraphList();
-        $graphData = $graphEdge->asArray();
+        $graphList = $factory->makeGraphList();
+        $graphData = $graphList->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphEdge);
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphList);
         $this->assertEquals([
           'id' => '123',
           'name' => 'Foo McBar',
