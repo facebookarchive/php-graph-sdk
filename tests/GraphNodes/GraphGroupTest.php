@@ -27,7 +27,7 @@ use Facebook\FacebookResponse;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
-class GraphEventTest extends \PHPUnit_Framework_TestCase
+class GraphGroupTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var FacebookResponse
@@ -50,16 +50,16 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphGroup();
 
-        $cover = $graphObject->getCover();
+        $cover = $graphNode->getCover();
         $this->assertInstanceOf('\Facebook\GraphNodes\GraphCoverPhoto', $cover);
     }
 
-    public function testPlaceGetsCastAsGraphPage()
+    public function testVenueGetsCastAsGraphLocation()
     {
         $dataFromGraph = [
-            'place' => ['id' => '1337']
+            'venue' => ['id' => '1337']
         ];
 
         $this->responseMock
@@ -67,43 +67,9 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphGroup();
 
-        $place = $graphObject->getPlace();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphPage', $place);
-    }
-
-    public function testPictureGetsCastAsGraphPicture()
-    {
-        $dataFromGraph = [
-            'picture' => ['id' => '1337']
-        ];
-
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphEvent();
-
-        $picture = $graphObject->getPicture();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphPicture', $picture);
-    }
-
-    public function testParentGroupGetsCastAsGraphGroup()
-    {
-        $dataFromGraph = [
-            'parent_group' => ['id' => '1337']
-        ];
-
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
-        $graphObject = $factory->makeGraphEvent();
-
-        $parentGroup = $graphObject->getParentGroup();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphGroup', $parentGroup);
+        $venue = $graphNode->getVenue();
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphLocation', $venue);
     }
 }

@@ -168,6 +168,18 @@ class GraphNodeFactory
     }
 
     /**
+     * Convenience method for creating a GraphGroup collection.
+     *
+     * @return GraphGroup
+     *
+     * @throws FacebookSDKException
+     */
+    public function makeGraphGroup()
+    {
+        return $this->makeGraphNode(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphGroup');
+    }
+
+    /**
      * Tries to convert a FacebookResponse entity into a GraphEdge.
      *
      * @param string|null $subclassName The GraphNode sub class to cast the list items to.
