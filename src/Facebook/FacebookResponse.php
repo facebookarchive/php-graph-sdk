@@ -360,6 +360,20 @@ class FacebookResponse
     }
 
     /**
+     * Convenience method for creating a GraphGroup collection.
+     *
+     * @return \Facebook\GraphNodes\GraphGroup
+     *
+     * @throws FacebookSDKException
+     */
+    public function getGraphGroup()
+    {
+        $factory = new GraphNodeFactory($this);
+
+        return $factory->makeGraphGroup();
+    }
+
+    /**
      * Instantiate a new GraphList from response.
      *
      * @param string|null $subclassName The GraphNode sub class to cast list items to.
