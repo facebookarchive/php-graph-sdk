@@ -280,105 +280,135 @@ FB(devsite:markdown-wiki:table {
   columns: ['Property','GraphNode subtype',],
   rows: [
     [
-      '`from`',
-      '[`Facebook\GraphNodes\GraphUser`](#user-instance-methods)',
+      '`event`',
+      '[`Facebook\GraphNodes\GraphEvent`](#event-instance-methods)',
     ],
     [
       '`place`',
       '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
     ],
+    [
+      '`picture`',
+      '[`Facebook\GraphNodes\GraphPicture`](#picture-instance-methods)',
+    ],
   ],
 })
 
-All getter methods return `null` if the property does not exist on the node.
+All getter methods return `null` if the field does not exist on the node.
 
 ### getId() {#album-getid}
 ~~~~
 public string|null getId()
 ~~~~
-Returns the `id` property for the album as a string if present.
-
-### getName() {#album-getname}
-~~~~
-public string|null getName()
-~~~~
-Returns the `name` property for the album as a string if present.
+The album ID.
 
 ### getCanUpload() {#album-getcanupload}
 ~~~~
 public boolean|null getCanUpload()
 ~~~~
-Returns the `can_upload` property for the album as a boolean if present.
+Whether the viewer can upload photos to this album.
 
 ### getCount() {#album-getcount}
 ~~~~
 public int|null getCount()
 ~~~~
-Returns the `count` property for the album as an integer if present.
+Number of photos in this album.
 
 ### getCoverPhoto() {#album-getcoverphoto}
 ~~~~
 public string|null getCoverPhoto()
 ~~~~
-Returns the `cover_photo` property for the album as a string if present.
+Album cover photo id.
 
 ### getCreatedTime() {#album-getcreatedtime}
 ~~~~
 public \DateTime|null getCreatedTime()
 ~~~~
-Returns the `created_time` property for the album as a `\DateTime` if present.
-
-### getUpdatedTime() {#album-getupdatedtime}
-~~~~
-public \DateTime|null getUpdatedTime()
-~~~~
-Returns the `updated_time` property for the album as a `\DateTime` if present.
+The time the album was initially created.
 
 ### getDescription() {#album-getdescription}
 ~~~~
 public string|null getDescription()
 ~~~~
-Returns the `description` property for the album as a string if present.
+The description of the album.
 
 ### getFrom() {#album-getfrom}
 ~~~~
-public Facebook\GraphNodes\GraphUser|null getFrom()
+public GraphNode|null getFrom()
 ~~~~
-Returns the `from` property for the album as a `Facebook\GraphNodes\GraphUser` if present.
-
-### getPlace() {#album-getplace}
-~~~~
-public Facebook\GraphNodes\GraphPage|null getPlace()
-~~~~
-Returns the `place` property for the album as a `Facebook\GraphNodes\GraphPage` if present.
+The profile that created the album.
 
 ### getLink() {#album-getlink}
 ~~~~
 public string|null getLink()
 ~~~~
-Returns the `link` property for the album as a string if present.
+A link to this album on Facebook.
 
 ### getLocation() {#album-getlocation}
 ~~~~
-public Facebook\GraphNodes\GraphNode|string|null getLocation()
+public string|null getLocation()
 ~~~~
-Returns the `location` property for the album as a `Facebook\GraphNodes\GraphNode` or string if present.
+The textual location of the album.
+
+### getName() {#album-getname}
+~~~~
+public string|null getName()
+~~~~
+The title of the album.
 
 ### getPrivacy() {#album-getprivacy}
 ~~~~
 public string|null getPrivacy()
 ~~~~
-Returns the `privacy` property for the album as a string if present.
+The privacy settings for the album.
 
 ### getType() {#album-gettype}
 ~~~~
 public string|null getType()
 ~~~~
-Returns the `type` property for the album as a string (`profile`, `mobile`, `wall`, `normal` or `album`) if present.
+The type of the album: profile, mobile, wall, normal or album.
+
+### getUpdatedTime() {#album-getupdatedtime}
+~~~~
+public \DateTime|null getUpdatedTime()
+~~~~
+The last time the album was updated.
+
+### getEvent() {#album-getevent}
+~~~~
+public GraphEvent|null getEvent()
+~~~~
+If this object has a place, the event associated with the place.
+
+### getPlace() {#album-getplace}
+~~~~
+public GraphPage|null getPlace()
+~~~~
+The place associated with this album.
+
+### getBackdatedTime() {#album-getbackdatedtime}
+~~~~
+public \DateTime|null getBackdatedTime()
+~~~~
+A user-specified time for when this object was created.
+
+### getBackdatedTimeGranularity() {#album-getbackdatedtimegranularity}
+~~~~
+public string|null getBackdatedTimeGranularity()
+~~~~
+How accurate the backdated time is.
+
+### getPicture() {#album-getpicture}
+~~~~
+public GraphPicture|null getPicture()
+~~~~
+The cover photo of this album..
 </card>
 
 <card>
 ## GraphLocation Instance Methods {#location-instance-methods}
+
+The `GraphLocation` collection represents a [Location](https://developers.facebook.com/docs/graph-api/reference/location) Graph node.
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -422,6 +452,8 @@ Returns the `longitude` property for the location as a float if present.
 <card>
 ## GraphPicture Instance Methods {#picture-instance-methods}
 
+The `GraphPicture` collection represents a [Picture](https://developers.facebook.com/docs/graph-api/reference/user/picture) Graph node.
+
 All getter methods return `null` if the property does not exist on the node.
 
 ### getUrl() {#picture-geturl}
@@ -434,6 +466,8 @@ Returns the `url` property for the picture as a string if present.
 <card>
 ## GraphAchievement Instance Methods {#achievement-instance-methods}
 
+The `GraphAchievement` collection represents a [Achievement](https://developers.facebook.com/docs/graph-api/reference/user/achievement) Graph node.
+
 All getter methods return `null` if the property does not exist on the node.
 
 ### getId() {#achievement-getid}
@@ -445,6 +479,8 @@ Returns the `id` property for the achievement as a string if present.
 
 <card>
 ## GraphEvent Instance Methods {#event-instance-methods}
+
+The `GraphEvent` collection represents a [Event](https://developers.facebook.com/docs/graph-api/reference/user/event) Graph node.
 
 All getter methods return `null` if the property does not exist on the node.
 
