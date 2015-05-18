@@ -31,14 +31,13 @@ namespace Facebook\GraphNodes;
 class GraphEvent extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array Maps object key names to GraphNode types.
      */
     protected static $graphObjectMap = [
         'cover' => '\Facebook\GraphNodes\GraphCoverPhoto',
         'place' => '\Facebook\GraphNodes\GraphPage',
         'picture' => '\Facebook\GraphNodes\GraphPicture',
-        // @todo parent_group must be cast to GraphGroup once supported
-        // 'parent_group' => '\Facebook\GraphNodes\GraphGroup',
+        'parent_group' => '\Facebook\GraphNodes\GraphGroup',
     ];
 
     /**
@@ -102,7 +101,7 @@ class GraphEvent extends GraphNode
     }
 
     /**
-     * Returns the `owner` (The profile that created the event) as GraphObject if present.
+     * Returns the `owner` (The profile that created the event) as GraphNode if present.
      *
      * @return GraphNode|null
      */
@@ -112,9 +111,9 @@ class GraphEvent extends GraphNode
     }
 
     /**
-     * Returns the `parent_group` (The group the event belongs to) as GraphObject if present.
+     * Returns the `parent_group` (The group the event belongs to) as GraphGroup if present.
      *
-     * @return GraphNode|null
+     * @return GraphGroup|null
      */
     public function getParentGroup()
     {

@@ -486,8 +486,8 @@ Returns the `owner` property (The profile that created the event) for the event 
 
 ### getParentGroup() {#event-parent_group}
 ~~~~
-public GraphNode|null getParentGroup()~~~~
-Returns the `parent_group` property (The group the event belongs to) for the event as a GraphNode if present.
+public GraphGroup|null getParentGroup()~~~~
+Returns the `parent_group` property (The group the event belongs to) for the event as a GraphGroup if present.
 
 ### getPlace() {#event-place}
 ~~~~
@@ -548,4 +548,64 @@ Returns the `noreply_count` property (Number of people who did not reply to the 
 ~~~~
 public int|null getInvitedCount()~~~~
 Returns the `invited_count` property (Number of people invited to the event) for the event as a int if present.
+</card>
+
+
+<card>
+## GraphGroup Instance Methods {#group-instance-methods}
+
+All getter methods return `null` if the field does not exist on the node.
+
+### getId() {#group-id}
+~~~~
+public string|null getId()~~~~
+Returns the `id` field (The Group ID) for the group as a string if present.
+### getCover() {#group-cover}
+~~~~
+public GraphCoverPhoto|null getCover()~~~~
+Returns the `cover` field (The cover photo of the Group) for the group as a GraphCoverPhoto if present.
+### getDescription() {#group-description}
+~~~~
+public string|null getDescription()~~~~
+Returns the `description` field (A brief description of the Group) for the group as a string if present.
+### getEmail() {#group-email}
+~~~~
+public string|null getEmail()~~~~
+Returns the `email` field (The email address to upload content to the Group. Only current members of the Group can use this) for the group as a string if present.
+### getIcon() {#group-icon}
+~~~~
+public string|null getIcon()~~~~
+Returns the `icon` field (The URL for the Group's icon) for the group as a string if present.
+### getLink() {#group-link}
+~~~~
+public string|null getLink()~~~~
+Returns the `link` field (The Group's website) for the group as a string if present.
+### getName() {#group-name}
+~~~~
+public string|null getName()~~~~
+Returns the `name` field (The name of the Group) for the group as a string if present.
+### getMemberRequestCount() {#group-member_request_count}
+~~~~
+public int|null getMemberRequestCount()~~~~
+Returns the `member_request_count` field (Number of people asking to join the group.) for the group as a int if present.
+### getOwner() {#group-owner}
+~~~~
+public GraphNode|null getOwner()~~~~
+Returns the `owner` field (The profile that created this Group) for the group as a GraphNode if present.
+### getParent() {#group-parent}
+~~~~
+public GraphNode|null getParent()~~~~
+Returns the `parent` field (The parent Group of this Group, if it exists) for the group as a GraphNode if present.
+### getPrivacy() {#group-privacy}
+~~~~
+public string|null getPrivacy()~~~~
+Returns the `privacy` field (The privacy setting of the Group) for the group as a string if present.
+### getUpdatedTime() {#group-updated_time}
+~~~~
+public DateTime|null getUpdatedTime()~~~~
+Returns the `updated_time` field (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) for the group as a DateTime if present.
+### getVenue() {#group-venue}
+~~~~
+public GraphLocation|null getVenue()~~~~
+Returns the `venue` field (The location for the Group) for the group as a GraphLocation if present.
 </card>
