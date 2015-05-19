@@ -28,19 +28,19 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-
 class GraphAlbum extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array Maps object key names to GraphNode types.
      */
     protected static $graphObjectMap = [
-        'from' => '\Facebook\GraphNodes\GraphUser',
+        'event' => '\Facebook\GraphNodes\GraphEvent',
         'place' => '\Facebook\GraphNodes\GraphPage',
+        'picture' => '\Facebook\GraphNodes\GraphPicture',
     ];
 
     /**
-     * Returns the ID for the album.
+     * The album ID
      *
      * @return string|null
      */
@@ -50,7 +50,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns whether the viewer can upload photos to this album.
+     * Whether the viewer can upload photos to this album
      *
      * @return boolean|null
      */
@@ -60,7 +60,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the number of photos in this album.
+     * Number of photos in this album
      *
      * @return int|null
      */
@@ -70,7 +70,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the ID of the album's cover photo.
+     * Album cover photo id
      *
      * @return string|null
      */
@@ -80,7 +80,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the time the album was initially created.
+     * The time the album was initially created
      *
      * @return \DateTime|null
      */
@@ -90,17 +90,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the time the album was updated.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedTime()
-    {
-        return $this->getField('updated_time');
-    }
-
-    /**
-     * Returns the description of the album.
+     * The description of the album
      *
      * @return string|null
      */
@@ -110,9 +100,9 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns profile that created the album.
+     * The profile that created the album
      *
-     * @return GraphUser|null
+     * @return GraphNode|null
      */
     public function getFrom()
     {
@@ -120,17 +110,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns profile that created the album.
-     *
-     * @return GraphPage|null
-     */
-    public function getPlace()
-    {
-        return $this->getField('place');
-    }
-
-    /**
-     * Returns a link to this album on Facebook.
+     * A link to this album on Facebook
      *
      * @return string|null
      */
@@ -140,7 +120,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the textual location of the album.
+     * The textual location of the album
      *
      * @return string|null
      */
@@ -150,7 +130,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the title of the album.
+     * The title of the album
      *
      * @return string|null
      */
@@ -160,7 +140,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the privacy settings for the album.
+     * The privacy settings for the album
      *
      * @return string|null
      */
@@ -170,9 +150,7 @@ class GraphAlbum extends GraphNode
     }
 
     /**
-     * Returns the type of the album.
-     *
-     * enum{ profile, mobile, wall, normal, album }
+     * The type of the album: profile, mobile, wall, normal or album
      *
      * @return string|null
      */
@@ -180,4 +158,65 @@ class GraphAlbum extends GraphNode
     {
         return $this->getField('type');
     }
+
+    /**
+     * The last time the album was updated
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedTime()
+    {
+        return $this->getField('updated_time');
+    }
+
+    /**
+     * If this object has a place, the event associated with the place
+     *
+     * @return GraphEvent|null
+     */
+    public function getEvent()
+    {
+        return $this->getField('event');
+    }
+
+    /**
+     * The place associated with this album
+     *
+     * @return GraphPage|null
+     */
+    public function getPlace()
+    {
+        return $this->getField('place');
+    }
+
+    /**
+     * A user-specified time for when this object was created
+     *
+     * @return \DateTime|null
+     */
+    public function getBackdatedTime()
+    {
+        return $this->getField('backdated_time');
+    }
+
+    /**
+     * How accurate the backdated time is
+     *
+     * @return string|null
+     */
+    public function getBackdatedTimeGranularity()
+    {
+        return $this->getField('backdated_time_granularity');
+    }
+
+    /**
+     * The cover photo of this album.
+     *
+     * @return GraphPicture|null
+     */
+    public function getPicture()
+    {
+        return $this->getField('picture');
+    }
+
 }
