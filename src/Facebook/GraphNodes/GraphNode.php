@@ -28,8 +28,15 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-class GraphNode extends Collection
+class GraphNode implements \ArrayAccess
 {
+    /**
+     * The items contained in the collection.
+     *
+     * @var array
+     */
+    protected $items = [];
+
     /**
      * @var array Maps object key names to Graph object types.
      */
@@ -42,7 +49,85 @@ class GraphNode extends Collection
      */
     public function __construct(array $data = [])
     {
-        parent::__construct($this->castItems($data));
+        $this->items = $this->castItems($data);
+    }
+
+    /**
+     * Gets the value of a field from the Graph node.
+     *
+     * @param string $name    The field to retrieve.
+     * @param mixed  $default The default to return if the field doesn't exist.
+     *
+     * @return mixed
+     */
+    public function getField($name, $default = null)
+    {
+        if (isset($this->items[$name])) {
+            return $this->items[$name];
+        }
+
+        return $default ?: null;
+    }
+
+    /**
+     * Gets the value of the named property for this graph object.
+     *
+     * @param string $name    The property to retrieve.
+     * @param mixed  $default The default to return if the property doesn't exist.
+     *
+     * @return mixed
+     *
+     * @deprecated 5.0.0 getProperty() has been renamed to getField()
+     * @todo v6: Remove this method
+     */
+    public function getProperty($name, $default = null)
+    {
+        return $this->getField($name, $default);
+    }
+
+    /**
+     * Returns a list of all fields set on the object.
+     *
+     * @return array
+     */
+    public function getFieldNames()
+    {
+        return array_keys($this->items);
+    }
+
+    /**
+     * Returns a list of all properties set on the object.
+     *
+     * @return array
+     *
+     * @deprecated 5.0.0 getPropertyNames() has been renamed to getFieldNames()
+     * @todo v6: Remove this method
+     */
+    public function getPropertyNames()
+    {
+        return $this->getFieldNames();
+    }
+
+    /**
+     * Get all of the items in the collection.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function asArray()
+    {
+        return array_map(function ($value) {
+            return $value instanceof GraphNode ? $value->asArray() : $value;
+        }, $this->items);
     }
 
     /**
@@ -181,5 +266,68 @@ class GraphNode extends Collection
     public static function getObjectMap()
     {
         return static::$graphObjectMap;
+    }
+
+    /**
+     * Determine if an item exists at an offset.
+     *
+     * @param mixed $key
+     *
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return array_key_exists($key, $this->items);
+    }
+
+    /**
+     * Get an item at a given offset.
+     *
+     * @param mixed $key
+     *
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->items[$key];
+    }
+
+    /**
+     * Set the item at a given offset.
+     *
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        if (is_null($key)) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$key] = $value;
+        }
+    }
+
+    /**
+     * Unset the item at a given offset.
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->items[$key]);
+    }
+
+    /**
+     * Convert the collection to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->asJson();
     }
 }
