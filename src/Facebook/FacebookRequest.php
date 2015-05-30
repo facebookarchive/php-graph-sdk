@@ -225,7 +225,7 @@ class FacebookRequest
     } else {
       $baseUrl = static::BASE_GRAPH_URL;
     }
-    return $baseUrl . '/' . $this->version . $this->path;
+    return $baseUrl . '/' . $this->version . '/' . $this->path;
   }
 
   /**
