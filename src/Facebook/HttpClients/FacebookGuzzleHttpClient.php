@@ -26,6 +26,7 @@ namespace Facebook\HttpClients;
 use Facebook\FacebookSDKException;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\AdapterException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -52,9 +53,9 @@ class FacebookGuzzleHttpClient implements FacebookHttpable {
   protected static $guzzleClient;
 
   /**
-   * @param \GuzzleHttp\Client|null The Guzzle client
+   * @param \GuzzleHttp\ClientInterface|null The Guzzle client
    */
-  public function __construct(Client $guzzleClient = null)
+  public function __construct(ClientInterface $guzzleClient = null)
   {
     self::$guzzleClient = $guzzleClient ?: new Client();
   }
