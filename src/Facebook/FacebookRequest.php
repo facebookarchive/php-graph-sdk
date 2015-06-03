@@ -225,8 +225,7 @@ class FacebookRequest
     } else {
       $baseUrl = static::BASE_GRAPH_URL;
     }
-    $normalizedPath = ($this->path[0] == '/') ? $this->path : '/' . $this->path;
-    return $baseUrl . '/' . $this->version . $normalizedPath;
+    return $baseUrl . '/' . $this->version . '/' . ltrim($this->path, '/');
   }
 
   /**
