@@ -18,7 +18,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.8",
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": "~6.0"
     },
     "suggest": {
         "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
