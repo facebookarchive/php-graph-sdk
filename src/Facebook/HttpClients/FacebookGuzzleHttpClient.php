@@ -27,8 +27,8 @@ use Facebook\Http\GraphRawResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\ResponseInterface;
-use GuzzleHttp\Ring\Exception\RingException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Exception\RequestException;
 
 class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
@@ -58,14 +58,14 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
             'connect_timeout' => 10,
             'verify' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
         ];
-        $request = $this->guzzleClient->createRequest($method, $url, $options);
+        $request = new Request($method, $url, $options);
 
         try {
             $rawResponse = $this->guzzleClient->send($request);
         } catch (RequestException $e) {
             $rawResponse = $e->getResponse();
 
-            if ($e->getPrevious() instanceof RingException || !$rawResponse instanceof ResponseInterface) {
+            if ($e->getPrevious() instanceof RequestException || !$rawResponse instanceof Response) {
                 throw new FacebookSDKException($e->getMessage(), $e->getCode());
             }
         }
@@ -80,11 +80,11 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
     /**
      * Returns the Guzzle array of headers as a string.
      *
-     * @param ResponseInterface $response The Guzzle response.
+     * @param Response $response The Guzzle response.
      *
      * @return string
      */
-    public function getHeadersAsString(ResponseInterface $response)
+    public function getHeadersAsString(Response $response)
     {
         $headers = $response->getHeaders();
         $rawHeaders = [];
