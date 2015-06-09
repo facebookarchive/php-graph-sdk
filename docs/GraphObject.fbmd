@@ -39,7 +39,7 @@ echo $object->getProperty('country');
 echo $loc->getCountry();
 
 // SessionInfo example
-$info = $session->getSessionInfo());
+$info = $session->getSessionInfo();
 echo $info->getExpiresAt();
 ~~~~
 
