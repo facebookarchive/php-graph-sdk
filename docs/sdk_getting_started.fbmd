@@ -1,13 +1,13 @@
 <card>
 # Getting started with the Facebook SDK for PHP
 
-Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook PHP SDK does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
+Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook SDK for PHP does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
 </card>
 
 <card>
 ## Autoloading & namespaces {#psr-4}
 
-The Facebook PHP SDK v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
+The Facebook SDK for PHP v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
 
 It would be advantageous to familiarize yourself with the concepts of [namespacing](http://php.net/manual/en/language.namespaces.rationale.php) and [autoloading](http://php.net/manual/en/function.spl-autoload-register.php) if you are not already acquainted with them.
 </card>
@@ -23,7 +23,7 @@ It would be advantageous to familiarize yourself with the concepts of [namespaci
 <card>
 ## Installing the Facebook SDK for PHP {#installation}
 
-There are two methods to install the Facebook PHP SDK. The recommended installation method is by using [Composer](#install-composer). If are unable to use Composer for your project, you can still [install the SDK manually](#install-manually) by downloading the source files and including the autoloader.
+There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#install-composer). If are unable to use Composer for your project, you can still [install the SDK manually](#install-manually) by downloading the source files and including the autoloader.
 </card>
 
 <card>
@@ -59,7 +59,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 First, download the source code and unzip it wherever you like in your project.
 
 %FB(devsite:markdown-wiki:button {
- text: 'Download the PHP SDK v5.0',
+ text: 'Download the SDK for PHP v5.0',
  href: 'https://github.com/facebook/facebook-php-sdk-v4/archive/5.0-dev.zip',
  size: 'large',
  use: 'special',
@@ -74,7 +74,7 @@ require_once __DIR__ . '/path/to/facebook-php-sdk-v4/src/Facebook/autoload.php';
 The autoloader should be able to auto-detect the proper location of the source code.
 
 
-### Keeping things tidy
+### Keeping things tidy {#tidy-up}
 
 The source code includes myriad files that aren't necessary for use in a production environment. If you'd like to strip out everything except the core files, follow this example.
 
@@ -85,7 +85,7 @@ The source code includes myriad files that aren't necessary for use in a product
 
 After downloading the source code with the button above, extract the files in a temporary directory.
 
-Move the folder `src/Facebook` to the root of your website installation or where ever you like to put 3rd-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v5`.
+Move the folder `src/Facebook` to the root of your website installation or where ever you like to put third-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v5`.
 
 The path the the core SDK files should now be located in `/var/html/facebook-sdk-v5` and inside will also be the `autolaoder.php` file.
 
@@ -107,7 +107,7 @@ require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ## Configuration and setup {#setup}
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](http://developers.facebook.com/apps).",
+  content: "This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](/apps).",
   type: 'warning',
 })
 
@@ -121,14 +121,14 @@ $fb = new Facebook\Facebook([
   ]);
 ~~~
 
-You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](http://developers.facebook.com/apps).
+You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](/apps).
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "It's important that you specify a `default_graph_version` value as this will give you more control over which version of Graph you want to use. If you don't specify a `default_graph_version`, the PHP SDK will choose one for you and it might not be one that is compatible with your app.",
+  content: "It's important that you specify a `default_graph_version` value as this will give you more control over which version of Graph you want to use. If you don't specify a `default_graph_version`, the SDK for PHP will choose one for you and it might not be one that is compatible with your app.",
   type: 'warning',
 })
 
-The `Facebook\Facebook` service ties all the components of the PHP SDK together. [See the full reference for the `Facebook\Facebook` service](/docs/php/Facebook).
+The `Facebook\Facebook` service ties all the components of the SDK for PHP together. [See the full reference for the `Facebook\Facebook` service](/docs/php/Facebook).
 </card>
 
 <card>
@@ -196,7 +196,7 @@ if (isset($accessToken)) {
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) to get an [`AccessToken`](/docs/php/AccessToken) entity for the user.
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "The `FacebookCanvasHelper` will detect a [signed request](https://developers.facebook.com/docs/reference/login/signed-request) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#authentication-redirect) or by using the [JavaScript SDK](https://developers.facebook.com/docs/javascript) and then use the PHP SDK to [obtain the access token from the cookie](#authentication-javascript) the JavaScript SDK set.",
+  content: "The `FacebookCanvasHelper` will detect a [signed request](/docs/reference/login/signed-request) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#authentication-redirect) or by using the [SDK for JavaScript](/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#authentication-javascript) the SDK for JavaScript set.",
   type: 'warning',
 })
 
@@ -228,7 +228,7 @@ if (isset($accessToken)) {
 })
 
 
-### Obtaining an access token from the JavaScript SDK {#authentication-javascript}
+### Obtaining an access token from the SDK for JavaScript {#authentication-javascript}
 
 If you're already using the Facebook SDK for JavaScript to authenticate users, you can obtain the access token with PHP by using the [FacebookJavaScriptHelper](/docs/php/FacebookJavaScriptHelper). The `getAccessToken()` method will return an [`AccessToken`](/docs/php/AccessToken) entity.
 
@@ -255,7 +255,7 @@ if (isset($accessToken)) {
 ~~~
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "Make sure you set the `{cookie:true}` option when you [initialize the JavaScript SDK](https://developers.facebook.com/docs/javascript/reference/FB.init). This will make the JavaScript SDK set a cookie on your domain containing information about the user in the form of a signed request.",
+  content: "Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](/docs/javascript/reference/FB.init). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.",
   type: 'warning',
 })
 </card>
@@ -275,7 +275,7 @@ $oAuth2Client = $fb->getOAuth2Client();
 $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken('{access-token}');
 ~~~
 
-[See more about long-lived and short-lived access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens#extending).
+[See more about long-lived and short-lived access tokens](/docs/facebook-login/access-tokens#extending).
 </card>
 
 <card>
@@ -283,7 +283,7 @@ $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken('{access-token}')
 
 Once you have an instance of the `Facebook\Facebook` service and obtained an access token, you can begin making calls to the Graph API.
 
-In this example we will send a GET request to the Graph API endpoint `/me`. The `/me` endpoint is a special alias to the [user node endpoint](https://developers.facebook.com/docs/graph-api/reference/user) that references the user or Page making the request.
+In this example we will send a GET request to the Graph API endpoint `/me`. The `/me` endpoint is a special alias to the [user node endpoint](/docs/graph-api/reference/user) that references the user or Page making the request.
 
 ~~~
 $fb = new Facebook\Facebook([/* . . . */]);
@@ -324,5 +324,5 @@ try {
 $plainOldArray = $response->getDecodedBody();
 ~~~
 
-For a full list of all of the components that make up the PHP SDK, see the [PHP SDK reference page](/docs/php/reference).
+For a full list of all of the components that make up the SDK for PHP, see the [SDK for PHP reference page](/docs/php/reference).
 </card>

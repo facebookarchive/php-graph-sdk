@@ -61,22 +61,22 @@ $fb = new Facebook\Facebook([
 ]);
 ~~~~
 
-### `app_id`
+### `app_id` {#appid}
 The ID of your Facebook app (required).
 
-### `app_secret`
+### `app_secret` {#appsecret}
 The secret of your Facebook app (required).
 
-### `default_access_token`
+### `default_access_token` {#defaulttoken}
 The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
 
-### `enable_beta_mode`
-Enable [beta mode](https://developers.facebook.com/docs/support/beta-tier/) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
+### `enable_beta_mode` {#enablebeta}
+Enable [beta mode](/docs/support/beta-tier/) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
 
-### `default_graph_version`
+### `default_graph_version` {#defaultversion}
 Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.0`. Defaults to the latest version of Graph.
 
-### `http_client_handler`
+### `http_client_handler` {#httpclient}
 Allows you to overwrite the default HTTP client.
 
 By default, the SDK will try to use cURL as the HTTP client. If a cURL implementation cannot be found, it will fallback to a stream wrapper HTTP client. You can force either HTTP client implementations by setting this value to `curl` or `stream`.
@@ -93,7 +93,7 @@ $fb = new Facebook([
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
-### `persistent_data_handler`
+### `persistent_data_handler` {#datahandler}
 Allows you to overwrite the default persistent data store.
 
 By default, the SDK will try to use the native PHP session for the persistent data store. There is also an in-memory persistent data handler which is useful when running your script from the command line for example. You can force either implementation by setting this value to `session` or `memory`.
@@ -108,7 +108,7 @@ $fb = new Facebook([
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
-### `url_detection_handler`
+### `url_detection_handler` {#urlhandler}
 Allows you to overwrite the default URL detection logic.
 
 The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the `[Facebook\Url\UrlDetectionInterface](/docs/php/UrlDetectionInterface)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
@@ -121,7 +121,7 @@ $fb = new Facebook([
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
-### `pseudo_random_string_generator`
+### `pseudo_random_string_generator` {#prsg}
 Allows you to overwrite the default cryptographically secure pseudo-random string generator.
 
 Generating random strings in PHP is easy but generating _cryptographically secure_ random strings is another matter. By default the SDK will attempt to detect a suitable to cryptographically secure random string generator for you. If a cryptographically secure method cannot be detected, a `Facebook\Exceptions\FacebookSDKException` will be thrown.
@@ -260,7 +260,7 @@ $fb->get('/me');
 The access token (as a string or `AccessToken` entity) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
 
 `$eTag`
-[Graph supports eTags](https://developers.facebook.com/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
+[Graph supports eTags](/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
 
 `$graphVersion`
 This will overwrite the Graph version that was set in the `default_graph_version` configuration option.
@@ -373,7 +373,7 @@ The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 `$requests`
 An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be an instance of `Facebook\FacebookRequest`.
 
-If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
+If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](/docs/graph-api/making-multiple-requests/#operations).
 
 ~~~~
 $requests = [
@@ -406,7 +406,7 @@ $helper = $fb->getRedirectLoginHelper();
 public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
 ~~~~
 
-Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the JavaScript SDK.
+Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
 
 ~~~~
 $helper = $fb->getJavaScriptHelper();
@@ -518,7 +518,7 @@ echo 'Photo ID: ' . $graphNode['id'];
 public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
 ~~~~
 
-Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the PHP SDK will automatically point the request to the `graph-video.facebook.com` host name for you.
+Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the SDK for PHP will automatically point the request to the `graph-video.facebook.com` host name for you.
 
 ~~~~
 // Upload a video for a user
