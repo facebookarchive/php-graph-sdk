@@ -188,7 +188,7 @@ class SignedRequest
    *
    * @param string $signedRequest
    *
-   * @returns array
+   * @return array
    */
   public static function split($signedRequest)
   {
@@ -202,7 +202,7 @@ class SignedRequest
    *
    * @param string $encodedSig
    *
-   * @returns string
+   * @return string
    *
    * @throws FacebookSDKException
    */
@@ -224,7 +224,7 @@ class SignedRequest
    *
    * @param string $encodedPayload
    *
-   * @returns array
+   * @return array
    *
    * @throws FacebookSDKException
    */
