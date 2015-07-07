@@ -2,7 +2,6 @@
 
 use Facebook\FacebookRedirectLoginHelper;
 use Facebook\FacebookRequest;
-use Facebook\FacebookSession;
 
 class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
 {
@@ -88,7 +87,7 @@ class FacebookRedirectLoginHelperTest extends PHPUnit_Framework_TestCase
       $session, self::REDIRECT_URL
     );
   }
-  
+
   public function testCSPRNG()
   {
     $helper = new FacebookRedirectLoginHelper(
