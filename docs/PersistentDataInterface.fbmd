@@ -1,7 +1,7 @@
 <card>
 # The persistent data handler interface for the Facebook SDK for PHP
 
-The persistent data handler interface stores values in a persistent data store. By default the PHP SDK uses native PHP sessions to store the persistent data. You can overwrite this behavior by coding to the `Facebook\PersistentData\PersistentDataInterface`.
+The persistent data handler interface stores values in a persistent data store. By default the SDK for PHP uses native PHP sessions to store the persistent data. You can overwrite this behavior by coding to the `Facebook\PersistentData\PersistentDataInterface`.
 </card>
 
 <card>

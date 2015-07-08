@@ -9,7 +9,7 @@ Represents an error response from the Graph API.
 
 Whenever a `FacebookResponseException` is thrown, you can access it's previous exception with the `getPrevious()` method to get more information on the specific type of error response that the Graph API returned.
 
-```php
+~~~~
 try {
   // Some request to the Graph API
 } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -18,39 +18,39 @@ try {
   // Do some further processing on $previousException
   exit;
 }
-```
+~~~~
 
-FB(devsite:markdown-wiki:table {
+%FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],
   rows: [
     [
-      '`Facebook\Exceptions\FacebookAuthenticationException`',
+      '`Facebook\\Exceptions\\FacebookAuthenticationException`',
       'Thrown when Graph returns an authentication error.',
     ],
     [
-      '`Facebook\Exceptions\FacebookAuthorizationException`',
+      '`Facebook\\Exceptions\\FacebookAuthorizationException`',
       'Thrown when Graph returns a user permissions error.',
     ],
     [
-      '`Facebook\Exceptions\FacebookClientException`',
+      '`Facebook\\Exceptions\\FacebookClientException`',
       'Thrown when Graph returns a duplicate post error.',
     ],
     [
-      '`Facebook\Exceptions\FacebookOtherException`',
+      '`Facebook\\Exceptions\\FacebookOtherException`',
       'Thrown when Graph returns an error that is unknown to the SDK.',
     ],
     [
-      '`Facebook\Exceptions\FacebookServerException`',
+      '`Facebook\\Exceptions\\FacebookServerException`',
       'Thrown when Graph returns a server error.',
     ],
     [
-      '`Facebook\Exceptions\FacebookThrottleException`',
+      '`Facebook\\Exceptions\\FacebookThrottleException`',
       'Thrown when Graph returns a throttle error.',
     ],
   ],
 })
 
-These exceptions are derived from the [error responses from the Graph API](https://developers.facebook.com/docs/graph-api/using-graph-api/#errors).
+These exceptions are derived from the [error responses from the Graph API](/docs/graph-api/using-graph-api/#errors).
 </card>
 
 <card>

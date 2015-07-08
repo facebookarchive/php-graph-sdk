@@ -1,9 +1,9 @@
 <card>
 # Facebook SDK v5 for PHP
 
-The Facebook SDK for PHP is a library with powerful features that enable PHP developers to easily integrate Facebook login and make requests to the Graph API. It also plays well with the [Facebook SDK for JavaScript](/docs/reference/javascript/) to give the front-end user the best possible user experience. But it doesn't end there, the Facebook PHP SDK makes it easy to upload photos and videos and send batch requests to the Graph API among other things. And PHP SDK has many extensibility points giving PHP developers full control of how the PHP SDK interacts with their specific hosting environment and web framework.
+The Facebook SDK for PHP is a library with powerful features that enable PHP developers to easily integrate Facebook login and make requests to the Graph API. It also plays well with the [Facebook SDK for JavaScript](/docs/reference/javascript/) to give the front-end user the best possible user experience. But it doesn't end there, the Facebook SDK for PHP makes it easy to upload photos and videos and send batch requests to the Graph API among other things. And SDK for PHP has many extensibility points giving PHP developers full control of how the SDK for PHP interacts with their specific hosting environment and web framework.
 
-Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook PHP SDK does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
+Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook SDK for PHP does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
 
 For installation & implementation instructions, look through the [Getting Started with the Facebook SDK for PHP](/docs/php/gettingstarted) guide, and then check out some of the examples below.
 </card>
@@ -11,11 +11,11 @@ For installation & implementation instructions, look through the [Getting Starte
 <card>
 ## Examples {#examples}
 
-The following examples demonstrate how you would accomplish common tasks with the Facebook PHP SDK.
+The following examples demonstrate how you would accomplish common tasks with the Facebook SDK for PHP.
 
 - **Authentication & Signed Requests**
   - [Facebook Login (OAuth 2.0)](/docs/php/howto/example_facebook_login)
-  - [Obtaining an access token from the JavaScript SDK](/docs/php/howto/example_access_token_from_javascript)
+  - [Obtaining an access token from the SDK for JavaScript](/docs/php/howto/example_access_token_from_javascript)
   - [Obtaining an access token within a Facebook Canvas context](/docs/php/howto/example_access_token_from_canvas)
   - [Obtaining an access token within a Facebook Page tab context](/docs/php/howto/example_access_token_from_page_tab)
 - **User profile**

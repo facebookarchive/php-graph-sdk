@@ -1,10 +1,10 @@
 <card>
 # FacebookApp for the Facebook SDK for PHP
 
-In order to make requests to the Graph API, you need to [create a Facebook app](https://developers.facebook.com/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
+In order to make requests to the Graph API, you need to [create a Facebook app](/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
 
 %FB(devsite:markdown-wiki:info-card {
-  content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\Facebook` service handles injecting it into the required classes for you.",
+  content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\\Facebook` service handles injecting it into the required classes for you.",
   type: 'warning',
 })
 </card>
@@ -25,36 +25,28 @@ $fb = new Facebook\Facebook([/* . . . */]);
 $fbApp = $fb->getApp();
 ~~~~
 
-You'll rarely be using the `FacebookApp` entity directly unless you're doing some extreme customizations of the PHP SDK. But this entity plays an important role in the internal workings of the PHP SDK.
-</card>
+You'll rarely be using the `FacebookApp` entity directly unless you're doing some extreme customizations of the SDK for PHP. But this entity plays an important role in the internal workings of the SDK for PHP.
 
-<card>
 ## Instance Methods {#instance-methods}
 
-### getAccessToken() {#get-access-token}
+## getAccessToken() {#get-access-token}
 ~~~~
 public Facebook\Authentication\AccessToken getAccessToken()
 ~~~~
 Returns an app access token in the form of an [`AccessToken`](/docs/php/AccessToken) entity.
-</card>
 
-<card>
-### getId() {#get-id}
+## getId() {#get-id}
 ~~~~
 public string getId()
 ~~~~
 Returns an the app id.
-</card>
 
-<card>
-### getSecret() {#get-secret}
+## getSecret() {#get-secret}
 ~~~~
 public string getSecret()
 ~~~~
 Returns an the app secret.
-</card>
 
-<card>
 ## Serialization {#serialization}
 
 The `Facebook\FacebookApp` entity can be serialized and unserialized.
