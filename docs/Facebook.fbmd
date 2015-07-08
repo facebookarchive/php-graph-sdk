@@ -158,62 +158,48 @@ $fb = new Facebook\Facebook();
 </card>
 
 <card>
-## Instance Methods {#instance-methods}
+# Instance Methods {#instance-methods}
 
-### getApp() {#get-app}
+## getApp() {#get-app}
 ~~~~
 public FacebookApp getApp()
 ~~~~
 Returns the instance of `Facebook\FacebookApp` for the instantiated service.
-</card>
 
-<card>
-### getClient() {#get-client}
+## getClient() {#get-client}
 ~~~~
 public Facebook\FacebookClient getClient()
 ~~~~
 Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) for the instantiated service.
-</card>
 
-<card>
-### getOAuth2Client() {#get-oauth2-client}
+## getOAuth2Client() {#get-oauth2-client}
 ~~~~
 public Facebook\Authentication\OAuth2Client getOAuth2Client()
 ~~~~
 Returns an instance of [`Facebook\Authentication\OAuth2Client`](/docs/php/OAuth2Client).
-</card>
 
-<card>
-### getLastResponse() {#get-last-response}
+## getLastResponse() {#get-last-response}
 ~~~~
 public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
 ~~~~
 Returns the last response received from the Graph API in the form of a `Facebook\FacebookResponse` or `Facebook\FacebookBatchResponse`.
-</card>
 
-<card>
-### getUrlDetectionHandler() {#get-url-detection-handler}
+## getUrlDetectionHandler() {#get-url-detection-handler}
 ~~~~
 public Facebook\Url\UrlDetectionInterface getUrlDetectionHandler()
 ~~~~
 Returns an instance of [`Facebook\Url\UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
-</card>
 
-<card>
-### getDefaultAccessToken() {#get-default-access-token}
+## getDefaultAccessToken() {#get-default-access-token}
 ~~~~
 public Facebook\Authentication\AccessToken|null getDefaultAccessToken()
 ~~~~
-
 Returns the default fallback [`AccessToken`](/docs/php/AccessToken) entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
-</card>
 
-<card>
-### setDefaultAccessToken() {#set-default-access-token}
+## setDefaultAccessToken() {#set-default-access-token}
 ~~~~
 public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
 ~~~~
-
 Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](/docs/php/AccessToken).
 
 ~~~~
@@ -226,18 +212,14 @@ $fb->setDefaultAccessToken($accessToken);
 ~~~~
 
 This setting will overwrite the value from `default_access_token` option if it was passed to the `Facebook\Facebook` constructor.
-</card>
 
-<card>
-### getDefaultGraphVersion() {#get-default-graph-version}
+## getDefaultGraphVersion() {#get-default-graph-version}
 ~~~~
 public string getDefaultGraphVersion()
 ~~~~
 Returns the default version of Graph. If the `default_graph_version` configuration option was not set, this will default to `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
-</card>
 
-<card>
-### get() {#get}
+## get() {#get}
 ~~~~
 public Facebook\FacebookResponse get(
   string $endpoint,
@@ -264,10 +246,8 @@ The access token (as a string or `AccessToken` entity) to use for the request. I
 
 `$graphVersion`
 This will overwrite the Graph version that was set in the `default_graph_version` configuration option.
-</card>
 
-<card>
-### post() {#post}
+## post() {#post}
 ~~~~
 public Facebook\FacebookResponse post(
   string $endpoint,
@@ -288,10 +268,8 @@ The associative array of params you want to send in the body of the POST request
 ~~~~
 $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 ~~~~
-</card>
 
-<card>
-### delete() {#delete}
+## delete() {#delete}
 ~~~~
 public Facebook\FacebookResponse delete(
   string $endpoint,
@@ -309,10 +287,8 @@ The arguments are the same as `post()` above.
 ~~~~
 $response = $fb->delete('/{node-id}', ['object' => '1234']);
 ~~~~
-</card>
 
-<card>
-### request() {#request}
+## request() {#request}
 ~~~~
 public Facebook\FacebookRequest request(
   string $method,
@@ -334,10 +310,8 @@ The HTTP request verb to use for this request. This can be set to any verb that 
 ~~~~
 $request = $fb->request('GET', '/{node-id}');
 ~~~~
-</card>
 
-<card>
-### sendRequest() {#send-request}
+## sendRequest() {#send-request}
 ~~~~
 public Facebook\FacebookResponse sendRequest(
   string $method,
@@ -354,10 +328,8 @@ Sends a request to the Graph API.
 ~~~~
 $response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.2');
 ~~~~
-</card>
 
-<card>
-### sendBatchRequest() {#send-batch-request}
+## sendBatchRequest() {#send-batch-request}
 ~~~~
 public Facebook\FacebookBatchResponse sendBatchRequest(
   array $requests,
@@ -385,10 +357,8 @@ $batchResponse = $fb->sendBatchRequest($requests);
 ~~~~
 
 [See a full batch example](/docs/php/howto/example_batch_request).
-</card>
 
-<card>
-### getRedirectLoginHelper() {#get-redirect-login-helper}
+## getRedirectLoginHelper() {#get-redirect-login-helper}
 ~~~~
 public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
 ~~~~
@@ -398,10 +368,8 @@ Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRed
 ~~~~
 $helper = $fb->getRedirectLoginHelper();
 ~~~~
-</card>
 
-<card>
-### getJavaScriptHelper() {#get-javascript-helper}
+## getJavaScriptHelper() {#get-javascript-helper}
 ~~~~
 public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
 ~~~~
@@ -411,10 +379,8 @@ Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaSc
 ~~~~
 $helper = $fb->getJavaScriptHelper();
 ~~~~
-</card>
 
-<card>
-### getCanvasHelper() {#get-canvas-helper}
+## getCanvasHelper() {#get-canvas-helper}
 ~~~~
 public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
 ~~~~
@@ -424,10 +390,8 @@ Returns a [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelp
 ~~~~
 $helper = $fb->getCanvasHelper();
 ~~~~
-</card>
 
-<card>
-### getPageTabHelper() {#get-page-tab-helper}
+## getPageTabHelper() {#get-page-tab-helper}
 ~~~~
 public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
 ~~~~
@@ -437,10 +401,8 @@ Returns a [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHe
 ~~~~
 $helper = $fb->getPageTabHelper();
 ~~~~
-</card>
 
-<card>
-### next() {#next}
+## next() {#next}
 ~~~~
 public Facebook\GraphNodes\GraphEdge|null next(Facebook\GraphNodes\GraphEdge $graphEdge)
 ~~~~
@@ -473,19 +435,15 @@ if (count($photosEdge) > 0) {
   } while ($pageCount < $maxPages && $photosEdge = $fb->next($photosEdge));
 }
 ~~~~
-</card>
 
-<card>
-### previous() {#previous}
+## previous() {#previous}
 ~~~~
 public Facebook\GraphNodes\GraphEdge|null previous(Facebook\GraphNodes\GraphEdge $graphEdge)
 ~~~~
 
 Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphEdge` collection. Functions just like `next()` above, but in the opposite direction of pagination.
-</card>
 
-<card>
-### fileToUpload() {#file-to-upload}
+## fileToUpload() {#file-to-upload}
 ~~~~
 public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
 ~~~~
@@ -510,10 +468,8 @@ $graphNode = $response->getGraphNode();
 
 echo 'Photo ID: ' . $graphNode['id'];
 ~~~~
-</card>
 
-<card>
-### videoToUpload() {#video-to-upload}
+## videoToUpload() {#video-to-upload}
 ~~~~
 public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
 ~~~~

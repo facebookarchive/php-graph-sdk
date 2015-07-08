@@ -7,7 +7,7 @@ The most commonly used helper is the `FacebookRedirectLoginHelper` which allows 
 <card>
 ## Usage {#usage}
 
-Facebook Login is achieved via OAuth 2.0. But you don't really have to know much about OAuth 2.0 since the PHP SDK does all the heavy lifting for you.
+Facebook Login is achieved via OAuth 2.0. But you don't really have to know much about OAuth 2.0 since the SDK for PHP does all the heavy lifting for you.
 
 
 ### Obtaining an instance of FacebookRedirectLoginHelper

@@ -108,20 +108,20 @@ The `GraphUser` collection represents a [User](https://developers.facebook.com/d
 
 The following properties on the `GraphUser` collection will get automatically cast as `GraphNode` subtypes:
 
-FB(devsite:markdown-wiki:table {
+%FB(devsite:markdown-wiki:table {
   columns: ['Property','GraphNode subtype',],
   rows: [
     [
       '`hometown`',
-      '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
     ],
     [
       '`location`',
-      '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
     ],
     [
       '`significant_other`',
-      '[`Facebook\GraphNodes\GraphUser`](#user-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)',
     ],
   ],
 })
@@ -198,20 +198,20 @@ The `GraphPage` collection represents a [Page](https://developers.facebook.com/d
 
 The following properties on the `GraphPage` collection will get automatically cast as `GraphNode` subtypes:
 
-FB(devsite:markdown-wiki:table {
+%FB(devsite:markdown-wiki:table {
   columns: ['Property','GraphNode subtype',],
   rows: [
     [
       '`best_page`',
-      '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
     ],
     [
       '`global_brand_parent_page`',
-      '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
     ],
     [
       '`location`',
-      '[`Facebook\GraphNodes\GraphLocation`](#location-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphLocation`](#location-instance-methods)',
     ],
   ],
 })
@@ -276,16 +276,16 @@ The `GraphAlbum` collection represents an [Album](https://developers.facebook.co
 
 The following properties on the `GraphAlbum` collection will get automatically cast as `GraphNode` subtypes:
 
-FB(devsite:markdown-wiki:table {
+%FB(devsite:markdown-wiki:table {
   columns: ['Property','GraphNode subtype',],
   rows: [
     [
       '`from`',
-      '[`Facebook\GraphNodes\GraphUser`](#user-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)',
     ],
     [
       '`place`',
-      '[`Facebook\GraphNodes\GraphPage`](#page-instance-methods)',
+      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
     ],
   ],
 })
@@ -451,102 +451,122 @@ All getter methods return `null` if the property does not exist on the node.
 
 ### getId() {#event-id}
 ~~~~
-public string|null getId()~~~~
+public string|null getId()
+~~~~
 Returns the `id` property (The event ID) for the event as a string if present.
 
 ### getCover() {#event-cover}
 ~~~~
-public GraphCoverPhoto|null getCover()~~~~
+public GraphCoverPhoto|null getCover()
+~~~~
 Returns the `cover` property (Cover picture) for the event as a GraphCoverPhoto if present.
 
 ### getDescription() {#event-description}
 ~~~~
-public string|null getDescription()~~~~
+public string|null getDescription()
+~~~~
 Returns the `description` property (Long-form description) for the event as a string if present.
 
 ### getEndTime() {#event-end_time}
 ~~~~
-public DateTime|null getEndTime()~~~~
+public DateTime|null getEndTime()
+~~~~
 Returns the `end_time` property (End time, if one has been set) for the event as a DateTime if present.
 
 ### getIsDateOnly() {#event-is_date_only}
 ~~~~
-public bool|null getIsDateOnly()~~~~
+public bool|null getIsDateOnly()
+~~~~
 Returns the `is_date_only` property (Whether the event only has a date specified, but no time) for the event as a bool if present.
 
 ### getName() {#event-name}
 ~~~~
-public string|null getName()~~~~
+public string|null getName()
+~~~~
 Returns the `name` property (Event name) for the event as a string if present.
 
 ### getOwner() {#event-owner}
 ~~~~
-public GraphNode|null getOwner()~~~~
+public GraphNode|null getOwner()
+~~~~
 Returns the `owner` property (The profile that created the event) for the event as a GraphNode if present.
 
 ### getParentGroup() {#event-parent_group}
 ~~~~
-public GraphGroup|null getParentGroup()~~~~
+public GraphGroup|null getParentGroup()
+~~~~
 Returns the `parent_group` property (The group the event belongs to) for the event as a GraphGroup if present.
 
 ### getPlace() {#event-place}
 ~~~~
-public GraphPage|null getPlace()~~~~
+public GraphPage|null getPlace()
+~~~~
 Returns the `place` property (Event Place information) for the event as a GraphPage if present.
 
 ### getPrivacy() {#event-privacy}
 ~~~~
-public string|null getPrivacy()~~~~
+public string|null getPrivacy()
+~~~~
 Returns the `privacy` property (Who can see the event) for the event as a string if present.
 
 ### getStartTime() {#event-start_time}
 ~~~~
-public DateTime|null getStartTime()~~~~
+public DateTime|null getStartTime()
+~~~~
 Returns the `start_time` property (Start time) for the event as a DateTime if present.
 
 ### getTicketUri() {#event-ticket_uri}
 ~~~~
-public string|null getTicketUri()~~~~
+public string|null getTicketUri()
+~~~~
 Returns the `ticket_uri` property (The link users can visit to buy a ticket to this event) for the event as a string if present.
 
 ### getTimezone() {#event-timezone}
 ~~~~
-public string|null getTimezone()~~~~
+public string|null getTimezone()
+~~~~
 Returns the `timezone` property (Timezone) for the event as a string if present.
 
 ### getUpdatedTime() {#event-updated_time}
 ~~~~
-public DateTime|null getUpdatedTime()~~~~
+public DateTime|null getUpdatedTime()
+~~~~
 Returns the `updated_time` property (Last update time) for the event as a DateTime if present.
 
 ### getPicture() {#event-picture}
 ~~~~
-public GraphPicture|null getPicture()~~~~
+public GraphPicture|null getPicture()
+~~~~
 Returns the `picture` property (Event picture) for the event as a GraphPicture if present.
 
 ### getAttendingCount() {#event-attending_count}
 ~~~~
-public int|null getAttendingCount()~~~~
+public int|null getAttendingCount()
+~~~~
 Returns the `attending_count` property (Number of people attending the event) for the event as a int if present.
 
 ### getDeclinedCount() {#event-declined_count}
 ~~~~
-public int|null getDeclinedCount()~~~~
+public int|null getDeclinedCount()
+~~~~
 Returns the `declined_count` property (Number of people who declined the event) for the event as a int if present.
 
 ### getMaybeCount() {#event-maybe_count}
 ~~~~
-public int|null getMaybeCount()~~~~
+public int|null getMaybeCount()
+~~~~
 Returns the `maybe_count` property (Number of people who maybe going to the event) for the event as a int if present.
 
 ### getNoreplyCount() {#event-noreply_count}
 ~~~~
-public int|null getNoreplyCount()~~~~
+public int|null getNoreplyCount()
+~~~~
 Returns the `noreply_count` property (Number of people who did not reply to the event) for the event as a int if present.
 
 ### getInvitedCount() {#event-invited_count}
 ~~~~
-public int|null getInvitedCount()~~~~
+public int|null getInvitedCount()
+~~~~
 Returns the `invited_count` property (Number of people invited to the event) for the event as a int if present.
 </card>
 
@@ -558,54 +578,67 @@ All getter methods return `null` if the field does not exist on the node.
 
 ### getId() {#group-id}
 ~~~~
-public string|null getId()~~~~
+public string|null getId()
+~~~~
 Returns the `id` field (The Group ID) for the group as a string if present.
 ### getCover() {#group-cover}
 ~~~~
-public GraphCoverPhoto|null getCover()~~~~
+public GraphCoverPhoto|null getCover()
+~~~~
 Returns the `cover` field (The cover photo of the Group) for the group as a GraphCoverPhoto if present.
 ### getDescription() {#group-description}
 ~~~~
-public string|null getDescription()~~~~
+public string|null getDescription()
+~~~~
 Returns the `description` field (A brief description of the Group) for the group as a string if present.
 ### getEmail() {#group-email}
 ~~~~
-public string|null getEmail()~~~~
+public string|null getEmail()
+~~~~
 Returns the `email` field (The email address to upload content to the Group. Only current members of the Group can use this) for the group as a string if present.
 ### getIcon() {#group-icon}
 ~~~~
-public string|null getIcon()~~~~
+public string|null getIcon()
+~~~~
 Returns the `icon` field (The URL for the Group's icon) for the group as a string if present.
 ### getLink() {#group-link}
 ~~~~
-public string|null getLink()~~~~
+public string|null getLink()
+~~~~
 Returns the `link` field (The Group's website) for the group as a string if present.
 ### getName() {#group-name}
 ~~~~
-public string|null getName()~~~~
+public string|null getName()
+~~~~
 Returns the `name` field (The name of the Group) for the group as a string if present.
 ### getMemberRequestCount() {#group-member_request_count}
 ~~~~
-public int|null getMemberRequestCount()~~~~
+public int|null getMemberRequestCount()
+~~~~
 Returns the `member_request_count` field (Number of people asking to join the group.) for the group as a int if present.
 ### getOwner() {#group-owner}
 ~~~~
-public GraphNode|null getOwner()~~~~
+public GraphNode|null getOwner()
+~~~~
 Returns the `owner` field (The profile that created this Group) for the group as a GraphNode if present.
 ### getParent() {#group-parent}
 ~~~~
-public GraphNode|null getParent()~~~~
+public GraphNode|null getParent()
+~~~~
 Returns the `parent` field (The parent Group of this Group, if it exists) for the group as a GraphNode if present.
 ### getPrivacy() {#group-privacy}
 ~~~~
-public string|null getPrivacy()~~~~
+public string|null getPrivacy()
+~~~~
 Returns the `privacy` field (The privacy setting of the Group) for the group as a string if present.
 ### getUpdatedTime() {#group-updated_time}
 ~~~~
-public DateTime|null getUpdatedTime()~~~~
+public DateTime|null getUpdatedTime()
+~~~~
 Returns the `updated_time` field (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) for the group as a DateTime if present.
 ### getVenue() {#group-venue}
 ~~~~
-public GraphLocation|null getVenue()~~~~
+public GraphLocation|null getVenue()
+~~~~
 Returns the `venue` field (The location for the Group) for the group as a GraphLocation if present.
 </card>
