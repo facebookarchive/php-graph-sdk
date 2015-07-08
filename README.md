@@ -31,7 +31,7 @@ Simple GET example of a user's profile.
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.3',
+  'default_graph_version' => 'v2.4',
   //'default_access_token' => '{access-token}', // optional
 ]);
 
