@@ -198,9 +198,9 @@ class FacebookResponse
         $this->request->getPath(),
         $params
       );
-    } else {
-      return null;
     }
+
+    return null;
   }
 
 }
