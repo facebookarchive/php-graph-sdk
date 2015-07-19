@@ -87,7 +87,7 @@ After downloading the source code with the button above, extract the files in a 
 
 Move the folder `src/Facebook` to the root of your website installation or where ever you like to put third-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v5`.
 
-The path the the core SDK files should now be located in `/var/html/facebook-sdk-v5` and inside will also be the `autolaoder.php` file.
+The path the the core SDK files should now be located in `/var/html/facebook-sdk-v5` and inside will also be the `autoload.php` file.
 
 Assuming we have a script called `index.php` in the root of our web project, we need to include the autoloader at the top of our script.
 
