@@ -112,6 +112,16 @@ class FacebookFile
     }
 
     /**
+     * Return the path of the file.
+     *
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->path;
+    }
+
+    /**
      * Return the mimetype of the file.
      *
      * @return string

@@ -26,7 +26,7 @@ namespace Facebook;
 use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\FileUpload\FacebookFile;
-use Facebook\FileUpload\FacebookVideo;
+use Facebook\FileUpload\FacebookResumableUploader;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
@@ -46,6 +46,9 @@ use Facebook\Helpers\FacebookJavaScriptHelper;
 use Facebook\Helpers\FacebookPageTabHelper;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exceptions\FacebookUploadException;
+use Facebook\Exceptions\FacebookUploadTransferException;
+
 
 /**
  * Class Facebook
@@ -585,5 +588,71 @@ class Facebook
     public function videoToUpload($pathToFile)
     {
         return new FacebookVideo($pathToFile);
+    }
+
+    /**
+     * Upload video
+     *
+     * @param $target
+     * @param $pathToFile
+     * @param $accessToken
+     * @param int $maxTransferTries
+     *
+     * @return array
+     *
+     * @throws FacebookUploadException
+     */
+    public function uploadVideo($target, $pathToFile, $accessToken, $maxTransferTries = 5)
+    {
+        $uploader = $this->getResumableUploader($this->app, $accessToken, $maxTransferTries);
+        $endpoint = '/'.$target.'/videos';
+        $chunk = $uploader->start($endpoint, $pathToFile);
+
+        do {
+            $chunk = $uploader->transfer($endpoint, $chunk);
+        } while(!$chunk->isLastChunk());
+
+        return [
+            'videoId' => $chunk->getVideoId(),
+            'success' => $uploader->finish($endpoint, $chunk->getUploadSessionId()),
+        ];
+    }
+
+    /**
+     * Instantiates a new video uploader
+     *
+     * @param string $accessToken
+     * @param int $maxTransferTries
+     *
+     * @return FacebookResumableUploader
+     */
+    protected function getResumableUploader($accessToken, $maxTransferTries = 5)
+    {
+        return new FacebookResumableUploader($accessToken, $maxTransferTries);
+    }
+
+    /**
+     * @param FacebookUploadTransferException $exception
+     *
+     * @return array
+     *
+     * @throws FacebookUploadException
+     */
+    public function resumeUpload(FacebookUploadTransferException $exception)
+    {
+        $resumeContext = $exception->getResumeContext();
+
+        $uploader = $this->getResumableUploader($this->app, $resumeContext->accessToken, $resumeContext->maxTransferTries);
+        $chunk = $resumeContext->chunk;
+        $endpoint = $resumeContext->endpoint;
+
+        do {
+            $chunk = $uploader->transfer($endpoint, $chunk);
+        } while(!$chunk->isLastChunk());
+
+        return [
+            'videoId' => $chunk->getVideoId(),
+            'success' => $uploader->finish($endpoint, $chunk->getUploadSessionId()),
+        ];
     }
 }

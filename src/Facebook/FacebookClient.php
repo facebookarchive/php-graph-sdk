@@ -162,7 +162,11 @@ class FacebookClient
      */
     public function prepareRequestMessage(FacebookRequest $request)
     {
-        $postToVideoUrl = $request->containsVideoUploads();
+        $pathElements = explode('/', $request->getUrl());
+        $lastInPath = end($pathElements);
+        $postToVideoUrl = $request->containsVideoUploads() ||
+            ($lastInPath == 'videos' && $request->getMethod() === 'POST');
+
         $url = $this->getBaseGraphUrl($postToVideoUrl) . $request->getUrl();
 
         // If we're sending files they should be sent as multipart/form-data
