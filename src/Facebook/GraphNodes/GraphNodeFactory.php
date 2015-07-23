@@ -331,7 +331,7 @@ class GraphNodeFactory
 
         $dataList = [];
         foreach ($data['data'] as $graphNode) {
-            $dataList[] = $this->safelyMakeGraphNode($graphNode, $subclassName, $parentKey, $parentNodeId);
+            $dataList[] = $this->safelyMakeGraphNode($graphNode, $subclassName);
         }
 
         $metaData = $this->getMetaData($data);
