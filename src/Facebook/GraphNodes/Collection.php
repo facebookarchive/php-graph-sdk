@@ -69,7 +69,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
             return $this->items[$name];
         }
 
-        return $default ?: null;
+        return $default;
     }
 
     /**

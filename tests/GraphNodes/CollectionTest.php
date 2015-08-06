@@ -60,6 +60,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('faz', $property);
     }
 
+    public function testFalseDefaultsWillReturnSameType()
+    {
+        $graphNode = new Collection(['foo' => 'bar']);
+
+        $field = $graphNode->getField('baz', '');
+        $this->assertSame('', $field);
+
+        $field = $graphNode->getField('baz', 0);
+        $this->assertSame(0, $field);
+
+        $field = $graphNode->getField('baz', false);
+        $this->assertSame(false, $field);
+    }
+
     public function testTheKeysFromTheCollectionCanBeReturned()
     {
         $graphNode = new Collection([
