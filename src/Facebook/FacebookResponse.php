@@ -225,7 +225,7 @@ class FacebookResponse
      *
      * Graph will return 2 types of responses:
      * - JSON(P)
-     *    Most responses from Grpah are JSON(P)
+     *    Most responses from Graph are JSON(P)
      * - application/x-www-form-urlencoded key/value pairs
      *    Happens on the `/oauth/access_token` endpoint when exchanging
      *    a short-lived access token for a long-lived access token
