@@ -283,6 +283,12 @@ class Facebook
      */
     public function setDefaultAccessToken($accessToken)
     {
+        if ($accessToken === 'app_token') {
+            $this->defaultAccessToken = $this->app->getAccessToken();
+
+            return;
+        }
+
         if (is_string($accessToken)) {
             $this->defaultAccessToken = new AccessToken($accessToken);
 
