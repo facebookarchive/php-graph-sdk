@@ -153,35 +153,13 @@ class GraphEdge extends Collection
         $this->validateForPagination();
 
         // Do we have a paging URL?
-        if (isset($this->metaData['paging'][$direction])) {
-            // Graph returns the full URL with all the original params.
-            // We just want the endpoint though.
-            $pageUrl = $this->metaData['paging'][$direction];
-
-            return FacebookUrlManipulator::baseGraphUrlEndpoint($pageUrl);
-        }
-
-        // Do we have a cursor to work with?
-        $cursorDirection = $direction === 'next' ? 'after' : 'before';
-        $cursor = $this->getCursor($cursorDirection);
-        if (!$cursor) {
+        if (!isset($this->metaData['paging'][$direction])) {
             return null;
         }
 
-        // If we don't know the ID of the parent node, this ain't gonna work.
-        if (!$this->parentEdgeEndpoint) {
-            return null;
-        }
+        $pageUrl = $this->metaData['paging'][$direction];
 
-        // We have the parent node ID, paging cursor & original request.
-        // These were the ingredients chosen to create the perfect little URL.
-        $pageUrl = $this->parentEdgeEndpoint . '?' . $cursorDirection . '=' . urlencode($cursor);
-
-        // Pull in the original params
-        $originalUrl = $this->request->getUrl();
-        $pageUrl = FacebookUrlManipulator::mergeUrlParams($originalUrl, $pageUrl);
-
-        return FacebookUrlManipulator::forceSlashPrefix($pageUrl);
+        return FacebookUrlManipulator::baseGraphUrlEndpoint($pageUrl);
     }
 
     /**
