@@ -181,7 +181,23 @@ Returns the response data in the form of a [`Facebook\GraphNodes\GraphUser`](/do
 <card>
 ### getGraphEdge() {#get-graph-edge}
 ~~~~
-public Facebook\GraphNodes\GraphEdge getGraphEdge()
+public Facebook\GraphNodes\GraphEdge getGraphEdge(
+	string|null $subclassName,
+	boolean $auto_prefix)
 ~~~~
 Returns the response data in the form of a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection.
+
+`$subclassName`
+The `Facebook\GraphNodes\GraphNode` sub class to cast list items to. If none is provided, default is `Facebook\GraphNodes\GraphNode`.
+
+`$auto_prefix`
+Toggle to auto-prefix the subclass name. If none is provided, default is `true`.
+
+~~~~
+$res = $fb->get('/{facebook-page}/events', '{access-token}');
+$events = $res->getGraphEdge("GraphEvent");
+foreach($events : $event){
+	// . . .
+}
+~~~~
 </card>
