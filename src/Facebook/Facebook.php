@@ -49,7 +49,6 @@ use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookResumableUploadException;
 use Facebook\Exceptions\FacebookSDKException;
 
-
 /**
  * Class Facebook
  *
@@ -597,14 +596,16 @@ class Facebook
      * @param string $pathToFile
      * @param string $accessToken
      * @param int $maxTransferTries
+     * @param string $graphVersion
      *
      * @return array
      *
      * @throws FacebookSDKException
      */
-    public function uploadVideo($target, $pathToFile, $accessToken, $maxTransferTries = 5)
+    public function uploadVideo($target, $pathToFile, $accessToken, $maxTransferTries = 5, $graphVersion = null)
     {
-        $uploader = $this->getResumableUploader($accessToken, $maxTransferTries);
+        $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
+        $uploader = $this->getResumableUploader($accessToken, $maxTransferTries, $graphVersion);
         $endpoint = '/'.$target.'/videos';
         $chunk = $uploader->start($endpoint, $pathToFile);
 
@@ -623,12 +624,15 @@ class Facebook
      *
      * @param string $accessToken
      * @param int $maxTransferTries
+     * @param string $graphVersion
      *
      * @return FacebookResumableUploader
      */
-    protected function getResumableUploader($accessToken, $maxTransferTries = 5)
+    private function getResumableUploader($accessToken, $maxTransferTries = 5, $graphVersion = null)
     {
-        return new FacebookResumableUploader($this->app, $this->client, $accessToken, $maxTransferTries);
+        $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
+
+        return new FacebookResumableUploader($this->app, $this->client, $accessToken, $maxTransferTries, $graphVersion);
     }
 
     /**
@@ -642,6 +646,7 @@ class Facebook
      */
     public function resumeUpload(FacebookResumableUploadException $exception)
     {
+        // @TODO properly handle Graph version
         $resumeContext = $exception->getResumeContext();
 
         $uploader = $this->getResumableUploader($resumeContext->getAccessToken(), $resumeContext->getMaxTransferTries());

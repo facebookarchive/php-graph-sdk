@@ -57,17 +57,24 @@ class FacebookResumableUploader
     protected $maxTransferTries;
 
     /**
+     * @var string Graph version to use for this request.
+     */
+    protected $graphVersion;
+
+    /**
      * @param FacebookApp $app
      * @param FacebookClient $client
      * @param string $accessToken
      * @param int $maxTransferTries
+     * @param string|null             $graphVersion
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $maxTransferTries = 5)
+    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $maxTransferTries = 5, $graphVersion = null)
     {
         $this->app = $app;
         $this->client = $client;
         $this->accessToken = $accessToken;
         $this->maxTransferTries = $maxTransferTries;
+        $this->graphVersion = $graphVersion;
     }
 
     /**
@@ -93,17 +100,19 @@ class FacebookResumableUploader
             $this->accessToken,
             'POST',
             $endpoint,
-            $startReqParams
+            $startReqParams,
+            null,
+            $this->graphVersion
         );
 
-        $res= $this->client->sendRequest($request)->getDecodedBody();
+        $response = $this->client->sendRequest($request)->getDecodedBody();
 
         $firstTransferChunk = new FacebookTransferChunk(
             $filePath,
-            $res['upload_session_id'],
-            $res['video_id'],
-            $res['start_offset'],
-            $res['end_offset'] - $res['start_offset']
+            $response['upload_session_id'],
+            $response['video_id'],
+            $response['start_offset'],
+            $response['end_offset'] - $response['start_offset']
         );
 
         return $firstTransferChunk;
@@ -135,38 +144,38 @@ class FacebookResumableUploader
             $this->accessToken,
             'POST',
             $endpoint,
-            $transReqParams
+            $transReqParams,
+            null,
+            $this->graphVersion
         );
 
         while ($maxTransferTries > 0) {
             try {
-                $res= $this->client->sendRequest($request)->getDecodedBody();
+                $response = $this->client->sendRequest($request)->getDecodedBody();
 
-                $nextTransferChunk = new FacebookTransferChunk(
+                return new FacebookTransferChunk(
                     $chunk->getFilePath(),
                     $chunk->getUploadSessionId(),
                     $chunk->getVideoId(),
-                    $res['start_offset'],
-                    $res['end_offset'] - $res['start_offset']
+                    $response['start_offset'],
+                    $response['end_offset'] - $response['start_offset']
                 );
-
-                return $nextTransferChunk;
             } catch (FacebookSDKException $e) {
                 $preException = $e->getPrevious();
-                if ($preException instanceof FacebookResumableUploadException) {
-                    if (--$maxTransferTries <= 0) {
-                        $resumeContext = new FacebookResumeContext(
-                            $endpoint,
-                            $this->accessToken,
-                            $chunk
-                        );
-                        $preException->setResumeContext($resumeContext);
-                        throw $e;
-                    }
-                } else {
+                if (!$preException instanceof FacebookResumableUploadException) {
                     throw $e;
                 }
-                continue;
+
+                if (--$maxTransferTries <= 0) {
+                    $resumeContext = new FacebookResumeContext(
+                        $endpoint,
+                        $this->accessToken,
+                        $chunk
+                    );
+                    $preException->setResumeContext($resumeContext);
+
+                    throw $e;
+                }
             }
         }
     }
@@ -192,10 +201,13 @@ class FacebookResumableUploader
             $this->accessToken,
             'POST',
             $endpoint,
-            $finishReqParams
+            $finishReqParams,
+            null,
+            $this->graphVersion
         );
 
-        $res = $this->client->sendRequest($request)->getDecodedBody();
-        return $res['success'];
+        $response = $this->client->sendRequest($request)->getDecodedBody();
+
+        return $response['success'];
     }
 }
