@@ -27,7 +27,6 @@ use Facebook\FileUpload\FacebookFile;
 
 class FacebookFileTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $testFile = '';
 
     public function setUp()
@@ -41,6 +40,14 @@ class FacebookFileTest extends \PHPUnit_Framework_TestCase
         $fileContents = $file->getContents();
 
         $this->assertEquals('This is a text file used for testing. Let\'s dance.', $fileContents);
+    }
+
+    public function testPartialFilesCanBeCreated()
+    {
+        $file = new FacebookFile($this->testFile, 14, 5);
+        $fileContents = $file->getContents();
+
+        $this->assertEquals('is a text file', $fileContents);
     }
 
     /**

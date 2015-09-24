@@ -24,132 +24,59 @@
 
 namespace Facebook\Tests;
 
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookResumableUploadException;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\FileUpload\FacebookFile;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\FileUpload\FacebookResumableUploader;
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
+use Facebook\FileUpload\FacebookTransferChunk;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 
-class VideoUploadClientHandlerSuccess implements FacebookHttpClientInterface
+class FooFacebookClientForResumableUpload extends FacebookClient
 {
-    public function send($url, $method, $body, array $headers, $timeOut)
+    protected $response = '';
+
+    // Successful responses
+    public function setSuccessfulStartResponse()
     {
-        if (preg_split("/=/", explode('&', $body)[0])[1] == 'start') {
-            return $this->mockStart();
+        $this->response = '{"video_id":"1337","start_offset":"0","end_offset":"123","upload_session_id":"42"}';
+    }
+
+    public function setSuccessfulTransferResponse()
+    {
+        $this->response = '{"start_offset":"124","end_offset":"223"}';
+    }
+
+    public function setSuccessfulFinishResponse()
+    {
+        $this->response = '{"success":true}';
+    }
+
+    // Error responses
+    public function setFailedStartResponse()
+    {
+        $this->response = '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
+          '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
+          '"type":"OAuthException","code":190,"error_subcode":463}}';
+    }
+
+    public function setFailedTransferResponse()
+    {
+        $this->response = '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
+          '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}';
+    }
+
+    public function sendRequest(FacebookRequest $request)
+    {
+        $returnResponse = new FacebookResponse($request, $this->response, 0, []);
+
+        if ($returnResponse->isError()) {
+            throw $returnResponse->getThrownException();
         }
 
-        if (preg_split("/=/", explode('&', $body)[0])[1] == 'finish') {
-            return $this->mockFinish();
-        }
-
-        return $this->mockTransfer();
-    }
-
-    public function mockStart()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-        ];
-
-        $body = '{"video_id":"162719974059555","start_offset":"0","end_offset":"2087",' .
-            '"upload_session_id":"162719977392888"}';
-
-        return new GraphRawResponse($header, $body, 200);
-    }
-
-    public function mockTransfer()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-        ];
-
-        $body = '{"start_offset":"2087","end_offset":"2087"}';
-
-        return new GraphRawResponse($header, $body, 200);
-    }
-
-    public function mockFinish()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-        ];
-
-        $body = '{"success":true}';
-
-        return new GraphRawResponse($header, $body, 200);
+        return $returnResponse;
     }
 }
-
-class VideoUploadClientHandlerFail implements FacebookHttpClientInterface
-{
-    public function send($url, $method, $body, array $headers, $timeOut)
-    {
-        if (preg_split("/=/", explode('&', $body)[0])[1] == 'start') {
-            return $this->mockStart();
-        }
-
-        if (preg_split("/=/", explode('&', $body)[0])[1] == 'finish') {
-            return $this->mockFinish();
-        }
-
-        return $this->mockTransfer();
-    }
-
-    public function mockStart()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-            "WWW-Authenticate" => 'OAuth "Facebook Platform" "invalid_token" "Error validating access token',
-        ];
-
-        $body = '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
-            '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
-            '"type":"OAuthException","code":190,"error_subcode":463}}';
-
-        return new GraphRawResponse($header, $body, 400);
-    }
-
-    public function mockTransfer()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-            "WWW-Authenticate" => 'OAuth "Facebook Platform" "invalid_token" "Error validating access token',
-        ];
-
-        $body = '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
-            '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
-            '"type":"OAuthException","code":190,"error_subcode":1363033}}';
-
-        return new GraphRawResponse($header, $body, 400);
-    }
-
-    public function mockFinish()
-    {
-        $header = [
-            "Content-Type" => "application/json; charset=UTF-8",
-            "Date" => "Mon, 10 Aug 2015 07:14:04 GMT",
-            "facebook-api-version" => "v2.3",
-        ];
-
-        $body = '{"success":true}';
-
-        return new GraphRawResponse($header, $body, 200);
-    }
-}
-
 
 class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -157,66 +84,84 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
      * @var FacebookApp
      */
     private $fbApp;
+
     /**
-     * @var FacebookClient
+     * @var FooFacebookClientForResumableUpload
      */
-    private $fbSuccessClient;
+    private $client;
+
     /**
-     * @var FacebookClient
+     * @var FacebookFile
      */
-    private $fbFailClient;
+    private $file;
 
     public function setUp()
     {
         $this->fbApp = new FacebookApp('app_id', 'app_secret');
-        $this->fbSuccessClient = new FacebookClient(new VideoUploadClientHandlerSuccess());
-        $this->fbFailClient = new FacebookClient(new VideoUploadClientHandlerFail());
+        $this->client = new FooFacebookClientForResumableUpload();
+        $this->file = new FacebookFile(__DIR__.'/../foo.txt');
     }
 
-    public function testSuccess()
+    public function testResumableUploadCanStartTransferAndFinish()
     {
-        $fileUploader = new FacebookResumableUploader($this->fbApp, $this->fbSuccessClient, 'access_token');
-        $endpoint = '/113582528973300/videos';
-        $filePath = __DIR__ . '/../foo.mp4';
-        $chunk = $fileUploader->start($endpoint, $filePath);
+        $this->client->setSuccessfulStartResponse();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
+        $endpoint = '/me/videos';
+        $chunk = $uploader->start($endpoint, $this->file);
         $this->assertInstanceOf('Facebook\FileUpload\FacebookTransferChunk', $chunk);
-        $this->assertEquals('162719977392888', $chunk->getUploadSessionId());
-        $this->assertEquals('162719974059555', $chunk->getVideoId());
+        $this->assertEquals('42', $chunk->getUploadSessionId());
+        $this->assertEquals('1337', $chunk->getVideoId());
 
-        $chunk = $fileUploader->transfer($endpoint, $chunk);
-        $this->assertEquals(2087, $chunk->getStartOffset());
+        $this->client->setSuccessfulTransferResponse();
+        $newChunk = $uploader->transfer($endpoint, $chunk);
+        $this->assertEquals('124', $newChunk->getStartOffset());
+        $this->assertNotSame($newChunk, $chunk);
 
-        $this->assertTrue($fileUploader->finish($endpoint, $chunk->getUploadSessionId()));
+        $this->client->setSuccessfulFinishResponse();
+        $finalResponse = $uploader->finish($endpoint, $chunk->getUploadSessionId(), []);
+        $this->assertTrue($finalResponse);
     }
 
-    public function testFail()
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     */
+    public function testStartWillLetErrorResponsesThrow()
     {
-        $fileUploader = new FacebookResumableUploader($this->fbApp, $this->fbFailClient, 'access_token');
-        $endpoint = '/113582528973300/videos';
-        $filePath = __DIR__ . '/../foo.mp4';
+        $this->client->setFailedStartResponse();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
 
-        $catchResException = false;
-        try {
-            $chunk = $fileUploader->start($endpoint, $filePath);
-        } catch (FacebookSDKException $e) {
-            $catchResException = true;
-        }
-        $this->assertTrue($catchResException);
-
-        // get file chunk
-        $catchResumableException = false;
-        $successUploader = new FacebookResumableUploader($this->fbApp, $this->fbSuccessClient, 'access_token');
-        $chunk = $successUploader->start($endpoint, $filePath);
-        try {
-            $chunk = $fileUploader->transfer($endpoint, $chunk);
-        } catch (FacebookSDKException $e) {
-            if ($e->getPrevious() instanceof FacebookResumableUploadException) {
-                $catchResumableException = true;
-                $this->assertInstanceOf('Facebook\FileUpload\FacebookResumeContext',
-                    $e->getPrevious()->getResumeContext());
-            }
-        }
-        $this->assertTrue($catchResumableException);
+        $chunk = $uploader->start('/me/videos', $this->file);
     }
 
+    public function testFailedResumableTransferWillNotThrowAndReturnSameChunk()
+    {
+        $this->client->setFailedTransferResponse();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
+
+        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
+        $newChunk = $uploader->transfer('/me/videos', $chunk);
+        $this->assertSame($newChunk, $chunk);
+    }
+
+    public function testCanGetSuccessfulTransferWithMaxTries()
+    {
+        $this->client->setSuccessfulTransferResponse();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
+
+        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
+        $newChunk = $uploader->maxTriesTransfer('/me/videos', $chunk, 3);
+        $this->assertNotSame($newChunk, $chunk);
+    }
+
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     */
+    public function testMaxingOutRetriesWillThrow()
+    {
+        $this->client->setFailedTransferResponse();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
+
+        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
+        $newChunk = $uploader->maxTriesTransfer('/me/videos', $chunk, 3);
+    }
 }

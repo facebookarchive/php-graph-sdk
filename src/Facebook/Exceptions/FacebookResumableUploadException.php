@@ -23,8 +23,6 @@
  */
 namespace Facebook\Exceptions;
 
-use Facebook\FileUpload\FacebookResumeContext;
-
 /**
  * Class FacebookResumableUploadException
  *
@@ -32,24 +30,4 @@ use Facebook\FileUpload\FacebookResumeContext;
  */
 class FacebookResumableUploadException extends FacebookSDKException
 {
-    /**
-     * @var FacebookResumeContext
-     */
-    private $resumeContext;
-
-    /**
-     * @return FacebookResumeContext
-     */
-    public function getResumeContext()
-    {
-        return $this->resumeContext;
-    }
-
-    /**
-     * @param FacebookResumeContext $resumeContext
-     */
-    public function setResumeContext(FacebookResumeContext $resumeContext)
-    {
-        $this->resumeContext = $resumeContext;
-    }
 }

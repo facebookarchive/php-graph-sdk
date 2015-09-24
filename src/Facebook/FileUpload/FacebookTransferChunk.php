@@ -28,52 +28,69 @@ namespace Facebook\FileUpload;
  *
  * @package Facebook
  */
-class FacebookTransferChunk extends FacebookVideo
+class FacebookTransferChunk
 {
     /**
-     * @var int ID of the upload session
+     * @var FacebookFile The file to chunk during upload.
+     */
+    private $file;
+
+    /**
+     * @var int The ID of the upload session.
      */
     private $uploadSessionId;
 
     /**
-     * @var int Start byte position of the next file chunk
+     * @var int Start byte position of the next file chunk.
      */
     private $startOffset;
 
     /**
-     * @var int The maximum bytes to read
+     * @var int End byte position of the next file chunk.
      */
-    private $maxLen = -1;
+    private $endOffset;
 
     /**
-     * @var int ID of the video
+     * @var int The ID of the video.
      */
     private $videoId;
 
     /**
-     * @param string $filePath
+     * @param FacebookFile $file
      * @param int $uploadSessionId
      * @param int $videoId
      * @param int $startOffset
-     * @param int $maxLen
+     * @param int $endOffset
      */
-    public function __construct($filePath, $uploadSessionId, $videoId, $startOffset, $maxLen)
+    public function __construct(FacebookFile $file, $uploadSessionId, $videoId, $startOffset, $endOffset)
     {
-        parent::__construct($filePath);
+        $this->file = $file;
         $this->uploadSessionId = $uploadSessionId;
-        $this->startOffset = $startOffset;
-        $this->maxLen = $maxLen;
         $this->videoId = $videoId;
+        $this->startOffset = $startOffset;
+        $this->endOffset = $endOffset;
     }
 
     /**
-     * Return the contents of the file.
+     * Return the file entity.
      *
-     * @return string
+     * @return FacebookFile
      */
-    public function getContents()
+    public function getFile()
     {
-        return stream_get_contents($this->stream, $this->maxLen, $this->startOffset);
+        return $this->file;
+    }
+
+    /**
+     * Return a FacebookFile entity with partial content.
+     *
+     * @return FacebookFile
+     */
+    public function getPartialFile()
+    {
+        $maxLength = $this->endOffset - $this->startOffset;
+
+        return new FacebookFile($this->file->getFilePath(), $maxLength, $this->startOffset);
     }
 
     /**
@@ -93,7 +110,7 @@ class FacebookTransferChunk extends FacebookVideo
      */
     public function isLastChunk()
     {
-        return $this->maxLen === 0;
+        return $this->startOffset === $this->endOffset;
     }
 
     /**

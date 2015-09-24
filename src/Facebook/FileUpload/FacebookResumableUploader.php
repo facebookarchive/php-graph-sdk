@@ -24,6 +24,7 @@
 namespace Facebook\FileUpload;
 
 use Facebook\Exceptions\FacebookResumableUploadException;
+use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
@@ -52,11 +53,6 @@ class FacebookResumableUploader
     protected $client;
 
     /**
-     * @var int Max retry times
-     */
-    protected $maxTransferTries;
-
-    /**
      * @var string Graph version to use for this request.
      */
     protected $graphVersion;
@@ -65,149 +61,136 @@ class FacebookResumableUploader
      * @param FacebookApp $app
      * @param FacebookClient $client
      * @param string $accessToken
-     * @param int $maxTransferTries
-     * @param string|null             $graphVersion
+     * @param string $graphVersion
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $maxTransferTries = 5, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
         $this->accessToken = $accessToken;
-        $this->maxTransferTries = $maxTransferTries;
         $this->graphVersion = $graphVersion;
     }
 
     /**
-     * Upload - phase start
+     * Upload by chunks - start phase
      *
-     * @param $endpoint
-     * @param $filePath
+     * @param string $endpoint
+     * @param FacebookFile $file
+     *
      * @return FacebookTransferChunk
      *
      * @throws FacebookSDKException
      */
-    public function start($endpoint, $filePath)
+    public function start($endpoint, FacebookFile $file)
     {
-        $fileSize = filesize($filePath);
-
-        $startReqParams = [
+        $params = [
             'upload_phase' => 'start',
-            'file_size' => $fileSize,
+            'file_size' => $file->getSize(),
         ];
-
-        $request = new FacebookRequest(
-            $this->app,
-            $this->accessToken,
-            'POST',
-            $endpoint,
-            $startReqParams,
-            null,
-            $this->graphVersion
-        );
+        $request = $this->makeUploadRequest($endpoint, $params);
 
         $response = $this->client->sendRequest($request)->getDecodedBody();
 
-        $firstTransferChunk = new FacebookTransferChunk(
-            $filePath,
-            $response['upload_session_id'],
-            $response['video_id'],
-            $response['start_offset'],
-            $response['end_offset'] - $response['start_offset']
-        );
-
-        return $firstTransferChunk;
+        return new FacebookTransferChunk($file, $response['upload_session_id'], $response['video_id'], $response['start_offset'], $response['end_offset']);
     }
 
     /**
-     * Upload - phase transfer
+     * Upload by chunks - transfer phase
      *
-     * @param $endpoint
+     * @param string $endpoint
      * @param FacebookTransferChunk $chunk
+     * @param boolean $allowToThrow
+     *
      * @return FacebookTransferChunk
      *
-     * @throws FacebookResumableUploadException
-     * @throws FacebookSDKException
+     * @throws FacebookResponseException
      */
-    public function transfer($endpoint, FacebookTransferChunk $chunk)
+    public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false)
     {
-        $transReqParams = [
+        $params = [
             'upload_phase' => 'transfer',
             'upload_session_id' => $chunk->getUploadSessionId(),
             'start_offset' => $chunk->getStartOffset(),
-            'video_file_chunk' => $chunk,
+            'video_file_chunk' => $chunk->getPartialFile(),
         ];
+        $request = $this->makeUploadRequest($endpoint, $params);
 
-        $maxTransferTries = $this->maxTransferTries;
-
-        $request = new FacebookRequest(
-            $this->app,
-            $this->accessToken,
-            'POST',
-            $endpoint,
-            $transReqParams,
-            null,
-            $this->graphVersion
-        );
-
-        while ($maxTransferTries > 0) {
-            try {
-                $response = $this->client->sendRequest($request)->getDecodedBody();
-
-                return new FacebookTransferChunk(
-                    $chunk->getFilePath(),
-                    $chunk->getUploadSessionId(),
-                    $chunk->getVideoId(),
-                    $response['start_offset'],
-                    $response['end_offset'] - $response['start_offset']
-                );
-            } catch (FacebookSDKException $e) {
-                $preException = $e->getPrevious();
-                if (!$preException instanceof FacebookResumableUploadException) {
-                    throw $e;
-                }
-
-                if (--$maxTransferTries <= 0) {
-                    $resumeContext = new FacebookResumeContext(
-                        $endpoint,
-                        $this->accessToken,
-                        $chunk
-                    );
-                    $preException->setResumeContext($resumeContext);
-
-                    throw $e;
-                }
+        try {
+            $response = $this->client->sendRequest($request)->getDecodedBody();
+        } catch (FacebookResponseException $e) {
+            $preException = $e->getPrevious();
+            if ($allowToThrow || !$preException instanceof FacebookResumableUploadException) {
+                throw $e;
             }
+
+            // Return the same chunk entity so it can be retried.
+            return $chunk;
         }
+
+        return new FacebookTransferChunk($chunk->getFile(), $chunk->getUploadSessionId(), $chunk->getVideoId(), $response['start_offset'], $response['end_offset']);
     }
 
     /**
-     * Upload - phase finish
+     * Attempts to upload a chunk of a file in $retryCountdown tries.
      *
-     * @param $endpoint
-     * @param $uploadSessionId
+     * @param string $endpoint
+     * @param FacebookTransferChunk $chunk
+     * @param int $retryCountdown
+     *
+     * @return FacebookTransferChunk
+     *
+     * @throws FacebookResponseException
+     */
+    public function maxTriesTransfer($endpoint, FacebookTransferChunk $chunk, $retryCountdown)
+    {
+        $allowToThrow = $retryCountdown < 1;
+
+        $newChunk = $this->transfer($endpoint, $chunk, $allowToThrow);
+
+        if ($newChunk !== $chunk) {
+            return $newChunk;
+        }
+
+        $retryCountdown--;
+
+        // If transfer() returned the same chunk entity, the transfer failed but is resumable.
+        return $this->maxTriesTransfer($endpoint, $chunk, $retryCountdown);
+    }
+
+    /**
+     * Upload by chunks - finish phase
+     *
+     * @param string $endpoint
+     * @param string $uploadSessionId
+     * @param array $metadata The metadata associated with the file.
+     *
      * @return boolean
      *
      * @throws FacebookSDKException
      */
-    public function finish($endpoint, $uploadSessionId)
+    public function finish($endpoint, $uploadSessionId, $metadata = [])
     {
-        $finishReqParams = [
+        $params = array_merge($metadata, [
             'upload_phase' => 'finish',
             'upload_session_id' => $uploadSessionId,
-        ];
-
-        $request = new FacebookRequest(
-            $this->app,
-            $this->accessToken,
-            'POST',
-            $endpoint,
-            $finishReqParams,
-            null,
-            $this->graphVersion
-        );
+        ]);
+        $request = $this->makeUploadRequest($endpoint, $params);
 
         $response = $this->client->sendRequest($request)->getDecodedBody();
 
         return $response['success'];
+    }
+
+    /**
+     * Helper to make FacebookRequest entities.
+     *
+     * @param string $endpoint The endpoint to POST to.
+     * @param array $params The params to send with the request.
+     *
+     * @return FacebookRequest
+     */
+    private function makeUploadRequest($endpoint, $params = [])
+    {
+        return new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
     }
 }
