@@ -87,9 +87,7 @@ class FacebookResumableUploader
             'upload_phase' => 'start',
             'file_size' => $file->getSize(),
         ];
-        $request = $this->makeUploadRequest($endpoint, $params);
-
-        $response = $this->client->sendRequest($request)->getDecodedBody();
+        $response = $this->sendUploadRequest($endpoint, $params);
 
         return new FacebookTransferChunk($file, $response['upload_session_id'], $response['video_id'], $response['start_offset'], $response['end_offset']);
     }
@@ -113,10 +111,9 @@ class FacebookResumableUploader
             'start_offset' => $chunk->getStartOffset(),
             'video_file_chunk' => $chunk->getPartialFile(),
         ];
-        $request = $this->makeUploadRequest($endpoint, $params);
 
         try {
-            $response = $this->client->sendRequest($request)->getDecodedBody();
+            $response = $this->sendUploadRequest($endpoint, $params);
         } catch (FacebookResponseException $e) {
             $preException = $e->getPrevious();
             if ($allowToThrow || !$preException instanceof FacebookResumableUploadException) {
@@ -174,23 +171,23 @@ class FacebookResumableUploader
             'upload_phase' => 'finish',
             'upload_session_id' => $uploadSessionId,
         ]);
-        $request = $this->makeUploadRequest($endpoint, $params);
-
-        $response = $this->client->sendRequest($request)->getDecodedBody();
+        $response = $this->sendUploadRequest($endpoint, $params);
 
         return $response['success'];
     }
 
     /**
-     * Helper to make FacebookRequest entities.
+     * Helper to make a FacebookRequest and send it.
      *
      * @param string $endpoint The endpoint to POST to.
      * @param array $params The params to send with the request.
      *
-     * @return FacebookRequest
+     * @return array
      */
-    private function makeUploadRequest($endpoint, $params = [])
+    private function sendUploadRequest($endpoint, $params = [])
     {
-        return new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
+        $request = new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
+
+        return $this->client->sendRequest($request)->getDecodedBody();
     }
 }
