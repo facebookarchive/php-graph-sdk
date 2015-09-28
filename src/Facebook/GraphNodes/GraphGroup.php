@@ -167,5 +167,4 @@ class GraphGroup extends GraphNode
     {
         return $this->getField('venue');
     }
-
 }
