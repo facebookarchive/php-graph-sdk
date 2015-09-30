@@ -142,26 +142,4 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
         $newChunk = $uploader->transfer('/me/videos', $chunk);
         $this->assertSame($newChunk, $chunk);
     }
-
-    public function testCanGetSuccessfulTransferWithMaxTries()
-    {
-        $this->client->setSuccessfulTransferResponse();
-        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
-
-        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
-        $newChunk = $uploader->maxTriesTransfer('/me/videos', $chunk, 3);
-        $this->assertNotSame($newChunk, $chunk);
-    }
-
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
-     */
-    public function testMaxingOutRetriesWillThrow()
-    {
-        $this->client->setFailedTransferResponse();
-        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
-
-        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
-        $newChunk = $uploader->maxTriesTransfer('/me/videos', $chunk, 3);
-    }
 }

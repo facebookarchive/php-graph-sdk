@@ -27,6 +27,7 @@ use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookResumableUploader;
+use Facebook\FileUpload\FacebookTransferChunk;
 use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
@@ -591,12 +592,12 @@ class Facebook
     /**
      * Upload a video in chunks.
      *
-     * @param int         $target           The id of the target node before the /videos edge.
-     * @param string      $pathToFile       The full path to the file.
-     * @param array       $metadata         The metadata associated with the video file.
-     * @param string|null $accessToken      The access token.
-     * @param int         $maxTransferTries The max times to retry a failed upload chunk.
-     * @param string|null $graphVersion     The Graph API version to use.
+     * @param int $target The id of the target node before the /videos edge.
+     * @param string $pathToFile The full path to the file.
+     * @param array $metadata The metadata associated with the video file.
+     * @param string|null $accessToken The access token.
+     * @param int $maxTransferTries The max times to retry a failed upload chunk.
+     * @param string|null $graphVersion The Graph API version to use.
      *
      * @return array
      *
@@ -604,21 +605,49 @@ class Facebook
      */
     public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null)
     {
-        $accessToken  = $accessToken ?: $this->defaultAccessToken;
+        $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
         $uploader = new FacebookResumableUploader($this->app, $this->client, $accessToken, $graphVersion);
         $endpoint = '/'.$target.'/videos';
-        $file     = $this->videoToUpload($pathToFile);
-        $chunk    = $uploader->start($endpoint, $file);
+        $file = $this->videoToUpload($pathToFile);
+        $chunk = $uploader->start($endpoint, $file);
 
         do {
-            $chunk = $uploader->maxTriesTransfer($endpoint, $chunk, $maxTransferTries);
+            $chunk = $this->maxTriesTransfer($uploader, $endpoint, $chunk, $maxTransferTries);
         } while (!$chunk->isLastChunk());
 
         return [
           'video_id' => $chunk->getVideoId(),
           'success' => $uploader->finish($endpoint, $chunk->getUploadSessionId(), $metadata),
         ];
+    }
+
+    /**
+     * Attempts to upload a chunk of a file in $retryCountdown tries.
+     *
+     * @param FacebookResumableUploader $uploader
+     * @param string $endpoint
+     * @param FacebookTransferChunk $chunk
+     * @param int $retryCountdown
+     *
+     * @return FacebookTransferChunk
+     *
+     * @throws FacebookSDKException
+     */
+    public function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown)
+    {
+        $allowToThrow = $retryCountdown < 1;
+
+        $newChunk = $uploader->transfer($endpoint, $chunk, $allowToThrow);
+
+        if ($newChunk !== $chunk) {
+            return $newChunk;
+        }
+
+        $retryCountdown--;
+
+        // If transfer() returned the same chunk entity, the transfer failed but is resumable.
+        return $this->maxTriesTransfer($uploader, $endpoint, $chunk, $retryCountdown);
     }
 }

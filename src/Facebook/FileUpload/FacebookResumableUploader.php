@@ -128,33 +128,6 @@ class FacebookResumableUploader
     }
 
     /**
-     * Attempts to upload a chunk of a file in $retryCountdown tries.
-     *
-     * @param string $endpoint
-     * @param FacebookTransferChunk $chunk
-     * @param int $retryCountdown
-     *
-     * @return FacebookTransferChunk
-     *
-     * @throws FacebookResponseException
-     */
-    public function maxTriesTransfer($endpoint, FacebookTransferChunk $chunk, $retryCountdown)
-    {
-        $allowToThrow = $retryCountdown < 1;
-
-        $newChunk = $this->transfer($endpoint, $chunk, $allowToThrow);
-
-        if ($newChunk !== $chunk) {
-            return $newChunk;
-        }
-
-        $retryCountdown--;
-
-        // If transfer() returned the same chunk entity, the transfer failed but is resumable.
-        return $this->maxTriesTransfer($endpoint, $chunk, $retryCountdown);
-    }
-
-    /**
      * Upload by chunks - finish phase
      *
      * @param string $endpoint

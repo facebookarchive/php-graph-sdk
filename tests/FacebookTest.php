@@ -23,6 +23,7 @@
  */
 namespace Facebook\Tests;
 
+use Mockery as m;
 use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\Http\GraphRawResponse;
@@ -33,6 +34,8 @@ use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
+use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\FacebookTransferChunk;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
@@ -377,5 +380,38 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $lastResponse = $fb->getLastResponse();
         $this->assertInstanceOf('Facebook\FacebookResponse', $lastResponse);
         $this->assertEquals(1337, $lastResponse->getHttpStatusCode());
+    }
+
+    public function testCanGetSuccessfulTransferWithMaxTries()
+    {
+        $chunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '1', '2', '3', '4');
+        $newChunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '11', '12', '13', '14');
+
+        $uploader = m::mock('Facebook\FileUpload\FacebookResumableUploader');
+        $uploader->shouldReceive('transfer')
+          ->once()
+          ->andReturn($newChunk);
+
+        $fb = new Facebook($this->config);
+        $newChunk = $fb->maxTriesTransfer($uploader, '/me/videos', $chunk, 3);
+        $this->assertNotSame($newChunk, $chunk);
+    }
+
+    public function testMaxingOutRetriesWillFail()
+    {
+        $chunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '1', '2', '3', '4');
+
+        $uploader = m::mock('Facebook\FileUpload\FacebookResumableUploader');
+        $uploader->shouldReceive('transfer')
+                 ->twice()
+                 ->andReturn($chunk);
+        $uploader->shouldReceive('transfer')
+                 ->once()
+                 ->andReturn('Final fail');
+
+        $fb = new Facebook($this->config);
+        $newChunk = $fb->maxTriesTransfer($uploader, '/me/videos', $chunk, 3);
+
+        $this->assertEquals('Final fail', $newChunk);
     }
 }
