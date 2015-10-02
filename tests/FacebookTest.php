@@ -23,7 +23,6 @@
  */
 namespace Facebook\Tests;
 
-use Mockery as m;
 use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\Http\GraphRawResponse;
@@ -34,8 +33,7 @@ use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
-use Facebook\FileUpload\FacebookFile;
-use Facebook\FileUpload\FacebookTransferChunk;
+use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
@@ -384,34 +382,29 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
 
     public function testCanGetSuccessfulTransferWithMaxTries()
     {
-        $chunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '1', '2', '3', '4');
-        $newChunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '11', '12', '13', '14');
-
-        $uploader = m::mock('Facebook\FileUpload\FacebookResumableUploader');
-        $uploader->shouldReceive('transfer')
-          ->once()
-          ->andReturn($newChunk);
-
-        $fb = new Facebook($this->config);
-        $newChunk = $fb->maxTriesTransfer($uploader, '/me/videos', $chunk, 3);
-        $this->assertNotSame($newChunk, $chunk);
+        $config = array_merge($this->config, [
+          'http_client_handler' => new FakeGraphApiForResumableUpload(),
+        ]);
+        $fb = new Facebook($config);
+        $response = $fb->uploadVideo('me', __DIR__.'/foo.txt', [], 'foo-token', 3);
+        $this->assertEquals([
+          'video_id' => '1337',
+          'success' => true,
+        ], $response);
     }
 
-    public function testMaxingOutRetriesWillFail()
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     */
+    public function testMaxingOutRetriesWillThrow()
     {
-        $chunk = new FacebookTransferChunk(new FacebookFile(__DIR__.'/foo.txt'), '1', '2', '3', '4');
+        $client = new FakeGraphApiForResumableUpload();
+        $client->failOnTransfer();
 
-        $uploader = m::mock('Facebook\FileUpload\FacebookResumableUploader');
-        $uploader->shouldReceive('transfer')
-                 ->twice()
-                 ->andReturn($chunk);
-        $uploader->shouldReceive('transfer')
-                 ->once()
-                 ->andReturn('Final fail');
-
-        $fb = new Facebook($this->config);
-        $newChunk = $fb->maxTriesTransfer($uploader, '/me/videos', $chunk, 3);
-
-        $this->assertEquals('Final fail', $newChunk);
+        $config = array_merge($this->config, [
+          'http_client_handler' => $client,
+        ]);
+        $fb = new Facebook($config);
+        $response = $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
     }
 }

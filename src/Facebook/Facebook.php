@@ -635,11 +635,9 @@ class Facebook
      *
      * @throws FacebookSDKException
      */
-    public function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown)
+    private function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown)
     {
-        $allowToThrow = $retryCountdown < 1;
-
-        $newChunk = $uploader->transfer($endpoint, $chunk, $allowToThrow);
+        $newChunk = $uploader->transfer($endpoint, $chunk, $retryCountdown < 1);
 
         if ($newChunk !== $chunk) {
             return $newChunk;
