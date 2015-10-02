@@ -495,4 +495,61 @@ $graphNode = $response->getGraphNode();
 
 echo 'Video ID: ' . $graphNode['id'];
 ~~~~
+
+## uploadVideo() {#upload-video}
+~~~~
+public array videoToUpload(
+  string $target,
+  string $pathToFile,
+  array $metadata = [],
+  string|Facebook\AccessToken $accessToken = null,
+  int $maxTransferTries = 5,
+  string $graphVersion = null
+  )
+~~~~
+
+Functionality to [upload video files in chunks](/docs/graph-api/video-uploads#resumable) was added to the Graph API in v2.3. The `uploadVideo()` method provides an easy API to take advantage of this new feature.
+
+### Parameters
+
+`$target`
+The ID or alias of the target node. This can be a user ID, page ID, event ID, group ID or `me`.
+
+`$pathToFile`
+The absolute or relative path to the video file to upload.
+
+`$metadata`
+All the metadata associated with the [Video node](/docs/graph-api/reference/video/).
+
+`$accessToken`
+The access token to use for this request. Falls back to the default access token if one exists.
+
+`$maxTransferTries`
+During the [transfer phase](/docs/graph-api/video-uploads#transfer) an upload can fail for a number of reasons. If the Graph API responds with an error that is resumable, the PHP SDK will retry uploading the chunk automatically. By default the PHP SDK will try to upload each chunk five times before throwing a `FacebookResponseException`.
+
+`$graphVersion`
+The version of the Graph API to use. The resumable upload feature did not become available until Graph v2.3.
+
+### Return Value
+
+The array that is returned will contain two keys; `video_id` with the ID of the video node, and `success` with a boolean value that represents a successful or failed transfer.
+
+### Example
+
+~~~~
+// Upload a video for a user (chunked)
+$data = [
+  'title' => 'My awesome video',
+  'description' => 'More info about my awesome video.',
+];
+
+try {
+  $response = $fb->uploadVideo('me', '/path/to/video.mp4', $data, '{user-access-token}');
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  echo 'Error: ' . $e->getMessage();
+  exit;
+}
+
+echo 'Video ID: ' . $response['video_id'];
+~~~~
 </card>

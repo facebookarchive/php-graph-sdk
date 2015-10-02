@@ -5,7 +5,7 @@ Uploading files to the Graph API is made a breeze with the Facebook SDK for PHP.
 </card>
 
 <card>
-## Facebook\FileUpload\FacebookFile(string $pathToFile) {#overview}
+## Facebook\FileUpload\FacebookFile(string $pathToFile, int $maxLength = -1, int $offset = -1) {#overview}
 
 The `FacebookFile` entity represents a local or remote file to be uploaded with a request to Graph.
 
@@ -17,7 +17,6 @@ use Facebook\FileUpload\FacebookFile;
 $myFileToUpload = new FacebookFile('/path/to/file.jpg');
 ~~~~
 
-
 Alternatively, you can use the `fileToUpload()` factory on the `Facebook\Facebook` super service to instantiate a new `FacebookFile` entity.
 
 ~~~~
@@ -25,6 +24,8 @@ $fb = new Facebook\Facebook(/* . . . */);
 
 $myFileToUpload = $fb->fileToUpload('/path/to/file.jpg');
 ~~~~
+
+Partial file uploads are possible using the `$maxLength` and `$offset` parameters which provide the same functionality as the `$maxlen` and `$offset` parameters on the [`stream_get_contents()` PHP function](http://php.net/stream_get_contents).
 </card>
 
 <card>
