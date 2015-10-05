@@ -89,6 +89,14 @@ class FacebookResponseException extends FacebookSDKException
                 case 464:
                 case 467:
                     return new static($response, new FacebookAuthenticationException($message, $code));
+                // Video upload resumable error
+                case 1363030:
+                case 1363019:
+                case 1363037:
+                case 1363033:
+                case 1363021:
+                case 1363041:
+                    return new static($response, new FacebookResumableUploadException($message, $code));
             }
         }
 

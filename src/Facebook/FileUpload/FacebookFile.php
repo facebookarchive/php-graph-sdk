@@ -38,6 +38,16 @@ class FacebookFile
     protected $path;
 
     /**
+     * @var int The maximum bytes to read. Defaults to -1 (read all the remaining buffer).
+     */
+    private $maxLength;
+
+    /**
+     * @var int Seek to the specified offset before reading. If this number is negative, no seeking will occur and reading will start from the current position.
+     */
+    private $offset;
+
+    /**
      * @var resource The stream pointing to the file.
      */
     protected $stream;
@@ -46,12 +56,16 @@ class FacebookFile
      * Creates a new FacebookFile entity.
      *
      * @param string $filePath
+     * @param int $maxLength
+     * @param int $offset
      *
      * @throws FacebookSDKException
      */
-    public function __construct($filePath)
+    public function __construct($filePath, $maxLength = -1, $offset = -1)
     {
         $this->path = $filePath;
+        $this->maxLength = $maxLength;
+        $this->offset = $offset;
         $this->open();
     }
 
@@ -98,7 +112,7 @@ class FacebookFile
      */
     public function getContents()
     {
-        return stream_get_contents($this->stream);
+        return stream_get_contents($this->stream, $this->maxLength, $this->offset);
     }
 
     /**
@@ -109,6 +123,26 @@ class FacebookFile
     public function getFileName()
     {
         return basename($this->path);
+    }
+
+    /**
+     * Return the path of the file.
+     *
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Return the size of the file.
+     *
+     * @return int
+     */
+    public function getSize()
+    {
+        return filesize($this->path);
     }
 
     /**

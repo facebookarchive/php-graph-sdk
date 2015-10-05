@@ -33,6 +33,7 @@ use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
+use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
 
 class FooClientInterface implements FacebookHttpClientInterface
 {
@@ -377,5 +378,33 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $lastResponse = $fb->getLastResponse();
         $this->assertInstanceOf('Facebook\FacebookResponse', $lastResponse);
         $this->assertEquals(1337, $lastResponse->getHttpStatusCode());
+    }
+
+    public function testCanGetSuccessfulTransferWithMaxTries()
+    {
+        $config = array_merge($this->config, [
+          'http_client_handler' => new FakeGraphApiForResumableUpload(),
+        ]);
+        $fb = new Facebook($config);
+        $response = $fb->uploadVideo('me', __DIR__.'/foo.txt', [], 'foo-token', 3);
+        $this->assertEquals([
+          'video_id' => '1337',
+          'success' => true,
+        ], $response);
+    }
+
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     */
+    public function testMaxingOutRetriesWillThrow()
+    {
+        $client = new FakeGraphApiForResumableUpload();
+        $client->failOnTransfer();
+
+        $config = array_merge($this->config, [
+          'http_client_handler' => $client,
+        ]);
+        $fb = new Facebook($config);
+        $response = $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
     }
 }

@@ -21,40 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\FileUpload;
+namespace Facebook\Exceptions;
 
-use Facebook\FileUpload\FacebookFile;
-
-class FacebookFileTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class FacebookResumableUploadException
+ *
+ * @package Facebook
+ */
+class FacebookResumableUploadException extends FacebookSDKException
 {
-    protected $testFile = '';
-
-    public function setUp()
-    {
-        $this->testFile = __DIR__ . '/../foo.txt';
-    }
-
-    public function testCanOpenAndReadAndCloseAFile()
-    {
-        $file = new FacebookFile($this->testFile);
-        $fileContents = $file->getContents();
-
-        $this->assertEquals('This is a text file used for testing. Let\'s dance.', $fileContents);
-    }
-
-    public function testPartialFilesCanBeCreated()
-    {
-        $file = new FacebookFile($this->testFile, 14, 5);
-        $fileContents = $file->getContents();
-
-        $this->assertEquals('is a text file', $fileContents);
-    }
-
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
-    public function testTryingToOpenAFileThatDoesntExistsThrows()
-    {
-        new FacebookFile('does_not_exist.file');
-    }
 }
