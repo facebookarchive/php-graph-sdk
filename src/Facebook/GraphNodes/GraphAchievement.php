@@ -92,7 +92,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the type of achievement.
      *
-     * @see https://developers.facebook.com/docs/graph-api/reference/v2.2/achievement
+     * @see https://developers.facebook.com/docs/graph-api/reference/achievement
      *
      * @return string
      */
