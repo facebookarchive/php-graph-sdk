@@ -64,7 +64,7 @@ class Facebook
     /**
      * @const string Default Graph API version for requests.
      */
-    const DEFAULT_GRAPH_VERSION = 'v2.4';
+    const DEFAULT_GRAPH_VERSION = 'v2.5';
 
     /**
      * @const string The name of the environment variable that contains the app ID.
