@@ -382,7 +382,7 @@ class AccessTokenMetadata
     private function castTimestampsToDateTime()
     {
         foreach (static::$dateProperties as $key) {
-            if (isset($this->metadata[$key])) {
+            if (isset($this->metadata[$key]) && $this->metadata[$key] !== 0) {
                 $this->metadata[$key] = $this->convertTimestampToDateTime($this->metadata[$key]);
             }
         }
