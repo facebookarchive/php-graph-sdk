@@ -225,7 +225,7 @@ class FacebookResponse
      *
      * Graph will return 2 types of responses:
      * - JSON(P)
-     *    Most responses from Grpah are JSON(P)
+     *    Most responses from Graph are JSON(P)
      * - application/x-www-form-urlencoded key/value pairs
      *    Happens on the `/oauth/access_token` endpoint when exchanging
      *    a short-lived access token for a long-lived access token
@@ -259,7 +259,7 @@ class FacebookResponse
     /**
      * Instantiate a new GraphObject from response.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast to.
+     * @param string|null $subclassName The GraphNode subclass to cast to.
      *
      * @return \Facebook\GraphNodes\GraphObject
      *
@@ -276,7 +276,7 @@ class FacebookResponse
     /**
      * Instantiate a new GraphNode from response.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast to.
+     * @param string|null $subclassName The GraphNode subclass to cast to.
      *
      * @return \Facebook\GraphNodes\GraphNode
      *
@@ -376,7 +376,7 @@ class FacebookResponse
     /**
      * Instantiate a new GraphList from response.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast list items to.
+     * @param string|null $subclassName The GraphNode subclass to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
      * @return \Facebook\GraphNodes\GraphList
@@ -394,7 +394,7 @@ class FacebookResponse
     /**
      * Instantiate a new GraphEdge from response.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast list items to.
+     * @param string|null $subclassName The GraphNode subclass to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
      * @return \Facebook\GraphNodes\GraphEdge
