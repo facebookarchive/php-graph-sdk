@@ -13,9 +13,11 @@ before_install:
   - travis_retry composer self-update
 
 install:
+  - travis_retry composer require --dev --no-update squizlabs/php_codesniffer:~2.3
   - travis_retry composer install --prefer-source --no-interaction
 
 script:
+  - vendor/bin/phpcs --standard=psr2 src/
   - vendor/bin/phpunit --coverage-text --exclude-group integration
 
 matrix:
