@@ -20,6 +20,10 @@ The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/).
 }
 ```
 
+## Upgrading to v5.x
+
+Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [read the upgrade guide](https://www.sammyk.me/upgrading-the-facebook-php-sdk-from-v4-to-v5) before upgrading.
+
 
 ## Usage
 
