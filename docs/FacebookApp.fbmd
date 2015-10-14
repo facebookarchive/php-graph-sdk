@@ -39,13 +39,13 @@ Returns an app access token in the form of an [`AccessToken`](/docs/php/AccessTo
 ~~~~
 public string getId()
 ~~~~
-Returns an the app id.
+Returns the app id.
 
 ## getSecret() {#get-secret}
 ~~~~
 public string getSecret()
 ~~~~
-Returns an the app secret.
+Returns the app secret.
 
 ## Serialization {#serialization}
 
