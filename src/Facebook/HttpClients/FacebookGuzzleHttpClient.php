@@ -26,9 +26,9 @@ namespace Facebook\HttpClients;
 use Facebook\Http\GraphRawResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
+
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\ResponseInterface;
-use GuzzleHttp\Ring\Exception\RingException;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
 
 class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
@@ -36,10 +36,10 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
     /**
      * @var \GuzzleHttp\Client The Guzzle client.
      */
-    protected $guzzleClient;
+    private $guzzleClient;
 
     /**
-     * @param \GuzzleHttp\Client|null The Guzzle client.
+     * @param \GuzzleHttp\Client The Guzzle client.
      */
     public function __construct(Client $guzzleClient = null)
     {
@@ -51,47 +51,31 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
      */
     public function send($url, $method, $body, array $headers, $timeOut)
     {
+
+        $request = new Request($method, $url, $headers, $body);
         $options = [
-            'headers' => $headers,
-            'body' => $body,
             'timeout' => $timeOut,
             'connect_timeout' => 10,
             'verify' => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
         ];
-        $request = $this->guzzleClient->createRequest($method, $url, $options);
 
         try {
-            $rawResponse = $this->guzzleClient->send($request);
+            $response = $this->guzzleClient->send($request,$options);
         } catch (RequestException $e) {
-            $rawResponse = $e->getResponse();
-
-            if ($e->getPrevious() instanceof RingException || !$rawResponse instanceof ResponseInterface) {
-                throw new FacebookSDKException($e->getMessage(), $e->getCode());
-            }
+            throw new FacebookSDKException($e->getMessage(), $e->getCode());
         }
 
-        $rawHeaders = $this->getHeadersAsString($rawResponse);
-        $rawBody = $rawResponse->getBody();
-        $httpStatusCode = $rawResponse->getStatusCode();
+        $httpStatusCode = $response->getStatusCode();
+        $responseHeaders = $response->getHeaders();
 
-        return new GraphRawResponse($rawHeaders, $rawBody, $httpStatusCode);
-    }
-
-    /**
-     * Returns the Guzzle array of headers as a string.
-     *
-     * @param ResponseInterface $response The Guzzle response.
-     *
-     * @return string
-     */
-    public function getHeadersAsString(ResponseInterface $response)
-    {
-        $headers = $response->getHeaders();
-        $rawHeaders = [];
-        foreach ($headers as $name => $values) {
-            $rawHeaders[] = $name . ": " . implode(", ", $values);
+        foreach ($responseHeaders as $name => $values) {
+            $responseHeaders[$name] = implode(', ', $values);
         }
 
-        return implode("\r\n", $rawHeaders);
+        $responseBody = $response->getBody()->getContents();
+
+
+        return new GraphRawResponse($responseHeaders, $responseBody, $httpStatusCode);
     }
+
 }
