@@ -158,14 +158,6 @@ class Facebook
         $enableBeta = isset($config['enable_beta_mode']) && $config['enable_beta_mode'] === true;
         $this->client = new FacebookClient($httpClientHandler, $enableBeta);
 
-        if (isset($config['url_detection_handler'])) {
-            if ($config['url_detection_handler'] instanceof UrlDetectionInterface) {
-                $this->urlDetectionHandler = $config['url_detection_handler'];
-            } else {
-                throw new \InvalidArgumentException('The url_detection_handler must be an instance of Facebook\Url\UrlDetectionInterface');
-            }
-        }
-
         if (isset($config['pseudo_random_string_generator'])) {
             if ($config['pseudo_random_string_generator'] instanceof PseudoRandomStringGeneratorInterface) {
                 $this->pseudoRandomStringGenerator = $config['pseudo_random_string_generator'];
@@ -191,6 +183,7 @@ class Facebook
                 throw new \InvalidArgumentException('The persistent_data_handler must be set to "session", "memory", or be an instance of Facebook\PersistentData\PersistentDataInterface');
             }
         }
+        $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new FacebookUrlDetectionHandler());
 
         if (isset($config['default_access_token'])) {
             $this->setDefaultAccessToken($config['default_access_token']);
@@ -257,11 +250,17 @@ class Facebook
      */
     public function getUrlDetectionHandler()
     {
-        if (!$this->urlDetectionHandler instanceof UrlDetectionInterface) {
-            $this->urlDetectionHandler = new FacebookUrlDetectionHandler();
-        }
-
         return $this->urlDetectionHandler;
+    }
+
+    /**
+     * Changes the URL detection handler.
+     * 
+     * @param UrlDetectionInterface $urlDetectionHandler
+     */
+    private function setUrlDetectionHandler(UrlDetectionInterface $urlDetectionHandler)
+    {
+        $this->urlDetectionHandler = $urlDetectionHandler;
     }
 
     /**
