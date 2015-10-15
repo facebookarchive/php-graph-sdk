@@ -34,6 +34,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
     - Renamed `FacebookHttpable` to `FacebookHttpClientInterface`
     - Added `FacebookApp` entity that contains info about the Facebook app
     - Updated the API for the helpers
+    - Added `HttpClients`, `PersistentData` and `PseudoRandomString` factories to reduce main class' complexity
   - Tests
     - Added namespaces to the tests
     - Grouped functional tests under `functional` group
