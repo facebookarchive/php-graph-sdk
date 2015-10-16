@@ -124,7 +124,7 @@ class FacebookClient
      */
     public function detectHttpClientHandler()
     {
-        return function_exists('curl_init') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
+        return extension_loaded('curl') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
     }
 
     /**
