@@ -10,14 +10,10 @@ This repository contains the open source PHP SDK that allows you to access the F
 
 ## Installation
 
-The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/). Add the Facebook PHP SDK package to your `composer.json` file.
+The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/). Run this command:
 
-```json
-{
-    "require": {
-        "facebook/php-sdk-v4": "~5.1"
-    }
-}
+```sh
+composer require facebook/php-sdk-v4
 ```
 
 ## Upgrading to v5.x
