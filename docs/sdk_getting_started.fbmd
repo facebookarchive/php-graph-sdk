@@ -29,14 +29,10 @@ There are two methods to install the Facebook SDK for PHP. The recommended insta
 <card>
 ## Installing with Composer (recommended) {#install-composer}
 
-[Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply add the following "require" entry to the `composer.json` file in the root of your project.
+[Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
 
 ~~~
-{
-  "require" : {
-    "facebook/php-sdk-v4" : "~5.0"
-  }
-}
+composer require facebook/php-sdk-v4
 ~~~
 
 %FB(devsite:markdown-wiki:info-card {
@@ -44,7 +40,7 @@ There are two methods to install the Facebook SDK for PHP. The recommended insta
   type: 'info',
 })
 
-Then run `composer install` from the command line, and composer will download the latest version of the SDK and put it in the `/vendor/` directory.
+Once you do this, composer will edit your `composer.json` file and download the latest version of the SDK and put it in the `/vendor/` directory.
 
 Make sure to include the Composer autoloader at the top of your script.
 
