@@ -364,6 +364,8 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
                         'after' => 'bar_after_cursor',
                         'before' => 'bar_before_cursor',
                     ],
+                    'previous' => 'previous_url',
+                    'next' => 'next_url',
                 ]
             ],
             '/1337/photos',
