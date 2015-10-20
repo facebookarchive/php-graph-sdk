@@ -102,7 +102,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
 
         $httpResponseBody = isset($response['body']) ? $response['body'] : null;
         $httpResponseCode = isset($response['code']) ? $response['code'] : null;
-        $httpResponseHeaders = isset($response['headers']) ? $response['headers'] : [];
+        $httpResponseHeaders = isset($response['headers']) ? $this->normalizeBatchHeaders($response['headers']) : [];
 
         $this->responses[$originalRequestName] = new FacebookResponse(
             $originalRequest,
@@ -150,5 +150,23 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     public function offsetGet($offset)
     {
         return isset($this->responses[$offset]) ? $this->responses[$offset] : null;
+    }
+
+    /**
+     * Converts the batch header array into a standard format.
+     *
+     * @param array $batchHeaders
+     *
+     * @return array
+     */
+    private function normalizeBatchHeaders(array $batchHeaders)
+    {
+        $headers = [];
+
+        foreach ($batchHeaders as $header) {
+            $headers[$header['name']] = $header['value'];
+        }
+
+        return $headers;
     }
 }
