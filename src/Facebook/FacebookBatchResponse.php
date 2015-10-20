@@ -102,6 +102,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
 
         $httpResponseBody = isset($response['body']) ? $response['body'] : null;
         $httpResponseCode = isset($response['code']) ? $response['code'] : null;
+        // @TODO With PHP 5.5 support, this becomes array_column($response['headers'], 'value', 'name')
         $httpResponseHeaders = isset($response['headers']) ? $this->normalizeBatchHeaders($response['headers']) : [];
 
         $this->responses[$originalRequestName] = new FacebookResponse(
@@ -154,6 +155,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
 
     /**
      * Converts the batch header array into a standard format.
+     * @TODO replace with array_column() when PHP 5.5 is supported.
      *
      * @param array $batchHeaders
      *
