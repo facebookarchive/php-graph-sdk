@@ -25,16 +25,14 @@ namespace Facebook\Helpers;
 
 use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
-use Facebook\Url\UrlDetectionInterface;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+use Facebook\PersistentData\PersistentDataInterface;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorFactory;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
-use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
-use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
-use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
-use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Url\UrlDetectionInterface;
 
 /**
  * Class FacebookRedirectLoginHelper
@@ -79,7 +77,7 @@ class FacebookRedirectLoginHelper
         $this->oAuth2Client = $oAuth2Client;
         $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
         $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
-        $this->pseudoRandomStringGenerator = $prsg ?: $this->detectPseudoRandomStringGenerator();
+        $this->pseudoRandomStringGenerator = PseudoRandomStringGeneratorFactory::createPseudoRandomStringGenerator($prsg);
     }
 
     /**
@@ -110,32 +108,6 @@ class FacebookRedirectLoginHelper
     public function getPseudoRandomStringGenerator()
     {
         return $this->pseudoRandomStringGenerator;
-    }
-
-    /**
-     * Detects which pseudo-random string generator to use.
-     *
-     * @return PseudoRandomStringGeneratorInterface
-     *
-     * @throws FacebookSDKException
-     */
-    public function detectPseudoRandomStringGenerator()
-    {
-        // Since openssl_random_pseudo_bytes() can sometimes return non-cryptographically
-        // secure pseudo-random strings (in rare cases), we check for mcrypt_create_iv() first.
-        if (function_exists('mcrypt_create_iv')) {
-            return new McryptPseudoRandomStringGenerator();
-        }
-
-        if (function_exists('openssl_random_pseudo_bytes')) {
-            return new OpenSslPseudoRandomStringGenerator();
-        }
-
-        if (!ini_get('open_basedir') && is_readable('/dev/urandom')) {
-            return new UrandomPseudoRandomStringGenerator();
-        }
-
-        throw new FacebookSDKException('Unable to detect a cryptographically secure pseudo-random string generator.');
     }
 
     /**
