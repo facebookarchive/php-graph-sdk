@@ -41,7 +41,7 @@ class FacebookStream
     /**
      * @var array Response headers from the stream wrapper
      */
-    protected $responseHeaders;
+    protected $responseHeaders = [];
 
     /**
      * Make a new context stream reference instance
@@ -56,7 +56,7 @@ class FacebookStream
     /**
      * The response headers from the stream wrapper
      *
-     * @return array|null
+     * @return array
      */
     public function getResponseHeaders()
     {
@@ -73,7 +73,7 @@ class FacebookStream
     public function fileGetContents($url)
     {
         $rawResponse = file_get_contents($url, false, $this->stream);
-        $this->responseHeaders = $http_response_header;
+        $this->responseHeaders = $http_response_header ?: [];
 
         return $rawResponse;
     }
