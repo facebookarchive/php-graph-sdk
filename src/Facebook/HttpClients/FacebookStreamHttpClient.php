@@ -66,7 +66,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
         $rawBody = $this->facebookStream->fileGetContents($url);
         $rawHeaders = $this->facebookStream->getResponseHeaders();
 
-        if ($rawBody === false || !$rawHeaders) {
+        if ($rawBody === false || empty($rawHeaders)) {
             throw new FacebookSDKException('Stream returned an empty response', 660);
         }
 
