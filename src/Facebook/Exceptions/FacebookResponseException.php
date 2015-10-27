@@ -77,8 +77,6 @@ class FacebookResponseException extends FacebookSDKException
         $code = isset($data['error']['code']) ? $data['error']['code'] : null;
         $message = isset($data['error']['message']) ? $data['error']['message'] : 'Unknown error from Graph.';
 
-        $previousException = null;
-
         if (isset($data['error']['error_subcode'])) {
             switch ($data['error']['error_subcode']) {
                 // Other authentication issues
