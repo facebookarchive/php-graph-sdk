@@ -68,7 +68,7 @@ class GraphObjectFactory extends GraphNodeFactory
      */
     public function makeGraphEvent()
     {
-        return $this->makeGraphObject(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphEvent');
+        return $this->makeGraphNode(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphEvent');
     }
 
     /**
