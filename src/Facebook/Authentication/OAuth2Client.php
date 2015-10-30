@@ -250,9 +250,9 @@ class OAuth2Client
     /**
      * Send a request to Graph with an app access token.
      *
-     * @param string      $endpoint
-     * @param array       $params
-     * @param string|null $accessToken
+     * @param string                  $endpoint
+     * @param array                   $params
+     * @param AccessToken|string|null $accessToken
      *
      * @return FacebookResponse
      *
