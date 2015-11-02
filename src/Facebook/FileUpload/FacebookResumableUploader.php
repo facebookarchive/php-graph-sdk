@@ -23,8 +23,9 @@
  */
 namespace Facebook\FileUpload;
 
-use Facebook\Exceptions\FacebookResumableUploadException;
+use Facebook\Authentication\AccessToken;
 use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookResumableUploadException;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
@@ -58,10 +59,10 @@ class FacebookResumableUploader
     protected $graphVersion;
 
     /**
-     * @param FacebookApp $app
-     * @param FacebookClient $client
-     * @param string $accessToken
-     * @param string $graphVersion
+     * @param FacebookApp             $app
+     * @param FacebookClient          $client
+     * @param AccessToken|string|null $accessToken
+     * @param string                  $graphVersion
      */
     public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion)
     {
