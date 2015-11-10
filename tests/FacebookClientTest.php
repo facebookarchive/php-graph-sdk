@@ -218,8 +218,8 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
     }
 
-    public function testAFacebookRequestValidateAccessTokenIsNotProvided(){
-
+    public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
+    {
         $this->setExpectedException('Facebook\Exceptions\FacebookSDKException');
 
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
