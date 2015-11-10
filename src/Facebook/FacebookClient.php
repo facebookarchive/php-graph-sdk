@@ -197,7 +197,7 @@ class FacebookClient
      */
     public function sendRequest(FacebookRequest $request)
     {
-        if (get_class($request) === 'FacebookRequest') {
+        if (get_class($request) === 'Facebook\FacebookRequest') {
             $request->validateAccessToken();
         }
 
