@@ -54,7 +54,7 @@ class PersistentDataFactory
         }
 
         if ('session' === $handler) {
-            new FacebookSessionPersistentDataHandler();
+            return new FacebookSessionPersistentDataHandler();
         }
         if ('memory' === $handler) {
             return new FacebookMemoryPersistentDataHandler();
