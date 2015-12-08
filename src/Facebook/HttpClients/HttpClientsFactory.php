@@ -25,6 +25,7 @@ namespace Facebook\HttpClients;
 
 use GuzzleHttp\Client;
 use InvalidArgumentException;
+use Exception;
 
 class HttpClientsFactory
 {
