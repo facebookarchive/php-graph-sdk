@@ -54,16 +54,6 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
     protected $facebookCurl;
 
     /**
-     * @const Curl Version which is unaffected by the proxy header length error.
-     */
-    const CURL_PROXY_QUIRK_VER = 0x071E00;
-
-    /**
-     * @const "Connection Established" header text
-     */
-    const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
-
-    /**
      * @param FacebookCurl|null Procedural curl as object
      */
     public function __construct(FacebookCurl $facebookCurl = null)
@@ -164,47 +154,10 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
      */
     public function extractResponseHeadersAndBody()
     {
-        $headerSize = $this->getHeaderSize();
-
-        $rawHeaders = mb_substr($this->rawResponse, 0, $headerSize);
-        $rawBody = mb_substr($this->rawResponse, $headerSize);
+        $parts = explode("\r\n\r\n", $this->rawResponse);
+        $rawBody = array_pop($parts);
+        $rawHeaders = implode("\r\n\r\n", $parts);
 
         return [trim($rawHeaders), trim($rawBody)];
-    }
-
-    /**
-     * Return proper header size
-     *
-     * @return integer
-     */
-    private function getHeaderSize()
-    {
-        $headerSize = $this->facebookCurl->getinfo(CURLINFO_HEADER_SIZE);
-        // This corrects a Curl bug where header size does not account
-        // for additional Proxy headers.
-        if ($this->needsCurlProxyFix()) {
-            // Additional way to calculate the request body size.
-            if (preg_match('/Content-Length: (\d+)/', $this->rawResponse, $m)) {
-                $headerSize = mb_strlen($this->rawResponse) - $m[1];
-            } elseif (stripos($this->rawResponse, self::CONNECTION_ESTABLISHED) !== false) {
-                $headerSize += mb_strlen(self::CONNECTION_ESTABLISHED);
-            }
-        }
-
-        return $headerSize;
-    }
-
-    /**
-     * Detect versions of Curl which report incorrect header lengths when
-     * using Proxies.
-     *
-     * @return boolean
-     */
-    private function needsCurlProxyFix()
-    {
-        $ver = $this->facebookCurl->version();
-        $version = $ver['version_number'];
-
-        return $version < self::CURL_PROXY_QUIRK_VER;
     }
 }

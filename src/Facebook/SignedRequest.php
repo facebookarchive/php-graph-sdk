@@ -268,14 +268,8 @@ class SignedRequest
      */
     protected function validateSignature($hashedSig, $sig)
     {
-        if (mb_strlen($hashedSig) === mb_strlen($sig)) {
-            $validate = 0;
-            for ($i = 0; $i < mb_strlen($sig); $i++) {
-                $validate |= ord($hashedSig[$i]) ^ ord($sig[$i]);
-            }
-            if ($validate === 0) {
-                return;
-            }
+        if (\hash_equals($hashedSig, $sig)) {
+            return;
         }
 
         throw new FacebookSDKException('Signed request has an invalid signature.', 602);

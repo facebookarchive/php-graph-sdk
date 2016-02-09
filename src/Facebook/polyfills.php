@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Facebook, Inc.
+ * Copyright 2016 Facebook, Inc.
  *
  * You are hereby granted a non-exclusive, worldwide, royalty-free license to
  * use, copy, modify, and distribute this software in source code or binary
@@ -21,39 +21,23 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\PseudoRandomString;
 
-trait PseudoRandomStringGeneratorTrait
-{
-    /**
-     * Validates the length argument of a random string.
-     *
-     * @param int $length The length to validate.
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function validateLength($length)
+/**
+ * @see http://php.net/manual/en/function.hash-equals.php#115635
+ */
+if(!function_exists('hash_equals')) {
+    function hash_equals($str1, $str2)
     {
-        if (!is_int($length)) {
-            throw new \InvalidArgumentException('getPseudoRandomString() expects an integer for the string length');
+        if(strlen($str1) != strlen($str2)) {
+            return false;
         }
 
-        if ($length < 1) {
-            throw new \InvalidArgumentException('getPseudoRandomString() expects a length greater than 1');
+        $res = $str1 ^ $str2;
+        $ret = 0;
+        for($i = strlen($res) - 1; $i >= 0; $i--) {
+            $ret |= ord($res[$i]);
         }
-    }
 
-    /**
-     * Converts binary data to hexadecimal of arbitrary length.
-     *
-     * @param string $binaryData The binary data to convert to hex.
-     * @param int    $length     The length of the string to return.
-     * @throws \RuntimeException Throws an exception when multibyte support is not enabled
-     *
-     * @return string
-     */
-    public function binToHex($binaryData, $length)
-    {
-        return \substr(\bin2hex($binaryData), 0, $length);
+        return !$ret;
     }
 }

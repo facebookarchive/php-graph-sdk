@@ -147,15 +147,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testIsolatesTheHeaderAndBody()
     {
         $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(strlen($this->fakeRawHeader));
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_STABLE]);
-        $this->curlMock
             ->shouldReceive('exec')
             ->once()
             ->andReturn($this->fakeRawHeader . $this->fakeRawBody);
@@ -170,15 +161,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testProperlyHandlesProxyHeaders()
     {
         $rawHeader = $this->fakeRawProxyHeader . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(mb_strlen($rawHeader));
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_STABLE]);
         $this->curlMock
             ->shouldReceive('exec')
             ->once()
@@ -195,15 +177,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     {
         $rawHeader = $this->fakeRawProxyHeader . $this->fakeRawHeader;
         $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(mb_strlen($this->fakeRawHeader)); // Mimic bug that doesn't count proxy header
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_BUGGY]);
-        $this->curlMock
             ->shouldReceive('exec')
             ->once()
             ->andReturn($rawHeader . $this->fakeRawBody);
@@ -219,15 +192,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     {
         $rawHeader = $this->fakeRawProxyHeader2 . $this->fakeRawHeader;
         $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(mb_strlen($this->fakeRawHeader)); // Mimic bug that doesn't count proxy header
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_BUGGY]);
-        $this->curlMock
             ->shouldReceive('exec')
             ->once()
             ->andReturn($rawHeader . $this->fakeRawBody);
@@ -242,15 +206,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testProperlyHandlesRedirectHeaders()
     {
         $rawHeader = $this->fakeRawRedirectHeader . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(mb_strlen($rawHeader));
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_STABLE]);
         $this->curlMock
             ->shouldReceive('exec')
             ->once()
@@ -281,15 +236,6 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
             ->shouldReceive('errno')
             ->once()
             ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('getinfo')
-            ->with(CURLINFO_HEADER_SIZE)
-            ->once()
-            ->andReturn(mb_strlen($this->fakeRawHeader));
-        $this->curlMock
-            ->shouldReceive('version')
-            ->once()
-            ->andReturn(['version_number' => self::CURL_VERSION_STABLE]);
         $this->curlMock
             ->shouldReceive('close')
             ->once()
