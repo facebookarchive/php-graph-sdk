@@ -120,6 +120,9 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
 
     public function testCurlHttpClientHandlerCanBeForced()
     {
+        if (!extension_loaded('curl')) {
+            $this->markTestSkipped('cURL must be installed to test cURL client handler.');
+        }
         $config = array_merge($this->config, [
             'http_client_handler' => 'curl'
         ]);

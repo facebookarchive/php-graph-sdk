@@ -43,6 +43,9 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
     public function setUp()
     {
+        if (!extension_loaded('curl')) {
+            $this->markTestSkipped('cURL must be installed to test cURL client handler.');
+        }
         $this->curlMock = m::mock('Facebook\HttpClients\FacebookCurl');
         $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
     }
