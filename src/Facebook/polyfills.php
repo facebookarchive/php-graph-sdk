@@ -23,21 +23,22 @@
  */
 
 /**
- * @see http://php.net/manual/en/function.hash-equals.php#115635
+ * @see https://github.com/sarciszewski/php-future/blob/master/src/Security.php#L37-L51
  */
 if(!function_exists('hash_equals')) {
-    function hash_equals($str1, $str2)
+    function hash_equals($knownString, $userString)
     {
-        if(strlen($str1) != strlen($str2)) {
+        $kLen = strlen($knownString);
+        $uLen = strlen($userString);
+        if ($kLen !== $uLen) {
             return false;
         }
-
-        $res = $str1 ^ $str2;
-        $ret = 0;
-        for($i = strlen($res) - 1; $i >= 0; $i--) {
-            $ret |= ord($res[$i]);
+        $result = 0;
+        for ($i = 0; $i < $kLen; $i++) {
+            $result |= (ord($knownString[$i]) ^ ord($userString[$i]));
         }
 
-        return !$ret;
+        // They are only identical strings if $result is exactly 0...
+        return 0 === $result;
     }
 }
