@@ -19,8 +19,3 @@ install:
 script:
   - vendor/bin/phpcs src --standard=psr2 -spn
   - vendor/bin/phpunit --coverage-text --exclude-group integration
-
-matrix:
-  allow_failures:
-    - php: 7.0
-  fast_finish: true
