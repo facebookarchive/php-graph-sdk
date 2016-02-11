@@ -65,7 +65,7 @@ class AccessToken
    */
   public function __construct($accessToken, $expiresAt = 0, $machineId = null)
   {
-    $this->accessToken = $accessToken;
+    $this->accessToken = (string) $accessToken;
     if ($expiresAt) {
       $this->setExpiresAtFromTimeStamp($expiresAt);
     }
