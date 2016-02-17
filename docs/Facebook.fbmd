@@ -31,12 +31,12 @@ $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 $response = $fb->delete('/{node-id}');
 ~~~~
 
-If you don't provide a `default_access_token` in the configuration options, or you wish to use a different access token than the default, you can explicitly pass the access token as an argument to the `get()`, `post()`, and `delete()` methods.
+If you don't provide a `default_access_token` in the configuration options, or you wish to use a different access token than the default, you can explicitly pass the access token as an argument to the `get()`, `post()`, and `delete()` methods. You must provide the params field when explicitly supplying the access token.
 
 ~~~~
-$res = $fb->get('/me', '{access-token}');
+$res = $fb->get('/me', ['fields' => 'id'] '{access-token}');
 $res = $fb->post('/me/feed', ['foo' => 'bar'], '{access-token}');
-$res = $fb->delete('/{node-id}', '{access-token}');
+$res = $fb->delete('/{node-id}', [], '{access-token}');
 ~~~~
 </card>
 
@@ -223,6 +223,7 @@ Returns the default version of Graph. If the `default_graph_version` configurati
 ~~~~
 public Facebook\FacebookResponse get(
   string $endpoint,
+  string $params,
   string|AccessToken|null $accessToken,
   string|null $eTag,
   string|null $graphVersion
@@ -234,8 +235,15 @@ Sends a GET request to Graph and returns a `Facebook\FacebookResponse`.
 `$endpoint`
 The url to send to Graph without the version prefix (required).
 
+`$params`
+The associative array of params you want to send in the body of the GET request.
+
 ~~~
-$fb->get('/me');
+$response = $fb->get('/me');
+
+By default, not all the fields in a node or edge are returned when you make a query. You can choose the fields (or edges) you want returned with the `fields` query parameter.
+
+$response = $fb->get('/me', ['fields' => 'id,name']);
 ~~~
 
 `$accessToken`
@@ -260,10 +268,7 @@ public Facebook\FacebookResponse post(
 
 Sends a POST request to Graph and returns a `Facebook\FacebookResponse`.
 
-The arguments are the same as `get()` above with the exception of `$params`.
-
-`$params`
-The associative array of params you want to send in the body of the POST request.
+The arguments are the same as `get()` above.
 
 ~~~~
 $response = $fb->post('/me/feed', ['message' => 'Foo message']);
@@ -282,7 +287,7 @@ public Facebook\FacebookResponse delete(
 
 Sends a DELETE request to Graph and returns a `Facebook\FacebookResponse`.
 
-The arguments are the same as `post()` above.
+The arguments are the same as `get()` above.
 
 ~~~~
 $response = $fb->delete('/{node-id}', ['object' => '1234']);
