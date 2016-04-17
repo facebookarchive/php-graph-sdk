@@ -172,6 +172,10 @@ Graph nodes are collections that represent nodes returned by the Graph API. And 
       '[`Facebook\\GraphNodes\\GraphUser`](/docs/php/GraphNode#user-instance-methods)',
       'A collection that represents a User node.',
     ],
+    [
+      '[`Facebook\\GraphNodes\\Birthday`](/docs/php/Birthday#instance-methods)',
+      'A class that represents a GraphUser\'s birthday.',
+    ],
   ],
 })
 </card>
