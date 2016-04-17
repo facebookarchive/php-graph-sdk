@@ -22,12 +22,12 @@ Usage:
 ~~~~
 $fb = new Facebook\Facebook(\* *\);
 // Returns a `Facebook\FacebookResponse` object
-$response = $fb->get('/something');
+$response = $fb->get('/me');
 
 // Get the response typed as a GraphUser
 $user = $response->getGraphUser();
 
-// Gets birthday value, assume graph return was format MM/DD
+// Gets birthday value, assume Graph return was format MM/DD
 $birthday = $user->getBirthday();
 
 var_dump($birthday);
