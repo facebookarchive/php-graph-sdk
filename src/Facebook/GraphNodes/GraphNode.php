@@ -65,7 +65,7 @@ class GraphNode extends Collection
                     || $this->isIso8601DateString($v))
             ) {
                 $items[$k] = $this->castToDateTime($v);
-            } else if ($k === 'birthday') {
+            } elseif ($k === 'birthday') {
                 $items[$k] = $this->castToBirthday($v);
             } else {
                 $items[$k] = $v;
@@ -178,7 +178,7 @@ class GraphNode extends Collection
      *
      * @param string $value
      *
-     * @return \Facebook\GraphNodes\Birthday
+     * @return Birthday
      */
     public function castToBirthday($value)
     {

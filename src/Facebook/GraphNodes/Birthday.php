@@ -24,7 +24,6 @@
 namespace Facebook\GraphNodes;
 
 use DateTime;
-use DateTimeZone;
 
 /**
  * Birthday object to handle various Graph return formats
@@ -52,22 +51,16 @@ class Birthday extends DateTime
      *
      * @link https://developers.facebook.com/docs/graph-api/reference/user
      *
-     * @param string       $date
-     * @param DateTimeZone $timezone
+     * @param string $date
      */
-    public function __construct($date, DateTimeZone $timezone = null)
+    public function __construct($date)
     {
         $parts = explode('/', $date);
 
-        if (count($parts) === 3 || count($parts) === 1) {
-            $this->hasYear = true;
-        }
+        $this->hasYear = count($parts) === 3 || count($parts) === 1;
+        $this->hasDate = count($parts) === 3 || count($parts) === 2;
 
-        if (count($parts) === 3 || count($parts) === 2) {
-            $this->hasDate = true;
-        }
-
-        parent::__construct($date, $timezone);
+        parent::__construct($date);
     }
 
     /**
