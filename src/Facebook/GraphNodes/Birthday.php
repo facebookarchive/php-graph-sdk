@@ -35,12 +35,12 @@ class Birthday extends DateTime
     /**
      * @var bool
      */
-    protected $hasDate = false;
+    private $hasDate = false;
 
     /**
      * @var bool
      */
-    protected $hasYear = false;
+    private $hasYear = false;
 
     /**
      * Parses Graph birthday format to set indication flags, possible values:
