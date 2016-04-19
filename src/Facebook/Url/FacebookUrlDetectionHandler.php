@@ -95,8 +95,8 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     protected function getHostName()
     {
         // Check for proxy first
-        if ($this->isValidForwardedHost() && $host = $this->getHeader('X_FORWARDED_HOST')) {
-            $elements = explode(',', $host);
+        if ($header = $this->getHeader('X_FORWARDED_HOST') && $this->isValidForwardedHost($header)) {
+            $elements = explode(',', $header);
             $host = $elements[count($elements) - 1];
         } elseif (!$host = $this->getHeader('HOST')) {
             if (!$host = $this->getServerVar('SERVER_NAME')) {
@@ -164,20 +164,18 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     /**
      * Checks if the value in X_FORWARDED_HOST is a valid hostname
      * Could prevent unintended redirections
+     *
+     * @param string $header
+     *
+     * @return boolean
      */
-    protected function isValidForwardedHost()
+    protected function isValidForwardedHost($header)
     {
-        $host = $this->getHeader('X_FORWARDED_HOST');
-        if (!$host) {
-          return false;
-        }
-
-        $elements = explode(',', $host);
+        $elements = explode(',', $header);
         $host = $elements[count($elements) - 1];
         
-        return return (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $domain_name) //valid chars check
-            && preg_match("/^.{1,253}$/", $domain_name) //overall length check
-            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $domain_name) ); //length of each label
+        return preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $host) //valid chars check
+            && 0 < strlen($host) && strlen($host) < 254 //overall length check
+            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $host); //length of each label
     }
-
 }
