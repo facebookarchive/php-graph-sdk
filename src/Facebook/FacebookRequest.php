@@ -154,7 +154,7 @@ class FacebookRequest
     }
 
     /**
-     * Return the access token for this request an an AccessToken entity.
+     * Return the access token for this request as an AccessToken entity.
      *
      * @return AccessToken|null
      */
@@ -214,8 +214,6 @@ class FacebookRequest
      * Set the HTTP method for this request.
      *
      * @param string
-     *
-     * @return FacebookRequest
      */
     public function setMethod($method)
     {
@@ -273,7 +271,7 @@ class FacebookRequest
     }
 
     /**
-     * Return the HTTP method for this request.
+     * Return the endpoint for this request.
      *
      * @return string
      */
