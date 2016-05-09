@@ -28,7 +28,7 @@ Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [
 Simple GET example of a user's profile.
 
 ```php
-$fb = new Facebook\Facebook([
+$fb = new Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
   'default_graph_version' => 'v2.5',
