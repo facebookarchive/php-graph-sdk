@@ -84,7 +84,7 @@ class FacebookApp implements \Serializable
      */
     public function serialize()
     {
-        return json_encode([$this->id, $this->secret]);
+        return implode('|', [$this->id, $this->secret]);
     }
 
     /**
@@ -94,7 +94,7 @@ class FacebookApp implements \Serializable
      */
     public function unserialize($serialized)
     {
-        list($id, $secret) = json_decode($serialized);
+        list($id, $secret) = explode('|', $serialized);
 
         $this->__construct($id, $secret);
     }
