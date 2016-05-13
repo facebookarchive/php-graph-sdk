@@ -6,7 +6,10 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 ## 5.0.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
-
+- 5.1.4
+  - Breaking changes
+    - Changes the serialization method of FacebookApp
+      - FacebookApps serialized by versions prior 5.1.4 cannot be unserialized by this version
 - 5.0 (2015-??-??)
   - New features
     - Added the `Facebook\Facebook` super service for an easier API
@@ -22,8 +25,8 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
       - Many improvements to the Graph node subtypes
     - New injectable interfaces
       - Added a `PersistentDataInterface` for custom persistent data handling
-      - Added a `PseudoRandomStringGeneratorInterface` for customizable CSPRNG's 
-      - Added a `UrlDetectionInterface` for custom URL-detection logic 
+      - Added a `PseudoRandomStringGeneratorInterface` for customizable CSPRNG's
+      - Added a `UrlDetectionInterface` for custom URL-detection logic
   - Codebase changes
     - Moved exception classes to `Exception\*` directory
     - Moved response collection objects to `GraphNodes\*` directory
