@@ -166,9 +166,9 @@ Returns the `link` property for the user as a string if present.
 
 ### getBirthday() {#user-getbirthday}
 ~~~~
-public \DateTime|null getBirthday()
+public \Facebook\GraphNodes\Birthday|null getBirthday()
 ~~~~
-Returns the `birthday` property for the user as a `\DateTime` if present.
+Returns the `birthday` property for the user as a [`Facebook\GraphNodes\Birthday`](/docs/php/Birthday) if present.
 
 ### getLocation() {#user-getlocation}
 ~~~~
