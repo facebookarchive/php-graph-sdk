@@ -3,9 +3,12 @@
 Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org/).
 
 
-## 5.0.x
+## 5.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+- 5.1.5
+  - Removed mbstring extension dependency
+  - Updated required PHP version syntax in composer.json
 - 5.1.4
   - Breaking changes
     - Changes the serialization method of FacebookApp
