@@ -6,6 +6,10 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 ## 5.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+- 5.2.0
+  - Added new Birthday class to handle Graph API response variations
+  - Bumped Graph version to v2.6
+  - Added better error checking for app IDs that are cast as int when they are greater than PHP_INT_MAX
 - 5.1.5
   - Removed mbstring extension dependency
   - Updated required PHP version syntax in composer.json
