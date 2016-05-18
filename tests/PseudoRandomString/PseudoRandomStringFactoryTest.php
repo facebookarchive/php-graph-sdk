@@ -53,11 +53,19 @@ class PseudoRandomStringFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function httpClientsProvider()
     {
-        return [
-            ['mcrypt', self::COMMON_NAMESPACE . 'McryptPseudoRandomStringGenerator'],
-            ['openssl', self::COMMON_NAMESPACE . 'OpenSslPseudoRandomStringGenerator'],
-            ['urandom', self::COMMON_NAMESPACE . 'UrandomPseudoRandomStringGenerator'],
-            [null, self::COMMON_INTERFACE],
+        $providers = [
+          [null, self::COMMON_INTERFACE],
         ];
+        if (function_exists('mcrypt_create_iv')) {
+            $providers[] = ['mcrypt', self::COMMON_NAMESPACE . 'McryptPseudoRandomStringGenerator'];
+        }
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $providers[] = ['openssl', self::COMMON_NAMESPACE . 'OpenSslPseudoRandomStringGenerator'];
+        }
+        if (!ini_get('open_basedir') && is_readable('/dev/urandom')) {
+            $providers[] = ['urandom', self::COMMON_NAMESPACE . 'UrandomPseudoRandomStringGenerator'];
+        }
+
+        return $providers;
     }
 }

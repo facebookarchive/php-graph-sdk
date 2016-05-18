@@ -54,15 +54,19 @@ class HttpClientsFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function httpClientsProvider()
     {
-        return [
-            ['curl', self::COMMON_NAMESPACE . 'FacebookCurlHttpClient'],
-            ['guzzle', self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
-            ['stream', self::COMMON_NAMESPACE . 'FacebookStreamHttpClient'],
-            [new Client(), self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
-            [new FacebookCurlHttpClient(), self::COMMON_NAMESPACE . 'FacebookCurlHttpClient'],
-            [new FacebookGuzzleHttpClient(), self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
-            [new FacebookStreamHttpClient(), self::COMMON_NAMESPACE . 'FacebookStreamHttpClient'],
-            [null, self::COMMON_INTERFACE],
+        $clients = [
+          ['guzzle', self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
+          ['stream', self::COMMON_NAMESPACE . 'FacebookStreamHttpClient'],
+          [new Client(), self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
+          [new FacebookGuzzleHttpClient(), self::COMMON_NAMESPACE . 'FacebookGuzzleHttpClient'],
+          [new FacebookStreamHttpClient(), self::COMMON_NAMESPACE . 'FacebookStreamHttpClient'],
+          [null, self::COMMON_INTERFACE],
         ];
+        if (extension_loaded('curl')) {
+            $clients[] = ['curl', self::COMMON_NAMESPACE . 'FacebookCurlHttpClient'];
+            $clients[] = [new FacebookCurlHttpClient(), self::COMMON_NAMESPACE . 'FacebookCurlHttpClient'];
+        }
+
+        return $clients;
     }
 }
