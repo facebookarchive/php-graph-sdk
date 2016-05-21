@@ -36,7 +36,7 @@ class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->request = new FacebookRequest(new FacebookApp('123', 'foo'));
     }

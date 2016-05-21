@@ -82,7 +82,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
      */
     public static $testFacebookClient;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fbApp = new FacebookApp('id', 'shhhh!');
         $this->fbClient = new FacebookClient(new MyFooClientHandler());

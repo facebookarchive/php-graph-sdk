@@ -33,7 +33,7 @@ abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
      */
     protected $responseMock;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->responseMock = m::mock('\Facebook\FacebookResponse');

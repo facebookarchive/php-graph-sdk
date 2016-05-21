@@ -40,7 +40,7 @@ class GraphEdgeTest extends \PHPUnit_Framework_TestCase
         'previous' => 'https://graph.facebook.com/v7.12/998899/photos?pretty=0&limit=25&before=foo_before_cursor',
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $app = new FacebookApp('123', 'foo_app_secret');
         $this->request = new FacebookRequest(

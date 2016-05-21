@@ -42,7 +42,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
      */
     protected $guzzleClient;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->guzzleMock = m::mock('GuzzleHttp\Client');
         $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);

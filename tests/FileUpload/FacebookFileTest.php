@@ -29,7 +29,7 @@ class FacebookFileTest extends \PHPUnit_Framework_TestCase
 {
     protected $testFile = '';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->testFile = __DIR__ . '/../foo.txt';
     }
