@@ -23,10 +23,7 @@
  */
 namespace Facebook\Tests\PseudoRandomString;
 
-use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
-use Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorFactory;
-use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 use PHPUnit_Framework_TestCase;
 
 class PseudoRandomStringFactoryTest extends PHPUnit_Framework_TestCase

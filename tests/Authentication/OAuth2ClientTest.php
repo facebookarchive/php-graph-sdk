@@ -23,7 +23,6 @@
  */
 namespace Facebook\Tests\Authentication;
 
-use Mockery as m;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
