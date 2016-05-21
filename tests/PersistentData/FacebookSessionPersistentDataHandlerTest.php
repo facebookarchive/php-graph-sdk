@@ -32,7 +32,7 @@ class FacebookSessionPersistentDataHandlerTest extends \PHPUnit_Framework_TestCa
      */
     public function testInactiveSessionsWillThrow()
     {
-        $handler = new FacebookSessionPersistentDataHandler();
+        new FacebookSessionPersistentDataHandler();
     }
 
     public function testCanSetAValue()

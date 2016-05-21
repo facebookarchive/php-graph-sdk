@@ -91,7 +91,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = [
             'app_secret' => 'foo_secret',
         ];
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     /**
@@ -104,7 +104,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = [
             'app_id' => 'foo_id',
         ];
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     /**
@@ -115,7 +115,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = array_merge($this->config, [
             'http_client_handler' => 'foo_handler',
         ]);
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     public function testCurlHttpClientHandlerCanBeForced()
@@ -165,7 +165,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = array_merge($this->config, [
             'persistent_data_handler' => 'foo_handler',
         ]);
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     public function testPersistentDataHandlerCanBeForced()
@@ -191,7 +191,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = array_merge($this->config, [
             'url_detection_handler' => 'foo_handler',
         ]);
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
@@ -302,7 +302,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $config = array_merge($this->config, [
             'default_access_token' => 123,
         ]);
-        $fb = new Facebook($config);
+        new Facebook($config);
     }
 
     public function testCreatingANewRequestWillDefaultToTheProperConfig()
@@ -413,6 +413,6 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
           'http_client_handler' => $client,
         ]);
         $fb = new Facebook($config);
-        $response = $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
+        $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
     }
 }
