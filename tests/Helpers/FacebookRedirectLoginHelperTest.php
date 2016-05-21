@@ -26,26 +26,8 @@ namespace Facebook\Tests\Helpers;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
-use Facebook\Authentication\OAuth2Client;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
-
-class FooPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
-{
-    public function getPseudoRandomString($length)
-    {
-        return 'csprs123';
-    }
-}
-
-class FooRedirectLoginOAuth2Client extends OAuth2Client
-{
-    public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null)
-    {
-        return 'foo_token_from_code|' . $code . '|' . $redirectUri;
-    }
-}
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {

@@ -25,54 +25,10 @@ namespace Facebook\Tests;
 
 use Facebook\Facebook;
 use Facebook\FacebookClient;
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
-use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\Url\UrlDetectionInterface;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
-
-class FooClientInterface implements FacebookHttpClientInterface
-{
-    public function send($url, $method, $body, array $headers, $timeOut)
-    {
-        return new GraphRawResponse(
-            "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
-            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
-        );
-    }
-}
-
-class FooPersistentDataInterface implements PersistentDataInterface
-{
-    public function get($key)
-    {
-        return 'foo';
-    }
-
-    public function set($key, $value)
-    {
-    }
-}
-
-class FooUrlDetectionInterface implements UrlDetectionInterface
-{
-    public function getCurrentUrl()
-    {
-        return 'https://foo.bar';
-    }
-}
-
-class FooBarPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
-{
-    public function getPseudoRandomString($length)
-    {
-        return 'csprs123';
-    }
-}
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {

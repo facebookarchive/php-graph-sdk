@@ -21,25 +21,21 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests\Helpers;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+use Facebook\FacebookClient;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+
+class FooSignedRequestHelperFacebookClient extends FacebookClient
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
+    public function sendRequest(FacebookRequest $request)
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
+        $params = $request->getParams();
+        $rawResponse = json_encode([
+            'access_token' => 'foo_access_token_from:' . $params['code'],
+        ]);
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
+        return new FacebookResponse($request, $rawResponse, 200);
     }
 }

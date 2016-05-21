@@ -27,18 +27,6 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphNodeFactory;
-use Facebook\GraphNodes\GraphNode;
-
-class MyFooSubClassGraphNode extends GraphNode
-{
-}
-
-class MyFooGraphNode extends GraphNode
-{
-    protected static $graphObjectMap = [
-        'foo_object' => '\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode',
-    ];
-}
 
 class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 {

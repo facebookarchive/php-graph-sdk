@@ -21,25 +21,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+use Facebook\PersistentData\PersistentDataInterface;
+
+class FooPersistentDataInterface implements PersistentDataInterface
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
+    public function get($key)
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
+        return 'foo';
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
+    public function set($key, $value)
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
     }
 }

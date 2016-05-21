@@ -23,23 +23,9 @@
  */
 namespace Facebook\Tests\PseudoRandomString;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
-{
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorTrait;
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
-    }
+class MyFooBarPseudoRandomStringGenerator
+{
+    use PseudoRandomStringGeneratorTrait;
 }

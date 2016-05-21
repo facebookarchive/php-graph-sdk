@@ -21,25 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests\Helpers;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+
+class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
+    public function getRawSignedRequest()
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
+        return null;
     }
 }

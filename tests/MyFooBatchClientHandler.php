@@ -21,25 +21,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+use Facebook\Http\GraphRawResponse;
+use Facebook\HttpClients\FacebookHttpClientInterface;
+
+class MyFooBatchClientHandler implements FacebookHttpClientInterface
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
+    public function send($url, $method, $body, array $headers, $timeOut)
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
+        return new GraphRawResponse(
+            "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+            '[{"code":"123","body":"Foo"},{"code":"1337","body":"Bar"}]'
+        );
     }
 }
