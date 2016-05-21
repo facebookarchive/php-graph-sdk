@@ -86,7 +86,7 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
         $this->graphApi->failOnStart();
         $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
 
-        $chunk = $uploader->start('/me/videos', $this->file);
+        $uploader->start('/me/videos', $this->file);
     }
 
     public function testFailedResumableTransferWillNotThrowAndReturnSameChunk()
