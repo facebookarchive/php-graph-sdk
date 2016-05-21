@@ -33,7 +33,7 @@ class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $responseMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
     }

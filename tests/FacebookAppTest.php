@@ -32,7 +32,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
      */
     private $app;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->app = new FacebookApp('id', 'secret');
     }

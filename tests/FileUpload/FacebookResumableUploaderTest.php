@@ -53,7 +53,7 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
      */
     private $file;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->fbApp = new FacebookApp('app_id', 'app_secret');
         $this->graphApi = new FakeGraphApiForResumableUpload();

@@ -46,7 +46,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
      */
     protected $oauth;
 
-    public function setUp()
+    protected function setUp()
     {
         $app = new FacebookApp('123', 'foo_secret');
         $this->client = new FooFacebookClientForOAuth2Test();

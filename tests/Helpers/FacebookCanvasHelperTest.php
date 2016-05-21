@@ -36,7 +36,7 @@ class FacebookCanvasHelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $app = new FacebookApp('123', 'foo_app_secret');
         $this->helper = new FacebookCanvasHelper($app, new FacebookClient());

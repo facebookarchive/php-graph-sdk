@@ -38,7 +38,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
      */
     protected $streamClient;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->streamMock = m::mock('Facebook\HttpClients\FacebookStream');
         $this->streamClient = new FacebookStreamHttpClient($this->streamMock);

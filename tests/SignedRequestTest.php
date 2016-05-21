@@ -46,7 +46,7 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
         'foo' => 'bar',
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->app = new FacebookApp('123', 'foo_app_secret');
     }

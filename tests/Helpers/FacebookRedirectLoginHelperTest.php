@@ -61,7 +61,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
     const REDIRECT_URL = 'http://invalid.zzz';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->persistentDataHandler = new FacebookMemoryPersistentDataHandler();
 
