@@ -1,6 +1,7 @@
 filter:
     paths:
         - 'src/*'
+        - 'tests/*'
 
 tools:
     php_code_sniffer:
