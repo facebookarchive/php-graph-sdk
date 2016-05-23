@@ -17,6 +17,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
   - Breaking changes
     - Changes the serialization method of FacebookApp
       - FacebookApps serialized by versions prior 5.1.4 cannot be unserialized by this version
+  - Fixed redirect_uri injection vulnerability
 - 5.0 (2015-??-??)
   - New features
     - Added the `Facebook\Facebook` super service for an easier API
