@@ -21,21 +21,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Helpers;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\FacebookClient;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
+use Facebook\PersistentData\PersistentDataInterface;
 
-class FooSignedRequestHelperFacebookClient extends FacebookClient
+class FooPersistentDataInterface implements PersistentDataInterface
 {
-    public function sendRequest(FacebookRequest $request)
+    public function get($key)
     {
-        $params = $request->getParams();
-        $rawResponse = json_encode([
-            'access_token' => 'foo_access_token_from:' . $params['code'],
-        ]);
+        return 'foo';
+    }
 
-        return new FacebookResponse($request, $rawResponse, 200);
+    public function set($key, $value)
+    {
     }
 }

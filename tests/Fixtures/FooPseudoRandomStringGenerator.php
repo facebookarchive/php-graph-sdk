@@ -21,18 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 
-class FooClientInterface implements FacebookHttpClientInterface
+class FooPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
 {
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function getPseudoRandomString($length)
     {
-        return new GraphRawResponse(
-            "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
-            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
-        );
+        return 'csprs123';
     }
 }

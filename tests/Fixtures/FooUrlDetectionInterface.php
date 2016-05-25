@@ -21,14 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
+use Facebook\Url\UrlDetectionInterface;
 
-class FooBarPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
+class FooUrlDetectionInterface implements UrlDetectionInterface
 {
-    public function getPseudoRandomString($length)
+    public function getCurrentUrl()
     {
-        return 'csprs123';
+        return 'https://foo.bar';
     }
 }

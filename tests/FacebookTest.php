@@ -28,7 +28,11 @@ use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
-use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
+use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
+use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
+use Facebook\Tests\Fixtures\FooClientInterface;
+use Facebook\Tests\Fixtures\FooPersistentDataInterface;
+use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {
@@ -292,19 +296,19 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $fb = new Facebook($config);
 
         $this->assertInstanceOf(
-            'Facebook\Tests\FooClientInterface',
+            'Facebook\Tests\Fixtures\FooClientInterface',
             $fb->getClient()->getHttpClientHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooPersistentDataInterface',
+            'Facebook\Tests\Fixtures\FooPersistentDataInterface',
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooUrlDetectionInterface',
+            'Facebook\Tests\Fixtures\FooUrlDetectionInterface',
             $fb->getRedirectLoginHelper()->getUrlDetectionHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooBarPseudoRandomStringGenerator',
+            'Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator',
             $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
         );
     }

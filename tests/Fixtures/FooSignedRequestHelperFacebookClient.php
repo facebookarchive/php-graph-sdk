@@ -21,14 +21,21 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Helpers;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Authentication\OAuth2Client;
+use Facebook\FacebookClient;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
 
-class FooRedirectLoginOAuth2Client extends OAuth2Client
+class FooSignedRequestHelperFacebookClient extends FacebookClient
 {
-    public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null)
+    public function sendRequest(FacebookRequest $request)
     {
-        return 'foo_token_from_code|' . $code . '|' . $redirectUri;
+        $params = $request->getParams();
+        $rawResponse = json_encode([
+            'access_token' => 'foo_access_token_from:' . $params['code'],
+        ]);
+
+        return new FacebookResponse($request, $rawResponse, 200);
     }
 }

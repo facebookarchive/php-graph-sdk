@@ -29,7 +29,7 @@ use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\FileUpload\FacebookResumableUploader;
 use Facebook\FileUpload\FacebookTransferChunk;
-use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
+use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 
 class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
 {

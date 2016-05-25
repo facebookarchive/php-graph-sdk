@@ -35,6 +35,8 @@ use Facebook\FileUpload\FacebookVideo;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
+use Facebook\Tests\Fixtures\MyFooClientHandler;
 
 class FacebookClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,7 +72,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $client = new FacebookClient($handler);
         $httpHandler = $client->getHttpClientHandler();
 
-        $this->assertInstanceOf('Facebook\Tests\MyFooClientHandler', $httpHandler);
+        $this->assertInstanceOf('Facebook\Tests\Fixtures\MyFooClientHandler', $httpHandler);
     }
 
     public function testTheHttpClientWillFallbackToDefault()

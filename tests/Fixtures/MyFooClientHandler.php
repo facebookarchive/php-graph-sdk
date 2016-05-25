@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Fixtures;
 
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;

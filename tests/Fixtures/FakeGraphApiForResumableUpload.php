@@ -22,7 +22,7 @@
  *
  */
 
-namespace Facebook\Tests\FakeGraphApi;
+namespace Facebook\Tests\Fixtures;
 
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;

@@ -21,14 +21,11 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Helpers;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+use Facebook\PseudoRandomString\PseudoRandomStringGeneratorTrait;
 
-class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
+class MyFooBarPseudoRandomStringGenerator
 {
-    public function getRawSignedRequest()
-    {
-        return null;
-    }
+    use PseudoRandomStringGeneratorTrait;
 }

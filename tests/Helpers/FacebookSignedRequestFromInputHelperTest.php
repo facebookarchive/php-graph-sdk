@@ -24,6 +24,8 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
+use Facebook\Tests\Fixtures\FooSignedRequestHelper;
+use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
 
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {

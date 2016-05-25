@@ -21,11 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorTrait;
+use Facebook\Authentication\OAuth2Client;
 
-class MyFooBarPseudoRandomStringGenerator
+class FooRedirectLoginOAuth2Client extends OAuth2Client
 {
-    use PseudoRandomStringGeneratorTrait;
+    public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null)
+    {
+        return 'foo_token_from_code|' . $code . '|' . $redirectUri;
+    }
 }

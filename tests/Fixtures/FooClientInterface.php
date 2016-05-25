@@ -21,13 +21,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\GraphNodes;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\GraphNodes\GraphNode;
+use Facebook\Http\GraphRawResponse;
+use Facebook\HttpClients\FacebookHttpClientInterface;
 
-class MyFooGraphNode extends GraphNode
+class FooClientInterface implements FacebookHttpClientInterface
 {
-    protected static $graphObjectMap = [
-        'foo_object' => '\Facebook\Tests\GraphNodes\MyFooSubClassGraphNode',
-    ];
+    public function send($url, $method, $body, array $headers, $timeOut)
+    {
+        return new GraphRawResponse(
+            "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
+        );
+    }
 }

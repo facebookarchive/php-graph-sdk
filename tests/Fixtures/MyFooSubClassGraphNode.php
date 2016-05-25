@@ -21,14 +21,10 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Url\UrlDetectionInterface;
+use Facebook\GraphNodes\GraphNode;
 
-class FooUrlDetectionInterface implements UrlDetectionInterface
+class MyFooSubClassGraphNode extends GraphNode
 {
-    public function getCurrentUrl()
-    {
-        return 'https://foo.bar';
-    }
 }

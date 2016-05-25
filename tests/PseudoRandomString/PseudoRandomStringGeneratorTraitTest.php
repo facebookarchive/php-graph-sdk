@@ -23,6 +23,8 @@
  */
 namespace Facebook\Tests\PseudoRandomString;
 
+use Facebook\Tests\Fixtures\MyFooBarPseudoRandomStringGenerator;
+
 class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**

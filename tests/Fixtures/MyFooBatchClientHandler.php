@@ -21,18 +21,18 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\PersistentData\PersistentDataInterface;
+use Facebook\Http\GraphRawResponse;
+use Facebook\HttpClients\FacebookHttpClientInterface;
 
-class FooPersistentDataInterface implements PersistentDataInterface
+class MyFooBatchClientHandler implements FacebookHttpClientInterface
 {
-    public function get($key)
+    public function send($url, $method, $body, array $headers, $timeOut)
     {
-        return 'foo';
-    }
-
-    public function set($key, $value)
-    {
+        return new GraphRawResponse(
+            "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
+            '[{"code":"123","body":"Foo"},{"code":"1337","body":"Bar"}]'
+        );
     }
 }

@@ -21,14 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\Helpers;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
+use Facebook\GraphNodes\GraphNode;
 
-class FooPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
+class MyFooGraphNode extends GraphNode
 {
-    public function getPseudoRandomString($length)
-    {
-        return 'csprs123';
-    }
+    protected static $graphObjectMap = [
+        'foo_object' => '\Facebook\Tests\Fixtures\MyFooSubClassGraphNode',
+    ];
 }
