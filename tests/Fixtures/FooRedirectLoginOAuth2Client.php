@@ -21,27 +21,14 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Tests\Fixtures\MyFooBarPseudoRandomStringGenerator;
+use Facebook\Authentication\OAuth2Client;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+class FooRedirectLoginOAuth2Client extends OAuth2Client
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
+    public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null)
     {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
+        return 'foo_token_from_code|' . $code . '|' . $redirectUri;
     }
 }

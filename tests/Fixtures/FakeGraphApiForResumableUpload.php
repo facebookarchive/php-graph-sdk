@@ -22,7 +22,7 @@
  *
  */
 
-namespace Facebook\Tests\FakeGraphApi;
+namespace Facebook\Tests\Fixtures;
 
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
@@ -58,16 +58,16 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
     {
         if ($this->respondWith == 'FAIL_ON_START') {
             return new GraphRawResponse(
-              "HTTP/1.1 500 OK\r\nFoo: Bar",
-              '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
-              '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
-              '"type":"OAuthException","code":190,"error_subcode":463}}'
+                "HTTP/1.1 500 OK\r\nFoo: Bar",
+                '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
+                '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
+                '"type":"OAuthException","code":190,"error_subcode":463}}'
             );
         }
 
         return new GraphRawResponse(
-          "HTTP/1.1 200 OK\r\nFoo: Bar",
-          '{"video_id":"1337","start_offset":"0","end_offset":"20","upload_session_id":"42"}'
+            "HTTP/1.1 200 OK\r\nFoo: Bar",
+            '{"video_id":"1337","start_offset":"0","end_offset":"20","upload_session_id":"42"}'
         );
     }
 
@@ -75,9 +75,9 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
     {
         if ($this->respondWith == 'FAIL_ON_TRANSFER') {
             return new GraphRawResponse(
-              "HTTP/1.1 500 OK\r\nFoo: Bar",
-              '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
-              '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}'
+                "HTTP/1.1 500 OK\r\nFoo: Bar",
+                '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
+                '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}'
             );
         }
 
@@ -96,16 +96,16 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         $this->transferCount++;
 
         return new GraphRawResponse(
-          "HTTP/1.1 200 OK\r\nFoo: Bar",
-          json_encode($data)
+            "HTTP/1.1 200 OK\r\nFoo: Bar",
+            json_encode($data)
         );
     }
 
     private function respondFinish()
     {
         return new GraphRawResponse(
-          "HTTP/1.1 200 OK\r\nFoo: Bar",
-          '{"success":true}'
+            "HTTP/1.1 200 OK\r\nFoo: Bar",
+            '{"success":true}'
         );
     }
 }

@@ -48,7 +48,7 @@ $ composer global require squizlabs/php_codesniffer
 Then you can `cd` into the Facebook PHP SDK folder and run Code Sniffer against the `src/` directory.
 
 ``` bash
-$ ~/.composer/vendor/bin/phpcs src --standard=psr2 -spn
+$ ~/.composer/vendor/bin/phpcs
 ```
 
 **Happy coding**!

@@ -21,27 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Tests\PseudoRandomString;
+namespace Facebook\Tests\Fixtures;
 
-use Facebook\Tests\Fixtures\MyFooBarPseudoRandomStringGenerator;
+use Facebook\GraphNodes\GraphNode;
 
-class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
+class MyFooGraphNode extends GraphNode
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAnInvalidLengthWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength('foo_len');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testALengthThatIsNotAtLeastOneCharacterWillThrow()
-    {
-        $prsg = new MyFooBarPseudoRandomStringGenerator();
-        $prsg->validateLength(0);
-    }
+    protected static $graphObjectMap = [
+        'foo_object' => '\Facebook\Tests\Fixtures\MyFooSubClassGraphNode',
+    ];
 }

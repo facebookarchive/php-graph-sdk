@@ -25,54 +25,14 @@ namespace Facebook\Tests;
 
 use Facebook\Facebook;
 use Facebook\FacebookClient;
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
-use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\Url\UrlDetectionInterface;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
-use Facebook\Tests\FakeGraphApi\FakeGraphApiForResumableUpload;
-
-class FooClientInterface implements FacebookHttpClientInterface
-{
-    public function send($url, $method, $body, array $headers, $timeOut)
-    {
-        return new GraphRawResponse(
-            "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
-            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
-        );
-    }
-}
-
-class FooPersistentDataInterface implements PersistentDataInterface
-{
-    public function get($key)
-    {
-        return 'foo';
-    }
-
-    public function set($key, $value)
-    {
-    }
-}
-
-class FooUrlDetectionInterface implements UrlDetectionInterface
-{
-    public function getCurrentUrl()
-    {
-        return 'https://foo.bar';
-    }
-}
-
-class FooBarPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
-{
-    public function getPseudoRandomString($length)
-    {
-        return 'csprs123';
-    }
-}
+use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
+use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
+use Facebook\Tests\Fixtures\FooClientInterface;
+use Facebook\Tests\Fixtures\FooPersistentDataInterface;
+use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {
@@ -336,19 +296,19 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $fb = new Facebook($config);
 
         $this->assertInstanceOf(
-            'Facebook\Tests\FooClientInterface',
+            'Facebook\Tests\Fixtures\FooClientInterface',
             $fb->getClient()->getHttpClientHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooPersistentDataInterface',
+            'Facebook\Tests\Fixtures\FooPersistentDataInterface',
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooUrlDetectionInterface',
+            'Facebook\Tests\Fixtures\FooUrlDetectionInterface',
             $fb->getRedirectLoginHelper()->getUrlDetectionHandler()
         );
         $this->assertInstanceOf(
-            'Facebook\Tests\FooBarPseudoRandomStringGenerator',
+            'Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator',
             $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
         );
     }

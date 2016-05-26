@@ -24,31 +24,8 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
-use Facebook\FacebookClient;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
-use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
-
-class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
-{
-    public function getRawSignedRequest()
-    {
-        return null;
-    }
-}
-
-class FooSignedRequestHelperFacebookClient extends FacebookClient
-{
-    public function sendRequest(FacebookRequest $request)
-    {
-        $params = $request->getParams();
-        $rawResponse = json_encode([
-            'access_token' => 'foo_access_token_from:' . $params['code'],
-        ]);
-
-        return new FacebookResponse($request, $rawResponse, 200);
-    }
-}
+use Facebook\Tests\Fixtures\FooSignedRequestHelper;
+use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
 
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {
