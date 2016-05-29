@@ -22,6 +22,8 @@
  *
  */
 
+define('FACEBOOK_SDK_POLYFILLS_LOADED', 1);
+
 /**
  * @see https://github.com/sarciszewski/php-future/blob/master/src/Security.php#L37-L51
  */

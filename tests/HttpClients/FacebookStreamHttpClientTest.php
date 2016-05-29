@@ -95,7 +95,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
         $this->streamMock
             ->shouldReceive('getResponseHeaders')
             ->once()
-            ->andReturn(explode("\n", trim($this->fakeRawHeader)));
+            ->andReturn(explode(PHP_EOL, trim($this->fakeRawHeader)));
         $this->streamMock
             ->shouldReceive('fileGetContents')
             ->once()
