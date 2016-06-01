@@ -53,6 +53,8 @@ spl_autoload_register(function ($class) {
         $customBaseDir = FACEBOOK_SDK_V4_SRC_DIR;
     } elseif (defined('FACEBOOK_SDK_SRC_DIR')) {
         $customBaseDir = FACEBOOK_SDK_SRC_DIR;
+    } else {
+        assert(false);
     }
     // base directory for the namespace prefix
     $baseDir = $customBaseDir ?: __DIR__ . '/';
