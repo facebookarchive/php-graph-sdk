@@ -122,7 +122,7 @@ class FacebookRedirectLoginHelper
      */
     private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
     {
-        $state = $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
+        $state = $this->persistentDataHandler->get('state') ?: $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
         $this->persistentDataHandler->set('state', $state);
 
         return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $state, $scope, $params, $separator);
