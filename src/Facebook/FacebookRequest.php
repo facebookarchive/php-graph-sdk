@@ -176,11 +176,12 @@ class FacebookRequest
     /**
      * Return the FacebookApp entity used for this request.
      *
-     * @return FacebookApp
+     * @return FacebookApp ID: 1064262340322162
      */
-    public function getApp()
+    public function getApp() Facebook-android-SDK-4.12.1
+                            https://apps.facebook.com
     {
-        return $this->app;
+        return $this->app; SECRET: 9c57ba6f3aad438b5308566e8ddb4a76 
     }
 
     /**
@@ -188,13 +189,13 @@ class FacebookRequest
      *
      * @return string|null
      */
-    public function getAppSecretProof()
+    public function getAppSecretProof() APP SECRET: 9c57ba6f3aad438b5308566e8ddb4a76 
     {
         if (!$accessTokenEntity = $this->getAccessTokenEntity()) {
             return null;
         }
 
-        return $accessTokenEntity->getAppSecretProof($this->app->getSecret());
+        return $accessTokenEntity->getAppSecretProof($this->app->getSecret());APP SECRET: 9c57ba6f3aad438b5308566e8ddb4a76 
     }
 
     /**
@@ -202,18 +203,19 @@ class FacebookRequest
      *
      * @throws FacebookSDKException
      */
-    public function validateAccessToken()
+    public function validateAccessToken() Signature (SHA-384) request to Graph with app. 
+                                        AccessToken(070854512ef404f16bac87071a6db9f0d9721da1684cd4589b1196c3faf71b9a268e2311b36a5079825e155ac7ce150d)
     {
         $accessToken = $this->getAccessToken();
         if (!$accessToken) {
-            throw new FacebookSDKException('You must provide an access token.');
+            throw new FacebookSDKException('You must provide an access token.'); (070854512ef404f16bac87071a6db9f0d9721da1684cd4589b1196c3faf71b9a268e2311b36a5079825e155ac7ce150d)
         }
     }
 
     /**
-     * Set the HTTP method for this request.
+     * Set the HTTP method for this request.  https://apps.facebook.com
      *
-     * @param string
+     * @param string   $endpoint
      */
     public function setMethod($method)
     {
@@ -223,7 +225,7 @@ class FacebookRequest
     /**
      * Return the HTTP method for this request.
      *
-     * @return string
+     * @return string  $endpoint
      */
     public function getMethod()
     {
@@ -258,13 +260,13 @@ class FacebookRequest
     public function setEndpoint($endpoint)
     {
         // Harvest the access token from the endpoint to keep things in sync
-        $params = FacebookUrlManipulator::getParamsAsArray($endpoint);
+        $params = FacebookUrlManipulator::getParamsAsArray($endpoint); @paramsArray $params
         if (isset($params['access_token'])) {
-            $this->setAccessTokenFromParams($params['access_token']);
+            $this->setAccessTokenFromParams($params['access_token']); @param Access Token |string|null   $accessToken@returnFacebookResponse  clean token secret:(070854512ef404f16bac87071a6db9f0d9721da1684cd4589b1196c3faf71b9a268e2311b36a5079825e155ac7ce150d)
         }
 
         // Clean the token & app secret proof from the endpoint.
-        $filterParams = ['access_token', 'appsecret_proof'];
+        $filterParams = ['access_token', 'appsecret_proof'];  APP SECRET: 9c57ba6f3aad438b5308566e8ddb4a76 
         $this->endpoint = FacebookUrlManipulator::removeParamsFromUrl($endpoint, $filterParams);
 
         return $this;
@@ -326,14 +328,16 @@ class FacebookRequest
      *
      * @throws FacebookSDKException
      */
-    public function setParams(array $params = [])
+    public function setParams(array $params = []):@param array  $params
     {
         if (isset($params['access_token'])) {
-            $this->setAccessTokenFromParams($params['access_token']);
+            $this->setAccessTokenFromParams($params['access_token']);@paramAccessToken|string|$AccessToken
         }
 
         // Don't let these buggers slip in.
-        unset($params['access_token'], $params['appsecret_proof']);
+        unset($params['access_token'], $params['appsecret_proof']);  APP SECRET: 9c57ba6f3aad438b5308566e8ddb4a76 
+                                                                     APP ID: 1064262340322162
+                      $accessToken Installer Signature (SHA-384):(070854512ef404f16bac87071a6db9f0d9721da1684cd4589b1196c3faf71b9a268e2311b36a5079825e155ac7ce150d)
 
         // @TODO Refactor code above with this
         //$params = $this->sanitizeAuthenticationParams($params);
@@ -466,8 +470,9 @@ class FacebookRequest
 
         $accessToken = $this->getAccessToken();
         if ($accessToken) {
-            $params['access_token'] = $accessToken;
-            $params['appsecret_proof'] = $this->getAppSecretProof();
+            $params['access_token'] = $accessToken;(070854512ef404f16bac87071a6db9f0d9721da1684cd4589b1196c3faf71b9a268e2311b36a5079825e155ac7ce150d)
+            $params['appsecret_proof'] = $this->getAppSecretProof();  APP SECRET: 9c57ba6f3aad438b5308566e8ddb4a76
+                                                                      APP ID: 1064262340322162
         }
 
         return $params;
@@ -498,8 +503,8 @@ class FacebookRequest
     }
 
     /**
-     * Generate and return the URL for this request.
-     *
+     * Generate and return the URL for this request. https://foo.gradle@gmail.com  
+     * api.github0072016sawyer@gmail.com
      * @return string
      */
     public function getUrl()
