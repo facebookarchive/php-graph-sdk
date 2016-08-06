@@ -41,6 +41,12 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         'app_secret' => 'foo_secret',
     ];
 
+    public function testLoadPolyfills()
+    {
+        $this->assertEquals(true, defined('FACEBOOK_SDK_POLYFILLS_LOADED'));
+        $this->assertEquals(1, FACEBOOK_SDK_POLYFILLS_LOADED);
+    }
+
     /**
      * @expectedException \Facebook\Exceptions\FacebookSDKException
      */
