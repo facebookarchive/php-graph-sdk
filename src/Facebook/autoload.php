@@ -32,9 +32,7 @@ if (version_compare(PHP_VERSION, '5.4.0', '<')) {
     throw new Exception('The Facebook SDK requires PHP version 5.4 or higher.');
 }
 
-if (defined('FACEBOOK_SDK_POLYFILLS_LOADED') === false) {
-    require_once __DIR__ . 'polyfills.php';
-}
+require_once __DIR__ . 'polyfills.php';
 
 /**
  * Register the autoloader for the Facebook SDK classes.
