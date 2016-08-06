@@ -6,6 +6,10 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 ## 5.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+- 5.2.1
+  - Fix notice that is raised in `FacebookUrlDetectionHandler` (#626)
+  - Fix bug in `FacebookRedirectLoginHelper::getLoginUrl()` where the CSRF token gets overwritten in certain scenarios (#613)
+  - Fix bug with polyfills not getting loaded when installing the Facebook PHP SDK manually (#599)
 - 5.2.0
   - Added new Birthday class to handle Graph API response variations
   - Bumped Graph version to v2.6
