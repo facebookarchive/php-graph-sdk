@@ -28,7 +28,7 @@ Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [
 Simple GET example of a user's profile.
 
 ```php
-$fb = new Facebook([
+$fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
   'default_graph_version' => 'v2.6',
@@ -42,14 +42,14 @@ $fb = new Facebook([
 //   $helper = $fb->getPageTabHelper();
 
 try {
-  // Get the Facebook\GraphNodes\GraphUser object for the current user.
+  // Get the \Facebook\GraphNodes\GraphUser object for the current user.
   // If you provided a 'default_access_token', the '{access-token}' is optional.
   $response = $fb->get('/me', '{access-token}');
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(\Facebook\Exceptions\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(\Facebook\Exceptions\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
