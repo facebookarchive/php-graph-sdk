@@ -6,6 +6,8 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 ## 5.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+- 5.3.1
+  - Fixed a bug where the `polyfills.php` file wasn't being included properly when using the built-in auto loader (#633)
 - 5.3.0
   - Bump Graph API version to v2.7.
 - 5.2.1
