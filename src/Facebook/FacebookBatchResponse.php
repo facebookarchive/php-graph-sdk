@@ -98,7 +98,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     public function addResponse($key, $response)
     {
         $originalRequestName = isset($this->batchRequest[$key]['name']) ? $this->batchRequest[$key]['name'] : $key;
-        $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : null;
+        $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : new FacebookRequest;
 
         $httpResponseBody = isset($response['body']) ? $response['body'] : null;
         $httpResponseCode = isset($response['code']) ? $response['code'] : null;
