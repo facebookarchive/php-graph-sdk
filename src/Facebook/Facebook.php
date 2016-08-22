@@ -322,6 +322,7 @@ class Facebook
      * Sends a GET request to Graph and returns the result.
      *
      * @param string                  $endpoint
+     * @param array                   $params
      * @param AccessToken|string|null $accessToken
      * @param string|null             $eTag
      * @param string|null             $graphVersion
@@ -330,12 +331,12 @@ class Facebook
      *
      * @throws FacebookSDKException
      */
-    public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
+    public function get($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
         return $this->sendRequest(
             'GET',
             $endpoint,
-            $params = [],
+            $params,
             $accessToken,
             $eTag,
             $graphVersion
