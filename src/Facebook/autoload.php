@@ -44,7 +44,8 @@ require_once __DIR__ . '/polyfills.php';
  *
  * @return void
  */
-spl_autoload_register(function ($class) {
+spl_autoload_register(function ($class)
+{
     // project-specific namespace prefix
     $prefix = 'Facebook\\';
 
