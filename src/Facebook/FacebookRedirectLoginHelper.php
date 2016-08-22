@@ -197,11 +197,11 @@ class FacebookRedirectLoginHelper
         $accessToken = $response['access_token'];
       }
 
-      if (isset($accessToken)) {
+      if (is_null($accessToken)) {
         return new FacebookSession($accessToken);
       }
     }
-    return null;
+    return;
   }
 
   /**
