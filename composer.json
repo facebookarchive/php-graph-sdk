@@ -1,14 +1,14 @@
 {
-    "name": "facebook/php-sdk-v4",
+    "name": "facebook/php-graph-sdk",
     "description": "Facebook SDK for PHP",
     "keywords": ["facebook", "sdk"],
     "type": "library",
-    "homepage": "https://github.com/facebook/facebook-php-sdk-v4",
+    "homepage": "https://github.com/facebook/php-graph-sdk",
     "license": "Facebook Platform",
     "authors": [
         {
             "name": "Facebook",
-            "homepage": "https://github.com/facebook/facebook-php-sdk-v4/contributors"
+            "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
         }
     ],
     "require": {
