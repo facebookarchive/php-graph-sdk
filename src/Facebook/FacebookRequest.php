@@ -108,7 +108,7 @@ class FacebookRequest
     /**
      * Set the access token for this request.
      *
-     * @param AccessToken|string
+     * @param AccessToken|string|null
      *
      * @return FacebookRequest
      */
