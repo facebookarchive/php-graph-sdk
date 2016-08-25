@@ -32,7 +32,6 @@ use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
-use Facebook\HttpClients\HttpClientsFactory;
 use Facebook\PersistentData\PersistentDataFactory;
 use Facebook\PersistentData\PersistentDataInterface;
 use Facebook\Helpers\FacebookCanvasHelper;
@@ -40,6 +39,7 @@ use Facebook\Helpers\FacebookJavaScriptHelper;
 use Facebook\Helpers\FacebookPageTabHelper;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
+use Http\Client\HttpClient;
 
 /**
  * Class Facebook
@@ -117,7 +117,7 @@ class Facebook
             'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
             'default_graph_version' => null,
             'enable_beta_mode' => false,
-            'http_client_handler' => null,
+            'http_client' => null,
             'persistent_data_handler' => null,
             'url_detection_handler' => null,
         ], $config);
@@ -128,13 +128,16 @@ class Facebook
         if (!$config['app_secret']) {
             throw new FacebookSDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
         }
+        if ($config['http_client'] !== null && !$config['http_client'] instanceof HttpClient) {
+            throw new \InvalidArgumentException('Required "http_client" key to be null or an instance of \Http\Client\HttpClient');
+        }
         if (!$config['default_graph_version']) {
             throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config');
         }
 
         $this->app = new FacebookApp($config['app_id'], $config['app_secret']);
         $this->client = new FacebookClient(
-            HttpClientsFactory::createHttpClient($config['http_client_handler']),
+            $config['http_client'],
             $config['enable_beta_mode']
         );
         $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new FacebookUrlDetectionHandler());

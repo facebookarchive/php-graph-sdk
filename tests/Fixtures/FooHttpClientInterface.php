@@ -21,27 +21,22 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\HttpClients;
+namespace Facebook\Tests\Fixtures;
 
-/**
- * Interface FacebookHttpClientInterface
- *
- * @package Facebook
- */
-interface FacebookHttpClientInterface
+use GuzzleHttp\Psr7\Response;
+use Http\Client\HttpClient;
+use Psr\Http\Message\RequestInterface;
+
+class FooHttpClientInterface implements HttpClient
 {
-    /**
-     * Sends a request to the server and returns the raw response.
-     *
-     * @param string $url     The endpoint to send the request to.
-     * @param string $method  The request method.
-     * @param string $body    The body of the request.
-     * @param array  $headers The request headers.
-     * @param int    $timeOut The timeout in seconds for the request.
-     *
-     * @return \Facebook\Http\GraphRawResponse Raw response from the server.
-     *
-     * @throws \Facebook\Exceptions\FacebookSDKException
-     */
-    public function send($url, $method, $body, array $headers, $timeOut);
+    public function sendRequest(RequestInterface $request)
+    {
+        return new Response(
+            1337,
+            ['Date' => 'Mon, 19 May 2014 18:37:17 GMT'],
+            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}',
+            '1.1',
+            'OK'
+        );
+    }
 }

@@ -24,6 +24,8 @@ $myVideoFileToUpload = $fb->videoToUpload('/path/to/video-file.mp4'),
 
 Partial file uploads are possible using the `$maxLength` and `$offset` parameters which provide the same functionality as the `$maxlen` and `$offset` parameters on the [`stream_get_contents()` PHP function](http://php.net/stream_get_contents).
 
+> **Warning:** Uploading videos may cause a timeout. Make sure to configure your HTTP client to increase timeout time before uploading videos.
+
 ## Usage
 
 In Graph v2.3, functionality was added to [upload video files in chunks](https://developers.facebook.com/docs/graph-api/video-uploads#resumable). The PHP SDK provides a handy API to easily upload video files in chunks via the [`uploadVideo()` method](Facebook.md#uploadvideo).

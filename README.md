@@ -15,8 +15,10 @@ This repository contains the open source PHP SDK that allows you to access the F
 The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/). Run this command:
 
 ```sh
-composer require facebook/graph-sdk
+composer require facebook/graph-sdk php-http/curl-client guzzlehttp/psr7 php-http/message
 ```
+
+Why the extra packages? We give you the flexibility to choose what HTTP client (e.g. cURL or Guzzle) to use and what PSR-7 implementation you prefer. Read more about this at the [HTTPlug documentation](http://php-http.readthedocs.io/en/latest/httplug/users.html).
 
 
 ## Usage
