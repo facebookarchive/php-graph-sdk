@@ -1,7 +1,7 @@
 # Facebook SDK for PHP (v5)
 
-[![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/master.svg)](https://travis-ci.org/facebook/php-graph-sdk)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=master)
+[![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/5.3.svg)](https://travis-ci.org/facebook/php-graph-sdk)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=5.3)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=5.3)
 [![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-5.3.1-blue.svg)](https://packagist.org/packages/facebook/graph-sdk)
 
 
