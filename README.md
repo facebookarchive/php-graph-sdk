@@ -79,9 +79,9 @@ $ ./vendor/bin/phpunit --exclude-group integration
 
 ## Contributing
 
-For us to accept contributions you will have to first have signed the [Contributor License Agreement](https://developers.facebook.com/opensource/cla). Please see [CONTRIBUTING](https://github.com/facebook/facebook-php-sdk-v4/blob/master/CONTRIBUTING.md) for details.
+For us to accept contributions you will have to first have signed the [Contributor License Agreement](https://developers.facebook.com/opensource/cla). Please see [CONTRIBUTING](https://github.com/facebook/php-graph-sdk/blob/master/CONTRIBUTING.md) for details.
 
 
 ## License
 
-Please see the [license file](https://github.com/facebook/facebook-php-sdk-v4/blob/master/LICENSE) for more information.
+Please see the [license file](https://github.com/facebook/php-graph-sdk/blob/master/LICENSE) for more information.
