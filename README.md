@@ -1,8 +1,10 @@
-# Facebook SDK for PHP (v5)
+# Facebook SDK for PHP (v6)
 
-[![Build Status](https://img.shields.io/travis/facebook/facebook-php-sdk-v4/master.svg)](https://travis-ci.org/facebook/facebook-php-sdk-v4)
+## NOTICE: This branch is under active development. For the stable release please use the [5.3 branch](https://github.com/facebook/php-graph-sdk/tree/5.3).
+
+[![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/master.svg)](https://travis-ci.org/facebook/php-graph-sdk)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=master)
-[![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-5.2.0-blue.svg)](https://packagist.org/packages/facebook/php-sdk-v4)
+[![Development Version](http://img.shields.io/badge/Development%20Version-v6.0-orange.svg)](https://packagist.org/packages/facebook/graph-sdk)
 
 
 This repository contains the open source PHP SDK that allows you to access the Facebook Platform from your PHP app.
@@ -16,10 +18,6 @@ The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/).
 composer require facebook/graph-sdk
 ```
 
-## Upgrading to v5.x
-
-Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [read the upgrade guide](https://www.sammyk.me/upgrading-the-facebook-php-sdk-from-v4-to-v5) before upgrading.
-
 
 ## Usage
 
@@ -31,7 +29,7 @@ Simple GET example of a user's profile.
 $fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.7',
   //'default_access_token' => '{access-token}', // optional
 ]);
 
