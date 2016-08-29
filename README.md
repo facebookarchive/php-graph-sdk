@@ -21,7 +21,7 @@ composer require facebook/graph-sdk
 
 ## Usage
 
-> **Note:** This version of the Facebook SDK for PHP requires PHP 5.4 or greater.
+> **Note:** This version of the Facebook SDK for PHP requires PHP 5.6 or greater.
 
 Simple GET example of a user's profile.
 

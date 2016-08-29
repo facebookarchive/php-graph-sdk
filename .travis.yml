@@ -1,10 +1,9 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
+  - 7.1.0beta3
   - hhvm
 
 sudo: false
@@ -23,3 +22,7 @@ install:
 script:
   - vendor/bin/phpcs
   - vendor/bin/phpunit --coverage-text --exclude-group integration
+
+matrix:
+  allow_failures:
+    - php: 7.1.0beta3
