@@ -56,11 +56,6 @@ class Facebook
     const VERSION = '6.0-dev';
 
     /**
-     * @const string Default Graph API version for requests.
-     */
-    const DEFAULT_GRAPH_VERSION = 'v2.7';
-
-    /**
      * @const string The name of the environment variable that contains the app ID.
      */
     const APP_ID_ENV_NAME = 'FACEBOOK_APP_ID';
@@ -127,7 +122,6 @@ class Facebook
         $config = array_merge([
             'app_id' => getenv(static::APP_ID_ENV_NAME),
             'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
-            'default_graph_version' => static::DEFAULT_GRAPH_VERSION,
             'enable_beta_mode' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,
@@ -140,6 +134,9 @@ class Facebook
         }
         if (!$config['app_secret']) {
             throw new FacebookSDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
+        }
+        if (empty($config['default_graph_version'])) {
+            throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config');
         }
 
         $this->app = new FacebookApp($config['app_id'], $config['app_secret']);
@@ -159,7 +156,6 @@ class Facebook
             $this->setDefaultAccessToken($config['default_access_token']);
         }
 
-        // @todo v6: Throw an InvalidArgumentException if "default_graph_version" is not set
         $this->defaultGraphVersion = $config['default_graph_version'];
     }
 

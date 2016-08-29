@@ -43,9 +43,9 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
      *
      * @param FacebookApp    $app          The FacebookApp entity.
      * @param FacebookClient $client       The client to make HTTP requests.
-     * @param string|null    $graphVersion The version of Graph to use.
+     * @param string         $graphVersion The version of Graph to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion)
     {
         parent::__construct($app, $client, $graphVersion);
 

@@ -216,7 +216,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
     public function requestsAndExpectedResponsesProvider()
     {
         $headers = $this->defaultHeaders();
-        $apiVersion = Facebook::DEFAULT_GRAPH_VERSION;
+        $apiVersion = FacebookTest::DEFAULT_GRAPH_VERSION;
 
         return [
             [
@@ -273,7 +273,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([
             'headers' => $this->defaultHeaders(),
             'method' => 'POST',
-            'relative_url' => '/' . Facebook::DEFAULT_GRAPH_VERSION . '/bar',
+            'relative_url' => '/' . FacebookTest::DEFAULT_GRAPH_VERSION . '/bar',
             'body' => 'message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
             'name' => 'foo_name',
             'attached_files' => $attachedFiles,
@@ -290,7 +290,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $params = $batchRequest->getParams();
 
         $expectedHeaders = json_encode($this->defaultHeaders());
-        $version = Facebook::DEFAULT_GRAPH_VERSION;
+        $version = FacebookTest::DEFAULT_GRAPH_VERSION;
         $expectedBatchParams = [
             'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
                 . '{"headers":' . $expectedHeaders . ',"method":"POST","relative_url":"\\/' . $version . '\\/bar","body":"foo=bar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9"}]',
@@ -317,7 +317,7 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $attachedFiles = implode(',', array_keys($files));
 
         $expectedHeaders = json_encode($this->defaultHeaders());
-        $version = Facebook::DEFAULT_GRAPH_VERSION;
+        $version = FacebookTest::DEFAULT_GRAPH_VERSION;
         $expectedBatchParams = [
             'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
                 . '{"headers":' . $expectedHeaders . ',"method":"POST","relative_url":"\\/' . $version . '\\/me\\/photos","body":"message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9","attached_files":"' . $attachedFiles . '"}]',

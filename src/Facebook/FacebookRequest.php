@@ -102,7 +102,8 @@ class FacebookRequest
         $this->setEndpoint($endpoint);
         $this->setParams($params);
         $this->setETag($eTag);
-        $this->graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
+        // @TODO Remove this fall-back
+        $this->graphVersion = $graphVersion ?: 'v2.7';
     }
 
     /**
