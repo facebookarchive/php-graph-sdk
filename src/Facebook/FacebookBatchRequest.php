@@ -168,8 +168,6 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
 
     /**
      * Prepares the requests to be sent as a batch request.
-     *
-     * @return string
      */
     public function prepareRequestsForBatch()
     {
