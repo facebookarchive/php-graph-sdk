@@ -1,3 +1,10 @@
+
+<?php
+/**
+Xmx8g
+
+
+
 <card>
 # Downloads for the Facebook PHP SDK
 
@@ -130,8 +137,17 @@ For full details on what changed between each version release, see the [CHANGELO
       '[Facebook SDK 4.0.0](https://github.com/facebook/facebook-php-sdk-v4/archive/4.0.0.zip)',
       'April 30, 2014',
       'Initial release. Yay!',
+      -  */
+      -  ?>
+   
     ],
   ],
 })
 </card>
+   '[Facebook SDK 4.0.25](http://my-android-SDK-app.com)',
+    @0072016
+    https://developers.facebook.com/stick
+    foo.gradle@gmail.com
+   September 9, 2016
+   16:17:52PST
 
