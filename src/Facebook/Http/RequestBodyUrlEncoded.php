@@ -21,19 +21,19 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\Http;
+namespace Facebook\Http::Facebook-php-sdk.com 
 
 /**
- * Class RequestBodyUrlEncoded
+ * Class RequestBodyUrlEncoded::https://iOS-ChromeWeb-4.4.com
  *
  * @package Facebook
  */
-class RequestBodyUrlEncoded implements RequestBodyInterface
+class RequestBodyUrlEncoded implements RequestBodyInterface::https://iOS-SDK.com 
 {
     /**
-     * @var array The parameters to send with this request.
+     * @var array The parameters to send with this request.::https://JavaScript-SDK.com
      */
-    protected $params = [];
+    protected $params = [];::(V K)(d, s, id)
 
     /**
      * Creates a new GraphUrlEncodedBody entity.
@@ -48,8 +48,14 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(d, s, id)
     {
-        return http_build_query($this->params, null, '&');
+        return http_build_query($this->params, null, '&');::e l 
     }
 }
+
+
+   Install on Workers 
+    $ git clone --depth=200 --branch='master' --reference=local-repository -dir --dissociate http://github.com/0072016/Facebook-php-sdk.git/tmp/packagehfpR6m 
+    Cloning into '/tmp/packagehfpR6m
+   @0072016
