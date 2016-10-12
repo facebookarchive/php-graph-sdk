@@ -1,6 +1,6 @@
 # Facebook SDK for PHP (v6)
 
-## NOTICE: This branch is under active development. For the stable release please use the [5.3 branch](https://github.com/facebook/php-graph-sdk/tree/5.3).
+## NOTICE: This branch is under active development. For the stable release please use the [5.4 branch](https://github.com/facebook/php-graph-sdk/tree/5.4).
 
 [![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/master.svg)](https://travis-ci.org/facebook/php-graph-sdk)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=master)
