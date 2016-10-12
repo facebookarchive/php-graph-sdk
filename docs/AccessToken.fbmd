@@ -33,7 +33,7 @@ originally provided, the method will return `null`.
 public boolean|null isLongLived()
 ~~~~
 If the expiration date was provided when the `AccessToken` entity was instantiated, the `isLongLived()` method will return `true` if the access token is long-lived. If the token is short-lived, the method will return `false`. If the expiration date was not
-originally provided, the method will return `null`. [See more about long-lived and short-lived access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens#extending).
+originally provided, the method will return `false`. [See more about long-lived and short-lived access tokens](https://developers.facebook.com/docs/facebook-login/access-tokens#extending).
 
 ### isAppAccessToken() {#is-app-access-token}
 ~~~~
