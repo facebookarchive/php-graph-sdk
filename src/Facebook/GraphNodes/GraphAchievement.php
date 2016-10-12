@@ -28,7 +28,6 @@ namespace Facebook\GraphNodes;
  *
  * @package Facebook
  */
-
 class GraphAchievement extends GraphNode
 {
     /**
