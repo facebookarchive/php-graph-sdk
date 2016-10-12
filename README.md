@@ -1,8 +1,8 @@
 # Facebook SDK for PHP (v5)
 
-[![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/5.3.svg)](https://travis-ci.org/facebook/php-graph-sdk)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=5.3)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=5.3)
-[![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-5.3.1-blue.svg)](https://packagist.org/packages/facebook/graph-sdk)
+[![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/5.4.svg)](https://travis-ci.org/facebook/php-graph-sdk)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=5.4)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=5.4)
+[![Latest Stable Version](http://img.shields.io/badge/Latest%20Stable-5.4.0-blue.svg)](https://packagist.org/packages/facebook/graph-sdk)
 
 
 This repository contains the open source PHP SDK that allows you to access the Facebook Platform from your PHP app.
@@ -31,7 +31,7 @@ Simple GET example of a user's profile.
 $fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.7',
+  'default_graph_version' => 'v2.8',
   //'default_access_token' => '{access-token}', // optional
 ]);
 

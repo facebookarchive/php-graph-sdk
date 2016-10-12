@@ -6,6 +6,11 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 ## 5.x
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
+
+- 5.4.0 (2016-10-12)
+  - Bump Graph API version to v2.8.
+  - Auto-cast `cover` field to `GraphCoverPhoto` and `picture` field to `GraphPicture` in `GraphPage`. (#655)
+  - Added `getCover()` and `getPicture()` to `GraphPage`. (#655)
 - 5.3.1
   - Fixed a bug where the `polyfills.php` file wasn't being included properly when using the built-in auto loader (#633)
 - 5.3.0
@@ -26,7 +31,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
     - Changes the serialization method of FacebookApp
       - FacebookApps serialized by versions prior 5.1.4 cannot be unserialized by this version
   - Fixed redirect_uri injection vulnerability
-- 5.0 (2015-??-??)
+- 5.0 (2015-07-09)
   - New features
     - Added the `Facebook\Facebook` super service for an easier API
     - Improved "reauthentication" and "rerequest" support
