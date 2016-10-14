@@ -60,9 +60,9 @@ class FacebookRedirectLoginHelper
     protected $persistentDataHandler;
 
     /**
-     * @param OAuth2Client                              $oAuth2Client          The OAuth 2.0 client service.
-     * @param PersistentDataInterface|null              $persistentDataHandler The persistent data handler.
-     * @param UrlDetectionInterface|null                $urlHandler            The URL detection handler.
+     * @param OAuth2Client $oAuth2Client The OAuth 2.0 client service.
+     * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
+     * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
      */
     public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null)
     {
@@ -95,9 +95,9 @@ class FacebookRedirectLoginHelper
      * Stores CSRF state and returns a URL to which the user should be sent to in order to continue the login process with Facebook.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param array  $params      An array of parameters to generate URL.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param array $params An array of parameters to generate URL.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
@@ -118,8 +118,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to login to Facebook.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
@@ -132,8 +132,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to log out of Facebook.
      *
      * @param AccessToken|string $accessToken The access token that will be logged out.
-     * @param string             $next        The url Facebook should redirect the user to after a successful logout.
-     * @param string             $separator   The separator to use in http_build_query().
+     * @param string $next The url Facebook should redirect the user to after a successful logout.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      *
@@ -161,8 +161,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to login to Facebook with permission(s) to be re-asked.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
@@ -177,8 +177,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to login to Facebook with user to be re-authenticated.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
