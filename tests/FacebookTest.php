@@ -183,80 +183,6 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSettingAnInvalidPseudoRandomStringGeneratorThrows()
-    {
-        $config = array_merge($this->config, [
-            'pseudo_random_string_generator' => 'foo_generator',
-        ]);
-        new Facebook($config);
-    }
-
-    public function testMcryptCsprgCanBeForced()
-    {
-        if (!function_exists('mcrypt_create_iv')) {
-            $this->markTestSkipped(
-                'Mcrypt must be installed to test mcrypt_create_iv().'
-            );
-        }
-
-        $config = array_merge($this->config, [
-            'persistent_data_handler' => 'memory', // To keep session errors from happening
-            'pseudo_random_string_generator' => 'mcrypt'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            'Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator',
-            $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
-        );
-    }
-
-    public function testOpenSslCsprgCanBeForced()
-    {
-        if (!function_exists('openssl_random_pseudo_bytes')) {
-            $this->markTestSkipped(
-                'The OpenSSL extension must be enabled to test openssl_random_pseudo_bytes().'
-            );
-        }
-
-        $config = array_merge($this->config, [
-            'persistent_data_handler' => 'memory', // To keep session errors from happening
-            'pseudo_random_string_generator' => 'openssl'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            'Facebook\PseudoRandomString\OpenSslPseudoRandomStringGenerator',
-            $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
-        );
-    }
-
-    public function testUrandomCsprgCanBeForced()
-    {
-        if (ini_get('open_basedir')) {
-            $this->markTestSkipped(
-                'Cannot test /dev/urandom generator due to open_basedir constraint.'
-            );
-        }
-
-        if (!is_readable('/dev/urandom')) {
-            $this->markTestSkipped(
-                '/dev/urandom not found or is not readable.'
-            );
-        }
-
-        $config = array_merge($this->config, [
-            'persistent_data_handler' => 'memory', // To keep session errors from happening
-            'pseudo_random_string_generator' => 'urandom'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            'Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator',
-            $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
-        );
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
     {
         $config = array_merge($this->config, [
@@ -291,7 +217,6 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
             'http_client_handler' => new FooClientInterface(),
             'persistent_data_handler' => new FooPersistentDataInterface(),
             'url_detection_handler' => new FooUrlDetectionInterface(),
-            'pseudo_random_string_generator' => new FooBarPseudoRandomStringGenerator(),
         ]);
         $fb = new Facebook($config);
 
@@ -306,10 +231,6 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Facebook\Tests\Fixtures\FooUrlDetectionInterface',
             $fb->getRedirectLoginHelper()->getUrlDetectionHandler()
-        );
-        $this->assertInstanceOf(
-            'Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator',
-            $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
         );
     }
 
