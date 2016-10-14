@@ -8,7 +8,7 @@ For installation & implementation instructions, look through the [Getting Starte
 
 ---
 
-## Examples {#examples}
+## Examples
 
 The following examples demonstrate how you would accomplish common tasks with the Facebook SDK for PHP.
 
@@ -29,6 +29,6 @@ The following examples demonstrate how you would accomplish common tasks with th
 - **Pagination**
   - [Basic pagination](docs/example_pagination_basic.fbmd)
 
-## API Reference {#reference}
+## API Reference
 
 For a full list of classes, see the API [reference page](docs/sdk_reference.fbmd).
