@@ -8,19 +8,19 @@ The `FacebookFile` entity represents a local or remote file to be uploaded with 
 
 There are two ways to instantiate a `FacebookFile` entity. One way is to instantiate it directly:
 
-~~~~
+```
 use Facebook\FileUpload\FacebookFile;
 
 $myFileToUpload = new FacebookFile('/path/to/file.jpg');
-~~~~
+```
 
 Alternatively, you can use the `fileToUpload()` factory on the `Facebook\Facebook` super service to instantiate a new `FacebookFile` entity.
 
-~~~~
+```
 $fb = new Facebook\Facebook(/* . . . */);
 
 $myFileToUpload = $fb->fileToUpload('/path/to/file.jpg');
-~~~~
+```
 
 Partial file uploads are possible using the `$maxLength` and `$offset` parameters which provide the same functionality as the `$maxlen` and `$offset` parameters on the [`stream_get_contents()` PHP function](http://php.net/stream_get_contents).
 
@@ -28,7 +28,7 @@ Partial file uploads are possible using the `$maxLength` and `$offset` parameter
 
 The following example uploads a photo for a user.
 
-~~~~
+```
 $data = [
   'message' => 'My awesome photo upload example.',
   'source' => $fb->fileToUpload('/path/to/photo.jpg'),
@@ -46,11 +46,11 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Photo ID: ' . $graphNode['id'];
-~~~~
+```
 
 > **Note:** Although you can use `fileToUpload()` to upload a remote file, it is more efficient to just point the Graph request to the the remote file with the `url` param.
 
-~~~~
+```
 // Upload a remote photo for a user without using the FacebookFile entity
 $data = [
   'message' => 'A neat photo upload example. Neat.',
@@ -58,4 +58,4 @@ $data = [
 ];
 
 $response = $fb->post('/me/photos', $data);
-~~~~
+```

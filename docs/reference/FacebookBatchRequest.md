@@ -6,7 +6,7 @@ Represents a batch request that will be sent to the Graph API.
 
 You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor.
 
-~~~~
+```
 use Facebook\FacebookBatchRequest;
 
 $request = new FacebookBatchRequest(
@@ -15,7 +15,7 @@ $request = new FacebookBatchRequest(
   string|null $accessToken,
   string|null $graphVersion
 );
-~~~~
+```
 
 The `$requests` array is an array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent as a batch request.
 
@@ -23,7 +23,7 @@ The `FacebookBatchRequest` entity does not actually make any calls to the Graph 
 
 Usage:
 
-~~~~
+```
 $fb = new Facebook\Facebook(/* . . . */);
 
 $requests = [
@@ -52,34 +52,34 @@ foreach ($batchResponse as $key => $response) {
     // Success
   }
 }
-~~~~
+```
 
 ## Instance Methods
 
 Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
 
 ### add()
-~~~~
+```
 public add(
   array|Facebook\FacebookBatchRequest $request,
   string|null $name
   )
-~~~~
+```
 Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) or an array of `Facebook\FacebookRequest`'s.
 
 The `$name` argument is optional and is used to identify the request in the batch.
 
 ### getRequests()
-~~~~
+```
 public array getRequests()
-~~~~
+```
 Returns the array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
 
 ## Array Access
 
 Since `Facebook\FacebookBatchRequest` implements `\IteratorAggregate` and `\ArrayAccess`, the requests can be accessed via array syntax and can also be iterated over.
 
-~~~~
+```
 $fb = new Facebook\Facebook(/* . . . */);
 $requests = [
   'foo' => $fb->request('GET', '/me'),
@@ -94,4 +94,4 @@ array(2) {
   'request' => class Facebook\FacebookRequest
   . . .
 */
-~~~~
+```

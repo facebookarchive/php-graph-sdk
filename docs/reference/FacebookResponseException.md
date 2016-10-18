@@ -6,7 +6,7 @@ Represents an error response from the Graph API.
 
 Whenever a `FacebookResponseException` is thrown, you can access it's previous exception with the `getPrevious()` method to get more information on the specific type of error response that the Graph API returned.
 
-~~~~
+```
 try {
   // Some request to the Graph API
 } catch (Facebook\Exceptions\FacebookResponseException $e) {
@@ -15,7 +15,7 @@ try {
   // Do some further processing on $previousException
   exit;
 }
-~~~~
+```
 
 %FB(devsite:markdown-wiki:table {
   columns: ['Class name','Description',],

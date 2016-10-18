@@ -12,7 +12,7 @@ If your hosting environment does not support any of the CSPRSG methods used by t
 
 An example of implementing a custom CSPRSG:
 
-~~~~
+```
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 
 class MyCustomPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
@@ -29,31 +29,31 @@ class MyCustomPseudoRandomStringGenerator implements PseudoRandomStringGenerator
     return $randomString;
   }
 }
-~~~~
+```
 
 To enable your custom CSPRSG implementation in the SDK, you can set an instance of the generator to the `pseudo_random_string_generator` config of the `Facebook\Facebook` super service.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   // . . .
   'pseudo_random_string_generator' => new MyCustomPseudoRandomStringGenerator(),
   // . . .
   ]);
-~~~~
+```
 
 Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom generator via the constructor.
 
-~~~~
+```
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 $myPseudoRandomStringGenerator = new MyCustomPseudoRandomStringGenerator();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);
-~~~~
+```
 
 ## Method Reference
 
 ### getPseudoRandomString()
-~~~~
+```
 public string getPseudoRandomString(int $length)
-~~~~
+```
 Returns a cryptographically secure pseudo-random string that is `$length` characters long.

@@ -16,7 +16,7 @@ The `Facebook\GraphNodes\Birthday` entity extends `DateTime` so `format` may be 
 
 Usage:
 
-~~~~
+```
 $fb = new Facebook\Facebook(\* *\);
 // Returns a `Facebook\FacebookResponse` object
 $response = $fb->get('/me');
@@ -38,18 +38,18 @@ var_dump($birthday->hasYear());
 
 var_dump($birthday->format('m/d'));
 // 03/21
-~~~~
+```
 
 ## Instance Methods
 
 ### hasDate()
-~~~~
+```
 public boolean hasDate()
-~~~~
+```
 Returns whether or not the birthday object contains the day and month of birth.
 
 ### hasYear()
-~~~~
+```
 public boolean hasYear()
-~~~~
+```
 Returns whether or not the birthday object contains the year of birth.

@@ -8,7 +8,7 @@ For more information, see the documentation for [`Facebook\Facebook`](/docs/php/
 
 ## Example
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -34,6 +34,6 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Photo ID: ' . $graphNode['id'];
-~~~~
+```
 
 Note that the `message` field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).

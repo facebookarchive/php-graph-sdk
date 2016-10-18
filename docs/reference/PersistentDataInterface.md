@@ -8,7 +8,7 @@ If you're using a web framework that handles persistent data for you, you might 
 
 For example if you are using Laravel, a custom handler might look like this:
 
-~~~~
+```
 use Facebook\PersistentData\PersistentDataInterface;
 
 class MyLaravelPersistentDataHandler implements PersistentDataInterface
@@ -34,37 +34,37 @@ class MyLaravelPersistentDataHandler implements PersistentDataInterface
     \Session::put($this->sessionPrefix . $key, $value);
   }
 }
-~~~~
+```
 
 To enable your custom persistent data handler implementation in the SDK, you can set an instance of the handler to the `persistent_data_handler` config of the `Facebook\Facebook` super service.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   // . . .
   'persistent_data_handler' => new MyLaravelPersistentDataHandler(),
   // . . .
   ]);
-~~~~
+```
 
 Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom handler via the constructor.
 
-~~~~
+```
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 $myPersistentDataHandler = new MyLaravelPersistentDataHandler();
 $helper = new FacebookRedirectLoginHelper($fbApp, $myPersistentDataHandler);
-~~~~
+```
 
 ## Method Reference
 
 ### get()
-~~~~
+```
 public mixed get(string $key)
-~~~~
+```
 Returns a value from the persistent data store or `null` if the value does not exist.
 
 ### set()
-~~~~
+```
 public void set(string $key, mixed $value)
-~~~~
+```
 Sets a value to the persistent data store.

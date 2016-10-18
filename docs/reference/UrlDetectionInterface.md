@@ -8,7 +8,7 @@ If you're using a web framework that handles routes and URL generation for you, 
 
 For example if you are using Laravel, a custom handler might look like this:
 
-~~~~
+```
 use Facebook\Url\UrlDetectionInterface;
 
 class MyLaravelUrlDetectionHandler implements UrlDetectionInterface
@@ -21,31 +21,31 @@ class MyLaravelUrlDetectionHandler implements UrlDetectionInterface
     return \Request::url();
   }
 }
-~~~~
+```
 
 To enable your custom URL detection implementation in the SDK, you can set an instance of the handler to the `url_detection_handler` config of the `Facebook\Facebook` super service.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   // . . .
   'url_detection_handler' => new MyLaravelUrlDetectionHandler(),
   // . . .
   ]);
-~~~~
+```
 
 Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom handler via the constructor.
 
-~~~~
+```
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 $myUrlDetectionHandler = new MyLaravelUrlDetectionHandler();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, $myUrlDetectionHandler);
-~~~~
+```
 
 ## Method Reference
 
 ### getCurrentUrl()
-~~~~
+```
 public string getCurrentUrl()
-~~~~
+```
 Returns the full and currently active URL.

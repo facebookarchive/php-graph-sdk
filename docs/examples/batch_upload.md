@@ -8,7 +8,7 @@ The Graph API supports [file uploads in batch requests](https://developers.faceb
 
 The following example will upload two photos and one video.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -59,4 +59,4 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
+```

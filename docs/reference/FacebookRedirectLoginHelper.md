@@ -11,11 +11,11 @@ Facebook Login is achieved via OAuth 2.0. But you don't really have to know much
 
 You can obtain an instance of the `FacebookRedirectLoginHelper` from the `getRedirectLoginHelper()` method on the `Facebook\Facebook` service.
 
-~~~
+```
 $fb = new Facebook\Facebook([/* . . . */]);
 
 $helper = $fb->getRedirectLoginHelper();
-~~~
+```
 
 ### Login with Facebook
 
@@ -26,7 +26,7 @@ The basic login flow goes like this:
 3. After the user confirms or denies the app authorization, they will be redirected to a specific callback URL on your website.
 4. In your callback URL you can analyse the response to obtain a user access token or display an error if the user denied the request.
 
-~~~
+```
 # login.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -35,7 +35,7 @@ $permissions = ['email', 'user_likes']; // optional
 $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-~~~
+```
 
 %FB(devsite:markdown-wiki:info-card {
   content: "The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts. You can overwrite the default session handling - see [extensibility points](#extensibility-points) below.",
@@ -44,7 +44,7 @@ echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 
 Then, in your callback page (at the redirect url) when Facebook sends the user back:
 
-~~~
+```
 # login-callback.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -71,14 +71,14 @@ if (isset($accessToken)) {
   // The user denied the request
   exit;
 }
-~~~
+```
 
 ## Instance Methods
 
 ### getLoginUrl()
-~~~~
+```
 public string getLoginUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates an authorization URL to ask a user for access to their profile on behalf of your app.
 
 #### Arguments
@@ -87,27 +87,27 @@ Generates an authorization URL to ask a user for access to their profile on beha
 - `$separator` (_Optional_) The URL parameter separator. When working with XML documents, you can set this to `&amp;` for example.
 
 ### getReRequestUrl()
-~~~~
+```
 public string getReRequestUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates a URL to rerequest permissions from a user. The arguments are the same as the `getLoginUrl()` method above.
 
 ### getReAuthenticationUrl()
-~~~~
+```
 public string getReAuthenticationUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates a URL to ask the user to reauthenticate. The arguments are the same as the `getLoginUrl()` method above.
 
 ### getLogoutUrl()
-~~~~
+```
 public string getLogoutUrl(string $accessToken, string $next, string $separator = '&')
-~~~~
+```
 Generates the URL log a user out of Facebook. This will throw an `FacebookSDKException` if you try to use an app access token.
 
 ### getAccessToken()
-~~~~
+```
 public Facebook\Authentication\AccessToken|null getAccessToken(string $redirectUrl = null)
-~~~~
+```
 Attempts to obtain an access token from an authorization code. This method will make a request to the Graph API and return a response. If there was an error in that process a `FacebookSDKException` will be thrown. A `FacebookSDKException` will also be thrown if the CSRF validation fails.
 
 If no authorization code could be found from the `code` param in the URL, this method will return `null`.

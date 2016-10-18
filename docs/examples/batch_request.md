@@ -6,7 +6,7 @@ This example covers sending a batch request with the Facebook SDK for PHP.
 
 The following example assumes we have the following permissions granted from the user: `user_likes`, `user_events`, `user_photos`, `publish_actions`. The example makes use of [JSONPath to reference specific batch operations](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -74,7 +74,7 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
+```
 
 There five requests being made in this batch requests.
 
@@ -86,13 +86,13 @@ There five requests being made in this batch requests.
 
 If the request was successful, the user should have a new status update similar to this:
 
-~~~~
+```
 My name is Foo User.
 
 I like this page: Facebook Developers.
 
 My next 2 events are House Warming Party,Some Foo Event.
-~~~~
+```
 
 It should also contain a response containing two photos from the user.
 
@@ -105,7 +105,7 @@ It should also contain a response containing two photos from the user.
 
 Since the requests sent in a batch are unrelated by default, we can make requests on behalf of multiple users and pages in the same batch request.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -143,4 +143,4 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
+```
