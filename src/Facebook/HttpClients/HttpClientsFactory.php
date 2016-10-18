@@ -66,7 +66,6 @@ class HttpClientsFactory
         }
 
         if ('guzzle' === $handler) {
-
             if (!class_exists('GuzzleHttp\Client')) {
                 throw new Exception('The Guzzle HTTP client must be included in order to use the "guzzle" handler.');
             } else {
