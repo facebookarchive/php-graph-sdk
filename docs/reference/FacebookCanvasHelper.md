@@ -94,7 +94,7 @@ Gets the value that is set in the `app_data` property if present.
 ```
 public Facebook\SignedRequest|null getSignedRequest()
 ```
-Returns the signed request as an instance of [`Facebook\SignedRequest`](/docs/php/SignedRequest) if present.
+Returns the signed request as an instance of [`Facebook\SignedRequest`](SignedRequest.md) if present.
 
 ### getRawSignedRequest()
 ```

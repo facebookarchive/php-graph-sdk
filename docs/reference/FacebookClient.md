@@ -29,13 +29,13 @@ The `Facebook\FacebookClient` service takes the guess-work out of managing those
 ```
 public Facebook\HttpClients\FacebookHttpClientInterface getHttpClientHandler()
 ```
-Returns the instance of [`Facebook\HttpClients\FacebookHttpClientInterface`](/docs/php/FacebookHttpClientInterface) that the service is using.
+Returns the instance of `Facebook\HttpClients\FacebookHttpClientInterface` that the service is using.
 
 ### setHttpClientHandler()
 ```
 public setHttpClientHandler(Facebook\HttpClients\FacebookHttpClientInterface $client)
 ```
-If you've coded your own HTTP client to the [`Facebook\HttpClients\FacebookHttpClientInterface`](/docs/php/FacebookHttpClientInterface), you can inject it into the service using this method.
+If you've coded your own HTTP client to the `Facebook\HttpClients\FacebookHttpClientInterface`, you can inject it into the service using this method.
 
 ### enableBetaMode()
 ```
@@ -49,13 +49,13 @@ public Facebook\FacebookResponse sendRequest(Facebook\FacebookRequest $request)
 ```
 Sends a non-batch request to Graph.
 
-Takes a [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
+Takes a [`Facebook\FacebookRequest`](FacebookRequest.md) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
 
-Returns the response from Graph in the form of a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse).
+Returns the response from Graph in the form of a [`Facebook\FacebookResponse`](FacebookResponse.md).
 
-If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) will be thrown.
+If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](FacebookSDKException.md) will be thrown.
 
-If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException) will be thrown.
+If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](FacebookResponseException.md) will be thrown.
 
 ### sendBatchRequest()
 ```
@@ -63,10 +63,10 @@ public Facebook\FacebookBatchResponse sendBatchRequest(Facebook\FacebookBatchReq
 ```
 Sends a batch request to Graph.
 
-Takes a [`Facebook\FacebookBatchRequest`](/docs/php/FacebookBatchRequest) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
+Takes a [`Facebook\FacebookBatchRequest`](FacebookBatchRequest.md) and sends it to the Graph API in the proper `application/x-www-form-urlencoded` or `multipart/form-data` encoded format.
 
-Returns the response from Graph in the form of a [`Facebook\FacebookBatchResponse`](/docs/php/FacebookBatchResponse).
+Returns the response from Graph in the form of a [`Facebook\FacebookBatchResponse`](FacebookBatchResponse.md).
 
-If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) will be thrown.
+If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](FacebookSDKException.md) will be thrown.
 
-If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException) will be thrown.
+If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](FacebookResponseException.md) will be thrown.

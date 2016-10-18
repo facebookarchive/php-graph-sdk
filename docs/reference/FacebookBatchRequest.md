@@ -17,9 +17,9 @@ $request = new FacebookBatchRequest(
 );
 ```
 
-The `$requests` array is an array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent as a batch request.
+The `$requests` array is an array of [`Facebook\FacebookRequest`'s](FacebookRequest.md) to be sent as a batch request.
 
-The `FacebookBatchRequest` entity does not actually make any calls to the Graph API, but instead just represents a batch request that can be sent to the Graph API later. The batch request can be sent by using [`Facebook\Facebook::sendBatchRequest()`](/docs/php/Facebook#send-batch-request) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/php/FacebookClient#send-batch-request).
+The `FacebookBatchRequest` entity does not actually make any calls to the Graph API, but instead just represents a batch request that can be sent to the Graph API later. The batch request can be sent by using [`Facebook\Facebook::sendBatchRequest()`](Facebook.md#sendbatchrequest) or [`Facebook\FacebookClient::sendBatchRequest()`](FacebookClient.md#sendbatchrequest.md).
 
 Usage:
 
@@ -56,7 +56,7 @@ foreach ($batchResponse as $key => $response) {
 
 ## Instance Methods
 
-Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](FacebookRequest.md) entity, all the methods are inherited.
 
 ### add()
 ```
@@ -65,7 +65,7 @@ public add(
   string|null $name
   )
 ```
-Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) or an array of `Facebook\FacebookRequest`'s.
+Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](FacebookRequest.md) or an array of `Facebook\FacebookRequest`'s.
 
 The `$name` argument is optional and is used to identify the request in the batch.
 
@@ -73,7 +73,7 @@ The `$name` argument is optional and is used to identify the request in the batc
 ```
 public array getRequests()
 ```
-Returns the array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
+Returns the array of [`Facebook\FacebookRequest`'s](FacebookRequest.md) to be sent in the batch request.
 
 ## Array Access
 

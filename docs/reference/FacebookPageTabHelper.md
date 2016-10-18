@@ -4,7 +4,7 @@ Page tabs are similar to the context to app canvases but are treated slightly di
 
 ## Usage
 
-The usage of the `FacebookPageTabHelper` is exactly the same as [`FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) with  additional methods to obtain the `page` data from the signed request.
+The usage of the `FacebookPageTabHelper` is exactly the same as [`FacebookCanvasHelper`](FacebookCanvasHelper.md) with  additional methods to obtain the `page` data from the signed request.
 
 ```
 $fb = new Facebook\Facebook([/* */]);

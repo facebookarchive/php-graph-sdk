@@ -26,7 +26,7 @@ Partial file uploads are possible using the `$maxLength` and `$offset` parameter
 
 ## Usage
 
-In Graph v2.3, functionality was added to [upload video files in chunks](/docs/graph-api/video-uploads#resumable). The PHP SDK provides a handy API to easily upload video files in chunks via the [`uploadVideo()` method](/docs/php/Facebook#upload-video).
+In Graph v2.3, functionality was added to [upload video files in chunks](https://developers.facebook.com/docs/graph-api/video-uploads#resumable). The PHP SDK provides a handy API to easily upload video files in chunks via the [`uploadVideo()` method](Facebook.md#uploadvideo).
 
 ```
 // Upload a video for a user (chunked)

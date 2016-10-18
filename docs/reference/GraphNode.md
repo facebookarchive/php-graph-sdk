@@ -13,7 +13,7 @@ This base class has several subclasses:
 [__GraphPicture__](#picture-instance-methods)
 [__GraphAchievement__](#achievement-instance-methods)
 
-`GraphNode`s are obtained from a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) object which represents an HTTP response from the Graph API.
+`GraphNode`s are obtained from a [`Facebook\FacebookResponse`](FacebookResponse.md) object which represents an HTTP response from the Graph API.
 
 Usage:
 
@@ -146,7 +146,7 @@ Returns the `link` property for the user as a string if present.
 ```
 public \Facebook\GraphNodes\Birthday|null getBirthday()
 ```
-Returns the `birthday` property for the user as a [`Facebook\GraphNodes\Birthday`](/docs/php/Birthday) if present.
+Returns the `birthday` property for the user as a [`Facebook\GraphNodes\Birthday`](Birthday.md) if present.
 
 ### getLocation()
 ```
