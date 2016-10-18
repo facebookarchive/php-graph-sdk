@@ -7,6 +7,8 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
 
+- 5.4.1 (2016-10-18)
+  - Fixed a bug that was not properly parsing response headers when they contained the colon `:` character. (#679)
 - 5.4.0 (2016-10-12)
   - Bump Graph API version to v2.8.
   - Auto-cast `cover` field to `GraphCoverPhoto` and `picture` field to `GraphPicture` in `GraphPage`. (#655)
