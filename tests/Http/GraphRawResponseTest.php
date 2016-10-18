@@ -48,6 +48,9 @@ HEADER;
         'Access-Control-Allow-Origin' => '*',
     ];
 
+    protected $jsonFakeHeader = 'x-fb-ads-insights-throttle: {"app_id_util_pct": 0.00,"acc_id_util_pct": 0.00}';
+    protected $jsonFakeHeaderAsArray = ['x-fb-ads-insights-throttle' => '{"app_id_util_pct": 0.00,"acc_id_util_pct": 0.00}'];
+
     public function testCanSetTheHeadersFromAnArray()
     {
         $myHeaders = [
@@ -78,5 +81,13 @@ HEADER;
 
         $this->assertEquals($this->fakeHeadersAsArray, $headers);
         $this->assertEquals(200, $httpResponseCode);
+    }
+
+    public function testCanTransformJsonHeaderValues()
+    {
+        $response = new GraphRawResponse($this->jsonFakeHeader, '');
+        $headers = $response->getHeaders();
+
+        $this->assertEquals($this->jsonFakeHeaderAsArray['x-fb-ads-insights-throttle'], $headers['x-fb-ads-insights-throttle']);
     }
 }
