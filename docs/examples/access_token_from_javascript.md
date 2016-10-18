@@ -29,7 +29,7 @@ In order to have the JavaScript SDK set a cookie containing a signed request (wh
     FB.init({
       appId: 'your-app-id',
       cookie: true, // This is important, it's not enabled by default
-      version: 'v2.6'
+      version: 'v2.8'
     });
   };
 
@@ -52,7 +52,7 @@ After the user successfully logs in, redirect the user (or make an AJAX request)
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 $helper = $fb->getJavaScriptHelper();

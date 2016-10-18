@@ -95,7 +95,7 @@ Before we can send requests to the Graph API, we need to load our app configurat
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 ```
 
