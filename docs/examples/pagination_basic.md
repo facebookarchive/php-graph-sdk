@@ -2,7 +2,7 @@
 
 This example covers basic cursor pagination with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 The Graph API supports [several methods to paginate over response data](https://developers.facebook.com/docs/graph-api/using-graph-api/#paging). The PHP SDK supports cursor-based pagination out of the box. It does all the heavy lifting of managing page cursors for you.
 

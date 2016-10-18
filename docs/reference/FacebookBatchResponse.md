@@ -2,7 +2,7 @@
 
 Represents a batch response returned from the Graph API.
 
-## Facebook\FacebookBatchResponse {#overview}
+## Facebook\FacebookBatchResponse
 
 After sending a batch request to the Graph API, the response will be returned in the form of a `Facebook\FacebookBatchResponse` entity.
 
@@ -41,17 +41,17 @@ var_dump($batchResponse);
 // class Facebook\FacebookBatchResponse . . .
 ~~~~
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
 Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
 
-### getResponses() {#get-responses}
+### getResponses()
 ~~~~
 public array getResponses()
 ~~~~
 Returns the array of [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
 
-## Array Access {#array-access}
+## Array Access
 
 Since `Facebook\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
 

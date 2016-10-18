@@ -2,7 +2,7 @@
 
 When a list of nodes is returned from a Graph request, it can be cast as a `GraphEdge` which provides convenient ways of interacting with the data which includes pagination.
 
-## Facebook\GraphNodes\GraphEdge {#overview}
+## Facebook\GraphNodes\GraphEdge
 
 You can grab a `GraphEdge` from a response from Graph.
 
@@ -19,7 +19,7 @@ foreach ($graphEdge as $graphNode) {
 }
 ~~~~
 
-## Pagination {#pagination}
+## Pagination
 
 With the help of the `Facebook\Facebook` super service class, the `GraphEdge` collection can grab the next and previous sets of data.
 
@@ -34,7 +34,7 @@ $previousPageOfAlbums = $fb->previous($previousOfAlbums);
 
 When the next or previous page returns no results, `$fb->next()` will return `null`.
 
-## Deep Pagination {#deep-pagination}
+## Deep Pagination
 
 Sometimes Graph will return a list of nodes within a node. Paginating on these sub lists can be non-trivial. Fortunately, the `GraphEdge` collection takes the guesswork out and allows you to paginate deeply within a `GraphEdge`.
 
@@ -62,9 +62,9 @@ do {
 } while ($pageCount < $maxPages && $pagesEdge = $fb->next($pagesEdge));
 ~~~~
 
-## Method Reference {#method-reference}
+## Method Reference
 
-### getMetaData() {#get-meta-data}
+### getMetaData()
 ~~~~
 public array getMetaData()
 ~~~~
@@ -75,7 +75,7 @@ Sometimes Graph will return additional data associated with an edge. You can acc
 $metaData = $graphEdge->getMetaData();
 ~~~~
 
-### getNextCursor() {#get-next-cursor}
+### getNextCursor()
 ~~~~
 public string|null getNextCursor()
 ~~~~
@@ -87,7 +87,7 @@ $nextCursor = $graphEdge->getNextCursor();
 // Returns: MMAyDDM5NjA0OTEyMDc0OTM=
 ~~~~
 
-### getPreviousCursor() {#get-previous-cursor}
+### getPreviousCursor()
 ~~~~
 public string|null getPreviousCursor()
 ~~~~
@@ -99,7 +99,7 @@ $previousCursor = $graphEdge->getPreviousCursor();
 // Returns: ODOxMTUzMjQzNTg5zzU5
 ~~~~
 
-### getTotalCount() {#get-total-count}
+### getTotalCount()
 ~~~~
 public int|null getTotalCount()
 ~~~~

@@ -2,7 +2,7 @@
 
 This example covers sending a batch request with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 The following example assumes we have the following permissions granted from the user: `user_likes`, `user_events`, `user_photos`, `publish_actions`. The example makes use of [JSONPath to reference specific batch operations](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
@@ -101,7 +101,7 @@ It should also contain a response containing two photos from the user.
   type: 'warning',
 })
 
-## Multiple User Example {#multiple-user-example}
+## Multiple User Example
 
 Since the requests sent in a batch are unrelated by default, we can make requests on behalf of multiple users and pages in the same batch request.
 

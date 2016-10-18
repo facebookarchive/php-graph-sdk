@@ -2,7 +2,7 @@
 
 Represents a request that will be sent to the Graph API.
 
-## Facebook\FacebookRequest {#overview}
+## Facebook\FacebookRequest
 
 You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
@@ -53,50 +53,50 @@ $graphNode = $response->getGraphNode();
 echo 'User name: ' . $graphNode['name'];
 ~~~~
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### setAccessToken() {#set-access-token}
+### setAccessToken()
 ~~~~
 public setAccessToken(string|Facebook\AccessToken $accessToken)
 ~~~~
 
-### getAccessToken() {#get-access-token}
+### getAccessToken()
 ~~~~
 public string getAccessToken()
 ~~~~
 Returns the access token to be used for the request in the form of a string.
 
-### setApp() {#set-app}
+### setApp()
 ~~~~
 public setApp(Facebook\FacebookApp $app)
 ~~~~
 Sets the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 
-### getApp() {#get-app}
+### getApp()
 ~~~~
 public Facebook\FacebookApp getApp()
 ~~~~
 Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 
-### getAppSecretProof() {#get-app-secret-proof}
+### getAppSecretProof()
 ~~~~
 public string getAppSecretProof()
 ~~~~
 Returns the [app secret proof](https://developers.facebook.com/docs/graph-api/securing-requests/#appsecret_proof) to sign the request.
 
-### setMethod() {#set-method}
+### setMethod()
 ~~~~
 public setMethod(string $method)
 ~~~~
 Sets the HTTP verb to use for the request.
 
-### getMethod() {#get-method}
+### getMethod()
 ~~~~
 public string setMethod()
 ~~~~
 Returns the HTTP verb to use for the request.
 
-### setEndpoint() {#set-endpoint}
+### setEndpoint()
 ~~~~
 public setEndpoint(string $endpoint)
 ~~~~
@@ -106,13 +106,13 @@ Sets the Graph URL endpoint to be used with the request. The endpoint must be ex
 $request->setEndpoint('/me');
 ~~~~
 
-### getEndpoint() {#get-endpoint}
+### getEndpoint()
 ~~~~
 public string getEndpoint()
 ~~~~
 Returns the Graph URL endpoint to be used with the request.
 
-### setHeaders() {#set-headers}
+### setHeaders()
 ~~~~
 public setHeaders(array $headers)
 ~~~~
@@ -124,19 +124,19 @@ $request->setHeaders([
 ]);
 ~~~~
 
-### getHeaders() {#get-headers}
+### getHeaders()
 ~~~~
 public array getHeaders()
 ~~~~
 Returns the request headers that will be sent with the request. The eTag headers `If-None-Match` are appended automatically.
 
-### setETag() {#set-etag}
+### setETag()
 ~~~~
 public setETag(string $eTag)
 ~~~~
 Sets the eTag that will be using for matching the `If-None-Match` header.
 
-### setParams() {#set-params}
+### setParams()
 ~~~~
 public setParams(array $params)
 ~~~~
@@ -152,19 +152,19 @@ $request->setParams([
 
 For `POST` requests, the array of params will be sent in the `POST` body encoded as `application/x-www-form-urlencoded` for most request. If the request includes a file upload the params will be encoded as `multipart/form-data`.
 
-### getParams() {#get-params}
+### getParams()
 ~~~~
 public array getParams()
 ~~~~
 Returns an array of params to be sent with the request. The `access_token` and `appsecret_proof` params will be automatically appended to the array of params.
 
-### getGraphVersion() {#get-graph-version}
+### getGraphVersion()
 ~~~~
 public string getGraphVersion()
 ~~~~
 Returns the Graph version prefix to be used with the request.
 
-### getUrl() {#get-url}
+### getUrl()
 ~~~~
 public string getUrl()
 ~~~~

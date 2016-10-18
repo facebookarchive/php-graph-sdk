@@ -2,7 +2,7 @@
 
 This example covers obtaining an access token and signed request from the Facebook JavaScript SDK with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 In order to have the JavaScript SDK set a cookie containing a signed request (which contains information about the logged in user), you must first initialize the JavaScript SDK with the `{cookie: true}` option.
 

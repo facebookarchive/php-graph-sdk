@@ -2,13 +2,13 @@
 
 This example covers Facebook Login with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 Although it's common to see examples of Facebook Login being implemented in one PHP script, is best to use two separate PHP scripts for more separation and more control over the responses.
 
 In this example, the PHP script that generates the login link is called `/login.php`. The callback URL that Facebook redirects the user to after login dialog is called `/fb-callback.php`.
 
-## /login.php {#login}
+## /login.php
 
 ~~~~
 $fb = new Facebook\Facebook([
@@ -25,7 +25,7 @@ $loginUrl = $helper->getLoginUrl('https://example.com/fb-callback.php', $permiss
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 ~~~~
 
-## /fb-callback.php {#fbcallback}
+## /fb-callback.php
 
 ~~~~
 $fb = new Facebook\Facebook([

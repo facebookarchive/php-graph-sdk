@@ -2,7 +2,7 @@
 
 If you're using the [JavaScript SDK](https://developers.facebook.com/docs/javascript) on your site, information on the logged in user is stored in a cookie. Use the `FacebookJavaScriptHelper` to obtain an access token or signed request from the cookie.
 
-## Usage {#usage}
+## Usage
 
 This helper will handle validating and decode the signed request from the cookie set by the JavaScript SDK.
 
@@ -40,7 +40,7 @@ if (isset($accessToken)) {
 
 You will likely want to make an Ajax request when the login state changes in the Facebook SDK for JavaScript.  Information about that here: [FB.event.subscribe](https://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/#events)
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
 ### __construct() {#construct}
 ~~~~

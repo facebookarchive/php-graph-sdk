@@ -8,7 +8,7 @@ Users may opt not to share birth day or month, or may not share birth year. Poss
 * MM/DD
 * YYYY
 
-## Facebook\GraphNodes\Birthday {#overview}
+## Facebook\GraphNodes\Birthday
 
 After retrieving a GraphUser from the Graph API, the `getBirthday()` method will return the birthday in the form of a `Facebook\GraphNodes\Birthday` entity which indicates which aspects of the birthday the user opted to share.
 
@@ -40,15 +40,15 @@ var_dump($birthday->format('m/d'));
 // 03/21
 ~~~~
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### hasDate() {#has-date}
+### hasDate()
 ~~~~
 public boolean hasDate()
 ~~~~
 Returns whether or not the birthday object contains the day and month of birth.
 
-### hasYear() {#has-year}
+### hasYear()
 ~~~~
 public boolean hasYear()
 ~~~~

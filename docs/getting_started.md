@@ -2,23 +2,23 @@
 
 Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook SDK for PHP does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
 
-## Autoloading & namespaces {#psr-4}
+## Autoloading & namespaces
 
 The Facebook SDK for PHP v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
 
 It would be advantageous to familiarize yourself with the concepts of [namespacing](http://php.net/manual/en/language.namespaces.rationale.php) and [autoloading](http://php.net/manual/en/function.spl-autoload-register.php) if you are not already acquainted with them.
 
-## System requirements {#requirements}
+## System requirements
 
 - PHP 5.4 or greater
 - The [mbstring](http://php.net/manual/en/book.mbstring.php) extension
 - [Composer](https://getcomposer.org/) *(optional)*
 
-## Installing the Facebook SDK for PHP {#installation}
+## Installing the Facebook SDK for PHP
 
 There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#install-composer). If are unable to use Composer for your project, you can still [install the SDK manually](#install-manually) by downloading the source files and including the autoloader.
 
-## Installing with Composer (recommended) {#install-composer}
+## Installing with Composer (recommended)
 
 [Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
 
@@ -39,7 +39,7 @@ Make sure to include the Composer autoloader at the top of your script.
 require_once __DIR__ . '/vendor/autoload.php';
 ~~~
 
-## Manually installing (if you really have to) {#install-manually}
+## Manually installing (if you really have to)
 
 First, download the source code and unzip it wherever you like in your project.
 
@@ -59,7 +59,7 @@ require_once __DIR__ . '/path/to/facebook-php-sdk-v4/src/Facebook/autoload.php';
 The autoloader should be able to auto-detect the proper location of the source code.
 
 
-### Keeping things tidy {#tidy-up}
+### Keeping things tidy
 
 The source code includes myriad files that aren't necessary for use in a production environment. If you'd like to strip out everything except the core files, follow this example.
 
@@ -87,7 +87,7 @@ define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v5/');
 require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ~~~
 
-## Configuration and setup {#setup}
+## Configuration and setup
 
 %FB(devsite:markdown-wiki:info-card {
   content: "This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](/apps).",
@@ -113,14 +113,14 @@ You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app'
 
 The `Facebook\Facebook` service ties all the components of the SDK for PHP together. [See the full reference for the `Facebook\Facebook` service](/docs/php/Facebook).
 
-## Authentication and authorization {#authentication}
+## Authentication and authorization
 
 The SDK can be used to support logging a Facebook user into your site using Facebook Login which is based on OAuth 2.0.
 
 Most all request made to the Graph API require an access token. We can obtain user access tokens with the SDK using the [helper classes](/docs/php/reference#helpers).
 
 
-### Obtaining an access token from redirect {#authentication-redirect}
+### Obtaining an access token from redirect
 
 For most websites, you'll use the [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRedirectLoginHelper) to generate a login URL with the `getLoginUrl()` method. The link will take the user to an app authorization screen and upon approval, will redirect them back to a URL that you specified. On the redirect callback page we can obtain the user access token as an [`AccessToken`](/docs/php/AccessToken) entity.
 
@@ -172,7 +172,7 @@ if (isset($accessToken)) {
 ~~~
 
 
-### Obtaining an access token from a Facebook Canvas context {#authentication-canvas}
+### Obtaining an access token from a Facebook Canvas context
 
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) to get an [`AccessToken`](/docs/php/AccessToken) entity for the user.
 
@@ -209,7 +209,7 @@ if (isset($accessToken)) {
 })
 
 
-### Obtaining an access token from the SDK for JavaScript {#authentication-javascript}
+### Obtaining an access token from the SDK for JavaScript
 
 If you're already using the Facebook SDK for JavaScript to authenticate users, you can obtain the access token with PHP by using the [FacebookJavaScriptHelper](/docs/php/FacebookJavaScriptHelper). The `getAccessToken()` method will return an [`AccessToken`](/docs/php/AccessToken) entity.
 
@@ -240,7 +240,7 @@ if (isset($accessToken)) {
   type: 'warning',
 })
 
-## Extending the access token {#extending-access-token}
+## Extending the access token
 
 When a user first logs into your app, the access token your app receives will be a short-lived access token that lasts about 2 hours. It's generally a good idea to exchange the short-lived access token for a long-lived access token that lasts about 60 days.
 
@@ -256,7 +256,7 @@ $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken('{access-token}')
 
 [See more about long-lived and short-lived access tokens](/docs/facebook-login/access-tokens#extending).
 
-## Making Requests to the Graph API {#making-requests}
+## Making Requests to the Graph API
 
 Once you have an instance of the `Facebook\Facebook` service and obtained an access token, you can begin making calls to the Graph API.
 
