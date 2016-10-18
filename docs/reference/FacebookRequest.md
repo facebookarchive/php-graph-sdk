@@ -175,5 +175,5 @@ $fb = new Facebook\Facebook(/* . . . */);
 $request = $fb->request('GET', '/me', ['fields' => 'id,name']);
 
 $url = $request->getUrl();
-// /v2.6/me?fields=id,name&access_token=token&appsecret_proof=proof
+// /v2.8/me?fields=id,name&access_token=token&appsecret_proof=proof
 ```
