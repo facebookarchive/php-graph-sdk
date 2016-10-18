@@ -1,10 +1,7 @@
-<card>
 # SignedRequest entity for the Facebook SDK for PHP
 
 The `Facebook\SignedRequest` entity represents a signed request.
-</card>
 
-<card>
 ## Facebook\SignedRequest {#overview}
 
 [Signed requests](https://developers.facebook.com/docs/facebook-login/using-login-with-games#checklogin) contain payloads of data that can be validated against a hash signature to ensure it is from Facebook. The `Facebook\SignedRequest` entity can validate a signed request signature and decode the payload.
@@ -33,9 +30,7 @@ $signedRequest = $helper->getSignedRequest();
 $helper = $fb->getPageTabHelper();
 $signedRequest = $helper->getSignedRequest();
 ~~~~
-</card>
 
-<card>
 ## Instance Methods {#instance-methods}
 
 ### getRawSignedRequest() {#get-raw-signed-request}
@@ -43,41 +38,31 @@ $signedRequest = $helper->getSignedRequest();
 public string|null getRawSignedRequest()
 ~~~~
 Returns the original raw encoded signed request in the form of a string.
-</card>
 
-<card>
 ### getPayload() {#get-payload}
 ~~~~
 public array|null getPayload()
 ~~~~
 Returns the [signed request payload](https://developers.facebook.com/docs/reference/login/signed-request/) in the form of an array.
-</card>
 
-<card>
 ### get() {#get}
 ~~~~
 public string|null get(string $key, string|null $default)
 ~~~~
 Returns a [field from the signed request payload](https://developers.facebook.com/docs/reference/login/signed-request) or `$default` if the value does not exist.
-</card>
 
-<card>
 ### getUserId() {#get-user-id}
 ~~~~
 public string|null getUserId()
 ~~~~
 Returns the `user_id` field from the signed request payload if it exists or `null` if it does not exists.
-</card>
 
-<card>
 ### hasOAuthData() {#has-oauth-data}
 ~~~~
 public boolean hasOAuthData()
 ~~~~
 Returns `true` if the payload data contains either an `oauth_token` or `code` field. Returns `false` if neither value exists.
-</card>
 
-<card>
 ### make() {#make}
 ~~~~
 public string make(array $payload)
@@ -98,4 +83,3 @@ $rawSignedRequest = $signedRequest->make($payload);
 var_dump($rawSignedRequest);
 // string(129) "c9RNpwW4vGYTGc7_E-_XQu5aoEQrWrx_KDOdz3x9Ec0=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQxODE4MjI1NSwiZm9vIjoiYmFyIn0="
 ~~~~
-</card>

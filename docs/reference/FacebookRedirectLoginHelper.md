@@ -1,10 +1,7 @@
-<card>
 # Facebook\Helpers\FacebookRedirectLoginHelper
 
 The most commonly used helper is the `FacebookRedirectLoginHelper` which allows you to obtain a user access token from a redirect using a "Log in with Facebook" link.
-</card>
 
-<card>
 ## Usage {#usage}
 
 Facebook Login is achieved via OAuth 2.0. But you don't really have to know much about OAuth 2.0 since the SDK for PHP does all the heavy lifting for you.
@@ -75,9 +72,7 @@ if (isset($accessToken)) {
   exit;
 }
 ~~~
-</card>
 
-<card>
 ## Instance Methods {#instance-methods}
 
 ### getLoginUrl() {#get-login-url}
@@ -90,33 +85,25 @@ Generates an authorization URL to ask a user for access to their profile on beha
 - `$redirectUrl` (_Required_) The callback URL that the user will be redirected to after being presented with the app authorization modal.
 - `$scope` (_Optional_) A numeric array of permissions to ask the user for.
 - `$separator` (_Optional_) The URL parameter separator. When working with XML documents, you can set this to `&amp;` for example.
-</card>
 
-<card>
 ### getReRequestUrl() {#get-re-request-url}
 ~~~~
 public string getReRequestUrl(string $redirectUrl, array $scope = [], string $separator = '&')
 ~~~~
 Generates a URL to rerequest permissions from a user. The arguments are the same as the `getLoginUrl()` method above.
-</card>
 
-<card>
 ### getReAuthenticationUrl() {#get-re-authentication-url}
 ~~~~
 public string getReAuthenticationUrl(string $redirectUrl, array $scope = [], string $separator = '&')
 ~~~~
 Generates a URL to ask the user to reauthenticate. The arguments are the same as the `getLoginUrl()` method above.
-</card>
 
-<card>
 ### getLogoutUrl() {#get-logout-url}
 ~~~~
 public string getLogoutUrl(string $accessToken, string $next, string $separator = '&')
 ~~~~
 Generates the URL log a user out of Facebook. This will throw an `FacebookSDKException` if you try to use an app access token.
-</card>
 
-<card>
 ### getAccessToken() {#get-access-token}
 ~~~~
 public Facebook\Authentication\AccessToken|null getAccessToken(string $redirectUrl = null)
@@ -127,9 +114,7 @@ If no authorization code could be found from the `code` param in the URL, this m
 
 #### Arguments
 - `$redirectUrl` (_Optional_) The URL of the callback that the user is currently on. This should be the same as the one used when creating the login URL. If no URL is provided, it will be detected automatically.
-</card>
 
-<card>
 ## Extensibility Points {#extensibility-points}
 
 The `FacebookRedirectLoginHelper` has to orchestrate a number of components from the hosting environment to make the OAuth 2.0 authorization process as easy as possible to integrate. Out of the box it auto-detects all the things it needs, but sometimes you'll want to control these components.
@@ -150,4 +135,3 @@ The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenti
 ### URL detection
 
 In order to not make you pass the callback URL to the `getAccessToken()` method, the SDK will do its best to detect the callback's URL for you. Most modern web frameworks have URL detection built-in. You can code your specific web framework's URL detection logic by coding to the [`UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
-</card>

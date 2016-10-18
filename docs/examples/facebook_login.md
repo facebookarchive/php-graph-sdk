@@ -1,18 +1,13 @@
-<card>
 # Facebook Login Example
 
 This example covers Facebook Login with the Facebook SDK for PHP.
-</card>
 
-<card>
 ## Example {#example}
 
 Although it's common to see examples of Facebook Login being implemented in one PHP script, is best to use two separate PHP scripts for more separation and more control over the responses.
 
 In this example, the PHP script that generates the login link is called `/login.php`. The callback URL that Facebook redirects the user to after login dialog is called `/fb-callback.php`.
-</card>
 
-<card>
 ## /login.php {#login}
 
 ~~~~
@@ -29,9 +24,7 @@ $loginUrl = $helper->getLoginUrl('https://example.com/fb-callback.php', $permiss
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 ~~~~
-</card>
 
-<card>
 ## /fb-callback.php {#fbcallback}
 
 ~~~~
@@ -106,4 +99,3 @@ $_SESSION['fb_access_token'] = (string) $accessToken;
 // You can redirect them to a members-only page.
 //header('Location: https://example.com/members.php');
 ~~~~
-</card>

@@ -1,10 +1,7 @@
-<card>
 # Facebook SDK for PHP Reference (v5)
 
 Below is the API reference for the Facebook SDK for PHP.
-</card>
 
-<card>
 # Core API {#core-api}
 
 These classes are at the core of the Facebook SDK for PHP.
@@ -22,9 +19,7 @@ These classes are at the core of the Facebook SDK for PHP.
     ],
   ],
 })
-</card>
 
-<card>
 # Authentication {#authentication}
 
 These classes facilitate authenticating a Facebook user with OAuth 2.0.
@@ -50,9 +45,7 @@ These classes facilitate authenticating a Facebook user with OAuth 2.0.
     ],
   ],
 })
-</card>
 
-<card>
 # Requests and Responses {#requests-and-responses}
 
 These classes are used in a Graph API request/response cycle.
@@ -82,9 +75,7 @@ These classes are used in a Graph API request/response cycle.
     ],
   ],
 })
-</card>
 
-<card>
 # Signed Requests {#signed-requests}
 
 Classes to help obtain and manage signed requests.
@@ -110,9 +101,7 @@ Classes to help obtain and manage signed requests.
     ],
   ],
 })
-</card>
 
-<card>
 # Core Exceptions {#core-exceptions}
 
 These are the core exceptions that the SDK will throw when an error occurs.
@@ -130,9 +119,7 @@ These are the core exceptions that the SDK will throw when an error occurs.
     ],
   ],
 })
-</card>
 
-<card>
 # Graph Nodes and Edges {#graph-nodes-and-edges}
 
 Graph nodes are collections that represent nodes returned by the Graph API. And Graph edges are a collection of nodes returned from an edge on the Graph API.
@@ -174,9 +161,7 @@ Graph nodes are collections that represent nodes returned by the Graph API. And 
     ],
   ],
 })
-</card>
 
-<card>
 # File Uploads {#file-uploads}
 
 These are entities that represent files to be uploaded with a Graph request.
@@ -194,9 +179,7 @@ These are entities that represent files to be uploaded with a Graph request.
     ],
   ],
 })
-</card>
 
-<card>
 # Extensibility {#extensibility}
 
 You can overwrite certain functionality of the SDK by coding to an interface and injecting an instance of your custom functionality.
@@ -226,4 +209,3 @@ You can overwrite certain functionality of the SDK by coding to an interface and
     ],
   ],
 })
-</card>

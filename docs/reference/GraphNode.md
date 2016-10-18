@@ -1,10 +1,7 @@
-<card>
 # GraphNode for the Facebook SDK for PHP
 
 A `Facebook\GraphNodes\GraphNode` is a collection that represents a node returned by the Graph API.
-</card>
 
-<card>
 ## Facebook\GraphNodes\GraphNode {#overview}
 
 This base class has several subclasses:
@@ -42,9 +39,7 @@ echo $user->getName(); // From GraphUser
 echo $graphNode->getField('country'); // From GraphNode
 echo $location->getCountry(); // From GraphLocation
 ~~~~
-</card>
 
-<card>
 ## SPL Libraries {#spl}
 
 The `GraphNode` collection and its subclasses implement several [SPL](http://php.net/manual/en/book.spl.php) libraries and [predefined PHP interfaces and classes](http://php.net/manual/en/reserved.interfaces.php) which make it convenient to work with the object in PHP. The supported libraries are `ArrayAccess`, `ArrayIterator`, `Countable`, and `IteratorAggregate`.
@@ -66,9 +61,6 @@ foreach ($graphNode as $key => $value) {
 $total = count($graphNode);
 ~~~~
 
-</card>
-
-<card>
 ## GraphNode Instance Methods {#instance-methods}
 
 
@@ -97,9 +89,7 @@ Returns an array with the names of all fields present on the graph node.
 ### map {#map}
 `map(Closure $callback)`
 Provides a way to map over the data within the collection just like `array_map()`.
-</card>
 
-<card>
 ## GraphUser Instance Methods {#user-instance-methods}
 
 The `GraphUser` collection represents a [User](https://developers.facebook.com/docs/graph-api/reference/user) Graph node.
@@ -187,9 +177,7 @@ Returns the `hometown` property for the user as a `Facebook\GraphNodes\GraphPage
 public Facebook\GraphNodes\GraphUser|null getHometown()
 ~~~~
 Returns the `significant_other` property for the user as a `Facebook\GraphNodes\GraphUser` if present.
-</card>
 
-<card>
 ## GraphPage Instance Methods {#page-instance-methods}
 
 The `GraphPage` collection represents a [Page](https://developers.facebook.com/docs/graph-api/reference/page) Graph node.
@@ -265,9 +253,7 @@ Returns the `access_token` property for the page if present. (Only available in 
 public array|null getAccessToken()
 ~~~~
 Returns the `perms` property for the page as an `array` if present. (Only available in the `/me/accounts` context.)
-</card>
 
-<card>
 ## GraphAlbum Instance Methods {#album-instance-methods}
 
 The `GraphAlbum` collection represents an [Album](https://developers.facebook.com/docs/graph-api/reference/album) Graph node.
@@ -375,9 +361,7 @@ Returns the `privacy` property for the album as a string if present.
 public string|null getType()
 ~~~~
 Returns the `type` property for the album as a string (`profile`, `mobile`, `wall`, `normal` or `album`) if present.
-</card>
 
-<card>
 ## GraphLocation Instance Methods {#location-instance-methods}
 
 All getter methods return `null` if the property does not exist on the node.
@@ -417,9 +401,7 @@ Returns the `latitude` property for the location as a float if present.
 public float|null getLongitude()
 ~~~~
 Returns the `longitude` property for the location as a float if present.
-</card>
 
-<card>
 ## GraphPicture Instance Methods {#picture-instance-methods}
 
 All getter methods return `null` if the property does not exist on the node.
@@ -429,9 +411,7 @@ All getter methods return `null` if the property does not exist on the node.
 public string|null getUrl()
 ~~~~
 Returns the `url` property for the picture as a string if present.
-</card>
 
-<card>
 ## GraphAchievement Instance Methods {#achievement-instance-methods}
 
 All getter methods return `null` if the property does not exist on the node.
@@ -441,9 +421,7 @@ All getter methods return `null` if the property does not exist on the node.
 public string|null getId()
 ~~~~
 Returns the `id` property for the achievement as a string if present.
-</card>
 
-<card>
 ## GraphEvent Instance Methods {#event-instance-methods}
 
 All getter methods return `null` if the property does not exist on the node.
@@ -568,10 +546,7 @@ Returns the `noreply_count` property (Number of people who did not reply to the 
 public int|null getInvitedCount()
 ~~~~
 Returns the `invited_count` property (Number of people invited to the event) for the event as a int if present.
-</card>
 
-
-<card>
 ## GraphGroup Instance Methods {#group-instance-methods}
 
 All getter methods return `null` if the field does not exist on the node.
@@ -641,4 +616,3 @@ Returns the `updated_time` field (The last time the Group was updated (this incl
 public GraphLocation|null getVenue()
 ~~~~
 Returns the `venue` field (The location for the Group) for the group as a GraphLocation if present.
-</card>

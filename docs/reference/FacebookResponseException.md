@@ -1,10 +1,7 @@
-<card>
 # FacebookResponseException for the Facebook SDK for PHP
 
 Represents an error response from the Graph API.
-</card>
 
-<card>
 ## Facebook\Exceptions\FacebookResponseException {#overview}
 
 Whenever a `FacebookResponseException` is thrown, you can access it's previous exception with the `getPrevious()` method to get more information on the specific type of error response that the Graph API returned.
@@ -51,9 +48,7 @@ try {
 })
 
 These exceptions are derived from the [error responses from the Graph API](/docs/graph-api/using-graph-api/#errors).
-</card>
 
-<card>
 ## Instance Methods {#instance-methods}
 
 `FacebookResponseException` extends from the base `\Exception` class, so `getCode()` and `getMessage()` are available by default.
@@ -81,4 +76,3 @@ Returns the raw response body used to create the exception as a string.
 ### getResponse {#getresponse}
 `getResponse()`
 Returns the `FacebookResponse` entity which represents the HTTP response.
-</card>

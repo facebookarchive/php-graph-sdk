@@ -1,10 +1,7 @@
-<card>
 # Pagination Example
 
 This example covers basic cursor pagination with the Facebook SDK for PHP.
-</card>
 
-<card>
 ## Example {#example}
 
 The Graph API supports [several methods to paginate over response data](https://developers.facebook.com/docs/graph-api/using-graph-api/#paging). The PHP SDK supports cursor-based pagination out of the box. It does all the heavy lifting of managing page cursors for you.
@@ -45,4 +42,3 @@ foreach ($nextFeed as $status) {
   var_dump($status->asArray());
 }
 ~~~~
-</card>

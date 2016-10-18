@@ -1,10 +1,7 @@
-<card>
 # Getting Access Token From The JavaScript SDK Example
 
 This example covers obtaining an access token and signed request from the Facebook JavaScript SDK with the Facebook SDK for PHP.
-</card>
 
-<card>
 ## Example {#example}
 
 In order to have the JavaScript SDK set a cookie containing a signed request (which contains information about the logged in user), you must first initialize the JavaScript SDK with the `{cookie: true}` option.
@@ -87,4 +84,3 @@ $_SESSION['fb_access_token'] = (string) $accessToken;
 // You can redirect them to a members-only page.
 //header('Location: https://example.com/members.php');
 ~~~~
-</card>

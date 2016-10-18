@@ -1,10 +1,7 @@
-<card>
 # AccessToken for the Facebook SDK for PHP
 
 Requests to the Graph API need to have an access token sent with them to identify the app, user and/or page that is making the request. The `Facebook\Authentication\AccessToken` entity represents an access token.
-</card>
 
-<card>
 ## Facebook\Authentication\AccessToken {#overview}
 
 Whenever you use the PHP SDK to obtain an access token, the access token will be returned as an instance of `AccessToken`. The `AccessToken` entity contains a number of methods that make it easier to handle access tokens.
@@ -46,9 +43,7 @@ Since app access tokens contain the app secret in plain-text, it's very importan
 public string getAppSecretProof(string $appSecret)
 ~~~~
 For better security, all requests to the Graph API should be [signed with an app secret proof](https://developers.facebook.com/docs/graph-api/securing-requests#appsecret_proof) and your app settings should enable the app secret proof requirement for all requests. The PHP SDK will generate the app secret proof for each request automatically, but if you need to generate one, pass your app secret to the `getAppSecretProof()` method and it will return the HMAC hash that is the app secret proof.
-</card>
 
-<card>
 ## Making an entity from a string {#from-string}
 
 If you already have an access token in the form of a string (from a session or database for example), you can make an `AccessToken` entity with it by passing the access token string as the first argument in the `AccessToken` the constructor.
@@ -59,4 +54,3 @@ You can optionally pass an expiration date in the form of timestamp as the secon
 $expires = time() + 60 * 60 * 2;
 $accessToken = new Facebook\Authentication\AccessToken('{example-access-token}', $expires);
 ~~~~
-</card>

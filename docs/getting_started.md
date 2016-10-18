@@ -1,32 +1,23 @@
-<card>
 # Getting started with the Facebook SDK for PHP
 
 Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook SDK for PHP does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
-</card>
 
-<card>
 ## Autoloading & namespaces {#psr-4}
 
 The Facebook SDK for PHP v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
 
 It would be advantageous to familiarize yourself with the concepts of [namespacing](http://php.net/manual/en/language.namespaces.rationale.php) and [autoloading](http://php.net/manual/en/function.spl-autoload-register.php) if you are not already acquainted with them.
-</card>
 
-<card>
 ## System requirements {#requirements}
 
 - PHP 5.4 or greater
 - The [mbstring](http://php.net/manual/en/book.mbstring.php) extension
 - [Composer](https://getcomposer.org/) *(optional)*
-</card>
 
-<card>
 ## Installing the Facebook SDK for PHP {#installation}
 
 There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#install-composer). If are unable to use Composer for your project, you can still [install the SDK manually](#install-manually) by downloading the source files and including the autoloader.
-</card>
 
-<card>
 ## Installing with Composer (recommended) {#install-composer}
 
 [Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
@@ -47,9 +38,7 @@ Make sure to include the Composer autoloader at the top of your script.
 ~~~
 require_once __DIR__ . '/vendor/autoload.php';
 ~~~
-</card>
 
-<card>
 ## Manually installing (if you really have to) {#install-manually}
 
 First, download the source code and unzip it wherever you like in your project.
@@ -97,9 +86,7 @@ If the autoloader is having trouble detecting the path to the source files, we c
 define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v5/');
 require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ~~~
-</card>
 
-<card>
 ## Configuration and setup {#setup}
 
 %FB(devsite:markdown-wiki:info-card {
@@ -125,9 +112,7 @@ You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app'
 })
 
 The `Facebook\Facebook` service ties all the components of the SDK for PHP together. [See the full reference for the `Facebook\Facebook` service](/docs/php/Facebook).
-</card>
 
-<card>
 ## Authentication and authorization {#authentication}
 
 The SDK can be used to support logging a Facebook user into your site using Facebook Login which is based on OAuth 2.0.
@@ -254,9 +239,7 @@ if (isset($accessToken)) {
   content: "Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](/docs/javascript/reference/FB.init). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.",
   type: 'warning',
 })
-</card>
 
-<card>
 ## Extending the access token {#extending-access-token}
 
 When a user first logs into your app, the access token your app receives will be a short-lived access token that lasts about 2 hours. It's generally a good idea to exchange the short-lived access token for a long-lived access token that lasts about 60 days.
@@ -272,9 +255,7 @@ $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken('{access-token}')
 ~~~
 
 [See more about long-lived and short-lived access tokens](/docs/facebook-login/access-tokens#extending).
-</card>
 
-<card>
 ## Making Requests to the Graph API {#making-requests}
 
 Once you have an instance of the `Facebook\Facebook` service and obtained an access token, you can begin making calls to the Graph API.
@@ -321,4 +302,3 @@ $plainOldArray = $response->getDecodedBody();
 ~~~
 
 For a full list of all of the components that make up the SDK for PHP, see the [SDK for PHP reference page](/docs/php/reference).
-</card>

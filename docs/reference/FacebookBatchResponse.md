@@ -1,10 +1,7 @@
-<card>
 # FacebookBatchResponse for the Facebook SDK for PHP
 
 Represents a batch response returned from the Graph API.
-</card>
 
-<card>
 ## Facebook\FacebookBatchResponse {#overview}
 
 After sending a batch request to the Graph API, the response will be returned in the form of a `Facebook\FacebookBatchResponse` entity.
@@ -43,9 +40,7 @@ foreach ($batchResponse as $key => $response) {
 var_dump($batchResponse);
 // class Facebook\FacebookBatchResponse . . .
 ~~~~
-</card>
 
-<card>
 ## Instance Methods {#instance-methods}
 
 Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
@@ -55,9 +50,7 @@ Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\Faceb
 public array getResponses()
 ~~~~
 Returns the array of [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
-</card>
 
-<card>
 ## Array Access {#array-access}
 
 Since `Facebook\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
@@ -81,4 +74,3 @@ foreach ($batchResponse as $key => $response) {
 var_dump($batchResponse['foo']);
 // class Facebook\FacebookResponse . . .
 ~~~~
-</card>

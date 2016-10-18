@@ -1,4 +1,3 @@
-<card>
 # FacebookApp for the Facebook SDK for PHP
 
 In order to make requests to the Graph API, you need to [create a Facebook app](/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
@@ -7,9 +6,7 @@ In order to make requests to the Graph API, you need to [create a Facebook app](
   content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\\Facebook` service handles injecting it into the required classes for you.",
   type: 'warning',
 })
-</card>
 
-<card>
 ## Facebook\FacebookApp {#overview}
 
 To instantiate a new `Facebook\FacebookApp` entity, pass the app ID and app secret to the constructor.
@@ -61,4 +58,3 @@ $unserializedFacebookApp = unserialize($serializedFacebookApp);
 echo $unserializedFacebookApp->getAccessToken();
 // foo-app-id|foo-app-secret
 ~~~~
-</card>

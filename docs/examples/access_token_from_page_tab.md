@@ -1,10 +1,7 @@
-<card>
 # Get Access Token From Page Tab Example
 
 This example covers obtaining an access token and signed request from within the context of a page tab with the Facebook SDK for PHP.
-</card>
 
-<card>
 ## Example {#example}
 
 Page tabs behave much like the app canvas. The PHP SDK provides a helper for page tabs that delivers specific methods unique to page tabs.
@@ -48,4 +45,3 @@ var_dump($helper->getSignedRequest());
 echo '<h3>Access Token</h3>';
 var_dump($accessToken->getValue());
 ~~~~
-</card>
