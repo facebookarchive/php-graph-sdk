@@ -16,7 +16,7 @@ It would be advantageous to familiarize yourself with the concepts of [namespaci
 
 ## Installing the Facebook SDK for PHP
 
-There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#install-composer). If are unable to use Composer for your project, you can still [install the SDK manually](#install-manually) by downloading the source files and including the autoloader.
+There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#installing-with-composer-recommended). If are unable to use Composer for your project, you can still [install the SDK manually](#manually-installing-if-you-really-have-to) by downloading the source files and including the autoloader.
 
 ## Installing with Composer (recommended)
 
@@ -165,7 +165,7 @@ if (isset($accessToken)) {
 
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
 
-> content: "The `FacebookCanvasHelper` will detect a [signed request](docs/reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#authentication-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#authentication-javascript) the SDK for JavaScript set.",
+> content: "The `FacebookCanvasHelper` will detect a [signed request](reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#authentication-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#authentication-javascript) the SDK for JavaScript set.",
 > type: 'warning',
 
 ```
@@ -190,7 +190,7 @@ if (isset($accessToken)) {
 }
 ```
 
-> content: "If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](docs/reference/FacebookPageTabHelper.md)",
+> content: "If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)",
 > type: 'info',
 
 
