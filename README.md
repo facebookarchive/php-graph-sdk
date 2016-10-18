@@ -59,7 +59,7 @@ $me = $response->getGraphUser();
 echo 'Logged in as ' . $me->getName();
 ```
 
-Complete documentation, installation instructions, and examples are available at: [https://developers.facebook.com/docs/php](docs/)
+Complete documentation, installation instructions, and examples are available [here](docs/).
 
 
 ## Tests
