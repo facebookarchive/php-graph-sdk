@@ -24,10 +24,10 @@ There are two methods to install the Facebook SDK for PHP. The recommended insta
 
 ```
 composer require facebook/php-sdk-v4
-```
 
-content: "The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.",
-type: 'info',
+> content: "The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.",
+> type: 'info',
+
 ```
 
 Once you do this, composer will edit your `composer.json` file and download the latest version of the SDK and put it in the `/vendor/` directory.
