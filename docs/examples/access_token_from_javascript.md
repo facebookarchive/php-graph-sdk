@@ -6,7 +6,7 @@ This example covers obtaining an access token and signed request from the Facebo
 
 In order to have the JavaScript SDK set a cookie containing a signed request (which contains information about the logged in user), you must first initialize the JavaScript SDK with the `{cookie: true}` option.
 
-```
+```php
 <html>
 <body>
 
@@ -47,7 +47,7 @@ In order to have the JavaScript SDK set a cookie containing a signed request (wh
 
 After the user successfully logs in, redirect the user (or make an AJAX request) to a PHP script that obtains an access token from the signed request that exists in the cookie.
 
-```
+```php
 # /js-login.php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',

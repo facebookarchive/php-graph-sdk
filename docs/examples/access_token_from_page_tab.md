@@ -6,7 +6,7 @@ This example covers obtaining an access token and signed request from within the
 
 Page tabs behave much like the app canvas. The PHP SDK provides a helper for page tabs that delivers specific methods unique to page tabs.
 
-```
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',

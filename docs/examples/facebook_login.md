@@ -10,7 +10,7 @@ In this example, the PHP script that generates the login link is called `/login.
 
 ## /login.php
 
-```
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -27,7 +27,7 @@ echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 
 ## /fb-callback.php
 
-```
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',

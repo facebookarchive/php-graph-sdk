@@ -8,14 +8,14 @@ You most likely won't be working with the `Facebook\FacebookClient` service dire
 
 You can grab an instance of a `Facebook\FacebookClient` service, from the `Facebook\Facebook` super service class.
 
-```
+```php
 $fb = new Facebook\Facebook([/* */]);
 $fbClient = $fb->getClient();
 ```
 
 Alternatively you could instantiate a new `Facebook\FacebookClient` service directly.
 
-```
+```php
 $fbClient = new Facebook\FacebookClient($httpClientHandler, $enableBeta = false);
 ```
 
@@ -26,25 +26,25 @@ The `Facebook\FacebookClient` service takes the guess-work out of managing those
 ## Instance Methods
 
 ### getHttpClientHandler()
-```
+```php
 public Facebook\HttpClients\FacebookHttpClientInterface getHttpClientHandler()
 ```
 Returns the instance of `Facebook\HttpClients\FacebookHttpClientInterface` that the service is using.
 
 ### setHttpClientHandler()
-```
+```php
 public setHttpClientHandler(Facebook\HttpClients\FacebookHttpClientInterface $client)
 ```
 If you've coded your own HTTP client to the `Facebook\HttpClients\FacebookHttpClientInterface`, you can inject it into the service using this method.
 
 ### enableBetaMode()
-```
+```php
 public enableBetaMode(boolean $enable = true)
 ```
 Tells the service to send requests to the beta URL's which include [https://graph.beta.facebook.com](https://graph.beta.facebook.com) and [https://graph-video.beta.facebook.com](https://graph-video.beta.facebook.com).
 
 ### sendRequest()
-```
+```php
 public Facebook\FacebookResponse sendRequest(Facebook\FacebookRequest $request)
 ```
 Sends a non-batch request to Graph.
@@ -58,7 +58,7 @@ If there was an error processing the request before sending, a [`Facebook\Except
 If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](FacebookResponseException.md) will be thrown.
 
 ### sendBatchRequest()
-```
+```php
 public Facebook\FacebookBatchResponse sendBatchRequest(Facebook\FacebookBatchRequest $batchRequest)
 ```
 Sends a batch request to Graph.

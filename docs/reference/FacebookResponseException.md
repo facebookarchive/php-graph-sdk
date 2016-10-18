@@ -6,7 +6,7 @@ Represents an error response from the Graph API.
 
 Whenever a `FacebookResponseException` is thrown, you can access it's previous exception with the `getPrevious()` method to get more information on the specific type of error response that the Graph API returned.
 
-```
+```php
 try {
   // Some request to the Graph API
 } catch (Facebook\Exceptions\FacebookResponseException $e) {
