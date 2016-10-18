@@ -1,4 +1,3 @@
-<card>
 # Facebook\Helpers\FacebookCanvasHelper
 
 The `FacebookCanvasHelper` is used to obtain an access token or signed request when working within the context of an [app canvas](https://developers.facebook.com/docs/games/canvas).
@@ -6,9 +5,7 @@ The `FacebookCanvasHelper` is used to obtain an access token or signed request w
 ~~~
 Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 ~~~
-</card>
 
-<card>
 ## Usage {#usage}
 
 If your app is loaded through Canvas, Facebook sends a POST request to your app with a signed request.  This helper will handle validating and decrypting the signed request.
@@ -46,9 +43,7 @@ if (isset($accessToken)) {
 ~~~
 
 The `$accessToken` will be `null` if the signed request did not contain any OAuth 2.0 data to obtain the access token.
-</card>
 
-<card>
 ## Instance Methods {#instance-methods}
 
 ### __construct() {#construct}
@@ -56,17 +51,13 @@ The `$accessToken` will be `null` if the signed request did not contain any OAut
 public FacebookCanvasHelper __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
 ~~~~
 Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed request that was sent via POST if present.
-</card>
 
-<card>
 ### getAccessToken() {#get-access-token}
 ~~~
 public Facebook\AccessToken|null getAccessToken()
 ~~~
 Checks the signed request for authentication data and tries to obtain an access token access token.
-</card>
 
-<card>
 ### getUserId() {#get-user-id}
 ~~~
 public string|null getUserId()
@@ -92,28 +83,21 @@ if ($signedRequest) {
   $userId = $signedRequest->get('user_id');
 }
 ~~~
-</card>
 
-<card>
 ### getAppData() {#get-app-data}
 ~~~
 public string|null getAppData()
 ~~~
 Gets the value that is set in the `app_data` property if present.
-</card>
 
-<card>
 ### getSignedRequest() {#get-signed-request}
 ~~~
 public Facebook\SignedRequest|null getSignedRequest()
 ~~~
 Returns the signed request as an instance of [`Facebook\SignedRequest`](/docs/php/SignedRequest) if present.
-</card>
 
-<card>
 ### getRawSignedRequest() {#get-raw-signed-request}
 ~~~
 public string|null getRawSignedRequest()
 ~~~
 Returns the raw encoded signed request as a `string` if present in the POST variables or `null`.
-</card>

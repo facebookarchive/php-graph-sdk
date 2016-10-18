@@ -1,10 +1,7 @@
-<card>
 # Facebook service class for the Facebook SDK for PHP
 
 The Facebook SDK for PHP is made up of many components. The `Facebook\Facebook` service class provides an easy interface for working with all the components of the SDK.
-</card>
 
-<card>
 ## Facebook\Facebook {#overview}
 
 To instantiate a new `Facebook\Facebook` service, pass an array of configuration options to the constructor.
@@ -38,9 +35,7 @@ $res = $fb->get('/me', '{access-token}');
 $res = $fb->post('/me/feed', ['foo' => 'bar'], '{access-token}');
 $res = $fb->delete('/{node-id}', '{access-token}');
 ~~~~
-</card>
 
-<card>
 ## Configuration options {#config}
 
 Although the `Facebook\Facebook` service tries to make the SDK as easy as possible to use, it also makes it easy to customize with configuration options.
@@ -143,9 +138,7 @@ $fb = new Facebook([
 ~~~~
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
-</card>
 
-<card>
 ## Environment variables fallback {#env-vars}
 
 The only required configuration options are `app_id` and `app_secret`. However, the SDK will look to environment variables for the app ID and app secret.
@@ -155,9 +148,7 @@ To take advantage of this feature, simply set an environment variable named `FAC
 ~~~~
 $fb = new Facebook\Facebook();
 ~~~~
-</card>
 
-<card>
 # Instance Methods {#instance-methods}
 
 ## getApp() {#get-app}
@@ -552,4 +543,3 @@ try {
 
 echo 'Video ID: ' . $response['video_id'];
 ~~~~
-</card>

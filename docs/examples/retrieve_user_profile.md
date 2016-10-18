@@ -1,4 +1,3 @@
-<card>
 # Retrieve User Profile via the Graph API
 
 This example covers getting profile information for the current user and printing their name, using the Graph API and the Facebook SDK for PHP.
@@ -6,9 +5,7 @@ This example covers getting profile information for the current user and printin
 It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers).
 
 For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphUser`](/docs/php/GraphNode#user-instance-methods), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
-</card>
 
-<card>
 ## Example {#example}
 
 ~~~~
@@ -35,4 +32,3 @@ echo 'Name: ' . $user['name'];
 // OR
 // echo 'Name: ' . $user->getName();
 ~~~~
-</card>

@@ -1,10 +1,7 @@
-<card>
 # Video Upload Example
 
 This example covers uploading & posting a video to a user's timeline with the Facebook SDK for PHP.
-</card>
 
-<card>
 ## Example {#example}
 
 %FB(devsite:markdown-wiki:info-card {
@@ -70,4 +67,3 @@ $graphNode = $response->getGraphNode();
 
 echo 'Video ID: ' . $graphNode['id'];
 ~~~~
-</card>

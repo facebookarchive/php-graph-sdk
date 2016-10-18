@@ -1,10 +1,7 @@
-<card>
 # GraphEdge for the Facebook SDK for PHP
 
 When a list of nodes is returned from a Graph request, it can be cast as a `GraphEdge` which provides convenient ways of interacting with the data which includes pagination.
-</card>
 
-<card>
 ## Facebook\GraphNodes\GraphEdge {#overview}
 
 You can grab a `GraphEdge` from a response from Graph.
@@ -21,9 +18,7 @@ foreach ($graphEdge as $graphNode) {
   // . . .
 }
 ~~~~
-</card>
 
-<card>
 ## Pagination {#pagination}
 
 With the help of the `Facebook\Facebook` super service class, the `GraphEdge` collection can grab the next and previous sets of data.
@@ -38,9 +33,7 @@ $previousPageOfAlbums = $fb->previous($previousOfAlbums);
 ~~~~
 
 When the next or previous page returns no results, `$fb->next()` will return `null`.
-</card>
 
-<card>
 ## Deep Pagination {#deep-pagination}
 
 Sometimes Graph will return a list of nodes within a node. Paginating on these sub lists can be non-trivial. Fortunately, the `GraphEdge` collection takes the guesswork out and allows you to paginate deeply within a `GraphEdge`.
@@ -68,9 +61,7 @@ do {
   $pageCount++;
 } while ($pageCount < $maxPages && $pagesEdge = $fb->next($pagesEdge));
 ~~~~
-</card>
 
-<card>
 ## Method Reference {#method-reference}
 
 ### getMetaData() {#get-meta-data}
@@ -121,4 +112,3 @@ $likesEdge = $response->getGraphEdge();
 $totalCount = $likesEdge->getTotalCount();
 // Returns: 10
 ~~~~
-</card>
