@@ -26,7 +26,7 @@ try {
 | `Facebook\\Exceptions\\FacebookServerException`  | Thrown when Graph returns a server error.  |
 | `Facebook\\Exceptions\\FacebookThrottleException`  | Thrown when Graph returns a throttle error.  |
 
-These exceptions are derived from the [error responses from the Graph API](/docs/graph-api/using-graph-api/#errors).
+These exceptions are derived from the [error responses from the Graph API](https://developers.facebook.com/docs/graph-api/using-graph-api#errors).
 
 ## Instance Methods
 

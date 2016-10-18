@@ -122,14 +122,14 @@ The `FacebookRedirectLoginHelper` has to orchestrate a number of components from
 
 In order to prevent [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)'s, a unique value is generated with each login link and stored in a session.
 
-Most modern web frameworks have custom session handlers that allow you to manage your sessions with something other than the default flat-file storage. You can integrate your framework's custom session handling by coding to the [`PersistentDataInterface`](/docs/php/PersistentDataInterface).
+Most modern web frameworks have custom session handlers that allow you to manage your sessions with something other than the default flat-file storage. You can integrate your framework's custom session handling by coding to the [`PersistentDataInterface`](PersistentDataInterface.md).
 
 
 ### CSPRNG
 
-The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](/docs/php/PseudoRandomStringGeneratorInterface) allows you to inject your own custom CSPRNG.
+The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) allows you to inject your own custom CSPRNG.
 
 
 ### URL detection
 
-In order to not make you pass the callback URL to the `getAccessToken()` method, the SDK will do its best to detect the callback's URL for you. Most modern web frameworks have URL detection built-in. You can code your specific web framework's URL detection logic by coding to the [`UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
+In order to not make you pass the callback URL to the `getAccessToken()` method, the SDK will do its best to detect the callback's URL for you. Most modern web frameworks have URL detection built-in. You can code your specific web framework's URL detection logic by coding to the [`UrlDetectionInterface`](UrlDetectionInterface.md).

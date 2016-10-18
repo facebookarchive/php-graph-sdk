@@ -20,9 +20,9 @@ $request = new FacebookRequest(
 );
 ```
 
-Alternatively, you can make use of the [`request()` factory provided by `Facebook\Facebook`](/docs/php/Facebook#request) to create new `FacebookRequest` instances.
+Alternatively, you can make use of the [`request()` factory provided by `Facebook\Facebook`](Facebook.md#request) to create new `FacebookRequest` instances.
 
-The `FacebookRequest` entity does not actually make any calls to the Graph API, but instead just represents a request that can be sent to the Graph API later. This is most useful for making batch requests using [`Facebook\Facebook::sendBatchRequest()`](/docs/php/Facebook#send-batch-request) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/php/FacebookClient#send-batch-request).
+The `FacebookRequest` entity does not actually make any calls to the Graph API, but instead just represents a request that can be sent to the Graph API later. This is most useful for making batch requests using [`Facebook\Facebook::sendBatchRequest()`](Facebook.md#sendbatchrequest) or [`Facebook\FacebookClient::sendBatchRequest()`](FacebookClient.md#sendbatchrequest).
 
 Usage:
 
@@ -70,13 +70,13 @@ Returns the access token to be used for the request in the form of a string.
 ```
 public setApp(Facebook\FacebookApp $app)
 ```
-Sets the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
+Sets the [`Facebook\FacebookApp`](FacebookApp.md) entity used with this request.
 
 ### getApp()
 ```
 public Facebook\FacebookApp getApp()
 ```
-Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
+Returns the [`Facebook\FacebookApp`](FacebookApp.md) entity used with this request.
 
 ### getAppSecretProof()
 ```
@@ -168,7 +168,7 @@ Returns the Graph version prefix to be used with the request.
 ```
 public string getUrl()
 ```
-Returns the endpoint of the Graph URL for the request. This will include the Graph version prefix but will not include the host name. The host name is determined after the request is sent to [`Facebook\FacebookClient`](/docs/php/FacebookClient).
+Returns the endpoint of the Graph URL for the request. This will include the Graph version prefix but will not include the host name. The host name is determined after the request is sent to [`Facebook\FacebookClient`](FacebookClient.md).
 
 ```
 $fb = new Facebook\Facebook(/* . . . */);

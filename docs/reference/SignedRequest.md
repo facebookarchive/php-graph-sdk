@@ -6,14 +6,14 @@ The `Facebook\SignedRequest` entity represents a signed request.
 
 [Signed requests](https://developers.facebook.com/docs/facebook-login/using-login-with-games#checklogin) contain payloads of data that can be validated against a hash signature to ensure it is from Facebook. The `Facebook\SignedRequest` entity can validate a signed request signature and decode the payload.
 
-To instantiate a new `Facebook\SignedRequest` entity, pass the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity and raw signed request to the constructor.
+To instantiate a new `Facebook\SignedRequest` entity, pass the [`Facebook\FacebookApp`](FacebookApp.md) entity and raw signed request to the constructor.
 
 ```
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 $signedRequest = new Facebook\SignedRequest($fbApp, 'raw.signed_request');
 ```
 
-Usually `Facebook\SignedRequest` entities are obtained using one of the [helpers](/docs/php/sdk_reference#helpers).
+Usually `Facebook\SignedRequest` entities are obtained using one of the [helpers](../reference.md).
 
 ```
 $fb = new Facebook\Facebook([/* . . . */]);

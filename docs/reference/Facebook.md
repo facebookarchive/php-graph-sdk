@@ -66,10 +66,10 @@ The secret of your Facebook app (required).
 The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
 
 ### `enable_beta_mode`
-Enable [beta mode](/docs/support/beta-tier/) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
+Enable [beta mode](https://developers.facebook.com/docs/apps/beta-tier) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
 
 ### `default_graph_version`
-Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.8`. Defaults to the [latest version of Graph](/docs/apps/changelog).
+Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.8`. Defaults to the [latest version of Graph](https://developers.facebook.com/docs/apps/changelog).
 
 ### `http_client_handler`
 Allows you to overwrite the default HTTP client.
@@ -78,7 +78,7 @@ By default, the SDK will try to use cURL as the HTTP client. If a cURL implement
 
 If you wish to use Guzzle, you can set this value to `guzzle`, but it requires that you [install Guzzle](http://docs.guzzlephp.org/en/latest/) with composer.
 
-If you wish to write your own HTTP client, you can code your HTTP client to the `[Facebook\HttpClients\FacebookHttpClientInterface](/docs/php/FacebookHttpClientInterface)` and set this value to an instance of your custom client.
+If you wish to write your own HTTP client, you can code your HTTP client to the `Facebook\HttpClients\FacebookHttpClientInterface` and set this value to an instance of your custom client.
 
 ```
 $fb = new Facebook([
@@ -93,7 +93,7 @@ Allows you to overwrite the default persistent data store.
 
 By default, the SDK will try to use the native PHP session for the persistent data store. There is also an in-memory persistent data handler which is useful when running your script from the command line for example. You can force either implementation by setting this value to `session` or `memory`.
 
-If you wish to write your own persistent data handler, you can code your persistent data handler to the `[Facebook\PersistentData\PersistentDataInterface](/docs/php/PersistentDataInterface)` and set the value of `persistent_data_handler` to an instance of your custom handler.
+If you wish to write your own persistent data handler, you can code your persistent data handler to the [`Facebook\PersistentData\PersistentDataInterface`](PersistentDataInterface.md) and set the value of `persistent_data_handler` to an instance of your custom handler.
 
 ```
 $fb = new Facebook([
@@ -106,7 +106,7 @@ If any other value is provided an `InvalidArgumentException` will be thrown.
 ### `url_detection_handler`
 Allows you to overwrite the default URL detection logic.
 
-The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the `[Facebook\Url\UrlDetectionInterface](/docs/php/UrlDetectionInterface)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
+The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the ['Facebook\Url\UrlDetectionInterface'](UrlDetectionInterface.md)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
 
 ```
 $fb = new Facebook([
@@ -129,7 +129,7 @@ $fb = new Facebook([
 ]);
 ```
 
-You can write your own CSPRSG that implements the `[Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface](/docs/php/PseudoRandomStringGeneratorInterface)` and set the value of `pseudo_random_string_generator` to an instance of your custom generator.
+You can write your own CSPRSG that implements the [`Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) and set the value of `pseudo_random_string_generator` to an instance of your custom generator.
 
 ```
 $fb = new Facebook([
@@ -161,13 +161,13 @@ Returns the instance of `Facebook\FacebookApp` for the instantiated service.
 ```
 public Facebook\FacebookClient getClient()
 ```
-Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) for the instantiated service.
+Returns the instance of [`Facebook\FacebookClient`](FacebookClient.md) for the instantiated service.
 
 ## getOAuth2Client()
 ```
 public Facebook\Authentication\OAuth2Client getOAuth2Client()
 ```
-Returns an instance of [`Facebook\Authentication\OAuth2Client`](/docs/php/OAuth2Client).
+Returns an instance of `Facebook\Authentication\OAuth2Client`.
 
 ## getLastResponse()
 ```
@@ -179,19 +179,19 @@ Returns the last response received from the Graph API in the form of a `Facebook
 ```
 public Facebook\Url\UrlDetectionInterface getUrlDetectionHandler()
 ```
-Returns an instance of [`Facebook\Url\UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
+Returns an instance of [`Facebook\Url\UrlDetectionInterface`](UrlDetectionInterface.md).
 
 ## getDefaultAccessToken()
 ```
 public Facebook\Authentication\AccessToken|null getDefaultAccessToken()
 ```
-Returns the default fallback [`AccessToken`](/docs/php/AccessToken) entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
+Returns the default fallback [`AccessToken`](AccessToken.md) entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
 
 ## setDefaultAccessToken()
 ```
 public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
 ```
-Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](/docs/php/AccessToken).
+Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](AccessToken.md).
 
 ```
 $fb->setDefaultAccessToken('{my-access-token}');
@@ -233,7 +233,7 @@ $fb->get('/me');
 The access token (as a string or `AccessToken` entity) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
 
 `$eTag`
-[Graph supports eTags](/docs/reference/ads-api/etags-reference/). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
+[Graph supports eTags](https://developers.facebook.com/docs/marketing-api/etags). Set this to the eTag from a previous request to get a `304 Not Modified` response if the data has not changed.
 
 `$graphVersion`
 This will overwrite the Graph version that was set in the `default_graph_version` configuration option.
@@ -336,7 +336,7 @@ The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 `$requests`
 An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be an instance of `Facebook\FacebookRequest`.
 
-If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](/docs/graph-api/making-multiple-requests/#operations).
+If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests).
 
 ```
 $requests = [
@@ -347,14 +347,14 @@ $requests = [
 $batchResponse = $fb->sendBatchRequest($requests);
 ```
 
-[See a full batch example](/docs/php/howto/example_batch_request).
+[See a full batch example](../examples/batch_request.md).
 
 ## getRedirectLoginHelper()
 ```
 public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRedirectLoginHelper) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
+Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](FacebookRedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
 
 ```
 $helper = $fb->getRedirectLoginHelper();
@@ -365,7 +365,7 @@ $helper = $fb->getRedirectLoginHelper();
 public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
+Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](FacebookJavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
 
 ```
 $helper = $fb->getJavaScriptHelper();
@@ -376,7 +376,7 @@ $helper = $fb->getJavaScriptHelper();
 public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) which is used to access the signed request that is `POST`ed to canvas apps.
+Returns a [`Facebook\Helpers\FacebookCanvasHelper`](FacebookCanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
 
 ```
 $helper = $fb->getCanvasHelper();
@@ -387,7 +387,7 @@ $helper = $fb->getCanvasHelper();
 public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHelper) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
+Returns a [`Facebook\Helpers\FacebookPageTabHelper`](FacebookPageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
 
 ```
 $helper = $fb->getPageTabHelper();
@@ -398,7 +398,7 @@ $helper = $fb->getPageTabHelper();
 public Facebook\GraphNodes\GraphEdge|null next(Facebook\GraphNodes\GraphEdge $graphEdge)
 ```
 
-Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection. If the next page returns no results, `null` will be returned.
+Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphEdge`](GraphEdge.md) collection. If the next page returns no results, `null` will be returned.
 
 ```
 // Iterate over 5 pages max
@@ -499,7 +499,7 @@ public array videoToUpload(
   )
 ```
 
-Functionality to [upload video files in chunks](/docs/graph-api/video-uploads#resumable) was added to the Graph API in v2.3. The `uploadVideo()` method provides an easy API to take advantage of this new feature.
+Functionality to [upload video files in chunks](https://developers.facebook.com/docs/graph-api/video-uploads#resumable) was added to the Graph API in v2.3. The `uploadVideo()` method provides an easy API to take advantage of this new feature.
 
 ### Parameters
 
@@ -510,13 +510,13 @@ The ID or alias of the target node. This can be a user ID, page ID, event ID, gr
 The absolute or relative path to the video file to upload.
 
 `$metadata`
-All the metadata associated with the [Video node](/docs/graph-api/reference/video/).
+All the metadata associated with the [Video node](https://developers.facebook.com/docs/graph-api/reference/video).
 
 `$accessToken`
 The access token to use for this request. Falls back to the default access token if one exists.
 
 `$maxTransferTries`
-During the [transfer phase](/docs/graph-api/video-uploads#transfer) an upload can fail for a number of reasons. If the Graph API responds with an error that is resumable, the PHP SDK will retry uploading the chunk automatically. By default the PHP SDK will try to upload each chunk five times before throwing a `FacebookResponseException`.
+During the [transfer phase](https://developers.facebook.com/docs/graph-api/video-uploads#transfer) an upload can fail for a number of reasons. If the Graph API responds with an error that is resumable, the PHP SDK will retry uploading the chunk automatically. By default the PHP SDK will try to upload each chunk five times before throwing a `FacebookResponseException`.
 
 `$graphVersion`
 The version of the Graph API to use. The resumable upload feature did not become available until Graph v2.3.

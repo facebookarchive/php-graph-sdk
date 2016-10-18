@@ -84,7 +84,7 @@ if ($signedRequest) {
 ```
 public Facebook\SignedRequest|null getSignedRequest()
 ```
-Returns the signed request as a [`Facebook\SignedRequest`](/docs/php/SignedRequest) entity if present.
+Returns the signed request as a [`Facebook\SignedRequest`](SignedRequest.md) entity if present.
 
 ### getRawSignedRequest()
 ```

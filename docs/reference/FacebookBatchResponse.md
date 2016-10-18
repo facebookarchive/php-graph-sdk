@@ -43,13 +43,13 @@ var_dump($batchResponse);
 
 ## Instance Methods
 
-Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](FacebookResponse.md) entity, all the methods are inherited.
 
 ### getResponses()
 ```
 public array getResponses()
 ```
-Returns the array of [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
+Returns the array of [`Facebook\FacebookResponse`](FacebookResponse.md) entities that were returned from Graph.
 
 ## Array Access
 

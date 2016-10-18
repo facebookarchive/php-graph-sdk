@@ -13,7 +13,7 @@ To instantiate a new `Facebook\FacebookApp` entity, pass the app ID and app secr
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 ```
 
-Alternatively you can obtain the `Facebook\FacebookApp` entity from the [`Facebook\Facebook`](/docs/php/Facebook) super service class.
+Alternatively you can obtain the `Facebook\FacebookApp` entity from the [`Facebook\Facebook`](Facebook.md) super service class.
 
 ```
 $fb = new Facebook\Facebook([/* . . . */]);
@@ -28,7 +28,7 @@ You'll rarely be using the `FacebookApp` entity directly unless you're doing som
 ```
 public Facebook\Authentication\AccessToken getAccessToken()
 ```
-Returns an app access token in the form of an [`AccessToken`](/docs/php/AccessToken) entity.
+Returns an app access token in the form of an [`AccessToken`](AccessToken.md) entity.
 
 ## getId()
 ```
