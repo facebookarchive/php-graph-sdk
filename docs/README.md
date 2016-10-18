@@ -13,7 +13,7 @@ For installation & implementation instructions, look through the [Getting Starte
 The following examples demonstrate how you would accomplish common tasks with the Facebook SDK for PHP.
 
 - **Authentication & Signed Requests**
-  - [Facebook Login (OAuth 2.0)](./example/facebook_login.md)
+  - [Facebook Login (OAuth 2.0)](./examples/facebook_login.md)
   - [Obtaining an access token from the SDK for JavaScript](./examples/access_token_from_javascript.md)
   - [Obtaining an access token within a Facebook Canvas context](./examples/access_token_from_canvas.md)
   - [Obtaining an access token within a Facebook Page tab context](./examples/access_token_from_page_tab.md)
