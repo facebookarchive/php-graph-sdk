@@ -8,7 +8,7 @@ For more information, see the documentation for [`Facebook\Facebook`](/docs/php/
 
 ## Example
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -31,4 +31,4 @@ $user = $response->getGraphUser();
 echo 'Name: ' . $user['name'];
 // OR
 // echo 'Name: ' . $user->getName();
-~~~~
+```

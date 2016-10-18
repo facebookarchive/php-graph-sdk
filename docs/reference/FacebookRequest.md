@@ -6,7 +6,7 @@ Represents a request that will be sent to the Graph API.
 
 You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
-~~~~
+```
 use Facebook\FacebookRequest;
 
 $request = new FacebookRequest(  
@@ -18,7 +18,7 @@ $request = new FacebookRequest(
   string $eTag,
   string $graphVersion
 );
-~~~~
+```
 
 Alternatively, you can make use of the [`request()` factory provided by `Facebook\Facebook`](/docs/php/Facebook#request) to create new `FacebookRequest` instances.
 
@@ -26,7 +26,7 @@ The `FacebookRequest` entity does not actually make any calls to the Graph API, 
 
 Usage:
 
-~~~~
+```
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 $request = new Facebook\FacebookRequest($fbApp, '{access-token}', 'GET', '/me');
 
@@ -51,129 +51,129 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'User name: ' . $graphNode['name'];
-~~~~
+```
 
 ## Instance Methods
 
 ### setAccessToken()
-~~~~
+```
 public setAccessToken(string|Facebook\AccessToken $accessToken)
-~~~~
+```
 
 ### getAccessToken()
-~~~~
+```
 public string getAccessToken()
-~~~~
+```
 Returns the access token to be used for the request in the form of a string.
 
 ### setApp()
-~~~~
+```
 public setApp(Facebook\FacebookApp $app)
-~~~~
+```
 Sets the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 
 ### getApp()
-~~~~
+```
 public Facebook\FacebookApp getApp()
-~~~~
+```
 Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
 
 ### getAppSecretProof()
-~~~~
+```
 public string getAppSecretProof()
-~~~~
+```
 Returns the [app secret proof](https://developers.facebook.com/docs/graph-api/securing-requests/#appsecret_proof) to sign the request.
 
 ### setMethod()
-~~~~
+```
 public setMethod(string $method)
-~~~~
+```
 Sets the HTTP verb to use for the request.
 
 ### getMethod()
-~~~~
+```
 public string setMethod()
-~~~~
+```
 Returns the HTTP verb to use for the request.
 
 ### setEndpoint()
-~~~~
+```
 public setEndpoint(string $endpoint)
-~~~~
+```
 Sets the Graph URL endpoint to be used with the request. The endpoint must be excluding the host name and Graph version number prefix.
 
-~~~~
+```
 $request->setEndpoint('/me');
-~~~~
+```
 
 ### getEndpoint()
-~~~~
+```
 public string getEndpoint()
-~~~~
+```
 Returns the Graph URL endpoint to be used with the request.
 
 ### setHeaders()
-~~~~
+```
 public setHeaders(array $headers)
-~~~~
+```
 Sets additional request headers to be use with the request. The supplied headers will be merged with the existing headers. The headers should be sent as an associative array with the key being the header name and the value being the header value.
 
-~~~~
+```
 $request->setHeaders([
   'X-foo-header' => 'Something',
 ]);
-~~~~
+```
 
 ### getHeaders()
-~~~~
+```
 public array getHeaders()
-~~~~
+```
 Returns the request headers that will be sent with the request. The eTag headers `If-None-Match` are appended automatically.
 
 ### setETag()
-~~~~
+```
 public setETag(string $eTag)
-~~~~
+```
 Sets the eTag that will be using for matching the `If-None-Match` header.
 
 ### setParams()
-~~~~
+```
 public setParams(array $params)
-~~~~
+```
 For `GET` requests, the array of params will be converted to a query string and appended to the URL.
 
-~~~~
+```
 $request->setParams([
   'foo' => 'bar',
   'limit' => 10,
 ]);
 // /endpoint?foo=bar&limit=10
-~~~~
+```
 
 For `POST` requests, the array of params will be sent in the `POST` body encoded as `application/x-www-form-urlencoded` for most request. If the request includes a file upload the params will be encoded as `multipart/form-data`.
 
 ### getParams()
-~~~~
+```
 public array getParams()
-~~~~
+```
 Returns an array of params to be sent with the request. The `access_token` and `appsecret_proof` params will be automatically appended to the array of params.
 
 ### getGraphVersion()
-~~~~
+```
 public string getGraphVersion()
-~~~~
+```
 Returns the Graph version prefix to be used with the request.
 
 ### getUrl()
-~~~~
+```
 public string getUrl()
-~~~~
+```
 Returns the endpoint of the Graph URL for the request. This will include the Graph version prefix but will not include the host name. The host name is determined after the request is sent to [`Facebook\FacebookClient`](/docs/php/FacebookClient).
 
-~~~~
+```
 $fb = new Facebook\Facebook(/* . . . */);
 $request = $fb->request('GET', '/me', ['fields' => 'id,name']);
 
 $url = $request->getUrl();
 // /v2.6/me?fields=id,name&access_token=token&appsecret_proof=proof
-~~~~
+```

@@ -11,44 +11,44 @@ In order to make requests to the Graph API, you need to [create a Facebook app](
 
 To instantiate a new `Facebook\FacebookApp` entity, pass the app ID and app secret to the constructor.
 
-~~~~
+```
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
-~~~~
+```
 
 Alternatively you can obtain the `Facebook\FacebookApp` entity from the [`Facebook\Facebook`](/docs/php/Facebook) super service class.
 
-~~~~
+```
 $fb = new Facebook\Facebook([/* . . . */]);
 $fbApp = $fb->getApp();
-~~~~
+```
 
 You'll rarely be using the `FacebookApp` entity directly unless you're doing some extreme customizations of the SDK for PHP. But this entity plays an important role in the internal workings of the SDK for PHP.
 
 ## Instance Methods
 
 ## getAccessToken()
-~~~~
+```
 public Facebook\Authentication\AccessToken getAccessToken()
-~~~~
+```
 Returns an app access token in the form of an [`AccessToken`](/docs/php/AccessToken) entity.
 
 ## getId()
-~~~~
+```
 public string getId()
-~~~~
+```
 Returns the app id.
 
 ## getSecret()
-~~~~
+```
 public string getSecret()
-~~~~
+```
 Returns the app secret.
 
 ## Serialization
 
 The `Facebook\FacebookApp` entity can be serialized and unserialized.
 
-~~~~
+```
 $fbApp = new Facebook\FacebookApp('foo-app-id', 'foo-app-secret');
 
 $serializedFacebookApp = serialize($fbApp);
@@ -57,4 +57,4 @@ $serializedFacebookApp = serialize($fbApp);
 $unserializedFacebookApp = unserialize($serializedFacebookApp);
 echo $unserializedFacebookApp->getAccessToken();
 // foo-app-id|foo-app-secret
-~~~~
+```

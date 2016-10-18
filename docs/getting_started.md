@@ -22,22 +22,23 @@ There are two methods to install the Facebook SDK for PHP. The recommended insta
 
 [Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
 
-~~~
+```
 composer require facebook/php-sdk-v4
-~~~
+
 
 %FB(devsite:markdown-wiki:info-card {
   content: "The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.",
   type: 'info',
 })
+```
 
 Once you do this, composer will edit your `composer.json` file and download the latest version of the SDK and put it in the `/vendor/` directory.
 
 Make sure to include the Composer autoloader at the top of your script.
 
-~~~
+```
 require_once __DIR__ . '/vendor/autoload.php';
-~~~
+```
 
 ## Manually installing (if you really have to)
 
@@ -52,9 +53,9 @@ First, download the source code and unzip it wherever you like in your project.
 
 Then include the autoloader provided in the SDK at the top of your script.
 
-~~~
+```
 require_once __DIR__ . '/path/to/facebook-php-sdk-v4/src/Facebook/autoload.php';
-~~~
+```
 
 The autoloader should be able to auto-detect the proper location of the source code.
 
@@ -76,16 +77,16 @@ The path the the core SDK files should now be located in `/var/html/facebook-sdk
 
 Assuming we have a script called `index.php` in the root of our web project, we need to include the autoloader at the top of our script.
 
-~~~
+```
 require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
-~~~
+```
 
 If the autoloader is having trouble detecting the path to the source files, we can define the location of the source code before the `require_once` statement.
 
-~~~
+```
 define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v5/');
 require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
-~~~
+```
 
 ## Configuration and setup
 
@@ -96,13 +97,13 @@ require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 
 Before we can send requests to the Graph API, we need to load our app configuration into the `Facebook\Facebook` service.
 
-~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
   'default_graph_version' => 'v2.6',
   ]);
-~~~
+```
 
 You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](/apps).
 
@@ -129,7 +130,7 @@ For most websites, you'll use the [`Facebook\Helpers\FacebookRedirectLoginHelper
   type: 'info',
 })
 
-~~~
+```
 # login.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -138,14 +139,14 @@ $permissions = ['email', 'user_likes']; // optional
 $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-~~~
+```
 
 %FB(devsite:markdown-wiki:info-card {
   content: "The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts.",
   type: 'warning',
 })
 
-~~~
+```
 # login-callback.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -169,7 +170,7 @@ if (isset($accessToken)) {
   // Now you can redirect to another page and use the
   // access token from $_SESSION['facebook_access_token']
 }
-~~~
+```
 
 
 ### Obtaining an access token from a Facebook Canvas context
@@ -181,7 +182,7 @@ If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebo
   type: 'warning',
 })
 
-~~~
+```
 # example-canvas-app.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -201,7 +202,7 @@ try {
 if (isset($accessToken)) {
   // Logged in.
 }
-~~~
+```
 
 %FB(devsite:markdown-wiki:info-card {
   content: "If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHelper)",
@@ -213,7 +214,7 @@ if (isset($accessToken)) {
 
 If you're already using the Facebook SDK for JavaScript to authenticate users, you can obtain the access token with PHP by using the [FacebookJavaScriptHelper](/docs/php/FacebookJavaScriptHelper). The `getAccessToken()` method will return an [`AccessToken`](/docs/php/AccessToken) entity.
 
-~~~
+```
 # example-obtain-from-js-cookie-app.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -233,7 +234,7 @@ try {
 if (isset($accessToken)) {
   // Logged in
 }
-~~~
+```
 
 %FB(devsite:markdown-wiki:info-card {
   content: "Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](/docs/javascript/reference/FB.init). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.",
@@ -246,13 +247,13 @@ When a user first logs into your app, the access token your app receives will be
 
 To extend an access token, you can make use of the [`OAuth2Client`](/docs/php/OAuth2Client).
 
-~~~
+```
 // OAuth 2.0 client handler
 $oAuth2Client = $fb->getOAuth2Client();
 
 // Exchanges a short-lived access token for a long-lived one
 $longLivedAccessToken = $oAuth2Client->getLongLivedAccessToken('{access-token}');
-~~~
+```
 
 [See more about long-lived and short-lived access tokens](/docs/facebook-login/access-tokens#extending).
 
@@ -262,7 +263,7 @@ Once you have an instance of the `Facebook\Facebook` service and obtained an acc
 
 In this example we will send a GET request to the Graph API endpoint `/me`. The `/me` endpoint is a special alias to the [user node endpoint](/docs/graph-api/reference/user) that references the user or Page making the request.
 
-~~~
+```
 $fb = new Facebook\Facebook([/* . . . */]);
 
 // Sets the default fallback access token so we don't have to pass it to each request
@@ -282,7 +283,7 @@ try {
 }
 
 echo 'Logged in as ' . $userNode->getName();
-~~~
+```
 
 The `get()` method will return a [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) which is an entity that represents an HTTP response from the Graph API.
 
@@ -290,7 +291,7 @@ To get the response in the form of a nifty collection, we call `getGraphUser()` 
 
 If you don't care about fancy collections and just want the response as a plain-old array, you can call the `getDecodedBody()` method on the `FacebookResponse` entity.
 
-~~~
+```
 try {
   $response = $fb->get('/me');
 } catch(Facebook\Exceptions\FacebookSDKException $e) {
@@ -299,6 +300,6 @@ try {
 }
 
 $plainOldArray = $response->getDecodedBody();
-~~~
+```
 
 For a full list of all of the components that make up the SDK for PHP, see the [SDK for PHP reference page](/docs/php/reference).

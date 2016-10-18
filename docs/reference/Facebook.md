@@ -6,18 +6,18 @@ The Facebook SDK for PHP is made up of many components. The `Facebook\Facebook` 
 
 To instantiate a new `Facebook\Facebook` service, pass an array of configuration options to the constructor.
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
   'default_graph_version' => 'v2.6',
   // . . .
   ]);
-~~~~
+```
 
 Usage:
 
-~~~~
+```
 // Send a GET request
 $response = $fb->get('/me');
 
@@ -26,15 +26,15 @@ $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 
 // Send a DELETE request
 $response = $fb->delete('/{node-id}');
-~~~~
+```
 
 If you don't provide a `default_access_token` in the configuration options, or you wish to use a different access token than the default, you can explicitly pass the access token as an argument to the `get()`, `post()`, and `delete()` methods.
 
-~~~~
+```
 $res = $fb->get('/me', '{access-token}');
 $res = $fb->post('/me/feed', ['foo' => 'bar'], '{access-token}');
 $res = $fb->delete('/{node-id}', '{access-token}');
-~~~~
+```
 
 ## Configuration options
 
@@ -42,7 +42,7 @@ Although the `Facebook\Facebook` service tries to make the SDK as easy as possib
 
 Full configuration options list:
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -54,7 +54,7 @@ $fb = new Facebook\Facebook([
   'url_detection_handler' => new MyUrlDetectionHandler(),
   'pseudo_random_string_generator' => new MyPseudoRandomStringGenerator(),
 ]);
-~~~~
+```
 
 ### `app_id`
 The ID of your Facebook app (required).
@@ -80,11 +80,11 @@ If you wish to use Guzzle, you can set this value to `guzzle`, but it requires t
 
 If you wish to write your own HTTP client, you can code your HTTP client to the `[Facebook\HttpClients\FacebookHttpClientInterface](/docs/php/FacebookHttpClientInterface)` and set this value to an instance of your custom client.
 
-~~~~
+```
 $fb = new Facebook([
   'http_client_handler' => new MyCustomHttpClient(),
 ]);
-~~~~
+```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
@@ -95,11 +95,11 @@ By default, the SDK will try to use the native PHP session for the persistent da
 
 If you wish to write your own persistent data handler, you can code your persistent data handler to the `[Facebook\PersistentData\PersistentDataInterface](/docs/php/PersistentDataInterface)` and set the value of `persistent_data_handler` to an instance of your custom handler.
 
-~~~~
+```
 $fb = new Facebook([
   'persistent_data_handler' => new MyCustomPersistentDataHandler(),
 ]);
-~~~~
+```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
@@ -108,11 +108,11 @@ Allows you to overwrite the default URL detection logic.
 
 The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the `[Facebook\Url\UrlDetectionInterface](/docs/php/UrlDetectionInterface)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
 
-~~~~
+```
 $fb = new Facebook([
   'url_detection_handler' => new MyUrlDetectionHandler(),
 ]);
-~~~~
+```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
@@ -123,19 +123,19 @@ Generating random strings in PHP is easy but generating _cryptographically secur
 
 You can force a specific implementation of the CSPRSG's provided in the SDK by setting `pseudo_random_string_generator` to one of the following methods: `mcrypt`, `openssl` and `urandom`.
 
-~~~~
+```
 $fb = new Facebook([
   'pseudo_random_string_generator' => 'openssl',
 ]);
-~~~~
+```
 
 You can write your own CSPRSG that implements the `[Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface](/docs/php/PseudoRandomStringGeneratorInterface)` and set the value of `pseudo_random_string_generator` to an instance of your custom generator.
 
-~~~~
+```
 $fb = new Facebook([
   'pseudo_random_string_generator' => new MyPseudoRandomStringGenerator(),
 ]);
-~~~~
+```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
 
@@ -145,89 +145,89 @@ The only required configuration options are `app_id` and `app_secret`. However, 
 
 To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service without setting any configuration in the constructor.
 
-~~~~
+```
 $fb = new Facebook\Facebook();
-~~~~
+```
 
 # Instance Methods
 
 ## getApp()
-~~~~
+```
 public FacebookApp getApp()
-~~~~
+```
 Returns the instance of `Facebook\FacebookApp` for the instantiated service.
 
 ## getClient()
-~~~~
+```
 public Facebook\FacebookClient getClient()
-~~~~
+```
 Returns the instance of [`Facebook\FacebookClient`](/docs/php/FacebookClient) for the instantiated service.
 
 ## getOAuth2Client()
-~~~~
+```
 public Facebook\Authentication\OAuth2Client getOAuth2Client()
-~~~~
+```
 Returns an instance of [`Facebook\Authentication\OAuth2Client`](/docs/php/OAuth2Client).
 
 ## getLastResponse()
-~~~~
+```
 public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
-~~~~
+```
 Returns the last response received from the Graph API in the form of a `Facebook\FacebookResponse` or `Facebook\FacebookBatchResponse`.
 
 ## getUrlDetectionHandler()
-~~~~
+```
 public Facebook\Url\UrlDetectionInterface getUrlDetectionHandler()
-~~~~
+```
 Returns an instance of [`Facebook\Url\UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
 
 ## getDefaultAccessToken()
-~~~~
+```
 public Facebook\Authentication\AccessToken|null getDefaultAccessToken()
-~~~~
+```
 Returns the default fallback [`AccessToken`](/docs/php/AccessToken) entity that is being used with every request to Graph. This value can be set with the configuration option `default_access_token` or by using `setDefaultAccessToken()`.
 
 ## setDefaultAccessToken()
-~~~~
+```
 public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
-~~~~
+```
 Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](/docs/php/AccessToken).
 
-~~~~
+```
 $fb->setDefaultAccessToken('{my-access-token}');
 
 // . . . OR . . .
 
 $accessToken = new Facebook\Authentication\AccessToken('{my-access-token}');
 $fb->setDefaultAccessToken($accessToken);
-~~~~
+```
 
 This setting will overwrite the value from `default_access_token` option if it was passed to the `Facebook\Facebook` constructor.
 
 ## getDefaultGraphVersion()
-~~~~
+```
 public string getDefaultGraphVersion()
-~~~~
+```
 Returns the default version of Graph. If the `default_graph_version` configuration option was not set, this will default to `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
 
 ## get()
-~~~~
+```
 public Facebook\FacebookResponse get(
   string $endpoint,
   string|AccessToken|null $accessToken,
   string|null $eTag,
   string|null $graphVersion
 )
-~~~~
+```
 
 Sends a GET request to Graph and returns a `Facebook\FacebookResponse`.
 
 `$endpoint`
 The url to send to Graph without the version prefix (required).
 
-~~~
+```
 $fb->get('/me');
-~~~
+```
 
 `$accessToken`
 The access token (as a string or `AccessToken` entity) to use for the request. If none is provided, the SDK will assume the value from the `default_access_token` configuration option if it was set.
@@ -239,7 +239,7 @@ The access token (as a string or `AccessToken` entity) to use for the request. I
 This will overwrite the Graph version that was set in the `default_graph_version` configuration option.
 
 ## post()
-~~~~
+```
 public Facebook\FacebookResponse post(
   string $endpoint,
   array $params,
@@ -247,7 +247,7 @@ public Facebook\FacebookResponse post(
   string|null $eTag,
   string|null $graphVersion
 )
-~~~~
+```
 
 Sends a POST request to Graph and returns a `Facebook\FacebookResponse`.
 
@@ -256,12 +256,12 @@ The arguments are the same as `get()` above with the exception of `$params`.
 `$params`
 The associative array of params you want to send in the body of the POST request.
 
-~~~~
+```
 $response = $fb->post('/me/feed', ['message' => 'Foo message']);
-~~~~
+```
 
 ## delete()
-~~~~
+```
 public Facebook\FacebookResponse delete(
   string $endpoint,
   array $params,
@@ -269,18 +269,18 @@ public Facebook\FacebookResponse delete(
   string|null $eTag,
   string|null $graphVersion
 )
-~~~~
+```
 
 Sends a DELETE request to Graph and returns a `Facebook\FacebookResponse`.
 
 The arguments are the same as `post()` above.
 
-~~~~
+```
 $response = $fb->delete('/{node-id}', ['object' => '1234']);
-~~~~
+```
 
 ## request()
-~~~~
+```
 public Facebook\FacebookRequest request(
   string $method,
   string $endpoint,
@@ -289,7 +289,7 @@ public Facebook\FacebookRequest request(
   string|null $eTag,
   string|null $graphVersion
 )
-~~~~
+```
 
 Instantiates a new `Facebook\FacebookRequest` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
 
@@ -298,12 +298,12 @@ The arguments are the same as `post()` above with the exception of `$method`.
 `$method`
 The HTTP request verb to use for this request. This can be set to any verb that the `$graphVersion` of Graph supports, e.g. `GET`, `POST`, `DELETE`, etc.
 
-~~~~
+```
 $request = $fb->request('GET', '/{node-id}');
-~~~~
+```
 
 ## sendRequest()
-~~~~
+```
 public Facebook\FacebookResponse sendRequest(
   string $method,
   string $endpoint,
@@ -312,22 +312,22 @@ public Facebook\FacebookResponse sendRequest(
   string|null $eTag,
   string|null $graphVersion
 )
-~~~~
+```
 
 Sends a request to the Graph API.
 
-~~~~
+```
 $response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.6');
-~~~~
+```
 
 ## sendBatchRequest()
-~~~~
+```
 public Facebook\FacebookBatchResponse sendBatchRequest(
   array $requests,
   string|AccessToken|null $accessToken,
   string|null $graphVersion
 )
-~~~~
+```
 
 Sends an array of `Facebook\FacebookRequest` entities as a batch request to Graph.
 
@@ -338,69 +338,69 @@ An array of `Facebook\FacebookRequest` entities. This can be a numeric or associ
 
 If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](/docs/graph-api/making-multiple-requests/#operations).
 
-~~~~
+```
 $requests = [
   'me' => $fb->request('GET', '/me'),
   'you' => $fb->request('GET', '/1337', [], '{user-b-access-token}'),
   'my_post' => $fb->request('POST', '/1337/feed', ['message' => 'Hi!']),
 ];
 $batchResponse = $fb->sendBatchRequest($requests);
-~~~~
+```
 
 [See a full batch example](/docs/php/howto/example_batch_request).
 
 ## getRedirectLoginHelper()
-~~~~
+```
 public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
-~~~~
+```
 
 Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](/docs/php/FacebookRedirectLoginHelper) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
 
-~~~~
+```
 $helper = $fb->getRedirectLoginHelper();
-~~~~
+```
 
 ## getJavaScriptHelper()
-~~~~
+```
 public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
-~~~~
+```
 
 Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](/docs/php/FacebookJavaScriptHelper) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
 
-~~~~
+```
 $helper = $fb->getJavaScriptHelper();
-~~~~
+```
 
 ## getCanvasHelper()
-~~~~
+```
 public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
-~~~~
+```
 
 Returns a [`Facebook\Helpers\FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) which is used to access the signed request that is `POST`ed to canvas apps.
 
-~~~~
+```
 $helper = $fb->getCanvasHelper();
-~~~~
+```
 
 ## getPageTabHelper()
-~~~~
+```
 public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
-~~~~
+```
 
 Returns a [`Facebook\Helpers\FacebookPageTabHelper`](/docs/php/FacebookPageTabHelper) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
 
-~~~~
+```
 $helper = $fb->getPageTabHelper();
-~~~~
+```
 
 ## next()
-~~~~
+```
 public Facebook\GraphNodes\GraphEdge|null next(Facebook\GraphNodes\GraphEdge $graphEdge)
-~~~~
+```
 
 Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphEdge`](/docs/php/GraphEdge) collection. If the next page returns no results, `null` will be returned.
 
-~~~~
+```
 // Iterate over 5 pages max
 $maxPages = 5;
 
@@ -425,23 +425,23 @@ if (count($photosEdge) > 0) {
     $pageCount++;
   } while ($pageCount < $maxPages && $photosEdge = $fb->next($photosEdge));
 }
-~~~~
+```
 
 ## previous()
-~~~~
+```
 public Facebook\GraphNodes\GraphEdge|null previous(Facebook\GraphNodes\GraphEdge $graphEdge)
-~~~~
+```
 
 Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphEdge` collection. Functions just like `next()` above, but in the opposite direction of pagination.
 
 ## fileToUpload()
-~~~~
+```
 public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
-~~~~
+```
 
 When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` entity that can be used in the params in a POST request to Graph.
 
-~~~~
+```
 // Upload a photo for a user
 $data = [
   'message' => 'A neat photo upload example. Neat.',
@@ -458,16 +458,16 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Photo ID: ' . $graphNode['id'];
-~~~~
+```
 
 ## videoToUpload()
-~~~~
+```
 public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
-~~~~
+```
 
 Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the SDK for PHP will automatically point the request to the `graph-video.facebook.com` host name for you.
 
-~~~~
+```
 // Upload a video for a user
 $data = [
   'title' => 'My awesome video',
@@ -485,10 +485,10 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Video ID: ' . $graphNode['id'];
-~~~~
+```
 
 ## uploadVideo()
-~~~~
+```
 public array videoToUpload(
   string $target,
   string $pathToFile,
@@ -497,7 +497,7 @@ public array videoToUpload(
   int $maxTransferTries = 5,
   string $graphVersion = null
   )
-~~~~
+```
 
 Functionality to [upload video files in chunks](/docs/graph-api/video-uploads#resumable) was added to the Graph API in v2.3. The `uploadVideo()` method provides an easy API to take advantage of this new feature.
 
@@ -527,7 +527,7 @@ The array that is returned will contain two keys; `video_id` with the ID of the 
 
 ### Example
 
-~~~~
+```
 // Upload a video for a user (chunked)
 $data = [
   'title' => 'My awesome video',
@@ -542,4 +542,4 @@ try {
 }
 
 echo 'Video ID: ' . $response['video_id'];
-~~~~
+```

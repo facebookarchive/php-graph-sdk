@@ -10,7 +10,7 @@ In this example, the PHP script that generates the login link is called `/login.
 
 ## /login.php
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -23,11 +23,11 @@ $permissions = ['email']; // Optional permissions
 $loginUrl = $helper->getLoginUrl('https://example.com/fb-callback.php', $permissions);
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-~~~~
+```
 
 ## /fb-callback.php
 
-~~~~
+```
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -98,4 +98,4 @@ $_SESSION['fb_access_token'] = (string) $accessToken;
 // User is logged in with a long-lived access token.
 // You can redirect them to a members-only page.
 //header('Location: https://example.com/members.php');
-~~~~
+```
