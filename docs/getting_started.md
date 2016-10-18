@@ -227,7 +227,7 @@ if (isset($accessToken)) {
 
 When a user first logs into your app, the access token your app receives will be a short-lived access token that lasts about 2 hours. It's generally a good idea to exchange the short-lived access token for a long-lived access token that lasts about 60 days.
 
-To extend an access token, you can make use of the [`OAuth2Client`](reference/Facebook.md#getOAuth2Client()).
+To extend an access token, you can make use of the [`OAuth2Client`](reference/Facebook.md#getoauth2client).
 
 ```
 // OAuth 2.0 client handler
@@ -269,7 +269,7 @@ echo 'Logged in as ' . $userNode->getName();
 
 The `get()` method will return a [`Facebook\FacebookResponse`](reference/FacebookResponse.md) which is an entity that represents an HTTP response from the Graph API.
 
-To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#GraphNode-instance-methods) entity which represents a user node.
+To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphnode-instance-methods) entity which represents a user node.
 
 If you don't care about fancy collections and just want the response as a plain-old array, you can call the `getDecodedBody()` method on the `FacebookResponse` entity.
 
