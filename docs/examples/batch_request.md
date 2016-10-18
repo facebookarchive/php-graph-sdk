@@ -86,7 +86,7 @@ There five requests being made in this batch requests.
 
 If the request was successful, the user should have a new status update similar to this:
 
-```php
+```
 My name is Foo User.
 
 I like this page: Facebook Developers.
