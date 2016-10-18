@@ -98,23 +98,11 @@ The `GraphUser` collection represents a [User](https://developers.facebook.com/d
 
 The following properties on the `GraphUser` collection will get automatically cast as `GraphNode` subtypes:
 
-%FB(devsite:markdown-wiki:table {
-  columns: ['Property','GraphNode subtype',],
-  rows: [
-    [
-      '`hometown`',
-      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
-    ],
-    [
-      '`location`',
-      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
-    ],
-    [
-      '`significant_other`',
-      '[`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)',
-    ],
-  ],
-})
+| Property  | GraphNode subtype |
+| ------------- | ------------- |
+| `hometown` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)  |
+| `location`  | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
+| `significant_other`  | [`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)  |
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -186,23 +174,12 @@ The `GraphPage` collection represents a [Page](https://developers.facebook.com/d
 
 The following properties on the `GraphPage` collection will get automatically cast as `GraphNode` subtypes:
 
-%FB(devsite:markdown-wiki:table {
-  columns: ['Property','GraphNode subtype',],
-  rows: [
-    [
-      '`best_page`',
-      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
-    ],
-    [
-      '`global_brand_parent_page`',
-      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
-    ],
-    [
-      '`location`',
-      '[`Facebook\\GraphNodes\\GraphLocation`](#location-instance-methods)',
-    ],
-  ],
-})
+| Property  | GraphNode subtype |
+| ------------- | ------------- |
+| `best_page` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)  |
+| `global_brand_parent_page`  | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
+| `location`  | [`Facebook\\GraphNodes\\GraphLocation`](#location-instance-methods)  |
+
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -262,19 +239,10 @@ The `GraphAlbum` collection represents an [Album](https://developers.facebook.co
 
 The following properties on the `GraphAlbum` collection will get automatically cast as `GraphNode` subtypes:
 
-%FB(devsite:markdown-wiki:table {
-  columns: ['Property','GraphNode subtype',],
-  rows: [
-    [
-      '`from`',
-      '[`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)',
-    ],
-    [
-      '`place`',
-      '[`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)',
-    ],
-  ],
-})
+| Property  | GraphNode subtype |
+| ------------- | ------------- |
+| `from` | [`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)  |
+| `place` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
 
 All getter methods return `null` if the property does not exist on the node.
 
