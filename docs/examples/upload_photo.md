@@ -6,7 +6,7 @@ It assumes that you've already acquired an access token using one of the helper 
 
 For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FileUpload\FacebookFile`](/docs/php/FacebookFile), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphNode`](/docs/php/GraphNode), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
 
-## Example {#example}
+## Example
 
 ~~~~
 $fb = new Facebook\Facebook([

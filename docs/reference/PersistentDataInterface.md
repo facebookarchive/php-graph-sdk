@@ -2,7 +2,7 @@
 
 The persistent data handler interface stores values in a persistent data store. By default the SDK for PHP uses native PHP sessions to store the persistent data. You can overwrite this behavior by coding to the `Facebook\PersistentData\PersistentDataInterface`.
 
-## Facebook\PersistentData\PersistentDataInterface {#overview}
+## Facebook\PersistentData\PersistentDataInterface
 
 If you're using a web framework that handles persistent data for you, you might want to code a custom persistent data handler to ensure that your persistent storage is being handled consistently.
 
@@ -55,15 +55,15 @@ $myPersistentDataHandler = new MyLaravelPersistentDataHandler();
 $helper = new FacebookRedirectLoginHelper($fbApp, $myPersistentDataHandler);
 ~~~~
 
-## Method Reference {#method-reference}
+## Method Reference
 
-### get() {#get}
+### get()
 ~~~~
 public mixed get(string $key)
 ~~~~
 Returns a value from the persistent data store or `null` if the value does not exist.
 
-### set() {#set}
+### set()
 ~~~~
 public void set(string $key, mixed $value)
 ~~~~

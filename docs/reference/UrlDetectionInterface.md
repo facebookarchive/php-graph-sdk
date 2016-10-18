@@ -2,7 +2,7 @@
 
 The URL detection interface allows you to overwrite the default URL detection logic by coding to the `Facebook\Url\UrlDetectionInterface`.
 
-## Facebook\Url\UrlDetectionInterface {#overview}
+## Facebook\Url\UrlDetectionInterface
 
 If you're using a web framework that handles routes and URL generation for you, you might want to code a custom URL detection handler to ensure that your URL's are being generated consistently.
 
@@ -42,9 +42,9 @@ $myUrlDetectionHandler = new MyLaravelUrlDetectionHandler();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, $myUrlDetectionHandler);
 ~~~~
 
-## Method Reference {#method-reference}
+## Method Reference
 
-### getCurrentUrl() {#get-current-url}
+### getCurrentUrl()
 ~~~~
 public string getCurrentUrl()
 ~~~~

@@ -2,7 +2,7 @@
 
 The cryptographically secure pseudo-random string generator interface allows you to overwrite the default CSPRSG logic by coding to the `Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface`.
 
-## Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface {#overview}
+## Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface
 
 By default the SDK will attempt to generate a cryptographically secure random string using a number of methods. If a cryptographically secure method is not detected, a `Facebook\Exceptions\FacebookSDKException` will be thrown.
 
@@ -50,9 +50,9 @@ $myPseudoRandomStringGenerator = new MyCustomPseudoRandomStringGenerator();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);
 ~~~~
 
-## Method Reference {#method-reference}
+## Method Reference
 
-### getPseudoRandomString() {#get-pseudo-random-string}
+### getPseudoRandomString()
 ~~~~
 public string getPseudoRandomString(int $length)
 ~~~~

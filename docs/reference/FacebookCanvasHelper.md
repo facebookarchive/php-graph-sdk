@@ -6,7 +6,7 @@ The `FacebookCanvasHelper` is used to obtain an access token or signed request w
 Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 ~~~
 
-## Usage {#usage}
+## Usage
 
 If your app is loaded through Canvas, Facebook sends a POST request to your app with a signed request.  This helper will handle validating and decrypting the signed request.
 
@@ -44,7 +44,7 @@ if (isset($accessToken)) {
 
 The `$accessToken` will be `null` if the signed request did not contain any OAuth 2.0 data to obtain the access token.
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
 ### __construct() {#construct}
 ~~~~

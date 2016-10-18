@@ -2,7 +2,7 @@
 
 This example covers uploading & posting a video to a user's timeline with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 %FB(devsite:markdown-wiki:info-card {
   content: "Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.",

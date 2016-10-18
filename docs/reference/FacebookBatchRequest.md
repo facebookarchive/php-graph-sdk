@@ -2,7 +2,7 @@
 
 Represents a batch request that will be sent to the Graph API.
 
-## Facebook\FacebookBatchRequest {#overview}
+## Facebook\FacebookBatchRequest
 
 You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor.
 
@@ -54,11 +54,11 @@ foreach ($batchResponse as $key => $response) {
 }
 ~~~~
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
 Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
 
-### add() {#add}
+### add()
 ~~~~
 public add(
   array|Facebook\FacebookBatchRequest $request,
@@ -69,13 +69,13 @@ Adds a request to be sent in the batch request. The `$request` can be a single [
 
 The `$name` argument is optional and is used to identify the request in the batch.
 
-### getRequests() {#get-requests}
+### getRequests()
 ~~~~
 public array getRequests()
 ~~~~
 Returns the array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
 
-## Array Access {#array-access}
+## Array Access
 
 Since `Facebook\FacebookBatchRequest` implements `\IteratorAggregate` and `\ArrayAccess`, the requests can be accessed via array syntax and can also be iterated over.
 

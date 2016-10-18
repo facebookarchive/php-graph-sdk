@@ -2,7 +2,7 @@
 
 The `Facebook\SignedRequest` entity represents a signed request.
 
-## Facebook\SignedRequest {#overview}
+## Facebook\SignedRequest
 
 [Signed requests](https://developers.facebook.com/docs/facebook-login/using-login-with-games#checklogin) contain payloads of data that can be validated against a hash signature to ensure it is from Facebook. The `Facebook\SignedRequest` entity can validate a signed request signature and decode the payload.
 
@@ -31,39 +31,39 @@ $helper = $fb->getPageTabHelper();
 $signedRequest = $helper->getSignedRequest();
 ~~~~
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### getRawSignedRequest() {#get-raw-signed-request}
+### getRawSignedRequest()
 ~~~~
 public string|null getRawSignedRequest()
 ~~~~
 Returns the original raw encoded signed request in the form of a string.
 
-### getPayload() {#get-payload}
+### getPayload()
 ~~~~
 public array|null getPayload()
 ~~~~
 Returns the [signed request payload](https://developers.facebook.com/docs/reference/login/signed-request/) in the form of an array.
 
-### get() {#get}
+### get()
 ~~~~
 public string|null get(string $key, string|null $default)
 ~~~~
 Returns a [field from the signed request payload](https://developers.facebook.com/docs/reference/login/signed-request) or `$default` if the value does not exist.
 
-### getUserId() {#get-user-id}
+### getUserId()
 ~~~~
 public string|null getUserId()
 ~~~~
 Returns the `user_id` field from the signed request payload if it exists or `null` if it does not exists.
 
-### hasOAuthData() {#has-oauth-data}
+### hasOAuthData()
 ~~~~
 public boolean hasOAuthData()
 ~~~~
 Returns `true` if the payload data contains either an `oauth_token` or `code` field. Returns `false` if neither value exists.
 
-### make() {#make}
+### make()
 ~~~~
 public string make(array $payload)
 ~~~~

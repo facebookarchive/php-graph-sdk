@@ -2,7 +2,7 @@
 
 This example covers obtaining an access token and signed request from within the context of a page tab with the Facebook SDK for PHP.
 
-## Example {#example}
+## Example
 
 Page tabs behave much like the app canvas. The PHP SDK provides a helper for page tabs that delivers specific methods unique to page tabs.
 

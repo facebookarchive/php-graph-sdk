@@ -2,7 +2,7 @@
 
 The `Facebook\FacebookClient` service class juggles the dependencies needed to make requests to the Graph API.
 
-## Facebook\FacebookClient {#overview}
+## Facebook\FacebookClient
 
 You most likely won't be working with the `Facebook\FacebookClient` service directly if you're using the `Facebook\Facebook` super service class, but if you have a highly customized environment, you might need to send requests with an instance of `Facebook\FacebookClient`.
 
@@ -23,27 +23,27 @@ The Graph API has a number of different base URL's based on what request you wan
 
 The `Facebook\FacebookClient` service takes the guess-work out of managing those base URL's by automatically sending your requests to the proper URL.
 
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### getHttpClientHandler() {#get-http-client-handler}
+### getHttpClientHandler()
 ~~~~
 public Facebook\HttpClients\FacebookHttpClientInterface getHttpClientHandler()
 ~~~~
 Returns the instance of [`Facebook\HttpClients\FacebookHttpClientInterface`](/docs/php/FacebookHttpClientInterface) that the service is using.
 
-### setHttpClientHandler() {#set-http-client-handler}
+### setHttpClientHandler()
 ~~~~
 public setHttpClientHandler(Facebook\HttpClients\FacebookHttpClientInterface $client)
 ~~~~
 If you've coded your own HTTP client to the [`Facebook\HttpClients\FacebookHttpClientInterface`](/docs/php/FacebookHttpClientInterface), you can inject it into the service using this method.
 
-### enableBetaMode() {#enable-beta-mode}
+### enableBetaMode()
 ~~~~
 public enableBetaMode(boolean $enable = true)
 ~~~~
 Tells the service to send requests to the beta URL's which include [https://graph.beta.facebook.com](https://graph.beta.facebook.com) and [https://graph-video.beta.facebook.com](https://graph-video.beta.facebook.com).
 
-### sendRequest() {#send-request}
+### sendRequest()
 ~~~~
 public Facebook\FacebookResponse sendRequest(Facebook\FacebookRequest $request)
 ~~~~
@@ -57,7 +57,7 @@ If there was an error processing the request before sending, a [`Facebook\Except
 
 If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException) will be thrown.
 
-### sendBatchRequest() {#send-batch-request}
+### sendBatchRequest()
 ~~~~
 public Facebook\FacebookBatchResponse sendBatchRequest(Facebook\FacebookBatchRequest $batchRequest)
 ~~~~

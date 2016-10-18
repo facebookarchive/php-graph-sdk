@@ -2,7 +2,7 @@
 
 Uploading video files to the Graph API is made a breeze with the SDK for PHP.
 
-## Facebook\FileUpload\FacebookVideo(string $pathToVideoFile, int $maxLength = -1, int $offset = -1) {#overview}
+## Facebook\FileUpload\FacebookVideo(string $pathToVideoFile, int $maxLength = -1, int $offset = -1)
 
 The `FacebookVideo` entity represents a local or remote video file to be uploaded with a request to Graph.
 
@@ -24,7 +24,7 @@ $myVideoFileToUpload = $fb->videoToUpload('/path/to/video-file.mp4'),
 
 Partial file uploads are possible using the `$maxLength` and `$offset` parameters which provide the same functionality as the `$maxlen` and `$offset` parameters on the [`stream_get_contents()` PHP function](http://php.net/stream_get_contents).
 
-## Usage {#usage}
+## Usage
 
 In Graph v2.3, functionality was added to [upload video files in chunks](/docs/graph-api/video-uploads#resumable). The PHP SDK provides a handy API to easily upload video files in chunks via the [`uploadVideo()` method](/docs/php/Facebook#upload-video).
 
