@@ -2,7 +2,7 @@
 
 The `FacebookCanvasHelper` is used to obtain an access token or signed request when working within the context of an [app canvas](https://developers.facebook.com/docs/games/canvas).
 
-```
+```php
 Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 ```
 
@@ -10,7 +10,7 @@ Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 
 If your app is loaded through Canvas, Facebook sends a POST request to your app with a signed request.  This helper will handle validating and decrypting the signed request.
 
-```
+```php
 $fb = new Facebook\Facebook([/* */]);
 $canvasHelper = $fb->getCanvasHelper();
 $signedRequest = $canvasHelper->getSignedRequest();
@@ -23,7 +23,7 @@ if ($signedRequest) {
 
 If a user has already authenticated your app, you can also obtain an access token.
 
-```
+```php
 $fb = new Facebook\Facebook([/* */]);
 $canvasHelper = $fb->getCanvasHelper();
 
@@ -47,24 +47,24 @@ The `$accessToken` will be `null` if the signed request did not contain any OAut
 ## Instance Methods
 
 ### __construct()
-```
+```php
 public FacebookCanvasHelper __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
 ```
 Upon instantiation, `FacebookCanvasHelper` validates and decrypts the signed request that was sent via POST if present.
 
 ### getAccessToken()
-```
+```php
 public Facebook\AccessToken|null getAccessToken()
 ```
 Checks the signed request for authentication data and tries to obtain an access token access token.
 
 ### getUserId()
-```
+```php
 public string|null getUserId()
 ```
 A convenience method for obtaining a user's ID from the signed request if present. This will only return the user's ID if a valid signed request can be obtained and decrypted and the user has already authorized the app.
 
-```
+```php
 $userId = $canvasHelper->getUserId();
 
 if ($userId) {
@@ -74,7 +74,7 @@ if ($userId) {
 
 This is equivalent to accessing the user ID from the signed request entity.
 
-```
+```php
 $signedRequest = $canvasHelper->getSignedRequest();
 
 if ($signedRequest) {
@@ -85,19 +85,19 @@ if ($signedRequest) {
 ```
 
 ### getAppData()
-```
+```php
 public string|null getAppData()
 ```
 Gets the value that is set in the `app_data` property if present.
 
 ### getSignedRequest()
-```
+```php
 public Facebook\SignedRequest|null getSignedRequest()
 ```
 Returns the signed request as an instance of [`Facebook\SignedRequest`](SignedRequest.md) if present.
 
 ### getRawSignedRequest()
-```
+```php
 public string|null getRawSignedRequest()
 ```
 Returns the raw encoded signed request as a `string` if present in the POST variables or `null`.

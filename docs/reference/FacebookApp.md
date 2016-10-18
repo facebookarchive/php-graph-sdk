@@ -9,13 +9,13 @@ In order to make requests to the Graph API, you need to [create a Facebook app](
 
 To instantiate a new `Facebook\FacebookApp` entity, pass the app ID and app secret to the constructor.
 
-```
+```php
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 ```
 
 Alternatively you can obtain the `Facebook\FacebookApp` entity from the [`Facebook\Facebook`](Facebook.md) super service class.
 
-```
+```php
 $fb = new Facebook\Facebook([/* . . . */]);
 $fbApp = $fb->getApp();
 ```
@@ -25,19 +25,19 @@ You'll rarely be using the `FacebookApp` entity directly unless you're doing som
 ## Instance Methods
 
 ## getAccessToken()
-```
+```php
 public Facebook\Authentication\AccessToken getAccessToken()
 ```
 Returns an app access token in the form of an [`AccessToken`](AccessToken.md) entity.
 
 ## getId()
-```
+```php
 public string getId()
 ```
 Returns the app id.
 
 ## getSecret()
-```
+```php
 public string getSecret()
 ```
 Returns the app secret.
@@ -46,7 +46,7 @@ Returns the app secret.
 
 The `Facebook\FacebookApp` entity can be serialized and unserialized.
 
-```
+```php
 $fbApp = new Facebook\FacebookApp('foo-app-id', 'foo-app-secret');
 
 $serializedFacebookApp = serialize($fbApp);

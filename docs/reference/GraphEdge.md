@@ -6,13 +6,13 @@ When a list of nodes is returned from a Graph request, it can be cast as a `Grap
 
 You can grab a `GraphEdge` from a response from Graph.
 
-```
+```php
 $graphEdge = $request->getGraphEdge();
 ```
 
 Usage:
 
-```
+```php
 // Iterate over all the GraphNode's returned from the edge
 foreach ($graphEdge as $graphNode) {
   // . . .
@@ -23,7 +23,7 @@ foreach ($graphEdge as $graphNode) {
 
 With the help of the `Facebook\Facebook` super service class, the `GraphEdge` collection can grab the next and previous sets of data.
 
-```
+```php
 $albumsEdge = $response->getGraphEdge();
 
 // Get the next page of results
@@ -40,7 +40,7 @@ Sometimes Graph will return a list of nodes within a node. Paginating on these s
 
 The following example paginates over the first 5 pages of a list of Facebook pages. For each page it paginates over all the likes for that page.
 
-```
+```php
 $pagesEdge = $response->getGraphEdge();
 // Only grab 5 pages
 $maxPages = 5;
@@ -65,48 +65,48 @@ do {
 ## Method Reference
 
 ### getMetaData()
-```
+```php
 public array getMetaData()
 ```
 
 Sometimes Graph will return additional data associated with an edge. You can access this raw data as an array with `getMetaData()`.
 
-```
+```php
 $metaData = $graphEdge->getMetaData();
 ```
 
 ### getNextCursor()
-```
+```php
 public string|null getNextCursor()
 ```
 
 Returns the `$.paging.cursors.after` value if it exists or `null` if it does not exist. Since cursors are sort of like bookmarks for paginating over an edge, it is sometimes handy to store the last cursor used so that you can revisit the exact position at a later time.
 
-```
+```php
 $nextCursor = $graphEdge->getNextCursor();
 // Returns: MMAyDDM5NjA0OTEyMDc0OTM=
 ```
 
 ### getPreviousCursor()
-```
+```php
 public string|null getPreviousCursor()
 ```
 
 Returns the `$.paging.cursors.before` value if it exists or `null` if it does not exist.
 
-```
+```php
 $previousCursor = $graphEdge->getPreviousCursor();
 // Returns: ODOxMTUzMjQzNTg5zzU5
 ```
 
 ### getTotalCount()
-```
+```php
 public int|null getTotalCount()
 ```
 
 Some endpoints and edges of Graph support a summary of data. If the `summary=true` modifier was sent with a request on a supported endpoint or edge, Graph will return the total count of results in the meta data under `$.summary.total_count`. `getTotalCount()` will return that value or `null` if it does not exist.
 
-```
+```php
 $response = $fb->get('/{post-id}/likes?summary=true');
 $likesEdge = $response->getGraphEdge();
 $totalCount = $likesEdge->getTotalCount();

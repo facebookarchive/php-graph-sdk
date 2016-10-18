@@ -8,7 +8,7 @@ After sending a batch request to the Graph API, the response will be returned in
 
 Usage:
 
-```
+```php
 $fb = new Facebook\Facebook(/* . . . */);
 $requests = [
   $fb->request('GET', '/me'),
@@ -46,7 +46,7 @@ var_dump($batchResponse);
 Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](FacebookResponse.md) entity, all the methods are inherited.
 
 ### getResponses()
-```
+```php
 public array getResponses()
 ```
 Returns the array of [`Facebook\FacebookResponse`](FacebookResponse.md) entities that were returned from Graph.
@@ -55,7 +55,7 @@ Returns the array of [`Facebook\FacebookResponse`](FacebookResponse.md) entities
 
 Since `Facebook\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
 
-```
+```php
 $requests = [
   'foo' => $fb->request('GET', '/me'),
   'bar' => $fb->request('POST', '/me/feed', [/* */]),

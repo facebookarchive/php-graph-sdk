@@ -9,7 +9,7 @@ This example covers uploading & posting a video to a user's timeline with the Fa
 
 The following example will upload a video in chunks using the [resumable upload](https://developers.facebook.com/docs/graph-api/video-uploads#resumable) feature added in Graph v2.3.
 
-```
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -40,7 +40,7 @@ See more about the [`uploadVideo()` method](..reference/Facebook.md#uploadvideo)
 
 For versions of Graph before v2.3, videos had to be uploaded in one request.
 
-```
+```php
 $fb = new Facebook\Facebook([/* . . . */]);
 
 $data = [

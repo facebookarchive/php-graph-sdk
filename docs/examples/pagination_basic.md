@@ -8,7 +8,7 @@ The Graph API supports [several methods to paginate over response data](https://
 
 In this example we'll pull five entries from a user's feed (assuming the user approved the `read_stream` permission for your app). Then we'll use the `next()` method to grab the next page of results. Naturally you'd provide some sort of pagination navigation in your app, but this is just an example to get you started.
 
-```
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
