@@ -9,7 +9,7 @@ These classes are at the core of the Facebook SDK for PHP.
 | Class name  | Description |
 | ------------- | ------------- |
 | [`Facebook\\Facebook`](/docs/php/Facebook)  | The main service object that helps tie all the SDK components together.  |
-| `Facebook\\FacebookApp`](/docs/php/FacebookApp)  | An entity that represents a Facebook app and is required to send requests to Graph.  |
+| [`Facebook\\FacebookApp`](/docs/php/FacebookApp)  | An entity that represents a Facebook app and is required to send requests to Graph.  |
 
 # Authentication
 
@@ -78,7 +78,7 @@ These are entities that represent files to be uploaded with a Graph request.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\\FileUpload\\FacebookFile`](/docs/php/FacebookFile)' | Represents a generic file to be uploaded to the Graph API.  |
+| [`Facebook\\FileUpload\\FacebookFile`](/docs/php/FacebookFile) | Represents a generic file to be uploaded to the Graph API.  |
 | [`Facebook\\FileUpload\\FacebookVideo`](/docs/php/FacebookVideo)  | Represents a video file to be uploaded to the Graph API.  |
 
 # Extensibility
