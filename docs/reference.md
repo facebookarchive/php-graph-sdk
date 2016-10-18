@@ -64,12 +64,12 @@ Graph nodes are collections that represent nodes returned by the Graph API. And 
 | ------------- | ------------- |
 | [`Facebook\\GraphNodes\\GraphNode`](reference/GraphNode.md) | The base collection object that represents a generic node.  |
 | [`Facebook\\GraphNodes\\GraphEdge`](reference/GraphEdge.md)  | A collection of GraphNode\'s with special methods to help paginate over the edge.  |
-| [`Facebook\\GraphNodes\\GraphAchievement`](reference/GraphNode.md#GraphAchievement-instance-methods) | A collection that represents an Achievement node.  |
-| [`Facebook\\GraphNodes\\GraphAlbum`](reference/GraphNode.md#GraphAlbum-instance-methods)  | A collection that represents an Album node. |
-| [`Facebook\\GraphNodes\\GraphLocation`](reference/GraphNode.md#GraphLocation-instance-methods)  | A collection that represents a Location node. |
-| [`Facebook\\GraphNodes\\GraphPage`](reference/GraphNode.md#GraphPage-instance-methods)  | A collection that represents a Page node. |
-| [`Facebook\\GraphNodes\\GraphPicture`](reference/GraphNode.md#GraphPicture-instance-methods)  | A collection that represents a Picture node. |
-| [`Facebook\\GraphNodes\\GraphUser`](reference/GraphNode.md#GraphUser-instance-methods)  | A collection that represents a User node. |
+| [`Facebook\\GraphNodes\\GraphAchievement`](reference/GraphNode.md#graphachievement-instance-methods) | A collection that represents an Achievement node.  |
+| [`Facebook\\GraphNodes\\GraphAlbum`](reference/GraphNode.md#graphalbum-instance-methods)  | A collection that represents an Album node. |
+| [`Facebook\\GraphNodes\\GraphLocation`](reference/GraphNode.md#graphlocation-instance-methods)  | A collection that represents a Location node. |
+| [`Facebook\\GraphNodes\\GraphPage`](reference/GraphNode.md#graphpage-instance-methods)  | A collection that represents a Page node. |
+| [`Facebook\\GraphNodes\\GraphPicture`](reference/GraphNode.md#graphpicture-instance-methods)  | A collection that represents a Picture node. |
+| [`Facebook\\GraphNodes\\GraphUser`](reference/GraphNode.md#graphuser-instance-methods)  | A collection that represents a User node. |
 
 
 # File Uploads
