@@ -2,10 +2,8 @@
 
 In order to make requests to the Graph API, you need to [create a Facebook app](/apps) and obtain the app ID and the app secret. The `Facebook\FacebookApp` entity represents the Facebook app that is making the requests to the Graph API.
 
-%FB(devsite:markdown-wiki:info-card {
-  content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\\Facebook` service handles injecting it into the required classes for you.",
-  type: 'warning',
-})
+> content: "It is quite uncommon to work with the `FacebookApp` entity directly since the `Facebook\\Facebook` service handles injecting it into the required classes for you.",
+> type: 'warning',
 
 ## Facebook\FacebookApp
 

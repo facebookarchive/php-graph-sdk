@@ -96,10 +96,8 @@ My next 2 events are House Warming Party,Some Foo Event.
 
 It should also contain a response containing two photos from the user.
 
-%FB(devsite:markdown-wiki:info-card {
-  content: "The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).",
-  type: 'warning',
-})
+> content: "The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).",
+> type: 'warning',
 
 ## Multiple User Example
 
