@@ -213,7 +213,7 @@ class FacebookResponse
     /**
      * Returns the exception that was thrown for this request.
      *
-     * @return FacebookResponseException|null
+     * @return FacebookSDKException|null
      */
     public function getThrownException()
     {
