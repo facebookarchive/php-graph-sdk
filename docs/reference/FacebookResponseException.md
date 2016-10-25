@@ -19,12 +19,12 @@ try {
 
 | Class name  | Description |
 | ------------- | ------------- |
-| `Facebook\\Exceptions\\FacebookAuthenticationException`  | Thrown when Graph returns an authentication error.  |
-| `Facebook\\Exceptions\\FacebookAuthorizationException`  | Thrown when Graph returns a user permissions error.  |
-| `Facebook\\Exceptions\\FacebookClientException`  | Thrown when Graph returns a duplicate post error.  |
-| `Facebook\\Exceptions\\FacebookOtherException`  | Thrown when Graph returns an error that is unknown to the SDK.  |
-| `Facebook\\Exceptions\\FacebookServerException`  | Thrown when Graph returns a server error.  |
-| `Facebook\\Exceptions\\FacebookThrottleException`  | Thrown when Graph returns a throttle error.  |
+| `Facebook\Exceptions\FacebookAuthenticationException`  | Thrown when Graph returns an authentication error.  |
+| `Facebook\Exceptions\FacebookAuthorizationException`  | Thrown when Graph returns a user permissions error.  |
+| `Facebook\Exceptions\FacebookClientException`  | Thrown when Graph returns a duplicate post error.  |
+| `Facebook\Exceptions\FacebookOtherException`  | Thrown when Graph returns an error that is unknown to the SDK.  |
+| `Facebook\Exceptions\FacebookServerException`  | Thrown when Graph returns a server error.  |
+| `Facebook\Exceptions\FacebookThrottleException`  | Thrown when Graph returns a throttle error.  |
 
 These exceptions are derived from the [error responses from the Graph API](https://developers.facebook.com/docs/graph-api/using-graph-api#errors).
 

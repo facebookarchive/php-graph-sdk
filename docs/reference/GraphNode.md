@@ -100,9 +100,9 @@ The following properties on the `GraphUser` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `hometown` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)  |
-| `location`  | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
-| `significant_other`  | [`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)  |
+| `hometown` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods)  |
+| `location`  | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
+| `significant_other`  | [`Facebook\GraphNodes\GraphUser`](#user-instance-methods)  |
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -176,9 +176,9 @@ The following properties on the `GraphPage` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `best_page` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods)  |
-| `global_brand_parent_page`  | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
-| `location`  | [`Facebook\\GraphNodes\\GraphLocation`](#location-instance-methods)  |
+| `best_page` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods)  |
+| `global_brand_parent_page`  | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
+| `location`  | [`Facebook\GraphNodes\GraphLocation`](#location-instance-methods)  |
 
 
 All getter methods return `null` if the property does not exist on the node.
@@ -241,8 +241,8 @@ The following properties on the `GraphAlbum` collection will get automatically c
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `from` | [`Facebook\\GraphNodes\\GraphUser`](#user-instance-methods)  |
-| `place` | [`Facebook\\GraphNodes\\GraphPage`](#page-instance-methods) |
+| `from` | [`Facebook\GraphNodes\GraphUser`](#user-instance-methods)  |
+| `place` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
 
 All getter methods return `null` if the property does not exist on the node.
 

@@ -36,7 +36,7 @@ try {
 echo 'Video ID: ' . $response['video_id'];
 ```
 
-See more about the [`uploadVideo()` method](..reference/Facebook.md#uploadvideo).
+See more about the [`uploadVideo()` method](../reference/Facebook.md#uploadvideo).
 
 For versions of Graph before v2.3, videos had to be uploaded in one request.
 
