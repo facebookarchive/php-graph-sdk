@@ -4,8 +4,7 @@ This example covers uploading & posting a video to a user's timeline with the Fa
 
 ## Example
 
-> content: "Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.",
-> type: 'warning',
+> **Warning:** Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.
 
 The following example will upload a video in chunks using the [resumable upload](https://developers.facebook.com/docs/graph-api/video-uploads#resumable) feature added in Graph v2.3.
 

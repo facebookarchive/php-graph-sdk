@@ -37,8 +37,7 @@ $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $pe
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 ```
 
-> content: "The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts. You can overwrite the default session handling - see [extensibility points](#extensibility-points) below.",
-> type: 'warning',
+> **Warning:** The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts. You can overwrite the default session handling - see [extensibility points](#extensibility-points) below.
 
 Then, in your callback page (at the redirect url) when Facebook sends the user back:
 
