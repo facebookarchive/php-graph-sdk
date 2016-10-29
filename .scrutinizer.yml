@@ -1,3 +1,4 @@
+******************************************************************************************************************
 filter:
     paths:
         - 'src/*'
@@ -7,3 +8,27 @@ tools:
     php_code_sniffer:
         config:
             standard: PSR2
+********************************************************************************************************************
+
+   -  "# .Scrutinizer.yml"
+   -   $git clone --depth=200 --branch='master' --reference=local-repository-dir --dissociate https://githu
+   -    b.com/0072016/Facebook-php-sdk.git /tmp/packageNBha7P
+   -    Cloning into "/tmp/packageNBha7P ...
+   -    ").
+   -  Configuration::
+    -  # .scrutinizer.yml
+    -  checks::
+    - php::
+    -  code_rating: true
+    -  duplication: true
+    -  python:
+    -  code_rating: true
+    -  duplicate_code: true
+    -  ruby:
+    -  code_rating: true
+    -  duplicate_code: true
+    @0072016
+    https://developers.facebook.com
+    https://iOS-ChromeWeb-4.4.com
+     October 29, 2016
+     12:04:13PST
