@@ -35,9 +35,9 @@ class PseudoRandomStringFactoryTest extends PHPUnit_Framework_TestCase
      * @param mixed  $handler
      * @param string $expected
      *
-     * @dataProvider httpClientsProvider
+     * @dataProvider csprngProvider
      */
-    public function testCreateHttpClient($handler, $expected)
+    public function testCsprng($handler, $expected)
     {
         $pseudoRandomStringGenerator = PseudoRandomStringGeneratorFactory::createPseudoRandomStringGenerator($handler);
 
@@ -48,11 +48,14 @@ class PseudoRandomStringFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function httpClientsProvider()
+    public function csprngProvider()
     {
         $providers = [
           [null, self::COMMON_INTERFACE],
         ];
+        if (function_exists('random_bytes')) {
+            $providers[] = ['random_bytes', self::COMMON_NAMESPACE . 'RandomBytesPseudoRandomStringGenerator'];
+        }
         if (function_exists('mcrypt_create_iv')) {
             $providers[] = ['mcrypt', self::COMMON_NAMESPACE . 'McryptPseudoRandomStringGenerator'];
         }

@@ -191,6 +191,25 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         new Facebook($config);
     }
 
+    public function testRandomBytesCsprgCanBeForced()
+    {
+        if (!function_exists('random_bytes')) {
+            $this->markTestSkipped(
+                'Must have PHP 7 or paragonie/random_compat installed to test random_bytes().'
+            );
+        }
+
+        $config = array_merge($this->config, [
+            'persistent_data_handler' => 'memory', // To keep session errors from happening
+            'pseudo_random_string_generator' => 'random_bytes'
+        ]);
+        $fb = new Facebook($config);
+        $this->assertInstanceOf(
+            'Facebook\PseudoRandomString\RandomBytesPseudoRandomStringGenerator',
+            $fb->getRedirectLoginHelper()->getPseudoRandomStringGenerator()
+        );
+    }
+
     public function testMcryptCsprgCanBeForced()
     {
         if (!function_exists('mcrypt_create_iv')) {
