@@ -211,7 +211,7 @@ class SignedRequest
         $payload = $this->base64UrlDecode($encodedPayload);
 
         if ($payload) {
-            $payload = json_decode($payload, true);
+            $payload = json_decode($payload, true, 512, JSON_BIGINT_AS_STRING);
         }
 
         if (!is_array($payload)) {
