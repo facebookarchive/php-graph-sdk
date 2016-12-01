@@ -211,6 +211,28 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreatingANewBatchRequestWillDefaultToTheProperConfig()
+    {
+        $config = array_merge($this->config, [
+            'default_access_token' => 'foo_token',
+            'enable_beta_mode' => true,
+            'default_graph_version' => 'v1337',
+        ]);
+        $fb = new Facebook($config);
+
+        $batchRequest = $fb->newBatchRequest();
+        $this->assertEquals('1337', $batchRequest->getApp()->getId());
+        $this->assertEquals('foo_secret', $batchRequest->getApp()->getSecret());
+        $this->assertEquals('foo_token', (string)$batchRequest->getAccessToken());
+        $this->assertEquals('v1337', $batchRequest->getGraphVersion());
+        $this->assertEquals(
+            FacebookClient::BASE_GRAPH_URL_BETA,
+            $fb->getClient()->getBaseGraphUrl()
+        );
+        $this->assertInstanceOf('Facebook\FacebookBatchRequest', $batchRequest);
+        $this->assertEquals(0, count($batchRequest->getRequests()));
+    }
+
     public function testCanInjectCustomHandlers()
     {
         $config = array_merge($this->config, [
