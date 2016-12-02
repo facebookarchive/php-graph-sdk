@@ -1,15 +1,12 @@
-<card>
 # FacebookBatchRequest for the Facebook SDK for PHP
 
 Represents a batch request that will be sent to the Graph API.
-</card>
 
-<card>
-## Facebook\FacebookBatchRequest {#overview}
+## Facebook\FacebookBatchRequest
 
 You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor.
 
-~~~~
+```php
 use Facebook\FacebookBatchRequest;
 
 $request = new FacebookBatchRequest(
@@ -18,15 +15,15 @@ $request = new FacebookBatchRequest(
   string|null $accessToken,
   string|null $graphVersion
 );
-~~~~
+```
 
-The `$requests` array is an array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent as a batch request.
+The `$requests` array is an array of [`Facebook\FacebookRequest`'s](/docs/reference/FacebookRequest.md) to be sent as a batch request.
 
-The `FacebookBatchRequest` entity does not actually make any calls to the Graph API, but instead just represents a batch request that can be sent to the Graph API later. The batch request can be sent by using [`Facebook\Facebook::sendBatchRequest()`](/docs/php/Facebook#send-batch-request) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/php/FacebookClient#send-batch-request).
+The `FacebookBatchRequest` entity does not actually make any calls to the Graph API, but instead just represents a batch request that can be sent to the Graph API later. The batch request can be sent by using [`Facebook\Facebook::sendBatchRequest()`](/docs/reference/Facebook.md#sendbatchrequest) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/reference/FacebookClient.md#sendbatchrequest).
 
 Usage:
 
-~~~~
+```php
 $fb = new Facebook\Facebook(/* . . . */);
 
 $requests = [
@@ -55,40 +52,34 @@ foreach ($batchResponse as $key => $response) {
     // Success
   }
 }
-~~~~
-</card>
+```
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\FacebookRequest`](/docs/reference/FacebookRequest.md) entity, all the methods are inherited.
 
-### add() {#add}
-~~~~
+### add()
+```php
 public add(
   array|Facebook\FacebookBatchRequest $request,
   string|null $name
   )
-~~~~
-Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](/docs/php/FacebookRequest) or an array of `Facebook\FacebookRequest`'s.
+```
+Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](/docs/reference/FacebookRequest.md) or an array of `Facebook\FacebookRequest`'s.
 
 The `$name` argument is optional and is used to identify the request in the batch.
-</card>
 
-<card>
-### getRequests() {#get-requests}
-~~~~
+### getRequests()
+```php
 public array getRequests()
-~~~~
-Returns the array of [`Facebook\FacebookRequest`'s](/docs/php/FacebookRequest) to be sent in the batch request.
-</card>
+```
+Returns the array of [`Facebook\FacebookRequest`'s](/docs/reference/FacebookRequest.md) to be sent in the batch request.
 
-<card>
-## Array Access {#array-access}
+## Array Access
 
 Since `Facebook\FacebookBatchRequest` implements `\IteratorAggregate` and `\ArrayAccess`, the requests can be accessed via array syntax and can also be iterated over.
 
-~~~~
+```php
 $fb = new Facebook\Facebook(/* . . . */);
 $requests = [
   'foo' => $fb->request('GET', '/me'),
@@ -103,5 +94,4 @@ array(2) {
   'request' => class Facebook\FacebookRequest
   . . .
 */
-~~~~
-</card>
+```
