@@ -79,7 +79,7 @@ require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 
 ## Configuration and setup
 
-> **Warning:** This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](/apps).
+> **Warning:** This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](https://developers.facebook.com/apps).
 
 Before we can send requests to the Graph API, we need to load our app configuration into the `Facebook\Facebook` service.
 
@@ -91,7 +91,7 @@ $fb = new Facebook\Facebook([
   ]);
 ```
 
-You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](/apps).
+You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](https://developers.facebook.com/apps).
 
 > **Warning:** It's important that you specify a `default_graph_version` value as this will give you more control over which version of Graph you want to use. If you don't specify a `default_graph_version`, the SDK for PHP will choose one for you and it might not be one that is compatible with your app.
 
@@ -154,7 +154,7 @@ if (isset($accessToken)) {
 
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
 
-> **Warning:** The `FacebookCanvasHelper` will detect a [signed request](reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#authentication-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#authentication-javascript) the SDK for JavaScript set.
+> **Warning:** The `FacebookCanvasHelper` will detect a [signed request](reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#obtaining-an-access-token-from-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#obtaining-an-access-token-from-the-sdk-for-javascript) the SDK for JavaScript set.
 
 ```php
 # example-canvas-app.php
@@ -207,7 +207,7 @@ if (isset($accessToken)) {
 }
 ```
 
-> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/v2.8). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
+> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.8). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
 
 ## Extending the access token
 
@@ -255,7 +255,7 @@ echo 'Logged in as ' . $userNode->getName();
 
 The `get()` method will return a [`Facebook\FacebookResponse`](reference/FacebookResponse.md) which is an entity that represents an HTTP response from the Graph API.
 
-To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphnode-instance-methods) entity which represents a user node.
+To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphuser-instance-methods) entity which represents a user node.
 
 If you don't care about fancy collections and just want the response as a plain-old array, you can call the `getDecodedBody()` method on the `FacebookResponse` entity.
 

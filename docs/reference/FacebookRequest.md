@@ -59,6 +59,7 @@ echo 'User name: ' . $graphNode['name'];
 ```php
 public setAccessToken(string|Facebook\AccessToken $accessToken)
 ```
+Sets the access token to be used for the request.
 
 ### getAccessToken()
 ```php
