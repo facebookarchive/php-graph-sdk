@@ -1,20 +1,14 @@
-<card>
 # Video Upload Example
 
 This example covers uploading & posting a video to a user's timeline with the Facebook SDK for PHP.
-</card>
 
-<card>
-## Example {#example}
+## Example
 
-%FB(devsite:markdown-wiki:info-card {
-  content: "Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.",
-  type: 'warning',
-})
+>Before you upload, check out the [video publishing options & requirements](https://developers.facebook.com/docs/graph-api/reference/video#publishing) for the specific video endpoint you want to publish to.
 
-The following example will upload a video in chunks using the [resumable upload](/docs/graph-api/video-uploads#resumable) feature added in Graph v2.3.
+The following example will upload a video in chunks using the [resumable upload](https://developers.facebook.com/docs/graph-api/video-uploads#resumable) feature added in Graph v2.3.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -39,13 +33,13 @@ try {
 }
 
 echo 'Video ID: ' . $response['video_id'];
-~~~~
+```
 
-See more about the [`uploadVideo()` method](/docs/php/Facebook#upload-video).
+See more about the [`uploadVideo()` method](/docs/reference/Facebook.md#uploadvideo).
 
 For versions of Graph before v2.3, videos had to be uploaded in one request.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([/* . . . */]);
 
 $data = [
@@ -69,5 +63,4 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Video ID: ' . $graphNode['id'];
-~~~~
-</card>
+```

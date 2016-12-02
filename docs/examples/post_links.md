@@ -1,17 +1,14 @@
-<card>
 # Post Links Using the Graph API
 
 This example covers posting a link to the current user's timeline using the Graph API and Facebook SDK for PHP.
 
-It assumes that you've already obtained an access token from one of the helpers found [here](/docs/php/sdk_reference#helpers). The access token must have the `publish_actions` permission for this to work.
+It assumes that you've already obtained an access token from one of the helpers found [here](/docs/reference.md#helpers). The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](/docs/php/Facebook), [`Facebook\FacebookResponse`](/docs/php/FacebookResponse), [`Facebook\GraphNodes\GraphNode`](/docs/php/GraphNode), [`Facebook\Exceptions\FacebookSDKException`](/docs/php/FacebookSDKException) and [`Facebook\Exceptions\FacebookResponseException`](/docs/php/FacebookResponseException).
-</card>
+For more information, see the documentation for [`Facebook\Facebook`](/docs/reference/Facebook.md), [`Facebook\FacebookResponse`](/docs/reference/FacebookResponse.md), [`Facebook\GraphNodes\GraphNode`](/docs/reference/GraphNode.md), [`Facebook\Exceptions\FacebookSDKException`](/docs/reference/FacebookSDKException.md) and [`Facebook\Exceptions\FacebookResponseException`](/docs/reference/FacebookResponseException.md).
 
-<card>
-## Example {#example}
+## Example
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
@@ -37,7 +34,6 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'Posted with id: ' . $graphNode['id'];
-~~~~
+```
 
 Note that the 'message' field must come from the user, as pre-filled content is forbidden by the [Platform Policies](https://developers.intern.facebook.com/policy/#control) (2.3).
-</card>
