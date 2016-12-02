@@ -6,12 +6,12 @@ A `Facebook\GraphNodes\GraphNode` is a collection that represents a node returne
 
 This base class has several subclasses:
 
-[__GraphUser__](#user-instance-methods)
-[__GraphPage__](#page-instance-methods)
-[__GraphAlbum__](#album-instance-methods)
-[__GraphLocation__](#location-instance-methods)
-[__GraphPicture__](#picture-instance-methods)
-[__GraphAchievement__](#achievement-instance-methods)
+[__GraphUser__](#graphuser-instance-methods)
+[__GraphPage__](#graphpage-instance-methods)
+[__GraphAlbum__](#graphalbum-instance-methods)
+[__GraphLocation__](#graphlocation-instance-methods)
+[__GraphPicture__](#graphpicture-instance-methods)
+[__GraphAchievement__](#graphachievement-instance-methods)
 
 `GraphNode`s are obtained from a [`Facebook\FacebookResponse`](FacebookResponse.md) object which represents an HTTP response from the Graph API.
 
@@ -100,9 +100,9 @@ The following properties on the `GraphUser` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `hometown` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods)  |
-| `location`  | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
-| `significant_other`  | [`Facebook\GraphNodes\GraphUser`](#user-instance-methods)  |
+| `hometown` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods)  |
+| `location`  | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods) |
+| `significant_other`  | [`Facebook\GraphNodes\GraphUser`](#graphuser-instance-methods)  |
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -176,9 +176,9 @@ The following properties on the `GraphPage` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `best_page` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods)  |
-| `global_brand_parent_page`  | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
-| `location`  | [`Facebook\GraphNodes\GraphLocation`](#location-instance-methods)  |
+| `best_page` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods)  |
+| `global_brand_parent_page`  | [`Facebook\GraphNodes\GraphPage`](graph#page-instance-methods) |
+| `location`  | [`Facebook\GraphNodes\GraphLocation`](#graphlocation-instance-methods)  |
 
 
 All getter methods return `null` if the property does not exist on the node.
@@ -241,8 +241,8 @@ The following properties on the `GraphAlbum` collection will get automatically c
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `from` | [`Facebook\GraphNodes\GraphUser`](#user-instance-methods)  |
-| `place` | [`Facebook\GraphNodes\GraphPage`](#page-instance-methods) |
+| `from` | [`Facebook\GraphNodes\GraphUser`](#graphuser-instance-methods)  |
+| `place` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods) |
 
 All getter methods return `null` if the property does not exist on the node.
 
