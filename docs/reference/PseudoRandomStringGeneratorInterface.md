@@ -1,11 +1,8 @@
-<card>
 # The cryptographically secure pseudo-random string generator interface for the Facebook SDK for PHP
 
 The cryptographically secure pseudo-random string generator interface allows you to overwrite the default CSPRSG logic by coding to the `Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface`.
-</card>
 
-<card>
-## Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface {#overview}
+## Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface
 
 By default the SDK will attempt to generate a cryptographically secure random string using a number of methods. If a cryptographically secure method is not detected, a `Facebook\Exceptions\FacebookSDKException` will be thrown.
 
@@ -15,7 +12,7 @@ If your hosting environment does not support any of the CSPRSG methods used by t
 
 An example of implementing a custom CSPRSG:
 
-~~~~
+```php
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 
 class MyCustomPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
@@ -32,34 +29,31 @@ class MyCustomPseudoRandomStringGenerator implements PseudoRandomStringGenerator
     return $randomString;
   }
 }
-~~~~
+```
 
 To enable your custom CSPRSG implementation in the SDK, you can set an instance of the generator to the `pseudo_random_string_generator` config of the `Facebook\Facebook` super service.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   // . . .
   'pseudo_random_string_generator' => new MyCustomPseudoRandomStringGenerator(),
   // . . .
   ]);
-~~~~
+```
 
 Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom generator via the constructor.
 
-~~~~
+```php
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 
 $myPseudoRandomStringGenerator = new MyCustomPseudoRandomStringGenerator();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);
-~~~~
-</card>
+```
 
-<card>
-## Method Reference {#method-reference}
+## Method Reference
 
-### getPseudoRandomString() {#get-pseudo-random-string}
-~~~~
+### getPseudoRandomString()
+```php
 public string getPseudoRandomString(int $length)
-~~~~
+```
 Returns a cryptographically secure pseudo-random string that is `$length` characters long.
-</card>

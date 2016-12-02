@@ -1,4 +1,3 @@
-<card>
 # Birthday for the Facebook SDK for PHP
 
 Extends `\DateTime` and represents a user's birthday returned from the Graph API which can be returned omitting certain information.
@@ -8,10 +7,8 @@ Users may opt not to share birth day or month, or may not share birth year. Poss
 * MM/DD/YYYY
 * MM/DD
 * YYYY
-</card>
 
-<card>
-## Facebook\GraphNodes\Birthday {#overview}
+## Facebook\GraphNodes\Birthday
 
 After retrieving a GraphUser from the Graph API, the `getBirthday()` method will return the birthday in the form of a `Facebook\GraphNodes\Birthday` entity which indicates which aspects of the birthday the user opted to share.
 
@@ -19,7 +16,7 @@ The `Facebook\GraphNodes\Birthday` entity extends `DateTime` so `format` may be 
 
 Usage:
 
-~~~~
+```php
 $fb = new Facebook\Facebook(\* *\);
 // Returns a `Facebook\FacebookResponse` object
 $response = $fb->get('/me');
@@ -41,23 +38,18 @@ var_dump($birthday->hasYear());
 
 var_dump($birthday->format('m/d'));
 // 03/21
-~~~~
-</card>
+```
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### hasDate() {#has-date}
-~~~~
+### hasDate()
+```php
 public boolean hasDate()
-~~~~
+```
 Returns whether or not the birthday object contains the day and month of birth.
-</card>
 
-<card>
-### hasYear() {#has-year}
-~~~~
+### hasYear()
+```php
 public boolean hasYear()
-~~~~
+```
 Returns whether or not the birthday object contains the year of birth.
-</card>

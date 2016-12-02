@@ -1,15 +1,12 @@
-<card>
 # FacebookRequest for the Facebook SDK for PHP
 
 Represents a request that will be sent to the Graph API.
-</card>
 
-<card>
-## Facebook\FacebookRequest {#overview}
+## Facebook\FacebookRequest
 
 You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
-~~~~
+```php
 use Facebook\FacebookRequest;
 
 $request = new FacebookRequest(  
@@ -21,15 +18,15 @@ $request = new FacebookRequest(
   string $eTag,
   string $graphVersion
 );
-~~~~
+```
 
-Alternatively, you can make use of the [`request()` factory provided by `Facebook\Facebook`](/docs/php/Facebook#request) to create new `FacebookRequest` instances.
+Alternatively, you can make use of the [`request()` factory provided by `Facebook\Facebook`](Facebook.md#request) to create new `FacebookRequest` instances.
 
-The `FacebookRequest` entity does not actually make any calls to the Graph API, but instead just represents a request that can be sent to the Graph API later. This is most useful for making batch requests using [`Facebook\Facebook::sendBatchRequest()`](/docs/php/Facebook#send-batch-request) or [`Facebook\FacebookClient::sendBatchRequest()`](/docs/php/FacebookClient#send-batch-request).
+The `FacebookRequest` entity does not actually make any calls to the Graph API, but instead just represents a request that can be sent to the Graph API later. This is most useful for making batch requests using [`Facebook\Facebook::sendBatchRequest()`](Facebook.md#sendbatchrequest) or [`Facebook\FacebookClient::sendBatchRequest()`](FacebookClient.md#sendbatchrequest).
 
 Usage:
 
-~~~~
+```php
 $fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
 $request = new Facebook\FacebookRequest($fbApp, '{access-token}', 'GET', '/me');
 
@@ -54,163 +51,129 @@ try {
 $graphNode = $response->getGraphNode();
 
 echo 'User name: ' . $graphNode['name'];
-~~~~
-</card>
+```
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### setAccessToken() {#set-access-token}
-~~~~
+### setAccessToken()
+```php
 public setAccessToken(string|Facebook\AccessToken $accessToken)
-~~~~
-Sets the access token to be used for the request.
-</card>
+```
 
-<card>
-### getAccessToken() {#get-access-token}
-~~~~
+### getAccessToken()
+```php
 public string getAccessToken()
-~~~~
+```
 Returns the access token to be used for the request in the form of a string.
-</card>
 
-<card>
-### setApp() {#set-app}
-~~~~
+### setApp()
+```php
 public setApp(Facebook\FacebookApp $app)
-~~~~
-Sets the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
-</card>
+```
+Sets the [`Facebook\FacebookApp`](FacebookApp.md) entity used with this request.
 
-<card>
-### getApp() {#get-app}
-~~~~
+### getApp()
+```php
 public Facebook\FacebookApp getApp()
-~~~~
-Returns the [`Facebook\FacebookApp`](/docs/php/FacebookApp) entity used with this request.
-</card>
+```
+Returns the [`Facebook\FacebookApp`](FacebookApp.md) entity used with this request.
 
-<card>
-### getAppSecretProof() {#get-app-secret-proof}
-~~~~
+### getAppSecretProof()
+```php
 public string getAppSecretProof()
-~~~~
+```
 Returns the [app secret proof](https://developers.facebook.com/docs/graph-api/securing-requests/#appsecret_proof) to sign the request.
-</card>
 
-<card>
-### setMethod() {#set-method}
-~~~~
+### setMethod()
+```php
 public setMethod(string $method)
-~~~~
+```
 Sets the HTTP verb to use for the request.
-</card>
 
-<card>
-### getMethod() {#get-method}
-~~~~
+### getMethod()
+```php
 public string setMethod()
-~~~~
+```
 Returns the HTTP verb to use for the request.
-</card>
 
-<card>
-### setEndpoint() {#set-endpoint}
-~~~~
+### setEndpoint()
+```php
 public setEndpoint(string $endpoint)
-~~~~
+```
 Sets the Graph URL endpoint to be used with the request. The endpoint must be excluding the host name and Graph version number prefix.
 
-~~~~
+```php
 $request->setEndpoint('/me');
-~~~~
-</card>
+```
 
-<card>
-### getEndpoint() {#get-endpoint}
-~~~~
+### getEndpoint()
+```php
 public string getEndpoint()
-~~~~
+```
 Returns the Graph URL endpoint to be used with the request.
-</card>
 
-<card>
-### setHeaders() {#set-headers}
-~~~~
+### setHeaders()
+```php
 public setHeaders(array $headers)
-~~~~
+```
 Sets additional request headers to be use with the request. The supplied headers will be merged with the existing headers. The headers should be sent as an associative array with the key being the header name and the value being the header value.
 
-~~~~
+```php
 $request->setHeaders([
   'X-foo-header' => 'Something',
 ]);
-~~~~
-</card>
+```
 
-<card>
-### getHeaders() {#get-headers}
-~~~~
+### getHeaders()
+```php
 public array getHeaders()
-~~~~
+```
 Returns the request headers that will be sent with the request. The eTag headers `If-None-Match` are appended automatically.
-</card>
 
-<card>
-### setETag() {#set-etag}
-~~~~
+### setETag()
+```php
 public setETag(string $eTag)
-~~~~
+```
 Sets the eTag that will be using for matching the `If-None-Match` header.
-</card>
 
-<card>
-### setParams() {#set-params}
-~~~~
+### setParams()
+```php
 public setParams(array $params)
-~~~~
+```
 For `GET` requests, the array of params will be converted to a query string and appended to the URL.
 
-~~~~
+```php
 $request->setParams([
   'foo' => 'bar',
   'limit' => 10,
 ]);
 // /endpoint?foo=bar&limit=10
-~~~~
+```
 
 For `POST` requests, the array of params will be sent in the `POST` body encoded as `application/x-www-form-urlencoded` for most request. If the request includes a file upload the params will be encoded as `multipart/form-data`.
-</card>
 
-<card>
-### getParams() {#get-params}
-~~~~
+### getParams()
+```php
 public array getParams()
-~~~~
+```
 Returns an array of params to be sent with the request. The `access_token` and `appsecret_proof` params will be automatically appended to the array of params.
-</card>
 
-<card>
-### getGraphVersion() {#get-graph-version}
-~~~~
+### getGraphVersion()
+```php
 public string getGraphVersion()
-~~~~
+```
 Returns the Graph version prefix to be used with the request.
-</card>
 
-<card>
-### getUrl() {#get-url}
-~~~~
+### getUrl()
+```php
 public string getUrl()
-~~~~
-Returns the endpoint of the Graph URL for the request. This will include the Graph version prefix but will not include the host name. The host name is determined after the request is sent to [`Facebook\FacebookClient`](/docs/php/FacebookClient).
+```
+Returns the endpoint of the Graph URL for the request. This will include the Graph version prefix but will not include the host name. The host name is determined after the request is sent to [`Facebook\FacebookClient`](FacebookClient.md).
 
-~~~~
+```php
 $fb = new Facebook\Facebook(/* . . . */);
 $request = $fb->request('GET', '/me', ['fields' => 'id,name']);
 
 $url = $request->getUrl();
-// /v2.6/me?fields=id,name&access_token=token&appsecret_proof=proof
-~~~~
-</card>
+// /v2.8/me?fields=id,name&access_token=token&appsecret_proof=proof
+```

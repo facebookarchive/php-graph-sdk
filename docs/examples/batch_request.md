@@ -1,19 +1,16 @@
-<card>
 # Batch Request Example
 
 This example covers sending a batch request with the Facebook SDK for PHP.
-</card>
 
-<card>
-## Example {#example}
+## Example
 
 The following example assumes we have the following permissions granted from the user: `user_likes`, `user_events`, `user_photos`, `publish_actions`. The example makes use of [JSONPath to reference specific batch operations](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 // Since all the requests will be sent on behalf of the same user,
@@ -77,7 +74,7 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
+```
 
 There five requests being made in this batch requests.
 
@@ -89,32 +86,27 @@ There five requests being made in this batch requests.
 
 If the request was successful, the user should have a new status update similar to this:
 
-~~~~
+```
 My name is Foo User.
 
 I like this page: Facebook Developers.
 
 My next 2 events are House Warming Party,Some Foo Event.
-~~~~
+```
 
 It should also contain a response containing two photos from the user.
 
-%FB(devsite:markdown-wiki:info-card {
-  content: "The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).",
-  type: 'warning',
-})
-</card>
+> **Warning:** The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
-<card>
-## Multiple User Example {#multiple-user-example}
+## Multiple User Example
 
 Since the requests sent in a batch are unrelated by default, we can make requests on behalf of multiple users and pages in the same batch request.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 $batch = [
@@ -148,5 +140,4 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
-</card>
+```
