@@ -1,11 +1,8 @@
-<card>
 # Facebook\Helpers\FacebookJavaScriptHelper
 
 If you're using the [JavaScript SDK](https://developers.facebook.com/docs/javascript) on your site, information on the logged in user is stored in a cookie. Use the `FacebookJavaScriptHelper` to obtain an access token or signed request from the cookie.
-</card>
 
-<card>
-## Usage {#usage}
+## Usage
 
 This helper will handle validating and decode the signed request from the cookie set by the JavaScript SDK.
 
@@ -42,28 +39,22 @@ if (isset($accessToken)) {
 ~~~
 
 You will likely want to make an Ajax request when the login state changes in the Facebook SDK for JavaScript.  Information about that here: [FB.event.subscribe](https://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/#events)
-</card>
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### __construct() {#construct}
-~~~~
+### __construct()
+```php
 public FacebookJavaScriptHelper __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
-~~~~
+```
 Upon instantiation, `FacebookJavaScriptHelper` validates and decodes the signed request that exists in the cookie set by the JavaScript SDK if present.
-</card>
 
-<card>
-### getAccessToken() {#get-access-token}
+### getAccessToken()
 ~~~
 public Facebook\AccessToken|null getAccessToken( Facebook\FacebookClient $client )
 ~~~
 Checks the signed request for authentication data and tries to obtain an access token access token.
-</card>
 
-<card>
-### getUserId() {#get-user-id}
+### getUserId()
 ~~~
 public string|null getUserId()
 ~~~
@@ -88,20 +79,15 @@ if ($signedRequest) {
   $userId = $signedRequest->get('user_id');
 }
 ~~~
-</card>
 
-<card>
-### getSignedRequest() {#get-signed-request}
+### getSignedRequest()
 ~~~
 public Facebook\SignedRequest|null getSignedRequest()
 ~~~
-Returns the signed request as a [`Facebook\SignedRequest`](/docs/php/SignedRequest) entity if present.
-</card>
+Returns the signed request as a [`Facebook\SignedRequest`](/docs/reference/SignedRequest.md) entity if present.
 
-<card>
-### getRawSignedRequest() {#get-raw-signed-request}
+### getRawSignedRequest()
 ~~~
 public string|null getRawSignedRequest()
 ~~~
 Returns the raw encoded signed request as a `string` or `null`.
-</card>

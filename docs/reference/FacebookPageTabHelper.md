@@ -1,13 +1,10 @@
-<card>
 # Facebook\Helpers\FacebookPageTabHelper
 
 Page tabs are similar to the context to app canvases but are treated slightly differently. Use the `FacebookPageTabHelper` to obtain an access token or signed request within the context of a page tab.
-</card>
 
-<card>
-## Usage {#usage}
+## Usage
 
-The usage of the `FacebookPageTabHelper` is exactly the same as [`FacebookCanvasHelper`](/docs/php/FacebookCanvasHelper) with  additional methods to obtain the `page` data from the signed request.
+The usage of the `FacebookPageTabHelper` is exactly the same as [`FacebookCanvasHelper`](/docs/reference/FacebookCanvasHelper.md) with  additional methods to obtain the `page` data from the signed request.
 
 ~~~
 $fb = new Facebook\Facebook([/* */]);
@@ -40,30 +37,23 @@ if (isset($accessToken)) {
   // Logged in.
 }
 ~~~
-</card>
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### getPageData() {#get-page-data}
+### getPageData()
 ~~~
 public string|null getPageData($key, $default = null)
 ~~~
 Gets a value from the `page` property if present.
-</card>
 
-<card>
-### isAdmin() {#is-admin}
+### isAdmin()
 ~~~
 public boolean isAdmin()
 ~~~
 Returns `true` is the user has authenticated your app and is an admin of the parent page.
-</card>
 
-<card>
-### getPageId() {#get-page-id}
+### getPageId()
 ~~~
 public string|null getPageId()
 ~~~
 Returns the ID of the parent page if it can be obtained from the `page` property in the signed request.
-</card>
