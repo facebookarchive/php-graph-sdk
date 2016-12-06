@@ -4,7 +4,7 @@ The `Facebook\SignedRequest` entity represents a signed request.
 
 ## Facebook\SignedRequest
 
-[Signed requests](https://developers.facebook.com/docs/facebook-login/using-login-with-games#checklogin) contain payloads of data that can be validated against a hash signature to ensure it is from Facebook. The `Facebook\SignedRequest` entity can validate a signed request signature and decode the payload.
+[Signed requests](https://developers.facebook.com/docs/games/gamesonfacebook/login#detectingloginstatus) contain payloads of data that can be validated against a hash signature to ensure it is from Facebook. The `Facebook\SignedRequest` entity can validate a signed request signature and decode the payload.
 
 To instantiate a new `Facebook\SignedRequest` entity, pass the [`Facebook\FacebookApp`](FacebookApp.md) entity and raw signed request to the constructor.
 
