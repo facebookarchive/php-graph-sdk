@@ -1,21 +1,18 @@
-<card>
 # Batch File Upload Example
 
 This example covers uploading files in a batch request with the Facebook SDK for PHP.
-</card>
 
-<card>
-## Example {#example}
+## Example
 
 The Graph API supports [file uploads in batch requests](https://developers.facebook.com/docs/graph-api/making-multiple-requests#binary) and the Facebook PHP SDK does all the heavy lifting to make it super easy to upload photos and videos in a batch request.
 
 The following example will upload two photos and one video.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 // Since all the requests will be sent on behalf of the same user,
@@ -62,5 +59,4 @@ foreach ($responses as $key => $response) {
     echo "<hr />\n\n";
   }
 }
-~~~~
-</card>
+```

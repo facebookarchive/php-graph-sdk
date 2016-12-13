@@ -1,21 +1,18 @@
-<card>
 # Pagination Example
 
 This example covers basic cursor pagination with the Facebook SDK for PHP.
-</card>
 
-<card>
-## Example {#example}
+## Example
 
 The Graph API supports [several methods to paginate over response data](https://developers.facebook.com/docs/graph-api/using-graph-api/#paging). The PHP SDK supports cursor-based pagination out of the box. It does all the heavy lifting of managing page cursors for you.
 
 In this example we'll pull five entries from a user's feed (assuming the user approved the `read_stream` permission for your app). Then we'll use the `next()` method to grab the next page of results. Naturally you'd provide some sort of pagination navigation in your app, but this is just an example to get you started.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 try {
@@ -44,5 +41,4 @@ $nextFeed = $fb->next($feedEdge);
 foreach ($nextFeed as $status) {
   var_dump($status->asArray());
 }
-~~~~
-</card>
+```

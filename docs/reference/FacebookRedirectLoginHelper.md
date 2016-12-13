@@ -1,11 +1,8 @@
-<card>
 # Facebook\Helpers\FacebookRedirectLoginHelper
 
 The most commonly used helper is the `FacebookRedirectLoginHelper` which allows you to obtain a user access token from a redirect using a "Log in with Facebook" link.
-</card>
 
-<card>
-## Usage {#usage}
+## Usage
 
 Facebook Login is achieved via OAuth 2.0. But you don't really have to know much about OAuth 2.0 since the SDK for PHP does all the heavy lifting for you.
 
@@ -14,11 +11,11 @@ Facebook Login is achieved via OAuth 2.0. But you don't really have to know much
 
 You can obtain an instance of the `FacebookRedirectLoginHelper` from the `getRedirectLoginHelper()` method on the `Facebook\Facebook` service.
 
-~~~
+```php
 $fb = new Facebook\Facebook([/* . . . */]);
 
 $helper = $fb->getRedirectLoginHelper();
-~~~
+```
 
 ### Login with Facebook
 
@@ -29,7 +26,7 @@ The basic login flow goes like this:
 3. After the user confirms or denies the app authorization, they will be redirected to a specific callback URL on your website.
 4. In your callback URL you can analyse the response to obtain a user access token or display an error if the user denied the request.
 
-~~~
+```php
 # login.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -38,16 +35,13 @@ $permissions = ['email', 'user_likes']; // optional
 $loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
 
 echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-~~~
+```
 
-%FB(devsite:markdown-wiki:info-card {
-  content: "The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts. You can overwrite the default session handling - see [extensibility points](#extensibility-points) below.",
-  type: 'warning',
-})
+> **Warning:** The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts. You can overwrite the default session handling - see [extensibility points](#extensibility-points) below.
 
 Then, in your callback page (at the redirect url) when Facebook sends the user back:
 
-~~~
+```php
 # login-callback.php
 $fb = new Facebook\Facebook([/* . . . */]);
 
@@ -74,63 +68,51 @@ if (isset($accessToken)) {
   // The user denied the request
   exit;
 }
-~~~
-</card>
+```
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-### getLoginUrl() {#get-login-url}
-~~~~
+### getLoginUrl()
+```php
 public string getLoginUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates an authorization URL to ask a user for access to their profile on behalf of your app.
 
 #### Arguments
 - `$redirectUrl` (_Required_) The callback URL that the user will be redirected to after being presented with the app authorization modal.
 - `$scope` (_Optional_) A numeric array of permissions to ask the user for.
 - `$separator` (_Optional_) The URL parameter separator. When working with XML documents, you can set this to `&amp;` for example.
-</card>
 
-<card>
-### getReRequestUrl() {#get-re-request-url}
-~~~~
+### getReRequestUrl()
+```php
 public string getReRequestUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates a URL to rerequest permissions from a user. The arguments are the same as the `getLoginUrl()` method above.
-</card>
 
-<card>
-### getReAuthenticationUrl() {#get-re-authentication-url}
-~~~~
+### getReAuthenticationUrl()
+```php
 public string getReAuthenticationUrl(string $redirectUrl, array $scope = [], string $separator = '&')
-~~~~
+```
 Generates a URL to ask the user to reauthenticate. The arguments are the same as the `getLoginUrl()` method above.
-</card>
 
-<card>
-### getLogoutUrl() {#get-logout-url}
-~~~~
+### getLogoutUrl()
+```php
 public string getLogoutUrl(string $accessToken, string $next, string $separator = '&')
-~~~~
+```
 Generates the URL log a user out of Facebook. This will throw an `FacebookSDKException` if you try to use an app access token.
-</card>
 
-<card>
-### getAccessToken() {#get-access-token}
-~~~~
+### getAccessToken()
+```php
 public Facebook\Authentication\AccessToken|null getAccessToken(string $redirectUrl = null)
-~~~~
+```
 Attempts to obtain an access token from an authorization code. This method will make a request to the Graph API and return a response. If there was an error in that process a `FacebookSDKException` will be thrown. A `FacebookSDKException` will also be thrown if the CSRF validation fails.
 
 If no authorization code could be found from the `code` param in the URL, this method will return `null`.
 
 #### Arguments
 - `$redirectUrl` (_Optional_) The URL of the callback that the user is currently on. This should be the same as the one used when creating the login URL. If no URL is provided, it will be detected automatically.
-</card>
 
-<card>
-## Extensibility Points {#extensibility-points}
+## Extensibility Points
 
 The `FacebookRedirectLoginHelper` has to orchestrate a number of components from the hosting environment to make the OAuth 2.0 authorization process as easy as possible to integrate. Out of the box it auto-detects all the things it needs, but sometimes you'll want to control these components.
 
@@ -139,15 +121,14 @@ The `FacebookRedirectLoginHelper` has to orchestrate a number of components from
 
 In order to prevent [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)'s, a unique value is generated with each login link and stored in a session.
 
-Most modern web frameworks have custom session handlers that allow you to manage your sessions with something other than the default flat-file storage. You can integrate your framework's custom session handling by coding to the [`PersistentDataInterface`](/docs/php/PersistentDataInterface).
+Most modern web frameworks have custom session handlers that allow you to manage your sessions with something other than the default flat-file storage. You can integrate your framework's custom session handling by coding to the [`PersistentDataInterface`](PersistentDataInterface.md).
 
 
 ### CSPRNG
 
-The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](/docs/php/PseudoRandomStringGeneratorInterface) allows you to inject your own custom CSPRNG.
+The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) allows you to inject your own custom CSPRNG.
 
 
 ### URL detection
 
-In order to not make you pass the callback URL to the `getAccessToken()` method, the SDK will do its best to detect the callback's URL for you. Most modern web frameworks have URL detection built-in. You can code your specific web framework's URL detection logic by coding to the [`UrlDetectionInterface`](/docs/php/UrlDetectionInterface).
-</card>
+In order to not make you pass the callback URL to the `getAccessToken()` method, the SDK will do its best to detect the callback's URL for you. Most modern web frameworks have URL detection built-in. You can code your specific web framework's URL detection logic by coding to the [`UrlDetectionInterface`](UrlDetectionInterface.md).

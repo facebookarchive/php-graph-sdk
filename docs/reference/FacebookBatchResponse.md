@@ -1,17 +1,14 @@
-<card>
 # FacebookBatchResponse for the Facebook SDK for PHP
 
 Represents a batch response returned from the Graph API.
-</card>
 
-<card>
-## Facebook\FacebookBatchResponse {#overview}
+## Facebook\FacebookBatchResponse
 
 After sending a batch request to the Graph API, the response will be returned in the form of a `Facebook\FacebookBatchResponse` entity.
 
 Usage:
 
-~~~~
+```php
 $fb = new Facebook\Facebook(/* . . . */);
 $requests = [
   $fb->request('GET', '/me'),
@@ -42,27 +39,23 @@ foreach ($batchResponse as $key => $response) {
 
 var_dump($batchResponse);
 // class Facebook\FacebookBatchResponse . . .
-~~~~
-</card>
+```
 
-<card>
-## Instance Methods {#instance-methods}
+## Instance Methods
 
-Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entity, all the methods are inherited.
+Since the `Facebook\FacebookBatchResponse` is extended from the [`Facebook\FacebookResponse`](FacebookResponse.md) entity, all the methods are inherited.
 
-### getResponses() {#get-responses}
-~~~~
+### getResponses()
+```php
 public array getResponses()
-~~~~
-Returns the array of [`Facebook\FacebookResponse`](/docs/php/FacebookResponse) entities that were returned from Graph.
-</card>
+```
+Returns the array of [`Facebook\FacebookResponse`](FacebookResponse.md) entities that were returned from Graph.
 
-<card>
-## Array Access {#array-access}
+## Array Access
 
 Since `Facebook\FacebookBatchResponse` implements `\IteratorAggregate` and `\ArrayAccess`, the responses can be accessed via array syntax and can also be iterated over.
 
-~~~~
+```php
 $requests = [
   'foo' => $fb->request('GET', '/me'),
   'bar' => $fb->request('POST', '/me/feed', [/* */]),
@@ -80,5 +73,4 @@ foreach ($batchResponse as $key => $response) {
 
 var_dump($batchResponse['foo']);
 // class Facebook\FacebookResponse . . .
-~~~~
-</card>
+```

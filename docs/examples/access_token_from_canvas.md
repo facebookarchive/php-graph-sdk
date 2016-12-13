@@ -1,19 +1,16 @@
-<card>
 # Get Access Token From App Canvas Example
 
 This example covers obtaining an access token and signed request from within the context of an app canvas with the Facebook SDK for PHP.
-</card>
 
-<card>
-## Example {#example}
+## Example
 
 A signed request will be sent to your app via the HTTP POST method within the context of app canvas. The PHP SDK provides a helper to easily obtain, validate & decode the signed request. If the proper OAuth data exists in the signed request payload data, an attempt can be made to obtain an access token from the Graph API.
 
-~~~~
+```php
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.6',
+  'default_graph_version' => 'v2.8',
   ]);
 
 $helper = $fb->getCanvasHelper();
@@ -41,5 +38,4 @@ var_dump($helper->getSignedRequest());
 
 echo '<h3>Access Token</h3>';
 var_dump($accessToken->getValue());
-~~~~
-</card>
+```
