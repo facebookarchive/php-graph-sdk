@@ -208,7 +208,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $batchRequest->add($request, 'foo_name');
 
         $requests = $batchRequest->getRequests();
-        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], [
+            'name' => $requests[0]['name'],
+        ]);
 
         $this->assertEquals($expectedArray, $batchRequestArray);
     }
@@ -264,11 +266,12 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
         $attachedFiles = $requests[0]['attached_files'];
 
-        $batchRequestArray = $batchRequest->requestEntityToBatchArray(
-            $requests[0]['request'],
-            $requests[0]['name'],
-            $attachedFiles
-        );
+        $options = [
+            'name' => $requests[0]['name'],
+            'attached_files' => $attachedFiles,
+        ];
+
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $options);
 
         $this->assertEquals([
             'headers' => $this->defaultHeaders(),
@@ -288,12 +291,13 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
         $requests = $batchRequest->getRequests();
 
-        $batchRequestArray = $batchRequest->requestEntityToBatchArray(
-            $requests[0]['request'],
-            $requests[0]['name'],
-            null,
-            $requests[0]['options']
-        );
+        $options = [
+            'name' => $requests[0]['name'],
+        ];
+
+        $options += $requests[0]['options'];
+
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $options);
 
         $this->assertEquals([
             'headers' => $this->defaultHeaders(),
@@ -418,7 +422,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         foreach ($requests as $name => $request) {
             $expectedRequests[] = [
                 'name' => $name,
-                'request' => $request
+                'request' => $request,
+                'attached_files' => null,
+                'options' => [],
             ];
         }
         $this->assertEquals($expectedRequests, $formattedRequests);
