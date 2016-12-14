@@ -482,12 +482,14 @@ class Facebook
         return $this->lastResponse = $this->client->sendBatchRequest($batchRequest);
     }
 
+
     /**
      * Instantiates an empty FacebookBatchRequest entity.
      *
      * @param  AccessToken|string|null $accessToken  The top-level access token. Requests with no access token
      *                                               will fallback to this.
-     * @param  string|null $graphVersion The Graph API version to use.
+     * @param  string|null             $graphVersion The Graph API version to use.
+     *
      * @return FacebookBatchRequest
      */
     public function newBatchRequest($accessToken = null, $graphVersion = null)

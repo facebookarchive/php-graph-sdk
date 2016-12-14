@@ -229,8 +229,8 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
      * Converts a Request entity into an array that is batch-friendly.
      *
      * @param FacebookRequest $request       The request entity to convert.
-     * @param array           $options The name and the attached files of the request plus
-     *                                 the batch options e.g. 'omit_response_on_success'
+     * @param array           $options       The name and the attached files of the request plus
+     *                                       the batch options e.g. 'omit_response_on_success'
      *
      * @return array
      */
