@@ -125,14 +125,14 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 
         $getUrl = $getRequest->getUrl();
         $expectedParams = 'foo=bar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9';
-        $expectedUrl = '/' . FacebookTest::DEFAULT_GRAPH_VERSION . '/foo?' . $expectedParams;
+        $expectedUrl = '/foo?' . $expectedParams;
 
         $this->assertEquals($expectedUrl, $getUrl);
 
         $postRequest = new FacebookRequest($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar']);
 
         $postUrl = $postRequest->getUrl();
-        $expectedUrl = '/' . FacebookTest::DEFAULT_GRAPH_VERSION . '/bar';
+        $expectedUrl = '/bar';
 
         $this->assertEquals($expectedUrl, $postUrl);
     }
@@ -156,7 +156,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
         $url = $request->getUrl();
 
         $expectedParams = 'bar=baz&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9';
-        $expectedUrl = '/' . FacebookTest::DEFAULT_GRAPH_VERSION . '/foo?' . $expectedParams;
+        $expectedUrl = '/foo?' . $expectedParams;
         $this->assertEquals($expectedUrl, $url);
 
         $params = $request->getParams();
