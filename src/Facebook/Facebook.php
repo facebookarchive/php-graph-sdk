@@ -115,6 +115,7 @@ class Facebook
         $config = array_merge([
             'app_id' => getenv(static::APP_ID_ENV_NAME),
             'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
+            'default_graph_version' => null,
             'enable_beta_mode' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,
