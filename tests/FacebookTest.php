@@ -36,7 +36,7 @@ use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {
-    const DEFAULT_GRAPH_VERSION = 'v2.7';
+    const DEFAULT_GRAPH_VERSION = 'v2.8';
 
     protected $config = [
         'app_id' => '1337',
