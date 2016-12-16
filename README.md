@@ -1,6 +1,6 @@
 # Facebook SDK for PHP (v6)
 
-## NOTICE: This branch is under active development. For the stable release please use the [5.3 branch](https://github.com/facebook/php-graph-sdk/tree/5.3).
+## NOTICE: This branch is under active development. For the stable release please use the [5.4 branch](https://github.com/facebook/php-graph-sdk/tree/5.4).
 
 [![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/master.svg)](https://travis-ci.org/facebook/php-graph-sdk)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/facebook-php-sdk-v4/?branch=master)
@@ -29,7 +29,7 @@ Simple GET example of a user's profile.
 $fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.7',
+  'default_graph_version' => 'v2.8',
   //'default_access_token' => '{access-token}', // optional
 ]);
 
@@ -57,7 +57,7 @@ $me = $response->getGraphUser();
 echo 'Logged in as ' . $me->getName();
 ```
 
-Complete documentation, installation instructions, and examples are available at: [https://developers.facebook.com/docs/php](https://developers.facebook.com/docs/php)
+Complete documentation, installation instructions, and examples are available [here](docs/).
 
 
 ## Tests

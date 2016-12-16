@@ -32,8 +32,6 @@ use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorFactory;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\HttpClients\HttpClientsFactory;
 use Facebook\PersistentData\PersistentDataFactory;
 use Facebook\PersistentData\PersistentDataInterface;
@@ -86,11 +84,6 @@ class Facebook
     protected $urlDetectionHandler;
 
     /**
-     * @var PseudoRandomStringGeneratorInterface|null The cryptographically secure pseudo-random string generator.
-     */
-    protected $pseudoRandomStringGenerator;
-
-    /**
      * @var AccessToken|null The default access token to use with requests.
      */
     protected $defaultAccessToken;
@@ -125,7 +118,6 @@ class Facebook
             'enable_beta_mode' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,
-            'pseudo_random_string_generator' => null,
             'url_detection_handler' => null,
         ], $config);
 
@@ -143,9 +135,6 @@ class Facebook
         $this->client = new FacebookClient(
             HttpClientsFactory::createHttpClient($config['http_client_handler']),
             $config['enable_beta_mode']
-        );
-        $this->pseudoRandomStringGenerator = PseudoRandomStringGeneratorFactory::createPseudoRandomStringGenerator(
-            $config['pseudo_random_string_generator']
         );
         $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new FacebookUrlDetectionHandler());
         $this->persistentDataHandler = PersistentDataFactory::createPersistentDataHandler(
@@ -279,8 +268,7 @@ class Facebook
         return new FacebookRedirectLoginHelper(
             $this->getOAuth2Client(),
             $this->persistentDataHandler,
-            $this->urlDetectionHandler,
-            $this->pseudoRandomStringGenerator
+            $this->urlDetectionHandler
         );
     }
 

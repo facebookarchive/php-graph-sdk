@@ -28,8 +28,6 @@ use Facebook\Authentication\OAuth2Client;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorFactory;
-use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\Url\UrlDetectionInterface;
@@ -62,22 +60,15 @@ class FacebookRedirectLoginHelper
     protected $persistentDataHandler;
 
     /**
-     * @var PseudoRandomStringGeneratorInterface The cryptographically secure pseudo-random string generator.
+     * @param OAuth2Client $oAuth2Client The OAuth 2.0 client service.
+     * @param PersistentDataInterface|null $persistentDataHandler The persistent data handler.
+     * @param UrlDetectionInterface|null $urlHandler The URL detection handler.
      */
-    protected $pseudoRandomStringGenerator;
-
-    /**
-     * @param OAuth2Client                              $oAuth2Client          The OAuth 2.0 client service.
-     * @param PersistentDataInterface|null              $persistentDataHandler The persistent data handler.
-     * @param UrlDetectionInterface|null                $urlHandler            The URL detection handler.
-     * @param PseudoRandomStringGeneratorInterface|null $prsg                  The cryptographically secure pseudo-random string generator.
-     */
-    public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null, PseudoRandomStringGeneratorInterface $prsg = null)
+    public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null)
     {
         $this->oAuth2Client = $oAuth2Client;
         $this->persistentDataHandler = $persistentDataHandler ?: new FacebookSessionPersistentDataHandler();
         $this->urlDetectionHandler = $urlHandler ?: new FacebookUrlDetectionHandler();
-        $this->pseudoRandomStringGenerator = PseudoRandomStringGeneratorFactory::createPseudoRandomStringGenerator($prsg);
     }
 
     /**
@@ -101,39 +92,34 @@ class FacebookRedirectLoginHelper
     }
 
     /**
-     * Returns the cryptographically secure pseudo-random string generator.
-     *
-     * @return PseudoRandomStringGeneratorInterface
-     */
-    public function getPseudoRandomStringGenerator()
-    {
-        return $this->pseudoRandomStringGenerator;
-    }
-
-    /**
      * Stores CSRF state and returns a URL to which the user should be sent to in order to continue the login process with Facebook.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param array  $params      An array of parameters to generate URL.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param array $params An array of parameters to generate URL.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
     private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
     {
-        $state = $this->persistentDataHandler->get('state') ?: $this->pseudoRandomStringGenerator->getPseudoRandomString(static::CSRF_LENGTH);
+        $state = $this->persistentDataHandler->get('state') ?: $this->getPseudoRandomString();
         $this->persistentDataHandler->set('state', $state);
 
         return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $state, $scope, $params, $separator);
+    }
+
+    private function getPseudoRandomString()
+    {
+        return bin2hex(random_bytes(static::CSRF_LENGTH));
     }
 
     /**
      * Returns the URL to send the user in order to login to Facebook.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
@@ -146,8 +132,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to log out of Facebook.
      *
      * @param AccessToken|string $accessToken The access token that will be logged out.
-     * @param string             $next        The url Facebook should redirect the user to after a successful logout.
-     * @param string             $separator   The separator to use in http_build_query().
+     * @param string $next The url Facebook should redirect the user to after a successful logout.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      *
@@ -175,8 +161,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to login to Facebook with permission(s) to be re-asked.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */
@@ -191,8 +177,8 @@ class FacebookRedirectLoginHelper
      * Returns the URL to send the user in order to login to Facebook with user to be re-authenticated.
      *
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
-     * @param array  $scope       List of permissions to request during login.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param array $scope List of permissions to request during login.
+     * @param string $separator The separator to use in http_build_query().
      *
      * @return string
      */

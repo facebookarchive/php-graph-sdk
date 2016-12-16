@@ -28,7 +28,6 @@ use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\Tests\Fixtures\FooPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooRedirectLoginOAuth2Client;
 
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
@@ -100,25 +99,5 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
         $accessToken = $this->redirectLoginHelper->getAccessToken(self::REDIRECT_URL);
 
         $this->assertEquals('foo_token_from_code|foo_code|' . self::REDIRECT_URL, (string)$accessToken);
-    }
-
-    public function testACustomCsprsgCanBeInjected()
-    {
-        $app = new FacebookApp('123', 'foo_app_secret');
-        $accessTokenClient = new FooRedirectLoginOAuth2Client($app, new FacebookClient(), 'v1337');
-        $fooPrsg = new FooPseudoRandomStringGenerator();
-        $helper = new FacebookRedirectLoginHelper($accessTokenClient, $this->persistentDataHandler, null, $fooPrsg);
-
-        $loginUrl = $helper->getLoginUrl(self::REDIRECT_URL);
-
-        $this->assertContains('state=csprs123', $loginUrl);
-    }
-
-    public function testThePseudoRandomStringGeneratorWillAutoDetectCsprsg()
-    {
-        $this->assertInstanceOf(
-            'Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface',
-            $this->redirectLoginHelper->getPseudoRandomStringGenerator()
-        );
     }
 }
