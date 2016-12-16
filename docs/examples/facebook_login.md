@@ -85,7 +85,7 @@ if (! $accessToken->isLongLived()) {
   try {
     $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
   } catch (Facebook\Exceptions\FacebookSDKException $e) {
-    echo "<p>Error getting long-lived access token: " . $helper->getMessage() . "</p>\n\n";
+    echo "<p>Error getting long-lived access token: " . $e->getMessage() . "</p>\n\n";
     exit;
   }
 
