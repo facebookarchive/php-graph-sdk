@@ -128,7 +128,7 @@ class Facebook
         if (!$config['app_secret']) {
             throw new FacebookSDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
         }
-        if (empty($config['default_graph_version'])) {
+        if (!$config['default_graph_version']) {
             throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config');
         }
 
