@@ -75,6 +75,18 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
+    public function testInstantiatingWithoutDefaultGraphVersionThrows()
+    {
+        $config = [
+            'app_id' => 'foo_id',
+            'app_secret' => 'foo_secret',
+        ];
+        new Facebook($config);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testSettingAnInvalidHttpClientHandlerThrows()
     {
         $config = array_merge($this->config, [
