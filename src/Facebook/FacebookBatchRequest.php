@@ -76,7 +76,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
     {
         if (is_array($request)) {
             foreach ($request as $key => $req) {
-                $this->add($req, $key);
+                $this->add($req, strval($key));
             }
 
             return $this;
