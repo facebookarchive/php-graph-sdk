@@ -63,12 +63,15 @@ Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\Facebo
 ```php
 public add(
   array|Facebook\FacebookBatchRequest $request,
-  string|null $name
+  string|null $name,
+  string[] $options
   )
 ```
 Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](FacebookRequest.md) or an array of `Facebook\FacebookRequest`'s.
 
 The `$name` argument is optional and is used to identify the request in the batch.
+
+The `$options` argument is optional and is used to provide values for the batch options e.g. 'omit_response_on_success' ([see example](../examples/batch_request.md#force-response-example)), 'depends_on' ([see example](../examples/batch_request.md#explicit-dependency-example)).
 
 ### getRequests()
 ```php
