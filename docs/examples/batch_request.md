@@ -96,7 +96,65 @@ My next 2 events are House Warming Party,Some Foo Event.
 
 It should also contain a response containing two photos from the user.
 
-> **Warning:** The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
+> **Warning:** The response object should return a `null` response for any request that was pointed to with JSONPath as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations). If we want to receive the response anyway we have to set the `omit_response_on_success` option to `false`. [See the example below](#force-response-example).
+
+## Force Response Example
+
+The following example is a subset of the [first example](#example). We will only use the `user-events` and `post-to-feed` requests of the [first example](#example), but in this case we will force the server to return the response of the `user-events` request.
+
+```php
+$fb = new Facebook\Facebook([
+  'app_id' => '{app-id}',
+  'app_secret' => '{app-secret}',
+  'default_graph_version' => 'v2.8',
+  ]);
+
+// Since all the requests will be sent on behalf of the same user,
+// we'll set the default fallback access token here.
+$fb->setDefaultAccessToken('user-access-token');
+
+// Get user events
+$requestUserEvents = $fb->request('GET', '/me/events?fields=id,name&limit=2');
+
+// Post a status update with reference to the user's events
+$message = 'My next 2 events are {result=user-events:$.data.*.name}.';
+$statusUpdate = ['message' => $message];
+$requestPostToFeed = $fb->request('POST', '/me/feed', $statusUpdate);
+
+// Create an empty batch request
+$batch = $fb->newBatchRequest();
+
+// Populate the batch request
+// Set the 'omit_response_on_success' option to false to force the server return the response
+$batch->add($requestUserEvents, "user-events", ["omit_response_on_success" => false]);
+$batch->add($requestPostToFeed, "post-to-feed");
+
+// Send the batch request
+try {
+  $responses = $fb->getClient()->sendBatchRequest($batch);
+} catch(Facebook\Exceptions\FacebookResponseException $e) {
+  // When Graph returns an error
+  echo 'Graph returned an error: ' . $e->getMessage();
+  exit;
+} catch(Facebook\Exceptions\FacebookSDKException $e) {
+  // When validation fails or other local issues
+  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+  exit;
+}
+
+foreach ($responses as $key => $response) {
+  if ($response->isError()) {
+    $e = $response->getThrownException();
+    echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
+    echo '<p>Graph Said: ' . "\n\n";
+    var_dump($e->getResponse());
+  } else {
+    echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
+    echo "Response: " . $response->getBody() . "</p>\n\n";
+    echo "<hr />\n\n";
+  }
+}
+```
 
 ## Multiple User Example
 
