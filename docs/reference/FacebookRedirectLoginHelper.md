@@ -126,7 +126,7 @@ Most modern web frameworks have custom session handlers that allow you to manage
 
 ### CSPRNG
 
-The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) allows you to inject your own custom CSPRNG.
+The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. To generate these tokens the PHP SDK uses the [CSPRNG functions in PHP 7](http://php.net/csprng) and the [paragonie/random_compat](https://github.com/paragonie/random_compat) polyfill for PHP 5.6.
 
 
 ### URL detection

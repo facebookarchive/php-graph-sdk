@@ -52,7 +52,6 @@ $fb = new Facebook\Facebook([
   'http_client_handler' => 'guzzle',
   'persistent_data_handler' => 'memory',
   'url_detection_handler' => new MyUrlDetectionHandler(),
-  'pseudo_random_string_generator' => new MyPseudoRandomStringGenerator(),
 ]);
 ```
 
@@ -111,29 +110,6 @@ The SDK will do its best to detect the proper current URL but this can sometimes
 ```php
 $fb = new Facebook([
   'url_detection_handler' => new MyUrlDetectionHandler(),
-]);
-```
-
-If any other value is provided an `InvalidArgumentException` will be thrown.
-
-### `pseudo_random_string_generator`
-Allows you to overwrite the default cryptographically secure pseudo-random string generator.
-
-Generating random strings in PHP is easy but generating _cryptographically secure_ random strings is another matter. By default the SDK will attempt to detect a suitable to cryptographically secure random string generator for you. If a cryptographically secure method cannot be detected, a `Facebook\Exceptions\FacebookSDKException` will be thrown.
-
-You can force a specific implementation of the CSPRSG's provided in the SDK by setting `pseudo_random_string_generator` to one of the following methods: `mcrypt`, `openssl` and `urandom`.
-
-```php
-$fb = new Facebook([
-  'pseudo_random_string_generator' => 'openssl',
-]);
-```
-
-You can write your own CSPRSG that implements the [`Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) and set the value of `pseudo_random_string_generator` to an instance of your custom generator.
-
-```php
-$fb = new Facebook([
-  'pseudo_random_string_generator' => new MyPseudoRandomStringGenerator(),
 ]);
 ```
 

@@ -91,4 +91,3 @@ You can overwrite certain functionality of the SDK by coding to an interface and
 | `Facebook\Http\GraphRawResponse`  | An entity that is returned from an instance of a `FacebookHttpClientInterface` that represents a raw HTTP response from the Graph API.  |
 | [`Facebook\PersistentData\PersistentDataInterface`](reference/PersistentDataInterface.md) | An interface to code your own persistent data storage implementation.  |
 | [`Facebook\Url\UrlDetectionInterface`](reference/UrlDetectionInterface.md) | An interface to code your own URL detection logic.  |
-| [`Facebook\PseudoRandomString\ PseudoRandomStringGeneratorInterface`](reference/PseudoRandomStringGeneratorInterface.md) | An interface to code your own cryptographically secure pseudo-random string generator.  |
