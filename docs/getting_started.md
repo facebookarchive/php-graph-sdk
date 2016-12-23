@@ -22,7 +22,7 @@ There are two methods to install the Facebook SDK for PHP. The recommended insta
 [Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
 
 ```
-composer require facebook/php-sdk-v4
+composer require facebook/graph-sdk
 ```
 
 > The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.
@@ -40,12 +40,12 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 First, download the source code and unzip it wherever you like in your project.
 
-[Download the SDK for PHP v5.0](https://github.com/facebook/facebook-php-sdk-v4/archive/5.0-dev.zip)
+[Download the SDK for PHP v5.0](https://github.com/facebook/php-graph-sdk/archive/5.4.zip)
 
 Then include the autoloader provided in the SDK at the top of your script.
 
 ```php
-require_once __DIR__ . '/path/to/facebook-php-sdk-v4/src/Facebook/autoload.php';
+require_once __DIR__ . '/path/to/php-graph-sdk/src/Facebook/autoload.php';
 ```
 
 The autoloader should be able to auto-detect the proper location of the source code.
