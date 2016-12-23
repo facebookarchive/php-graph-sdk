@@ -129,10 +129,10 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedUrl, $getUrl);
 
-        $postRequest = new FacebookRequest($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar']);
+        $postRequest = new FacebookRequest($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar'], null, 'v0.0');
 
         $postUrl = $postRequest->getUrl();
-        $expectedUrl = '/bar';
+        $expectedUrl = '/v0.0/bar';
 
         $this->assertEquals($expectedUrl, $postUrl);
     }
