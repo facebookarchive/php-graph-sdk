@@ -31,4 +31,4 @@ The following examples demonstrate how you would accomplish common tasks with th
 
 ## API Reference
 
-For a full list of classes, see the API [reference page](./sdk_reference.md).
+For a full list of classes, see the API [reference page](./reference.md).
