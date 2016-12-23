@@ -87,3 +87,8 @@ For us to accept contributions you will have to first have signed the [Contribut
 ## License
 
 Please see the [license file](https://github.com/facebook/php-graph-sdk/blob/master/LICENSE) for more information.
+
+
+## Security Vulnerabilities
+
+If you have found a security issue, please contact the maintainers directly at [me@sammyk.me](mailto:me@sammyk.me).
