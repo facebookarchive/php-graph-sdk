@@ -2,12 +2,6 @@
 
 Whether you're developing a website with Facebook login, creating a Facebook Canvas app or Page tab, the Facebook SDK for PHP does all the heavy lifting for you making it as easy as possible to deeply integrate into the Facebook platform.
 
-## Autoloading & namespaces
-
-The Facebook SDK for PHP v5 is coded in compliance with [PSR-4](http://www.php-fig.org/psr/psr-4/). This means it relies heavily on namespaces so that class files can be loaded for you automatically.
-
-It would be advantageous to familiarize yourself with the concepts of [namespacing](http://php.net/manual/en/language.namespaces.rationale.php) and [autoloading](http://php.net/manual/en/function.spl-autoload-register.php) if you are not already acquainted with them.
-
 ## System requirements
 
 - PHP 5.6 or greater
@@ -15,11 +9,7 @@ It would be advantageous to familiarize yourself with the concepts of [namespaci
 
 ## Installing the Facebook SDK for PHP
 
-There are two methods to install the Facebook SDK for PHP. The recommended installation method is by using [Composer](#installing-with-composer-recommended). If are unable to use Composer for your project, you can still [install the SDK manually](#manually-installing-if-you-really-have-to) by downloading the source files and including the autoloader.
-
-## Installing with Composer (recommended)
-
-[Composer](https://getcomposer.org/) is the recommended way to install the Facebook SDK for PHP. Simply run the following in the root of your project.
+The Facebook SDK for PHP is installed with [Composer](#installing-with-composer-recommended). Simply run the following in the root of your project.
 
 ```
 composer require facebook/graph-sdk
@@ -34,46 +24,6 @@ Make sure to include the Composer autoloader at the top of your script.
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
-```
-
-## Manually installing (if you really have to)
-
-First, download the source code and unzip it wherever you like in your project.
-
-[Download the SDK for PHP v5.0](https://github.com/facebook/php-graph-sdk/archive/5.4.zip)
-
-Then include the autoloader provided in the SDK at the top of your script.
-
-```php
-require_once __DIR__ . '/path/to/php-graph-sdk/src/Facebook/autoload.php';
-```
-
-The autoloader should be able to auto-detect the proper location of the source code.
-
-
-### Keeping things tidy
-
-The source code includes myriad files that aren't necessary for use in a production environment. If you'd like to strip out everything except the core files, follow this example.
-
->  For this example we'll assume the root of your website is `/var/html`.
-
-After downloading the source code with the button above, extract the files in a temporary directory.
-
-Move the folder `src/Facebook` to the root of your website installation or where ever you like to put third-party code. For this example we'll rename the `Facebook` directory to `facebook-sdk-v5`.
-
-The path the the core SDK files should now be located in `/var/html/facebook-sdk-v5` and inside will also be the `autoload.php` file.
-
-Assuming we have a script called `index.php` in the root of our web project, we need to include the autoloader at the top of our script.
-
-```php
-require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
-```
-
-If the autoloader is having trouble detecting the path to the source files, we can define the location of the source code before the `require_once` statement.
-
-```php
-define('FACEBOOK_SDK_V4_SRC_DIR', __DIR__ . '/facebook-sdk-v5/');
-require_once __DIR__ . '/facebook-sdk-v5/autoload.php';
 ```
 
 ## Configuration and setup
