@@ -37,7 +37,7 @@ class FacebookPageTabHelperTest extends \PHPUnit_Framework_TestCase
         $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
 
         $app = new FacebookApp('123', 'foo_app_secret');
-        $helper = new FacebookPageTabHelper($app, new FacebookClient(), FacebookTest::DEFAULT_GRAPH_VERSION);
+        $helper = new FacebookPageTabHelper($app, new FacebookClient(), 'v0.0');
 
         $this->assertFalse($helper->isAdmin());
         $this->assertEquals('42', $helper->getPageId());

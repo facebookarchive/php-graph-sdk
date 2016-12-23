@@ -37,7 +37,7 @@ class FacebookJavaScriptHelperTest extends \PHPUnit_Framework_TestCase
         $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
 
         $app = new FacebookApp('123', 'foo_app_secret');
-        $helper = new FacebookJavaScriptHelper($app, new FacebookClient(), FacebookTest::DEFAULT_GRAPH_VERSION);
+        $helper = new FacebookJavaScriptHelper($app, new FacebookClient(), 'v0.0');
 
         $rawSignedRequest = $helper->getRawSignedRequest();
 

@@ -35,12 +35,10 @@ use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {
-    const DEFAULT_GRAPH_VERSION = 'v2.8';
-
     protected $config = [
         'app_id' => '1337',
         'app_secret' => 'foo_secret',
-        'default_graph_version' => self::DEFAULT_GRAPH_VERSION,
+        'default_graph_version' => 'v0.0',
     ];
 
     /**
@@ -52,7 +50,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         putenv(Facebook::APP_ID_ENV_NAME.'=');
         $config = [
             'app_secret' => 'foo_secret',
-            'default_graph_version' => self::DEFAULT_GRAPH_VERSION,
+            'default_graph_version' => 'v0.0',
         ];
         new Facebook($config);
     }
@@ -66,7 +64,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         putenv(Facebook::APP_SECRET_ENV_NAME.'=');
         $config = [
             'app_id' => 'foo_id',
-            'default_graph_version' => self::DEFAULT_GRAPH_VERSION,
+            'default_graph_version' => 'v0.0',
         ];
         new Facebook($config);
     }

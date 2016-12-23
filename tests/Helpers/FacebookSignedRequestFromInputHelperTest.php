@@ -42,7 +42,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $app = new FacebookApp('123', 'foo_app_secret');
-        $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperFacebookClient(), FacebookTest::DEFAULT_GRAPH_VERSION);
+        $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperFacebookClient(), 'v0.0');
     }
 
     public function testSignedRequestDataCanBeRetrievedFromPostData()
