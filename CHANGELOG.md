@@ -7,6 +7,7 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 
 - 6.0.0 (Sometime in 2017)
   - Bumped minimum PHP version requirement to 5.6 (#607, #647)
+  - Made the `default_graph_version` option required (#643)
   - Replace custom CSPRNG implementation with `paragonie/random_compat` (#644)
   - Removed the built-in autoloader in favor of composer's autoloader (#646)
   - Big integers in signed requests get decoded as `string` instead of `float` (#699)
