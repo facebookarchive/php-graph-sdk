@@ -117,7 +117,7 @@ If any other value is provided an `InvalidArgumentException` will be thrown.
 
 ## Environment variables fallback
 
-The only required configuration options are `app_id` and `app_secret`. However, the SDK will look to environment variables for the app ID and app secret.
+The only required configuration options are `app_id`, `app_secret` and `default_graph_version`. However, the SDK will look to environment variables for the app ID and app secret.
 
 To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service with only needing to specify the `default_graph_version` option.
 
