@@ -10,8 +10,8 @@ It would be advantageous to familiarize yourself with the concepts of [namespaci
 
 ## System requirements
 
-- PHP 5.4 or greater
-- [Composer](https://getcomposer.org/) *(optional)*
+- PHP 5.6 or greater
+- [Composer](https://getcomposer.org/)
 
 ## Installing the Facebook SDK for PHP
 
