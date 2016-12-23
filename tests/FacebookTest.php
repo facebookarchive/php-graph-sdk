@@ -29,7 +29,6 @@ use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
-use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
@@ -39,6 +38,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     protected $config = [
         'app_id' => '1337',
         'app_secret' => 'foo_secret',
+        'default_graph_version' => 'v0.0',
     ];
 
     /**
@@ -50,6 +50,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         putenv(Facebook::APP_ID_ENV_NAME.'=');
         $config = [
             'app_secret' => 'foo_secret',
+            'default_graph_version' => 'v0.0',
         ];
         new Facebook($config);
     }
@@ -63,6 +64,19 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         putenv(Facebook::APP_SECRET_ENV_NAME.'=');
         $config = [
             'app_id' => 'foo_id',
+            'default_graph_version' => 'v0.0',
+        ];
+        new Facebook($config);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInstantiatingWithoutDefaultGraphVersionThrows()
+    {
+        $config = [
+            'app_id' => 'foo_id',
+            'app_secret' => 'foo_secret',
         ];
         new Facebook($config);
     }

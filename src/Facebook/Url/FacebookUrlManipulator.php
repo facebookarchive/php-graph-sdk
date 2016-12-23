@@ -142,12 +142,12 @@ class FacebookUrlManipulator
      *
      * @param string|null $string
      *
-     * @return string|null
+     * @return string
      */
     public static function forceSlashPrefix($string)
     {
         if (!$string) {
-            return $string;
+            return '';
         }
 
         return strpos($string, '/') === 0 ? $string : '/' . $string;

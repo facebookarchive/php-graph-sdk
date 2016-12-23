@@ -74,13 +74,13 @@ class OAuth2Client
     /**
      * @param FacebookApp    $app
      * @param FacebookClient $client
-     * @param string|null    $graphVersion The version of the Graph API to use.
+     * @param string         $graphVersion The version of the Graph API to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
-        $this->graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
+        $this->graphVersion = $graphVersion;
     }
 
     /**

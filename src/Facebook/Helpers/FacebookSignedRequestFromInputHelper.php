@@ -57,12 +57,11 @@ abstract class FacebookSignedRequestFromInputHelper
      *
      * @param FacebookApp    $app          The FacebookApp entity.
      * @param FacebookClient $client       The client to make HTTP requests.
-     * @param string|null    $graphVersion The version of Graph to use.
+     * @param string         $graphVersion The version of Graph to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion)
     {
         $this->app = $app;
-        $graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;
         $this->oAuth2Client = new OAuth2Client($this->app, $client, $graphVersion);
 
         $this->instantiateSignedRequest();

@@ -24,7 +24,6 @@
 namespace Facebook\Tests;
 
 use Facebook\Exceptions\FacebookSDKException;
-use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookBatchRequest;
@@ -165,7 +164,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
         list($url, $method, $headers, $body) = $this->fbClient->prepareRequestMessage($fbBatchRequest);
 
-        $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL . '/' . Facebook::DEFAULT_GRAPH_VERSION, $url);
+        $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL, $url);
         $this->assertEquals('POST', $method);
         $this->assertContains('multipart/form-data; boundary=', $headers['Content-Type']);
         $this->assertContains('Content-Disposition: form-data; name="batch"', $body);
