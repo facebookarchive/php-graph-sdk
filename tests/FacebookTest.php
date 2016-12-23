@@ -29,7 +29,6 @@ use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
-use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
