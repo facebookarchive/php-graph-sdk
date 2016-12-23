@@ -57,19 +57,19 @@ $fb = new Facebook\Facebook([
 ```
 
 ### `app_id`
-The ID of your Facebook app (required).
+**(Required)** The ID of your Facebook app. If not set, defaults to [the environment variables fallback](#environment-variables-fallback) if available.
 
 ### `app_secret`
-The secret of your Facebook app (required).
+**(Required)** The secret of your Facebook app. If not set, defaults to [the environment variables fallback](#environment-variables-fallback) if available.
+
+### `default_graph_version`
+**(Required)** Allows you to set the default Graph version number. Set this as a string as it would appear in the Graph url, e.g. `v2.8`. See the [latest version of Graph](https://developers.facebook.com/docs/apps/changelog) for more info on Graph versions.
 
 ### `default_access_token`
 The default fallback access token to use if one is not explicitly provided. The value can be of type `string` or `Facebook\AccessToken`. If any other value is provided an `InvalidArgumentException` will be thrown. Defaults to `null`.
 
 ### `enable_beta_mode`
 Enable [beta mode](https://developers.facebook.com/docs/apps/beta-tier) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
-
-### `default_graph_version`
-Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.8`. Defaults to the [latest version of Graph](https://developers.facebook.com/docs/apps/changelog).
 
 ### `http_client_handler`
 Allows you to overwrite the default HTTP client.
@@ -143,10 +143,12 @@ If any other value is provided an `InvalidArgumentException` will be thrown.
 
 The only required configuration options are `app_id` and `app_secret`. However, the SDK will look to environment variables for the app ID and app secret.
 
-To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service without setting any configuration in the constructor.
+To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service with only needing to specify the `default_graph_version` option.
 
 ```php
-$fb = new Facebook\Facebook();
+$fb = new Facebook\Facebook([
+    'default_graph_version' => 'v2.8',
+    ]);
 ```
 
 # Instance Methods
@@ -208,7 +210,7 @@ This setting will overwrite the value from `default_access_token` option if it w
 ```php
 public string getDefaultGraphVersion()
 ```
-Returns the default version of Graph. If the `default_graph_version` configuration option was not set, this will default to `Facebook\Facebook::DEFAULT_GRAPH_VERSION`.
+Returns the default version of Graph set with the `default_graph_version` configuration option.
 
 ## get()
 ```php

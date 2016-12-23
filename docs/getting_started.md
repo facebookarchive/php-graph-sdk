@@ -93,7 +93,7 @@ $fb = new Facebook\Facebook([
 
 You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](https://developers.facebook.com/apps).
 
-> **Warning:** It's important that you specify a `default_graph_version` value as this will give you more control over which version of Graph you want to use. If you don't specify a `default_graph_version`, the SDK for PHP will choose one for you and it might not be one that is compatible with your app.
+> **Warning:** It's important that you specify a `default_graph_version` value as this will give you more control over which version of Graph you want to use. If you don't specify a `default_graph_version`, the SDK will throw an [`InvalidArgumentException`](http://php.net/invalidargumentexception). See more about [Graph API versions](https://developers.facebook.com/docs/apps/versions).
 
 The `Facebook\Facebook` service ties all the components of the SDK for PHP together. [See the full reference for the `Facebook\Facebook` service](reference/Facebook.md).
 
