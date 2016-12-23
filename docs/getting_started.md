@@ -11,7 +11,6 @@ It would be advantageous to familiarize yourself with the concepts of [namespaci
 ## System requirements
 
 - PHP 5.4 or greater
-- The [mbstring](http://php.net/manual/en/book.mbstring.php) extension
 - [Composer](https://getcomposer.org/) *(optional)*
 
 ## Installing the Facebook SDK for PHP
