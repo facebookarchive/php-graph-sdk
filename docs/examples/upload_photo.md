@@ -4,7 +4,7 @@ This example covers uploading a photo to the current User's profile using the Gr
 
 It assumes that you've already acquired an access token using one of the helper classes found [here](../reference.md).  The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FileUpload\FacebookFile`](,,/reference/FacebookFile.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNodes\GraphNode`](../reference/GraphNode.md), [`Facebook\Exceptions\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exceptions\FacebookResponseException`](../reference/FacebookResponseException.md).
+For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FileUpload\FacebookFile`](../reference/FacebookFile.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNodes\GraphNode`](../reference/GraphNode.md), [`Facebook\Exceptions\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exceptions\FacebookResponseException`](../reference/FacebookResponseException.md).
 
 ## Example
 
