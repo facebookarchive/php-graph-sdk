@@ -1,4 +1,4 @@
-# Facebook SDK for PHP Reference (v5)
+# Facebook SDK for PHP Reference (v6)
 
 Below is the API reference for the Facebook SDK for PHP.
 
