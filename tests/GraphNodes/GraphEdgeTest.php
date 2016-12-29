@@ -26,6 +26,7 @@ namespace Facebook\Tests\GraphNodes;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphEdge;
+use Facebook\GraphNodes\GraphNode;
 
 class GraphEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,5 +96,29 @@ class GraphEdgeTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($this->request, $prevPage);
         $this->assertEquals('/v1337/998899/photos?access_token=foo_token&after=foo_after_cursor&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&foo=bar&limit=25&pretty=0', $nextPage->getUrl());
         $this->assertEquals('/v1337/998899/photos?access_token=foo_token&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&before=foo_before_cursor&foo=bar&limit=25&pretty=0', $prevPage->getUrl());
+    }
+
+    public function testCanMapOverNodes()
+    {
+        $graphEdge = new GraphEdge(
+            $this->request,
+            [new GraphNode(['name' => 'dummy'])],
+            ['paging' => $this->pagination],
+            '/1234567890/likes'
+        );
+
+        $graphEdge = $graphEdge->map(function (GraphNode $node) {
+            $node['name'] = str_replace('dummy', 'foo', $node['name']);
+            return $node;
+        });
+
+        $graphEdgeToCompare = new GraphEdge(
+            $this->request,
+            [new GraphNode(['name' => 'foo'])],
+            ['paging' => $this->pagination],
+            '/1234567890/likes'
+        );
+
+        $this->assertEquals($graphEdgeToCompare, $graphEdge);
     }
 }
