@@ -237,7 +237,7 @@ class GraphEdge extends Collection
     }
 
     /**
-     * @{inherited}
+     * @inheritDoc
      */
     public function map(\Closure $callback)
     {
