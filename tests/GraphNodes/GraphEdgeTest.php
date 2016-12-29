@@ -102,7 +102,10 @@ class GraphEdgeTest extends \PHPUnit_Framework_TestCase
     {
         $graphEdge = new GraphEdge(
             $this->request,
-            [new GraphNode(['name' => 'dummy'])],
+            [
+                new GraphNode(['name' => 'dummy']),
+                new GraphNode(['name' => 'dummy']),
+            ],
             ['paging' => $this->pagination],
             '/1234567890/likes'
         );
@@ -114,7 +117,10 @@ class GraphEdgeTest extends \PHPUnit_Framework_TestCase
 
         $graphEdgeToCompare = new GraphEdge(
             $this->request,
-            [new GraphNode(['name' => 'foo'])],
+            [
+                new GraphNode(['name' => 'foo']),
+                new GraphNode(['name' => 'foo'])
+            ],
             ['paging' => $this->pagination],
             '/1234567890/likes'
         );
