@@ -161,6 +161,75 @@ foreach ($responses as $key => $response) {
 
 ```
 
+## Explicit Dependency Example
+
+In the following example we will make two requests.
+* One to post a status update on the user's feed
+* and one to receive the last post of the user (which should be the one that we posted with first request).
+
+Since we want the second request to be executed after the first one is completed, we have to set the `depends_on` option of the second request to point to the name of the first request. We assume that we have the following options granted from the user: `user_posts`, `publish_actions`.
+
+```php
+<?php
+$fb = new Facebook\Facebook([
+    'app_id' => '{app-id}',
+    'app_secret' => '{app-secret}',
+    'default_graph_version' => 'v2.8',
+]);
+
+// Since all the requests will be sent on behalf of the same user,
+// we'll set the default fallback access token here.
+$fb->setDefaultAccessToken('user-access-token');
+
+// Post a status update to the user's feed
+$message = 'Random status update';
+$statusUpdate = ['message' => $message];
+$requestPostToFeed = $fb->request('POST', '/me/feed', $statusUpdate);
+
+// Get last post of the user
+$requestLastPost = $fb->request('GET', '/me/feed?limit=1');
+
+// Create an empty batch request
+$batch = $fb->newBatchRequest();
+
+// Populate the batch request
+$batch->add($requestPostToFeed, "post-to-feed");
+
+// Set the 'depends_on' property to point to the first request
+$batch->add($requestLastPost, [
+    "name" => "last-post",
+    "depends_on" => "post-to-feed"
+]);
+
+// Send the batch request
+try {
+    $responses = $fb->getClient()->sendBatchRequest($batch);
+} catch (Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+} catch (Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
+}
+
+foreach ($responses as $key => $response) {
+    if ($response->isError()) {
+        $e = $response->getThrownException();
+        echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
+        echo '<p>Graph Said: ' . "\n\n";
+        var_dump($e->getResponse());
+    } else {
+        echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
+        echo "Response: " . $response->getBody() . "</p>\n\n";
+        echo "<hr />\n\n";
+    }
+}
+```
+
+> **Warning:** The response object should return a `null` response for any request that was pointed to with the `depends_on` option as is [the behaviour of the batch functionality of the Graph API](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations). If we want to receive the response anyway we have to set the `omit_response_on_success` option to `false`. [See example](#force-response-example).
+
 ## Multiple User Example
 
 Since the requests sent in a batch are unrelated by default, we can make requests on behalf of multiple users and pages in the same batch request.
