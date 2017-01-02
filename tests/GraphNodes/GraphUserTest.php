@@ -42,7 +42,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
     public function testDatesGetCastToDateTime()
     {
         $dataFromGraph = [
-            'updated_time' => '2017-04-26 13:22:05',
+            'updated_time' => '2016-04-26 13:22:05',
         ];
 
         $this->responseMock
