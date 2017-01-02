@@ -93,7 +93,7 @@ class AccessToken
     /**
      * Determines whether or not this is a long-lived token.
      *
-     * @return bool
+     * @return bool|null
      */
     public function isLongLived()
     {
@@ -105,7 +105,7 @@ class AccessToken
             return true;
         }
 
-        return false;
+        return null;
     }
 
     /**
