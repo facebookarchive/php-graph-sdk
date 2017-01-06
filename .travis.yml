@@ -24,5 +24,6 @@ script:
   - vendor/bin/phpunit --coverage-text --exclude-group integration
 
 matrix:
+  fast_finish: true
   allow_failures:
     - php: 7.1.0RC3
