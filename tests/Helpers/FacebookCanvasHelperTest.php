@@ -25,7 +25,6 @@ namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
-use Facebook\Tests\FacebookTest;
 use Facebook\Helpers\FacebookCanvasHelper;
 
 class FacebookCanvasHelperTest extends \PHPUnit_Framework_TestCase

@@ -25,7 +25,6 @@ namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
-use Facebook\Tests\FacebookTest;
 use Facebook\Helpers\FacebookJavaScriptHelper;
 
 class FacebookJavaScriptHelperTest extends \PHPUnit_Framework_TestCase

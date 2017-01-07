@@ -24,7 +24,6 @@
 namespace Facebook\Tests\Helpers;
 
 use Facebook\FacebookApp;
-use Facebook\Tests\FacebookTest;
 use Facebook\Tests\Fixtures\FooSignedRequestHelper;
 use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
 
