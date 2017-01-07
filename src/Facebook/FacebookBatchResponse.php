@@ -40,7 +40,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     protected $batchRequest;
 
     /**
-     * @var array An array of FacebookResponse entities.
+     * @var FacebookResponse[] An array of FacebookResponse entities.
      */
     protected $responses = [];
 
@@ -67,7 +67,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * Returns an array of FacebookResponse entities.
      *
-     * @return array
+     * @return FacebookResponse[]
      */
     public function getResponses()
     {
