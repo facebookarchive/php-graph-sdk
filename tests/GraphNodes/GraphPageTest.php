@@ -25,6 +25,9 @@ namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
+use Facebook\GraphNodes\GraphLocation;
+use Facebook\GraphNodes\GraphPage;
+use Facebook\FacebookResponse;
 
 class GraphPageTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +38,7 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+        $this->responseMock = m::mock(FacebookResponse::class);
     }
 
     public function testPagePropertiesReturnGraphPageObjects()
@@ -63,8 +66,8 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
         $bestPage = $graphNode->getBestPage();
         $globalBrandParentPage = $graphNode->getGlobalBrandParentPage();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $bestPage);
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $globalBrandParentPage);
+        $this->assertInstanceOf(GraphPage::class, $bestPage);
+        $this->assertInstanceOf(GraphPage::class, $globalBrandParentPage);
     }
 
     public function testLocationPropertyWillGetCastAsGraphLocationObject()
@@ -90,6 +93,6 @@ class GraphPageTest extends \PHPUnit_Framework_TestCase
 
         $location = $graphNode->getLocation();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphLocation', $location);
+        $this->assertInstanceOf(GraphLocation::class, $location);
     }
 }

@@ -26,6 +26,8 @@ namespace Facebook\Tests;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
+use Facebook\GraphNodes\GraphNode;
+use Facebook\Exceptions\FacebookResponseException;
 
 class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,7 +81,7 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
             'id' => '123',
             'name' => 'Foo',
         ], $decodedResponse);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
+        $this->assertInstanceOf(GraphNode::class, $graphNode);
     }
 
     public function testASuccessfulJsonResponseWillBeDecodedToAGraphEdge()
@@ -90,8 +92,8 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $graphEdge = $response->getGraphEdge();
 
         $this->assertFalse($response->isError(), 'Did not expect Response to return an error.');
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[0]);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[1]);
+        $this->assertInstanceOf(GraphNode::class, $graphEdge[0]);
+        $this->assertInstanceOf(GraphNode::class, $graphEdge[1]);
     }
 
     public function testASuccessfulUrlEncodedKeyValuePairResponseWillBeDecoded()
@@ -116,6 +118,6 @@ class FacebookResponseTest extends \PHPUnit_Framework_TestCase
         $exception = $response->getThrownException();
 
         $this->assertTrue($response->isError(), 'Expected Response to return an error.');
-        $this->assertInstanceOf('Facebook\Exceptions\FacebookResponseException', $exception);
+        $this->assertInstanceOf(FacebookResponseException::class, $exception);
     }
 }

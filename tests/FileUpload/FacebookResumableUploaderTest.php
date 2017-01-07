@@ -66,7 +66,7 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
         $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
         $endpoint = '/me/videos';
         $chunk = $uploader->start($endpoint, $this->file);
-        $this->assertInstanceOf('Facebook\FileUpload\FacebookTransferChunk', $chunk);
+        $this->assertInstanceOf(FacebookTransferChunk::class, $chunk);
         $this->assertEquals('42', $chunk->getUploadSessionId());
         $this->assertEquals('1337', $chunk->getVideoId());
 

@@ -36,6 +36,9 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
 use Facebook\Tests\Fixtures\MyFooClientHandler;
+use Facebook\FacebookResponse;
+use Facebook\FacebookBatchResponse;
+use Facebook\GraphNodes\GraphNode;
 
 class FacebookClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,7 +74,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $client = new FacebookClient($handler);
         $httpHandler = $client->getHttpClientHandler();
 
-        $this->assertInstanceOf('Facebook\Tests\Fixtures\MyFooClientHandler', $httpHandler);
+        $this->assertInstanceOf(MyFooClientHandler::class, $httpHandler);
     }
 
     public function testTheHttpClientWillFallbackToDefault()
@@ -80,9 +83,9 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $httpHandler = $client->getHttpClientHandler();
 
         if (function_exists('curl_init')) {
-            $this->assertInstanceOf('Facebook\HttpClients\FacebookCurlHttpClient', $httpHandler);
+            $this->assertInstanceOf(FacebookCurlHttpClient::class, $httpHandler);
         } else {
-            $this->assertInstanceOf('Facebook\HttpClients\FacebookStreamHttpClient', $httpHandler);
+            $this->assertInstanceOf(FacebookStreamHttpClient::class, $httpHandler);
         }
     }
 
@@ -126,7 +129,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $fbRequest = new FacebookRequest($this->fbApp, 'token', 'GET', '/foo');
         $response = $this->fbClient->sendRequest($fbRequest);
 
-        $this->assertInstanceOf('Facebook\FacebookResponse', $response);
+        $this->assertInstanceOf(FacebookResponse::class, $response);
         $this->assertEquals(200, $response->getHttpStatusCode());
         $this->assertEquals('{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}', $response->getBody());
     }
@@ -142,7 +145,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $fbBatchClient = new FacebookClient(new MyFooBatchClientHandler());
         $response = $fbBatchClient->sendBatchRequest($fbBatchRequest);
 
-        $this->assertInstanceOf('Facebook\FacebookBatchResponse', $response);
+        $this->assertInstanceOf(FacebookBatchResponse::class, $response);
         $this->assertEquals('GET', $response[0]->getRequest()->getMethod());
         $this->assertEquals('POST', $response[1]->getRequest()->getMethod());
     }
@@ -197,7 +200,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
-        $this->setExpectedException('Facebook\Exceptions\FacebookSDKException');
+        $this->setExpectedException(FacebookSDKException::class);
 
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
@@ -240,7 +243,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         );
         $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
+        $this->assertInstanceOf(GraphNode::class, $graphNode);
         $this->assertNotNull($graphNode->getField('id'));
         $this->assertEquals('Foo Phpunit User', $graphNode->getField('name'));
 

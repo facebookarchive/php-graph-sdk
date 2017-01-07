@@ -45,12 +45,12 @@ class GraphNodeFactory
     /**
      * @const string The base graph object class.
      */
-    const BASE_GRAPH_NODE_CLASS = '\Facebook\GraphNodes\GraphNode';
+    const BASE_GRAPH_NODE_CLASS = GraphNode::class;
 
     /**
      * @const string The base graph edge class.
      */
-    const BASE_GRAPH_EDGE_CLASS = '\Facebook\GraphNodes\GraphEdge';
+    const BASE_GRAPH_EDGE_CLASS = GraphEdge::class;
 
     /**
      * @const string The graph object prefix.

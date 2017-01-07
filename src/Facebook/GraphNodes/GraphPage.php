@@ -34,11 +34,11 @@ class GraphPage extends GraphNode
      * @var array Maps object key names to Graph object types.
      */
     protected static $graphObjectMap = [
-        'best_page' => '\Facebook\GraphNodes\GraphPage',
-        'global_brand_parent_page' => '\Facebook\GraphNodes\GraphPage',
-        'location' => '\Facebook\GraphNodes\GraphLocation',
-        'cover' => '\Facebook\GraphNodes\GraphCoverPhoto',
-        'picture' => '\Facebook\GraphNodes\GraphPicture',
+        'best_page' => GraphPage::class,
+        'global_brand_parent_page' => GraphPage::class,
+        'location' => GraphLocation::class,
+        'cover' => GraphCoverPhoto::class,
+        'picture' => GraphPicture::class,
     ];
 
     /**

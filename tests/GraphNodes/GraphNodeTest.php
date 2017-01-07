@@ -76,7 +76,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
         $prettyDate = $dateTime->format(\DateTime::RFC1036);
         $timeStamp = $dateTime->getTimestamp();
 
-        $this->assertInstanceOf('DateTime', $dateTime);
+        $this->assertInstanceOf(\DateTime::class, $dateTime);
         $this->assertEquals('Wed, 16 Jul 14 23:43:40 +0200', $prettyDate);
         $this->assertEquals(1405547020, $timeStamp);
     }
@@ -89,7 +89,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
         $prettyDate = $dateTime->format(\DateTime::RFC1036);
         $timeStamp = $dateTime->getTimestamp();
 
-        $this->assertInstanceOf('DateTime', $dateTime);
+        $this->assertInstanceOf(\DateTime::class, $dateTime);
         $this->assertEquals('Tue, 15 Jul 14 03:44:53 +0000', $prettyDate);
         $this->assertEquals(1405395893, $timeStamp);
     }
@@ -121,7 +121,7 @@ class GraphNodeTest extends \PHPUnit_Framework_TestCase
 
         $collectionAsArray = $collection->asArray();
 
-        $this->assertInstanceOf('DateTime', $collectionAsArray['date']);
+        $this->assertInstanceOf(\DateTime::class, $collectionAsArray['date']);
     }
 
     public function testReturningACollectionAsJasonWillSafelyRepresentDateTimes()

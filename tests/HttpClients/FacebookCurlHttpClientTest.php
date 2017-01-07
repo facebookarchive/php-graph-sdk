@@ -25,6 +25,8 @@ namespace Facebook\Tests\HttpClients;
 
 use Mockery as m;
 use Facebook\HttpClients\FacebookCurlHttpClient;
+use Facebook\HttpClients\FacebookCurl;
+use Facebook\Http\GraphRawResponse;
 
 class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
@@ -46,7 +48,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
         if (!extension_loaded('curl')) {
             $this->markTestSkipped('cURL must be installed to test cURL client handler.');
         }
-        $this->curlMock = m::mock('Facebook\HttpClients\FacebookCurl');
+        $this->curlMock = m::mock(FacebookCurl::class);
         $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
     }
 
@@ -246,7 +248,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
         $response = $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
 
-        $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
+        $this->assertInstanceOf(GraphRawResponse::class, $response);
         $this->assertEquals($this->fakeRawBody, $response->getBody());
         $this->assertEquals($this->fakeHeadersAsArray, $response->getHeaders());
         $this->assertEquals(200, $response->getHttpResponseCode());

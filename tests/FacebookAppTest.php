@@ -24,6 +24,7 @@
 namespace Facebook\Tests;
 
 use Facebook\FacebookApp;
+use Facebook\Authentication\AccessToken;
 
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +52,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
     {
         $accessToken = $this->app->getAccessToken();
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertInstanceOf(AccessToken::class, $accessToken);
         $this->assertEquals('id|secret', (string)$accessToken);
     }
 
@@ -59,7 +60,7 @@ class FacebookAppTest extends \PHPUnit_Framework_TestCase
     {
         $newApp = unserialize(serialize($this->app));
 
-        $this->assertInstanceOf('Facebook\FacebookApp', $newApp);
+        $this->assertInstanceOf(FacebookApp::class, $newApp);
         $this->assertEquals('id', $newApp->getId());
         $this->assertEquals('secret', $newApp->getSecret());
     }

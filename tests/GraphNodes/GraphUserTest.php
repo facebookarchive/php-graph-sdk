@@ -26,6 +26,10 @@ namespace Facebook\Tests\GraphNodes;
 use Facebook\FacebookResponse;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
+use Facebook\GraphNodes\GraphPicture;
+use Facebook\GraphNodes\GraphUser;
+use Facebook\GraphNodes\GraphPage;
+use Facebook\GraphNodes\Birthday;
 
 class GraphUserTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +40,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+        $this->responseMock = m::mock(FacebookResponse::class);
     }
 
     public function testDatesGetCastToDateTime()
@@ -54,7 +58,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
 
         $updatedTime = $graphNode->getField('updated_time');
 
-        $this->assertInstanceOf('DateTime', $updatedTime);
+        $this->assertInstanceOf(\DateTime::class, $updatedTime);
     }
 
     public function testBirthdaysGetCastToBirthday()
@@ -73,9 +77,9 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
         $birthday = $graphNode->getBirthday();
 
         // Test to ensure BC
-        $this->assertInstanceOf('DateTime', $birthday);
+        $this->assertInstanceOf(\DateTime::class, $birthday);
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\Birthday', $birthday);
+        $this->assertInstanceOf(Birthday::class, $birthday);
         $this->assertTrue($birthday->hasDate());
         $this->assertTrue($birthday->hasYear());
         $this->assertEquals('1984/01/01', $birthday->format('Y/m/d'));
@@ -146,8 +150,8 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
         $hometown = $graphNode->getHometown();
         $location = $graphNode->getLocation();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $hometown);
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $location);
+        $this->assertInstanceOf(GraphPage::class, $hometown);
+        $this->assertInstanceOf(GraphPage::class, $location);
     }
 
     public function testUserPropertiesWillGetCastAsGraphUserObjects()
@@ -170,7 +174,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
 
         $significantOther = $graphNode->getSignificantOther();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $significantOther);
+        $this->assertInstanceOf(GraphUser::class, $significantOther);
     }
 
     public function testPicturePropertiesWillGetCastAsGraphPictureObjects()
@@ -195,7 +199,7 @@ class GraphUserTest extends \PHPUnit_Framework_TestCase
 
         $Picture = $graphNode->getPicture();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPicture', $Picture);
+        $this->assertInstanceOf(GraphPicture::class, $Picture);
         $this->assertTrue($Picture->isSilhouette());
         $this->assertEquals(200, $Picture->getWidth());
         $this->assertEquals(200, $Picture->getHeight());

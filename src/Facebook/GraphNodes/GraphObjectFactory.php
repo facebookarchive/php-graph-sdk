@@ -38,12 +38,12 @@ class GraphObjectFactory extends GraphNodeFactory
     /**
      * @const string The base graph object class.
      */
-    const BASE_GRAPH_NODE_CLASS = '\Facebook\GraphNodes\GraphObject';
+    const BASE_GRAPH_NODE_CLASS = GraphObject::class;
 
     /**
      * @const string The base graph edge class.
      */
-    const BASE_GRAPH_EDGE_CLASS = '\Facebook\GraphNodes\GraphList';
+    const BASE_GRAPH_EDGE_CLASS = GraphList::class;
 
     /**
      * Tries to convert a FacebookResponse entity into a GraphNode.
