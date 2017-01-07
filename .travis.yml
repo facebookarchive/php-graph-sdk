@@ -22,7 +22,3 @@ install:
 script:
   - vendor/bin/phpcs
   - vendor/bin/phpunit --coverage-text --exclude-group integration
-
-matrix:
-  allow_failures:
-    - php: 7.1
