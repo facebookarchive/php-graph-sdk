@@ -7,11 +7,12 @@ This example covers sending a batch request with the Facebook SDK for PHP.
 The following example assumes we have the following permissions granted from the user: `user_likes`, `user_events`, `user_photos`, `publish_actions`. The example makes use of [JSONPath to reference specific batch operations](https://developers.facebook.com/docs/graph-api/making-multiple-requests/#operations).
 
 ```php
+<?php
 $fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
-  ]);
+    'app_id' => '{app-id}',
+    'app_secret' => '{app-secret}',
+    'default_graph_version' => 'v2.8',
+]);
 
 // Since all the requests will be sent on behalf of the same user,
 // we'll set the default fallback access token here.
@@ -51,29 +52,30 @@ $batch = [
 echo '<h1>Make a batch request</h1>' . "\n\n";
 
 try {
-  $responses = $fb->sendBatchRequest($batch);
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
+    $responses = $fb->sendBatchRequest($batch);
+} catch (Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+} catch (Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
 }
 
 foreach ($responses as $key => $response) {
-  if ($response->isError()) {
-    $e = $response->getThrownException();
-    echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
-    echo '<p>Graph Said: ' . "\n\n";
-    var_dump($e->getResponse());
-  } else {
-    echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
-    echo "Response: " . $response->getBody() . "</p>\n\n";
-    echo "<hr />\n\n";
-  }
+    if ($response->isError()) {
+        $e = $response->getThrownException();
+        echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
+        echo '<p>Graph Said: ' . "\n\n";
+        var_dump($e->getResponse());
+    } else {
+        echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
+        echo "Response: " . $response->getBody() . "</p>\n\n";
+        echo "<hr />\n\n";
+    }
 }
+
 ```
 
 There five requests being made in this batch requests.
@@ -235,41 +237,42 @@ foreach ($responses as $key => $response) {
 Since the requests sent in a batch are unrelated by default, we can make requests on behalf of multiple users and pages in the same batch request.
 
 ```php
+<?php
 $fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
-  ]);
+    'app_id' => '{app-id}',
+    'app_secret' => '{app-secret}',
+    'default_graph_version' => 'v2.8',
+]);
 
 $batch = [
     $fb->request('GET', '/me?fields=id,name', 'user-access-token-one'),
     $fb->request('GET', '/me?fields=id,name', 'user-access-token-two'),
     $fb->request('GET', '/me?fields=id,name', 'page-access-token-one'),
     $fb->request('GET', '/me?fields=id,name', 'page-access-token-two'),
-    ];
+];
 
 try {
-  $responses = $fb->sendBatchRequest($batch);
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
+    $responses = $fb->sendBatchRequest($batch);
+} catch (Facebook\Exceptions\FacebookResponseException $e) {
+    // When Graph returns an error
+    echo 'Graph returned an error: ' . $e->getMessage();
+    exit;
+} catch (Facebook\Exceptions\FacebookSDKException $e) {
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
 }
 
 foreach ($responses as $key => $response) {
-  if ($response->isError()) {
-    $e = $response->getThrownException();
-    echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
-    echo '<p>Graph Said: ' . "\n\n";
-    var_dump($e->getResponse());
-  } else {
-    echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
-    echo "Response: " . $response->getBody() . "</p>\n\n";
-    echo "<hr />\n\n";
-  }
+    if ($response->isError()) {
+        $e = $response->getThrownException();
+        echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
+        echo '<p>Graph Said: ' . "\n\n";
+        var_dump($e->getResponse());
+    } else {
+        echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
+        echo "Response: " . $response->getBody() . "</p>\n\n";
+        echo "<hr />\n\n";
+    }
 }
 ```
