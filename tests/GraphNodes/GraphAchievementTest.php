@@ -23,6 +23,9 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
+use Facebook\GraphNodes\GraphApplication;
+use Facebook\GraphNodes\GraphUser;
+
 class GraphAchievementTest extends AbstractGraphNode
 {
 
@@ -79,7 +82,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $publishTime = $graphNode->getPublishTime();
 
-        $this->assertInstanceOf('DateTime', $publishTime);
+        $this->assertInstanceOf(\DateTime::class, $publishTime);
     }
 
     public function testFromGetsCastAsGraphUser()
@@ -96,7 +99,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $from = $graphNode->getFrom();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphUser', $from);
+        $this->assertInstanceOf(GraphUser::class, $from);
     }
 
     public function testApplicationGetsCastAsGraphApplication()
@@ -112,6 +115,6 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $app = $graphNode->getApplication();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphApplication', $app);
+        $this->assertInstanceOf(GraphApplication::class, $app);
     }
 }

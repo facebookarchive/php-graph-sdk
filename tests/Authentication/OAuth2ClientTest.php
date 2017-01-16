@@ -26,6 +26,8 @@ namespace Facebook\Tests\Authentication;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
+use Facebook\Authentication\AccessTokenMetadata;
+use Facebook\Authentication\AccessToken;
 
 class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +60,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $metadata = $this->oauth->debugToken('baz_token');
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessTokenMetadata', $metadata);
+        $this->assertInstanceOf(AccessTokenMetadata::class, $metadata);
         $this->assertEquals('444', $metadata->getUserId());
 
         $expectedParams = [
@@ -103,7 +105,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = $this->oauth->getAccessTokenFromCode('bar_code', 'foo_uri');
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertInstanceOf(AccessToken::class, $accessToken);
         $this->assertEquals('my_access_token', $accessToken->getValue());
 
         $expectedParams = [

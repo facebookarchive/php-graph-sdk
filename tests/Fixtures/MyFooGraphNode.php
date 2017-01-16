@@ -28,6 +28,6 @@ use Facebook\GraphNodes\GraphNode;
 class MyFooGraphNode extends GraphNode
 {
     protected static $graphObjectMap = [
-        'foo_object' => '\Facebook\Tests\Fixtures\MyFooSubClassGraphNode',
+        'foo_object' => MyFooSubClassGraphNode::class,
     ];
 }

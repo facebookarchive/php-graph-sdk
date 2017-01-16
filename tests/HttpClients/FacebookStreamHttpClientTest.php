@@ -25,6 +25,8 @@ namespace Facebook\Tests\HttpClients;
 
 use Mockery as m;
 use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\HttpClients\FacebookStream;
+use Facebook\Http\GraphRawResponse;
 
 class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 {
@@ -40,7 +42,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
     protected function setUp()
     {
-        $this->streamMock = m::mock('Facebook\HttpClients\FacebookStream');
+        $this->streamMock = m::mock(FacebookStream::class);
         $this->streamClient = new FacebookStreamHttpClient($this->streamMock);
     }
 
@@ -104,7 +106,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
         $response = $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
-        $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
+        $this->assertInstanceOf(GraphRawResponse::class, $response);
         $this->assertEquals($this->fakeRawBody, $response->getBody());
         $this->assertEquals($this->fakeHeadersAsArray, $response->getHeaders());
         $this->assertEquals(200, $response->getHttpResponseCode());

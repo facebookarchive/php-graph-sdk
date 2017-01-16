@@ -58,8 +58,8 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
         $expires = $metadata->getExpiresAt();
         $issuedAt = $metadata->getIssuedAt();
 
-        $this->assertInstanceOf('DateTime', $expires);
-        $this->assertInstanceOf('DateTime', $issuedAt);
+        $this->assertInstanceOf(\DateTime::class, $expires);
+        $this->assertInstanceOf(\DateTime::class, $issuedAt);
     }
 
     public function testAllTheGettersReturnTheProperValue()

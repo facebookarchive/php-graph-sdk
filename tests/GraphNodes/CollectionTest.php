@@ -126,7 +126,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
 
-        $this->assertInstanceOf('IteratorAggregate', $collection);
+        $this->assertInstanceOf(\IteratorAggregate::class, $collection);
 
         $newArray = [];
 

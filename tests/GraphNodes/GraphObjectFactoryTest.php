@@ -27,6 +27,8 @@ use Facebook\GraphNodes\GraphObjectFactory;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
+use Facebook\GraphNodes\GraphList;
+use Facebook\GraphNodes\GraphObject;
 
 /**
  * @todo v6: Remove this test
@@ -65,7 +67,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $graphObject = $factory->makeGraphObject();
         $graphData = $graphObject->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphObject', $graphObject);
+        $this->assertInstanceOf(GraphObject::class, $graphObject);
         $this->assertEquals([
             'id' => '123',
             'name' => 'Foo McBar',
@@ -99,7 +101,7 @@ class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
         $graphList = $factory->makeGraphList();
         $graphData = $graphList->asArray();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphList', $graphList);
+        $this->assertInstanceOf(GraphList::class, $graphList);
         $this->assertEquals([
           'id' => '123',
           'name' => 'Foo McBar',

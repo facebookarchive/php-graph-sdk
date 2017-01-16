@@ -25,6 +25,7 @@ namespace Facebook\Tests\GraphNodes;
 
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
+use Facebook\FacebookResponse;
 
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +36,7 @@ class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+        $this->responseMock = m::mock(FacebookResponse::class);
     }
 
     public function testDatesGetCastToDateTime()
@@ -56,7 +57,7 @@ class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
         $expires = $graphNode->getExpiresAt();
         $issuedAt = $graphNode->getIssuedAt();
 
-        $this->assertInstanceOf('DateTime', $expires);
-        $this->assertInstanceOf('DateTime', $issuedAt);
+        $this->assertInstanceOf(\DateTime::class, $expires);
+        $this->assertInstanceOf(\DateTime::class, $issuedAt);
     }
 }

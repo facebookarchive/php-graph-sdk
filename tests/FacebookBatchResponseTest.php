@@ -28,6 +28,7 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchRequest;
 use Facebook\FacebookBatchResponse;
+use Facebook\GraphNodes\GraphNode;
 
 class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,12 +81,12 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 
         // Single Graph object.
         $this->assertFalse($decodedResponses[0]->isError(), 'Did not expect Response to return an error for single Graph object.');
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $decodedResponses[0]->getGraphNode());
+        $this->assertInstanceOf(GraphNode::class, $decodedResponses[0]->getGraphNode());
         // Paginated list of Graph objects.
         $this->assertFalse($decodedResponses[1]->isError(), 'Did not expect Response to return an error for paginated list of Graph objects.');
         $graphEdge = $decodedResponses[1]->getGraphEdge();
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[0]);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphEdge[1]);
+        $this->assertInstanceOf(GraphNode::class, $graphEdge[0]);
+        $this->assertInstanceOf(GraphNode::class, $graphEdge[1]);
     }
 
     public function testABatchResponseCanBeIteratedOver()
@@ -103,11 +104,11 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
         ]);
         $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
-        $this->assertInstanceOf('IteratorAggregate', $batchResponse);
+        $this->assertInstanceOf(\IteratorAggregate::class, $batchResponse);
 
         foreach ($batchResponse as $key => $responseEntity) {
             $this->assertTrue(in_array($key, ['req_one', 'req_two', 'req_three']));
-            $this->assertInstanceOf('Facebook\FacebookResponse', $responseEntity);
+            $this->assertInstanceOf(FacebookResponse::class, $responseEntity);
         }
     }
 
@@ -129,8 +130,8 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
         $batchRequest = new FacebookBatchRequest($this->app, $requests);
         $batchResponse = new FacebookBatchResponse($batchRequest, $response);
 
-        $this->assertInstanceOf('Facebook\FacebookResponse', $batchResponse[0]);
-        $this->assertInstanceOf('Facebook\FacebookRequest', $batchResponse[0]->getRequest());
+        $this->assertInstanceOf(FacebookResponse::class, $batchResponse[0]);
+        $this->assertInstanceOf(FacebookRequest::class, $batchResponse[0]->getRequest());
         $this->assertEquals('foo_token_one', $batchResponse[0]->getAccessToken());
         $this->assertEquals('foo_token_two', $batchResponse[1]->getAccessToken());
         $this->assertEquals('foo_token_three', $batchResponse[2]->getAccessToken());

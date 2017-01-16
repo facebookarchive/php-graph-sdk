@@ -26,6 +26,7 @@ namespace Facebook\Tests\Helpers;
 use Facebook\FacebookApp;
 use Facebook\Tests\Fixtures\FooSignedRequestHelper;
 use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
+use Facebook\Authentication\AccessToken;
 
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,7 +76,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
         $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithAccessToken);
         $accessToken = $this->helper->getAccessToken();
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertInstanceOf(AccessToken::class, $accessToken);
         $this->assertEquals('foo_token', $accessToken->getValue());
     }
 
@@ -84,7 +85,7 @@ class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCa
         $this->helper->instantiateSignedRequest($this->rawSignedRequestAuthorizedWithCode);
         $accessToken = $this->helper->getAccessToken();
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        $this->assertInstanceOf(AccessToken::class, $accessToken);
         $this->assertEquals('foo_access_token_from:foo_code', $accessToken->getValue());
     }
 }

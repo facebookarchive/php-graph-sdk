@@ -29,6 +29,8 @@ use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
+use Facebook\Http\GraphRawResponse;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
@@ -44,7 +46,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
     protected function setUp()
     {
-        $this->guzzleMock = m::mock('GuzzleHttp\Client');
+        $this->guzzleMock = m::mock(Client::class);
         $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);
     }
 
@@ -91,7 +93,7 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
         $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
-        $this->assertInstanceOf('Facebook\Http\GraphRawResponse', $response);
+        $this->assertInstanceOf(GraphRawResponse::class, $response);
         $this->assertEquals($this->fakeRawBody, $response->getBody());
         $this->assertEquals($this->fakeHeadersAsArray, $response->getHeaders());
         $this->assertEquals(200, $response->getHttpResponseCode());
