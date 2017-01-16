@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, $field);
 
         $field = $graphNode->getField('baz', false);
-        $this->assertSame(false, $field);
+        $this->assertFalse($field);
     }
 
     public function testTheKeysFromTheCollectionCanBeReturned()
