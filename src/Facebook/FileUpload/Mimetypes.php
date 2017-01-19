@@ -724,6 +724,7 @@ class Mimetypes
         'spq' => 'application/scvp-vp-request',
         'spx' => 'audio/ogg',
         'src' => 'application/x-wais-source',
+        'srt' => 'application/octet-stream',
         'sru' => 'application/sru+xml',
         'srx' => 'application/sparql-results+xml',
         'sse' => 'application/vnd.kodak-descriptor',
