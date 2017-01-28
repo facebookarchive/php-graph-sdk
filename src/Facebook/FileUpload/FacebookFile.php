@@ -164,6 +164,6 @@ class FacebookFile
      */
     protected function isRemoteFile($pathToFile)
     {
-        return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
+        return filter_var($pathToFile, FILTER_VALIDATE_URL) !== false;
     }
 }
