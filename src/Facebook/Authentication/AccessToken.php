@@ -101,11 +101,7 @@ class AccessToken
             return $this->expiresAt->getTimestamp() > time() + (60 * 60 * 2);
         }
 
-        if ($this->isAppAccessToken()) {
-            return true;
-        }
-
-        return false;
+        return $this->isAppAccessToken();
     }
 
     /**
