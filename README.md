@@ -16,6 +16,8 @@ The Facebook PHP SDK can be installed with [Composer](https://getcomposer.org/).
 composer require facebook/graph-sdk
 ```
 
+Please be aware, that there are issues when using the Facebook SDK together witz [Guzzle](https://github.com/guzzle/guzzle) 6.x. php-graph-sdk v5.x only works with Guzzle 5.x out of the box. However, [there is a workaround to make it work with Guzzle 6.x](https://www.sammyk.me/how-to-inject-your-own-http-client-in-the-facebook-php-sdk-v5#writing-a-guzzle-6-http-client-implementation-from-scratch). 
+
 ## Upgrading to v5.x
 
 Upgrading from v4.x? Facebook PHP SDK v5.x introduced breaking changes. Please [read the upgrade guide](https://www.sammyk.me/upgrading-the-facebook-php-sdk-from-v4-to-v5) before upgrading.
