@@ -250,7 +250,11 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
             $batch['attached_files'] = $attachedFiles;
         }
 
-        // @TODO Add support for "omit_response_on_success"
+        $requestparams = $request->getParams();
+        if (array_key_exists('omit_response_on_success', $requestparams)){
+          $batch['omit_response_on_success'] = $requestparams['omit_response_on_success'];
+        }
+
         // @TODO Add support for "depends_on"
         // @TODO Add support for JSONP with "callback"
 
