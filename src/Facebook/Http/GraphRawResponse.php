@@ -129,7 +129,7 @@ class GraphRawResponse
             if (strpos($line, ': ') === false) {
                 $this->setHttpResponseCodeFromHeader($line);
             } else {
-                list($key, $value) = explode(': ', $line);
+                list($key, $value) = explode(': ', $line, 2);
                 $this->headers[$key] = $value;
             }
         }
