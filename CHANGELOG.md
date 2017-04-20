@@ -9,6 +9,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
 
 - 5.5.0 (2017-04-20)
   - Added support for batch options (#713)
+  - Bump Graph API version to v2.9.
 - 5.4.4 (2017-01-19)
   - Added the `application/octet-stream` MIME type for SRT files (#734)
 - 5.4.3 (2016-12-30)
