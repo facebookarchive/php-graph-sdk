@@ -11,7 +11,7 @@ The following example assumes we have the following permissions granted from the
 $fb = new Facebook\Facebook([
     'app_id' => '{app-id}',
     'app_secret' => '{app-secret}',
-    'default_graph_version' => 'v2.8',
+    'default_graph_version' => 'v2.9',
 ]);
 
 // Since all the requests will be sent on behalf of the same user,
@@ -109,7 +109,7 @@ The following example is a subset of the [first example](#example). We will only
 $fb = new Facebook\Facebook([
     'app_id' => '{app-id}',
     'app_secret' => '{app-secret}',
-    'default_graph_version' => 'v2.8',
+    'default_graph_version' => 'v2.9',
 ]);
 
 // Since all the requests will be sent on behalf of the same user,
@@ -176,7 +176,7 @@ Since we want the second request to be executed after the first one is completed
 $fb = new Facebook\Facebook([
     'app_id' => '{app-id}',
     'app_secret' => '{app-secret}',
-    'default_graph_version' => 'v2.8',
+    'default_graph_version' => 'v2.9',
 ]);
 
 // Since all the requests will be sent on behalf of the same user,
@@ -241,7 +241,7 @@ Since the requests sent in a batch are unrelated by default, we can make request
 $fb = new Facebook\Facebook([
     'app_id' => '{app-id}',
     'app_secret' => '{app-secret}',
-    'default_graph_version' => 'v2.8',
+    'default_graph_version' => 'v2.9',
 ]);
 
 $batch = [

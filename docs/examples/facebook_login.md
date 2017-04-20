@@ -14,7 +14,7 @@ In this example, the PHP script that generates the login link is called `/login.
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.9',
   ]);
 
 $helper = $fb->getRedirectLoginHelper();
@@ -31,7 +31,7 @@ echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.9',
   ]);
 
 $helper = $fb->getRedirectLoginHelper();

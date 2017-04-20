@@ -86,7 +86,7 @@ Before we can send requests to the Graph API, we need to load our app configurat
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.9',
   ]);
 ```
 
@@ -206,7 +206,7 @@ if (isset($accessToken)) {
 }
 ```
 
-> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.8). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
+> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.9). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
 
 ## Extending the access token
 
