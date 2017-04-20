@@ -62,16 +62,17 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
     }
 
     /**
-     * A a new request to the array.
+     * Adds a new request to the array.
      *
      * @param FacebookRequest|array $request
-     * @param string|null           $name
+     * @param string|null|array     $options Array of batch request options e.g. 'name', 'omit_response_on_success'.
+     *                                       If a string is given, it is the value of the 'name' option.
      *
      * @return FacebookBatchRequest
      *
      * @throws \InvalidArgumentException
      */
-    public function add($request, $name = null)
+    public function add($request, $options = null)
     {
         if (is_array($request)) {
             foreach ($request as $key => $req) {
@@ -85,17 +86,28 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
             throw new \InvalidArgumentException('Argument for add() must be of type array or FacebookRequest.');
         }
 
+        if (null === $options) {
+            $options = [];
+        } elseif (!is_array($options)) {
+            $options = ['name' => $options];
+        }
+
         $this->addFallbackDefaults($request);
-        $requestToAdd = [
-            'name' => $name,
-            'request' => $request,
-        ];
 
         // File uploads
         $attachedFiles = $this->extractFileAttachments($request);
-        if ($attachedFiles) {
-            $requestToAdd['attached_files'] = $attachedFiles;
-        }
+
+        $name = isset($options['name']) ? $options['name'] : null;
+
+        unset($options['name']);
+
+        $requestToAdd = [
+            'name' => $name,
+            'request' => $request,
+            'options' => $options,
+            'attached_files' => $attachedFiles,
+        ];
+
         $this->requests[] = $requestToAdd;
 
         return $this;
@@ -189,8 +201,15 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
     {
         $requests = [];
         foreach ($this->requests as $request) {
-            $attachedFiles = isset($request['attached_files']) ? $request['attached_files'] : null;
-            $requests[] = $this->requestEntityToBatchArray($request['request'], $request['name'], $attachedFiles);
+            $options = [];
+
+            if (null !== $request['name']) {
+                $options['name'] = $request['name'];
+            }
+
+            $options += $request['options'];
+
+            $requests[] = $this->requestEntityToBatchArray($request['request'], $options, $request['attached_files']);
         }
 
         return json_encode($requests);
@@ -215,14 +234,22 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
     /**
      * Converts a Request entity into an array that is batch-friendly.
      *
-     * @param FacebookRequest $request       The request entity to convert.
-     * @param string|null     $requestName   The name of the request.
-     * @param string|null     $attachedFiles Names of files associated with the request.
+     * @param FacebookRequest   $request       The request entity to convert.
+     * @param string|null|array $options       Array of batch request options e.g. 'name', 'omit_response_on_success'.
+     *                                         If a string is given, it is the value of the 'name' option.
+     * @param string|null       $attachedFiles Names of files associated with the request.
      *
      * @return array
      */
-    public function requestEntityToBatchArray(FacebookRequest $request, $requestName = null, $attachedFiles = null)
+    public function requestEntityToBatchArray(FacebookRequest $request, $options = null, $attachedFiles = null)
     {
+
+        if (null === $options) {
+            $options = [];
+        } elseif (!is_array($options)) {
+            $options = ['name' => $options];
+        }
+
         $compiledHeaders = [];
         $headers = $request->getHeaders();
         foreach ($headers as $name => $value) {
@@ -242,17 +269,11 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
             $batch['body'] = $body;
         }
 
-        if (isset($requestName)) {
-            $batch['name'] = $requestName;
-        }
+        $batch += $options;
 
-        if (isset($attachedFiles)) {
+        if (null !== $attachedFiles) {
             $batch['attached_files'] = $attachedFiles;
         }
-
-        // @TODO Add support for "omit_response_on_success"
-        // @TODO Add support for "depends_on"
-        // @TODO Add support for JSONP with "callback"
 
         return $batch;
     }
