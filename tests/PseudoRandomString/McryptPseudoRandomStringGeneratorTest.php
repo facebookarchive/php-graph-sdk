@@ -29,6 +29,10 @@ class McryptPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanGenerateRandomStringOfArbitraryLength()
     {
+        if (version_compare(PHP_VERSION, '7.1', '>=')) {
+            $this->markTestSkipped('Skipping test mcrypt is deprecated from 7.1');
+        }
+
         if (!function_exists('mcrypt_create_iv')) {
             $this->markTestSkipped(
                 'Mcrypt must be installed to test mcrypt_create_iv().'
