@@ -7,6 +7,8 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
 
+- 5.5.0 (2017-04-20)
+  - Added support for batch options (#713)
 - 5.4.4 (2017-01-19)
   - Added the `application/octet-stream` MIME type for SRT files (#734)
 - 5.4.3 (2016-12-30)
