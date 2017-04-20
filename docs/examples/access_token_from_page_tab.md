@@ -10,7 +10,7 @@ Page tabs behave much like the app canvas. The PHP SDK provides a helper for pag
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.9',
   ]);
 
 $helper = $fb->getPageTabHelper();

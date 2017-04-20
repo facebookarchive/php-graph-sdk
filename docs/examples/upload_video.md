@@ -12,7 +12,7 @@ The following example will upload a video in chunks using the [resumable upload]
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.9',
   ]);
 
 $data = [
