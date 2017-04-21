@@ -207,7 +207,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $batchRequest->add($request, 'foo_name');
 
         $requests = $batchRequest->getRequests();
-        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $requests[0]['name']);
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], [
+            'name' => $requests[0]['name'],
+        ]);
 
         $this->assertEquals($expectedArray, $batchRequestArray);
     }
@@ -262,11 +264,12 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 
         $attachedFiles = $requests[0]['attached_files'];
 
-        $batchRequestArray = $batchRequest->requestEntityToBatchArray(
-            $requests[0]['request'],
-            $requests[0]['name'],
-            $attachedFiles
-        );
+        $options = [
+            'name' => $requests[0]['name'],
+            'attached_files' => $attachedFiles,
+        ];
+
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $options);
 
         $this->assertEquals([
             'headers' => $this->defaultHeaders(),
@@ -275,6 +278,31 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
             'body' => 'message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
             'name' => 'foo_name',
             'attached_files' => $attachedFiles,
+        ], $batchRequestArray);
+    }
+
+    public function testBatchRequestsWithOptionsGetConvertedToAnArray()
+    {
+        $request = new FacebookRequest(null, null, 'GET', '/bar');
+        $batchRequest = $this->createBatchRequest();
+        $batchRequest->add($request, 'foo_name', ['omit_response_on_success' => false]);
+
+        $requests = $batchRequest->getRequests();
+
+        $options = [
+            'name' => $requests[0]['name'],
+        ];
+
+        $options += $requests[0]['options'];
+
+        $batchRequestArray = $batchRequest->requestEntityToBatchArray($requests[0]['request'], $options);
+
+        $this->assertEquals([
+            'headers' => $this->defaultHeaders(),
+            'method' => 'GET',
+            'relative_url' => '/' . Facebook::DEFAULT_GRAPH_VERSION . '/bar?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+            'name' => 'foo_name',
+            'omit_response_on_success' => false,
         ], $batchRequestArray);
     }
 
@@ -317,6 +345,27 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $expectedBatchParams = [
             'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/foo?access_token=bar_token&appsecret_proof=2ceec40b7b9fd7d38fff1767b766bcc6b1f9feb378febac4612c156e6a8354bd","name":"foo_name"},'
                 . '{"headers":' . $expectedHeaders . ',"method":"POST","relative_url":"\\/me\\/photos","body":"message=foobar&access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9","attached_files":"' . $attachedFiles . '"}]',
+            'include_headers' => true,
+            'access_token' => 'foo_token',
+            'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+        ];
+        $this->assertEquals($expectedBatchParams, $params);
+    }
+
+    public function testPreppingABatchRequestWithOptionsProperlySetsThePostParams()
+    {
+        $batchRequest = $this->createBatchRequest();
+        $batchRequest->add(new FacebookRequest(null, null, 'GET', '/foo'), 'foo_name', ['omit_response_on_success' => false]);
+
+        $batchRequest->prepareRequestsForBatch();
+        $params = $batchRequest->getParams();
+
+        $expectedHeaders = json_encode($this->defaultHeaders());
+        $version = Facebook::DEFAULT_GRAPH_VERSION;
+
+        $expectedBatchParams = [
+            'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9",'
+                . '"name":"foo_name","omit_response_on_success":false}]',
             'include_headers' => true,
             'access_token' => 'foo_token',
             'appsecret_proof' => 'df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
@@ -369,7 +418,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         foreach ($requests as $name => $request) {
             $expectedRequests[] = [
                 'name' => $name,
-                'request' => $request
+                'request' => $request,
+                'attached_files' => null,
+                'options' => [],
             ];
         }
         $this->assertEquals($expectedRequests, $formattedRequests);

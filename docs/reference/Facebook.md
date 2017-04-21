@@ -327,6 +327,23 @@ $batchResponse = $fb->sendBatchRequest($requests);
 
 [See a full batch example](../examples/batch_request.md).
 
+## newBatchRequest()
+```php
+public Facebook\FacebookBatchRequest newBatchRequest(
+  string|AccessToken|null $accessToken,
+  string|null $graphVersion
+)
+```
+
+Instantiates an empty `Facebook\FacebookBatchRequest`.
+To populate it use the [`Facebook\FacebookBatchRequest::add()`](FacebookBatchRequest.md#add) method.
+
+The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
+If any of the requests contained in the batch request does not have either the `$accessToken` or the `$graphVersion` set,
+it fallbacks to the values provided in the instantiation of the batch request.
+
+[See a full batch example](../examples/batch_request.md).
+
 ## getRedirectLoginHelper()
 ```php
 public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()

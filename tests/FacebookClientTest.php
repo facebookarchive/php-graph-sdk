@@ -172,8 +172,8 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('multipart/form-data; boundary=', $headers['Content-Type']);
         $this->assertContains('Content-Disposition: form-data; name="batch"', $body);
         $this->assertContains('Content-Disposition: form-data; name="include_headers"', $body);
-        $this->assertContains('"name":0,"attached_files":', $body);
-        $this->assertContains('"name":1,"attached_files":', $body);
+        $this->assertContains('"name":"0","attached_files":', $body);
+        $this->assertContains('"name":"1","attached_files":', $body);
         $this->assertContains('"; filename="foo.txt"', $body);
     }
 
