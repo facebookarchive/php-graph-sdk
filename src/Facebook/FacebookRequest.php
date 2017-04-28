@@ -294,7 +294,7 @@ class FacebookRequest
             $headers['If-None-Match'] = $this->eTag;
         }
 
-        return array_merge($this->headers, $headers);
+        return \array_merge($this->headers, $headers);
     }
 
     /**
@@ -304,7 +304,7 @@ class FacebookRequest
      */
     public function setHeaders(array $headers)
     {
-        $this->headers = array_merge($this->headers, $headers);
+        $this->headers = \array_merge($this->headers, $headers);
     }
 
     /**
@@ -352,7 +352,7 @@ class FacebookRequest
      */
     public function dangerouslySetParams(array $params = [])
     {
-        $this->params = array_merge($this->params, $params);
+        $this->params = \array_merge($this->params, $params);
 
         return $this;
     }

@@ -89,9 +89,9 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
         $headers = $response->getHeaders();
         $rawHeaders = [];
         foreach ($headers as $name => $values) {
-            $rawHeaders[] = $name . ": " . implode(", ", $values);
+            $rawHeaders[] = $name . ": " . \implode(", ", $values);
         }
 
-        return implode("\r\n", $rawHeaders);
+        return \implode("\r\n", $rawHeaders);
     }
 }

@@ -154,10 +154,10 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
      */
     public function extractResponseHeadersAndBody()
     {
-        $parts = explode("\r\n\r\n", $this->rawResponse);
-        $rawBody = array_pop($parts);
-        $rawHeaders = implode("\r\n\r\n", $parts);
+        $parts = \explode("\r\n\r\n", $this->rawResponse);
+        $rawBody = \array_pop($parts);
+        $rawHeaders = \implode("\r\n\r\n", $parts);
 
-        return [trim($rawHeaders), trim($rawBody)];
+        return [\trim($rawHeaders), \trim($rawBody)];
     }
 }

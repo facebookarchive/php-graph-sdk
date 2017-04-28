@@ -61,7 +61,7 @@ class GraphNode extends Collection
 
         foreach ($data as $k => $v) {
             if ($this->shouldCastAsDateTime($k)
-                && (is_numeric($v)
+                && (\is_numeric($v)
                     || $this->isIso8601DateString($v))
             ) {
                 $items[$k] = $this->castToDateTime($v);
@@ -85,7 +85,7 @@ class GraphNode extends Collection
     {
         $items = $this->asArray();
 
-        return array_map(function ($v) {
+        return \array_map(function ($v) {
             if ($v instanceof \DateTime) {
                 return $v->format(\DateTime::ISO8601);
             }
@@ -103,7 +103,7 @@ class GraphNode extends Collection
      */
     public function asJson($options = 0)
     {
-        return json_encode($this->uncastItems(), $options);
+        return \json_encode($this->uncastItems(), $options);
     }
 
     /**
@@ -130,7 +130,7 @@ class GraphNode extends Collection
             . '((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d'
             . '([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/';
 
-        return preg_match($crazyInsaneRegexThatSomehowDetectsIso8601, $string) === 1;
+        return \preg_match($crazyInsaneRegexThatSomehowDetectsIso8601, $string) === 1;
     }
 
     /**
@@ -142,7 +142,7 @@ class GraphNode extends Collection
      */
     public function shouldCastAsDateTime($key)
     {
-        return in_array($key, [
+        return \in_array($key, [
             'created_time',
             'updated_time',
             'start_time',
@@ -163,7 +163,7 @@ class GraphNode extends Collection
      */
     public function castToDateTime($value)
     {
-        if (is_int($value)) {
+        if (\is_int($value)) {
             $dt = new \DateTime();
             $dt->setTimestamp($value);
         } else {

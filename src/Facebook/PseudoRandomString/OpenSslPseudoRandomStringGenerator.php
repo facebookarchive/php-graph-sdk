@@ -39,7 +39,7 @@ class OpenSslPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
      */
     public function __construct()
     {
-        if (!function_exists('openssl_random_pseudo_bytes')) {
+        if (!\function_exists('openssl_random_pseudo_bytes')) {
             throw new FacebookSDKException(static::ERROR_MESSAGE . 'The function openssl_random_pseudo_bytes() does not exist.');
         }
     }
@@ -52,7 +52,7 @@ class OpenSslPseudoRandomStringGenerator implements PseudoRandomStringGeneratorI
         $this->validateLength($length);
 
         $wasCryptographicallyStrong = false;
-        $binaryString = openssl_random_pseudo_bytes($length, $wasCryptographicallyStrong);
+        $binaryString = \openssl_random_pseudo_bytes($length, $wasCryptographicallyStrong);
 
         if ($binaryString === false) {
             throw new FacebookSDKException(static::ERROR_MESSAGE . 'openssl_random_pseudo_bytes() returned an unknown error.');

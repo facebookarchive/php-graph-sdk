@@ -84,11 +84,11 @@ class FacebookFile
      */
     public function open()
     {
-        if (!$this->isRemoteFile($this->path) && !is_readable($this->path)) {
+        if (!$this->isRemoteFile($this->path) && !\is_readable($this->path)) {
             throw new FacebookSDKException('Failed to create FacebookFile entity. Unable to read resource: ' . $this->path . '.');
         }
 
-        $this->stream = fopen($this->path, 'r');
+        $this->stream = \fopen($this->path, 'r');
 
         if (!$this->stream) {
             throw new FacebookSDKException('Failed to create FacebookFile entity. Unable to open resource: ' . $this->path . '.');
@@ -100,8 +100,8 @@ class FacebookFile
      */
     public function close()
     {
-        if (is_resource($this->stream)) {
-            fclose($this->stream);
+        if (\is_resource($this->stream)) {
+            \fclose($this->stream);
         }
     }
 
@@ -112,7 +112,7 @@ class FacebookFile
      */
     public function getContents()
     {
-        return stream_get_contents($this->stream, $this->maxLength, $this->offset);
+        return \stream_get_contents($this->stream, $this->maxLength, $this->offset);
     }
 
     /**
@@ -122,7 +122,7 @@ class FacebookFile
      */
     public function getFileName()
     {
-        return basename($this->path);
+        return \basename($this->path);
     }
 
     /**
@@ -142,7 +142,7 @@ class FacebookFile
      */
     public function getSize()
     {
-        return filesize($this->path);
+        return \filesize($this->path);
     }
 
     /**
@@ -164,6 +164,6 @@ class FacebookFile
      */
     protected function isRemoteFile($pathToFile)
     {
-        return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
+        return \preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
     }
 }

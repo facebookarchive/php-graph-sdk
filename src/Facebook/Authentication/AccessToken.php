@@ -67,7 +67,7 @@ class AccessToken
      */
     public function getAppSecretProof($appSecret)
     {
-        return hash_hmac('sha256', $this->value, $appSecret);
+        return \hash_hmac('sha256', $this->value, $appSecret);
     }
 
     /**
@@ -87,7 +87,7 @@ class AccessToken
      */
     public function isAppAccessToken()
     {
-        return strpos($this->value, '|') !== false;
+        return \strpos($this->value, '|') !== false;
     }
 
     /**
@@ -98,7 +98,7 @@ class AccessToken
     public function isLongLived()
     {
         if ($this->expiresAt) {
-            return $this->expiresAt->getTimestamp() > time() + (60 * 60 * 2);
+            return $this->expiresAt->getTimestamp() > \time() + (60 * 60 * 2);
         }
 
         if ($this->isAppAccessToken()) {
@@ -116,7 +116,7 @@ class AccessToken
     public function isExpired()
     {
         if ($this->getExpiresAt() instanceof \DateTime) {
-            return $this->getExpiresAt()->getTimestamp() < time();
+            return $this->getExpiresAt()->getTimestamp() < \time();
         }
 
         if ($this->isAppAccessToken()) {

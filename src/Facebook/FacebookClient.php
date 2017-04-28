@@ -124,7 +124,7 @@ class FacebookClient
      */
     public function detectHttpClientHandler()
     {
-        return extension_loaded('curl') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
+        return \extension_loaded('curl') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
     }
 
     /**
@@ -197,7 +197,7 @@ class FacebookClient
      */
     public function sendRequest(FacebookRequest $request)
     {
-        if (get_class($request) === 'Facebook\FacebookRequest') {
+        if (\get_class($request) === 'Facebook\FacebookRequest') {
             $request->validateAccessToken();
         }
 

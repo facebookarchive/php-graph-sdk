@@ -233,21 +233,21 @@ class FacebookResponse
      */
     public function decodeBody()
     {
-        $this->decodedBody = json_decode($this->body, true);
+        $this->decodedBody = \json_decode($this->body, true);
 
         if ($this->decodedBody === null) {
             $this->decodedBody = [];
-            parse_str($this->body, $this->decodedBody);
-        } elseif (is_bool($this->decodedBody)) {
+            \parse_str($this->body, $this->decodedBody);
+        } elseif (\is_bool($this->decodedBody)) {
             // Backwards compatibility for Graph < 2.1.
             // Mimics 2.1 responses.
             // @TODO Remove this after Graph 2.0 is no longer supported
             $this->decodedBody = ['success' => $this->decodedBody];
-        } elseif (is_numeric($this->decodedBody)) {
+        } elseif (\is_numeric($this->decodedBody)) {
             $this->decodedBody = ['id' => $this->decodedBody];
         }
 
-        if (!is_array($this->decodedBody)) {
+        if (!\is_array($this->decodedBody)) {
             $this->decodedBody = [];
         }
 

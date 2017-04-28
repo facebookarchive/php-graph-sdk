@@ -78,9 +78,9 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
      */
     protected function protocolWithActiveSsl($protocol)
     {
-        $protocol = strtolower((string)$protocol);
+        $protocol = \strtolower((string)$protocol);
 
-        return in_array($protocol, ['on', '1', 'https', 'ssl'], true);
+        return \in_array($protocol, ['on', '1', 'https', 'ssl'], true);
     }
 
     /**
@@ -97,8 +97,8 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
         // Check for proxy first
         $header = $this->getHeader('X_FORWARDED_HOST');
         if ($header && $this->isValidForwardedHost($header)) {
-            $elements = explode(',', $header);
-            $host = $elements[count($elements) - 1];
+            $elements = \explode(',', $header);
+            $host = $elements[\count($elements) - 1];
         } elseif (!$host = $this->getHeader('HOST')) {
             if (!$host = $this->getServerVar('SERVER_NAME')) {
                 $host = $this->getServerVar('SERVER_ADDR');
@@ -107,7 +107,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
 
         // trim and remove port number from host
         // host is lowercase as per RFC 952/2181
-        $host = strtolower(preg_replace('/:\d+$/', '', trim($host)));
+        $host = \strtolower(\preg_replace('/:\d+$/', '', \trim($host)));
 
         // Port number
         $scheme = $this->getHttpScheme();
@@ -172,11 +172,11 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
      */
     protected function isValidForwardedHost($header)
     {
-        $elements = explode(',', $header);
-        $host = $elements[count($elements) - 1];
+        $elements = \explode(',', $header);
+        $host = $elements[\count($elements) - 1];
         
-        return preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $host) //valid chars check
-            && 0 < strlen($host) && strlen($host) < 254 //overall length check
-            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $host); //length of each label
+        return \preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $host) //valid chars check
+            && 0 < \strlen($host) && \strlen($host) < 254 //overall length check
+            && \preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $host); //length of each label
     }
 }

@@ -34,7 +34,7 @@ trait PseudoRandomStringGeneratorTrait
      */
     public function validateLength($length)
     {
-        if (!is_int($length)) {
+        if (!\is_int($length)) {
             throw new \InvalidArgumentException('getPseudoRandomString() expects an integer for the string length');
         }
 

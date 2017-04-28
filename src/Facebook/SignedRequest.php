@@ -133,8 +133,8 @@ class SignedRequest
     public function make(array $payload)
     {
         $payload['algorithm'] = isset($payload['algorithm']) ? $payload['algorithm'] : 'HMAC-SHA256';
-        $payload['issued_at'] = isset($payload['issued_at']) ? $payload['issued_at'] : time();
-        $encodedPayload = $this->base64UrlEncode(json_encode($payload));
+        $payload['issued_at'] = isset($payload['issued_at']) ? $payload['issued_at'] : \time();
+        $encodedPayload = $this->base64UrlEncode(\json_encode($payload));
 
         $hashedSig = $this->hashSignature($encodedPayload);
         $encodedSig = $this->base64UrlEncode($hashedSig);
@@ -170,11 +170,11 @@ class SignedRequest
      */
     protected function split()
     {
-        if (strpos($this->rawSignedRequest, '.') === false) {
+        if (\strpos($this->rawSignedRequest, '.') === false) {
             throw new FacebookSDKException('Malformed signed request.', 606);
         }
 
-        return explode('.', $this->rawSignedRequest, 2);
+        return \explode('.', $this->rawSignedRequest, 2);
     }
 
     /**
@@ -211,10 +211,10 @@ class SignedRequest
         $payload = $this->base64UrlDecode($encodedPayload);
 
         if ($payload) {
-            $payload = json_decode($payload, true);
+            $payload = \json_decode($payload, true);
         }
 
-        if (!is_array($payload)) {
+        if (!\is_array($payload)) {
             throw new FacebookSDKException('Signed request has malformed encoded payload data.', 607);
         }
 
@@ -244,7 +244,7 @@ class SignedRequest
      */
     protected function hashSignature($encodedData)
     {
-        $hashedSig = hash_hmac(
+        $hashedSig = \hash_hmac(
             'sha256',
             $encodedData,
             $this->app->getSecret(),
@@ -288,10 +288,10 @@ class SignedRequest
      */
     public function base64UrlDecode($input)
     {
-        $urlDecodedBase64 = strtr($input, '-_', '+/');
+        $urlDecodedBase64 = \strtr($input, '-_', '+/');
         $this->validateBase64($urlDecodedBase64);
 
-        return base64_decode($urlDecodedBase64);
+        return \base64_decode($urlDecodedBase64);
     }
 
     /**
@@ -307,7 +307,7 @@ class SignedRequest
      */
     public function base64UrlEncode($input)
     {
-        return strtr(base64_encode($input), '+/', '-_');
+        return \strtr(\base64_encode($input), '+/', '-_');
     }
 
     /**
@@ -319,7 +319,7 @@ class SignedRequest
      */
     protected function validateBase64($input)
     {
-        if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $input)) {
+        if (!\preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $input)) {
             throw new FacebookSDKException('Signed request contains malformed base64 encoding.', 608);
         }
     }

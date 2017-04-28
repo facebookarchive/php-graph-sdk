@@ -141,7 +141,7 @@ class FacebookResumableUploader
      */
     public function finish($endpoint, $uploadSessionId, $metadata = [])
     {
-        $params = array_merge($metadata, [
+        $params = \array_merge($metadata, [
             'upload_phase' => 'finish',
             'upload_session_id' => $uploadSessionId,
         ]);

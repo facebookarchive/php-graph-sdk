@@ -78,21 +78,21 @@ class PseudoRandomStringGeneratorFactory
     private static function detectDefaultPseudoRandomStringGenerator()
     {
         // Check for PHP 7's CSPRNG first to keep mcrypt deprecation messages from appearing in PHP 7.1.
-        if (function_exists('random_bytes')) {
+        if (\function_exists('random_bytes')) {
             return new RandomBytesPseudoRandomStringGenerator();
         }
 
         // Since openssl_random_pseudo_bytes() can sometimes return non-cryptographically
         // secure pseudo-random strings (in rare cases), we check for mcrypt_create_iv() next.
-        if (function_exists('mcrypt_create_iv')) {
+        if (\function_exists('mcrypt_create_iv')) {
             return new McryptPseudoRandomStringGenerator();
         }
 
-        if (function_exists('openssl_random_pseudo_bytes')) {
+        if (\function_exists('openssl_random_pseudo_bytes')) {
             return new OpenSslPseudoRandomStringGenerator();
         }
 
-        if (!ini_get('open_basedir') && is_readable('/dev/urandom')) {
+        if (!\ini_get('open_basedir') && \is_readable('/dev/urandom')) {
             return new UrandomPseudoRandomStringGenerator();
         }
 

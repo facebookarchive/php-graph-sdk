@@ -95,7 +95,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function getFieldNames()
     {
-        return array_keys($this->items);
+        return \array_keys($this->items);
     }
 
     /**
@@ -128,7 +128,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function asArray()
     {
-        return array_map(function ($value) {
+        return \array_map(function ($value) {
             return $value instanceof Collection ? $value->asArray() : $value;
         }, $this->items);
     }
@@ -142,7 +142,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function map(\Closure $callback)
     {
-        return new static(array_map($callback, $this->items, array_keys($this->items)));
+        return new static(\array_map($callback, $this->items, \array_keys($this->items)));
     }
 
     /**
@@ -154,7 +154,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function asJson($options = 0)
     {
-        return json_encode($this->asArray(), $options);
+        return \json_encode($this->asArray(), $options);
     }
 
     /**
@@ -164,7 +164,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function count()
     {
-        return count($this->items);
+        return \count($this->items);
     }
 
     /**
@@ -186,7 +186,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetExists($key)
     {
-        return array_key_exists($key, $this->items);
+        return \array_key_exists($key, $this->items);
     }
 
     /**
@@ -211,7 +211,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetSet($key, $value)
     {
-        if (is_null($key)) {
+        if (\is_null($key)) {
             $this->items[] = $value;
         } else {
             $this->items[$key] = $value;

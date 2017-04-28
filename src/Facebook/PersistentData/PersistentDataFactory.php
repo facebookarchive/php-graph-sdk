@@ -44,7 +44,7 @@ class PersistentDataFactory
     public static function createPersistentDataHandler($handler)
     {
         if (!$handler) {
-            return session_status() === PHP_SESSION_ACTIVE
+            return \session_status() === PHP_SESSION_ACTIVE
                 ? new FacebookSessionPersistentDataHandler()
                 : new FacebookMemoryPersistentDataHandler();
         }

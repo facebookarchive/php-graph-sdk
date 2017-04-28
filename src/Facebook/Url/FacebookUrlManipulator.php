@@ -40,20 +40,20 @@ class FacebookUrlManipulator
      */
     public static function removeParamsFromUrl($url, array $paramsToFilter)
     {
-        $parts = parse_url($url);
+        $parts = \parse_url($url);
 
         $query = '';
         if (isset($parts['query'])) {
             $params = [];
-            parse_str($parts['query'], $params);
+            \parse_str($parts['query'], $params);
 
             // Remove query params
             foreach ($paramsToFilter as $paramName) {
                 unset($params[$paramName]);
             }
 
-            if (count($params) > 0) {
-                $query = '?' . http_build_query($params, null, '&');
+            if (\count($params) > 0) {
+                $query = '?' . \http_build_query($params, null, '&');
             }
         }
 
@@ -80,21 +80,21 @@ class FacebookUrlManipulator
             return $url;
         }
 
-        if (strpos($url, '?') === false) {
-            return $url . '?' . http_build_query($newParams, null, '&');
+        if (\strpos($url, '?') === false) {
+            return $url . '?' . \http_build_query($newParams, null, '&');
         }
 
-        list($path, $query) = explode('?', $url, 2);
+        list($path, $query) = \explode('?', $url, 2);
         $existingParams = [];
-        parse_str($query, $existingParams);
+        \parse_str($query, $existingParams);
 
         // Favor params from the original URL over $newParams
-        $newParams = array_merge($newParams, $existingParams);
+        $newParams = \array_merge($newParams, $existingParams);
 
         // Sort for a predicable order
-        ksort($newParams);
+        \ksort($newParams);
 
-        return $path . '?' . http_build_query($newParams, null, '&');
+        return $path . '?' . \http_build_query($newParams, null, '&');
     }
 
     /**
@@ -106,12 +106,12 @@ class FacebookUrlManipulator
      */
     public static function getParamsAsArray($url)
     {
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = \parse_url($url, PHP_URL_QUERY);
         if (!$query) {
             return [];
         }
         $params = [];
-        parse_str($query, $params);
+        \parse_str($query, $params);
 
         return $params;
     }
@@ -150,7 +150,7 @@ class FacebookUrlManipulator
             return $string;
         }
 
-        return strpos($string, '/') === 0 ? $string : '/' . $string;
+        return \strpos($string, '/') === 0 ? $string : '/' . $string;
     }
 
     /**
@@ -162,6 +162,6 @@ class FacebookUrlManipulator
      */
     public static function baseGraphUrlEndpoint($urlToTrim)
     {
-        return '/' . preg_replace('/^https:\/\/.+\.facebook\.com(\/v.+?)?\//', '', $urlToTrim);
+        return '/' . \preg_replace('/^https:\/\/.+\.facebook\.com(\/v.+?)?\//', '', $urlToTrim);
     }
 }

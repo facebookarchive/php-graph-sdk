@@ -55,10 +55,10 @@ class Birthday extends DateTime
      */
     public function __construct($date)
     {
-        $parts = explode('/', $date);
+        $parts = \explode('/', $date);
 
-        $this->hasYear = count($parts) === 3 || count($parts) === 1;
-        $this->hasDate = count($parts) === 3 || count($parts) === 2;
+        $this->hasYear = \count($parts) === 3 || \count($parts) === 1;
+        $this->hasDate = \count($parts) === 3 || \count($parts) === 2;
 
         parent::__construct($date);
     }

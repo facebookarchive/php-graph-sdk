@@ -70,7 +70,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
             throw new FacebookSDKException('Stream returned an empty response', 660);
         }
 
-        $rawHeaders = implode("\r\n", $rawHeaders);
+        $rawHeaders = \implode("\r\n", $rawHeaders);
 
         return new GraphRawResponse($rawHeaders, $rawBody);
     }
@@ -89,6 +89,6 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
             $header[] = $k . ': ' . $v;
         }
 
-        return implode("\r\n", $header);
+        return \implode("\r\n", $header);
     }
 }

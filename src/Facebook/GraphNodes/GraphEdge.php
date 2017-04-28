@@ -243,7 +243,7 @@ class GraphEdge extends Collection
     {
         return new static(
             $this->request,
-            array_map($callback, $this->items, array_keys($this->items)),
+            \array_map($callback, $this->items, \array_keys($this->items)),
             $this->metaData,
             $this->parentEdgeEndpoint,
             $this->subclassName

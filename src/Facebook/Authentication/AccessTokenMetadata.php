@@ -356,7 +356,7 @@ class AccessTokenMetadata
             return;
         }
 
-        if ($this->getExpiresAt()->getTimestamp() < time()) {
+        if ($this->getExpiresAt()->getTimestamp() < \time()) {
             throw new FacebookSDKException('Inspection of access token metadata shows that the access token has expired.', 401);
         }
     }

@@ -124,9 +124,9 @@ class Facebook
      */
     public function __construct(array $config = [])
     {
-        $config = array_merge([
-            'app_id' => getenv(static::APP_ID_ENV_NAME),
-            'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
+        $config = \array_merge([
+            'app_id' => \getenv(static::APP_ID_ENV_NAME),
+            'app_secret' => \getenv(static::APP_SECRET_ENV_NAME),
             'default_graph_version' => static::DEFAULT_GRAPH_VERSION,
             'enable_beta_mode' => false,
             'http_client_handler' => null,
@@ -248,7 +248,7 @@ class Facebook
      */
     public function setDefaultAccessToken($accessToken)
     {
-        if (is_string($accessToken)) {
+        if (\is_string($accessToken)) {
             $this->defaultAccessToken = new AccessToken($accessToken);
 
             return;
@@ -443,7 +443,7 @@ class Facebook
         $subClassName = $graphEdge->getSubClassName();
         $graphEdge = $this->lastResponse->getGraphEdge($subClassName, false);
 
-        return count($graphEdge) > 0 ? $graphEdge : null;
+        return \count($graphEdge) > 0 ? $graphEdge : null;
     }
 
     /**
