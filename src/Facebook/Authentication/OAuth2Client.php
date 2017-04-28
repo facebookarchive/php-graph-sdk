@@ -140,10 +140,10 @@ class OAuth2Client
             'response_type' => 'code',
             'sdk' => 'php-sdk-' . Facebook::VERSION,
             'redirect_uri' => $redirectUrl,
-            'scope' => implode(',', $scope)
+            'scope' => \implode(',', $scope)
         ];
 
-        return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . http_build_query($params, null, $separator);
+        return static::BASE_AUTHORIZATION_URL . '/' . $this->graphVersion . '/dialog/oauth?' . \http_build_query($params, null, $separator);
     }
 
     /**
@@ -236,12 +236,12 @@ class OAuth2Client
         if (isset($data['expires'])) {
             // For exchanging a short lived token with a long lived token.
             // The expiration time in seconds will be returned as "expires".
-            $expiresAt = time() + $data['expires'];
+            $expiresAt = \time() + $data['expires'];
         } elseif (isset($data['expires_in'])) {
             // For exchanging a code for a short lived access token.
             // The expiration time in seconds will be returned as "expires_in".
             // See: https://developers.facebook.com/docs/facebook-login/access-tokens#long-via-code
-            $expiresAt = time() + $data['expires_in'];
+            $expiresAt = \time() + $data['expires_in'];
         }
 
         return new AccessToken($data['access_token'], $expiresAt);

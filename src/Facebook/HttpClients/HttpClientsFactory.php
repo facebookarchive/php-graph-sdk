@@ -58,14 +58,14 @@ class HttpClientsFactory
             return new FacebookStreamHttpClient();
         }
         if ('curl' === $handler) {
-            if (!extension_loaded('curl')) {
+            if (!\extension_loaded('curl')) {
                 throw new Exception('The cURL extension must be loaded in order to use the "curl" handler.');
             }
 
             return new FacebookCurlHttpClient();
         }
 
-        if ('guzzle' === $handler && !class_exists('GuzzleHttp\Client')) {
+        if ('guzzle' === $handler && !\class_exists('GuzzleHttp\Client')) {
             throw new Exception('The Guzzle HTTP client must be included in order to use the "guzzle" handler.');
         }
 
@@ -86,11 +86,11 @@ class HttpClientsFactory
      */
     private static function detectDefaultClient()
     {
-        if (extension_loaded('curl')) {
+        if (\extension_loaded('curl')) {
             return new FacebookCurlHttpClient();
         }
 
-        if (class_exists('GuzzleHttp\Client')) {
+        if (\class_exists('GuzzleHttp\Client')) {
             return new FacebookGuzzleHttpClient();
         }
 

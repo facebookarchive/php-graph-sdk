@@ -60,7 +60,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     {
         $this->params = $params;
         $this->files = $files;
-        $this->boundary = $boundary ?: uniqid();
+        $this->boundary = $boundary ?: \uniqid();
     }
 
     /**
@@ -107,7 +107,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      */
     private function getFileString($name, FacebookFile $file)
     {
-        return sprintf(
+        return \sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n",
             $this->boundary,
             $name,
@@ -127,7 +127,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      */
     private function getParamString($name, $value)
     {
-        return sprintf(
+        return \sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
             $this->boundary,
             $name,
@@ -144,13 +144,13 @@ class RequestBodyMultipart implements RequestBodyInterface
      */
     private function getNestedParams(array $params)
     {
-        $query = http_build_query($params, null, '&');
-        $params = explode('&', $query);
+        $query = \http_build_query($params, null, '&');
+        $params = \explode('&', $query);
         $result = [];
 
         foreach ($params as $param) {
-            list($key, $value) = explode('=', $param, 2);
-            $result[urldecode($key)] = urldecode($value);
+            list($key, $value) = \explode('=', $param, 2);
+            $result[\urldecode($key)] = \urldecode($value);
         }
 
         return $result;

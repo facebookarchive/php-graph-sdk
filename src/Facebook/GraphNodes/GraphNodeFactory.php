@@ -208,7 +208,7 @@ class GraphNodeFactory
      */
     public function validateResponseAsArray()
     {
-        if (!is_array($this->decodedBody)) {
+        if (!\is_array($this->decodedBody)) {
             throw new FacebookSDKException('Unable to get response from Graph as array.', 620);
         }
     }
@@ -265,7 +265,7 @@ class GraphNodeFactory
 
         foreach ($data as $k => $v) {
             // Array means could be recurable
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 // Detect any smart-casting from the $graphObjectMap array.
                 // This is always empty on the GraphNode collection, but subclasses can define
                 // their own array of smart-casting types.
@@ -371,7 +371,7 @@ class GraphNodeFactory
         }
 
         // Checks for a sequential numeric array which would be a GraphEdge
-        return array_keys($data) === range(0, count($data) - 1);
+        return \array_keys($data) === \range(0, count($data) - 1);
     }
 
     /**
@@ -383,7 +383,7 @@ class GraphNodeFactory
      */
     public static function validateSubclass($subclassName)
     {
-        if ($subclassName == static::BASE_GRAPH_NODE_CLASS || is_subclass_of($subclassName, static::BASE_GRAPH_NODE_CLASS)) {
+        if ($subclassName == static::BASE_GRAPH_NODE_CLASS || \is_subclass_of($subclassName, static::BASE_GRAPH_NODE_CLASS)) {
             return;
         }
 

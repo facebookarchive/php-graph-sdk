@@ -74,7 +74,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
      */
     public function add($request, $options = null)
     {
-        if (is_array($request)) {
+        if (\is_array($request)) {
             foreach ($request as $key => $req) {
                 $this->add($req, $key);
             }
@@ -88,7 +88,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
 
         if (null === $options) {
             $options = [];
-        } elseif (!is_array($options)) {
+        } elseif (!\is_array($options)) {
             $options = ['name' => $options];
         }
 
@@ -165,7 +165,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
         $request->resetFiles();
 
         // @TODO Does Graph support multiple uploads on one endpoint?
-        return implode(',', $fileNames);
+        return \implode(',', $fileNames);
     }
 
     /**
@@ -212,7 +212,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
             $requests[] = $this->requestEntityToBatchArray($request['request'], $options, $request['attached_files']);
         }
 
-        return json_encode($requests);
+        return \json_encode($requests);
     }
 
     /**
@@ -222,7 +222,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
      */
     public function validateBatchRequestCount()
     {
-        $batchCount = count($this->requests);
+        $batchCount = \count($this->requests);
         if ($batchCount === 0) {
             throw new FacebookSDKException('There are no batch requests to send.');
         } elseif ($batchCount > 50) {
@@ -246,7 +246,7 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
 
         if (null === $options) {
             $options = [];
-        } elseif (!is_array($options)) {
+        } elseif (!\is_array($options)) {
             $options = ['name' => $options];
         }
 

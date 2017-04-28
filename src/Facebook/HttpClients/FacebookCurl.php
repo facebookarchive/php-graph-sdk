@@ -43,7 +43,7 @@ class FacebookCurl
      */
     public function init()
     {
-        $this->curl = curl_init();
+        $this->curl = \curl_init();
     }
 
     /**
@@ -54,7 +54,7 @@ class FacebookCurl
      */
     public function setopt($key, $value)
     {
-        curl_setopt($this->curl, $key, $value);
+        \curl_setopt($this->curl, $key, $value);
     }
 
     /**
@@ -64,7 +64,7 @@ class FacebookCurl
      */
     public function setoptArray(array $options)
     {
-        curl_setopt_array($this->curl, $options);
+        \curl_setopt_array($this->curl, $options);
     }
 
     /**
@@ -74,7 +74,7 @@ class FacebookCurl
      */
     public function exec()
     {
-        return curl_exec($this->curl);
+        return \curl_exec($this->curl);
     }
 
     /**
@@ -84,7 +84,7 @@ class FacebookCurl
      */
     public function errno()
     {
-        return curl_errno($this->curl);
+        return \curl_errno($this->curl);
     }
 
     /**
@@ -94,7 +94,7 @@ class FacebookCurl
      */
     public function error()
     {
-        return curl_error($this->curl);
+        return \curl_error($this->curl);
     }
 
     /**
@@ -106,7 +106,7 @@ class FacebookCurl
      */
     public function getinfo($type)
     {
-        return curl_getinfo($this->curl, $type);
+        return \curl_getinfo($this->curl, $type);
     }
 
     /**
@@ -116,7 +116,7 @@ class FacebookCurl
      */
     public function version()
     {
-        return curl_version();
+        return \curl_version();
     }
 
     /**
@@ -124,6 +124,6 @@ class FacebookCurl
      */
     public function close()
     {
-        curl_close($this->curl);
+        \curl_close($this->curl);
     }
 }

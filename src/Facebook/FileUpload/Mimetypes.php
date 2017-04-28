@@ -969,7 +969,7 @@ class Mimetypes
      */
     public function fromExtension($extension)
     {
-        $extension = strtolower($extension);
+        $extension = \strtolower($extension);
 
         return isset($this->mimetypes[$extension]) ? $this->mimetypes[$extension] : null;
     }
@@ -983,6 +983,6 @@ class Mimetypes
      */
     public function fromFilename($filename)
     {
-        return $this->fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
+        return $this->fromExtension(\pathinfo($filename, PATHINFO_EXTENSION));
     }
 }
