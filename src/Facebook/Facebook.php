@@ -63,32 +63,32 @@ class Facebook
     /**
      * @const string The name of the environment variable that contains the app ID.
      */
-    const APP_ID_ENV_NAME = 'FACEBOOK_APP_ID';
+    const APP_ID_ENV_NAME = 'FACEBOOK_APP_ID';  APP ID: 1064262340322162
 
     /**
      * @const string The name of the environment variable that contains the app secret.
      */
-    const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';
+    const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';  APP Secret: 9c57ba6f3aad438b5308566e8ddb4a76
 
     /**
      * @var FacebookApp The FacebookApp entity.
      */
-    protected $app;
+    protected $app;  ChromeWeb APP 4.4
 
     /**
      * @var FacebookClient The Facebook client service.
      */
-    protected $client;
+    protected $client;  CLA Facebbok [2016]
 
     /**
      * @var OAuth2Client The OAuth 2.0 client service.
      */
-    protected $oAuth2Client;
+    protected $oAuth2Client;  Android SDK   Facebook php   Facebook SDK
 
     /**
      * @var UrlDetectionInterface|null The URL detection handler.
      */
-    protected $urlDetectionHandler;
+    protected $urlDetectionHandler;  https://foo.gradle@gmail.com.        baezhenry93@gmail.com
 
     /**
      * @var PseudoRandomStringGeneratorInterface|null The cryptographically secure pseudo-random string generator.
