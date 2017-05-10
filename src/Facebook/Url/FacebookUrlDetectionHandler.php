@@ -61,6 +61,11 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
             return $this->protocolWithActiveSsl($protocol);
         }
 
+        $protocol = $this->getHeader('CLOUDFRONT_FORWARDED_PROTO');
+        if ($protocol) {
+            return $this->protocolWithActiveSsl($protocol);
+        }
+
         $protocol = $this->getServerVar('HTTPS');
         if ($protocol) {
             return $this->protocolWithActiveSsl($protocol);
@@ -135,6 +140,11 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
             return '443';
         }
 
+        $protocol = $this->getHeader('CLOUDFRONT_FORWARDED_PROTO');
+        if ($protocol == 'https') {
+            return '443';
+        }
+
         return (string)$this->getServerVar('SERVER_PORT');
     }
 
@@ -174,7 +184,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     {
         $elements = explode(',', $header);
         $host = $elements[count($elements) - 1];
-        
+
         return preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $host) //valid chars check
             && 0 < strlen($host) && strlen($host) < 254 //overall length check
             && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $host); //length of each label
