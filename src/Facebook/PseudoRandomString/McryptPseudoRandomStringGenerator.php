@@ -32,17 +32,18 @@ class McryptPseudoRandomStringGenerator implements PseudoRandomStringGeneratorIn
     /**
      * @const string The error message when generating the string fails.
      */
-    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string from mcrypt_create_iv(). ';
+    const ERROR_MESSAGE = 'Unable to generate a cryptographically secure pseudo-random string';
 
     /**
      * @throws FacebookSDKException
      */
     public function __construct()
     {
-        if (!function_exists('mcrypt_create_iv')) {
+        $func = (PHP_VERSION_ID >= 70000) ? 'random_bytes' : 'mcrypt_create_iv';
+        if (! function_exists($func)) {
             throw new FacebookSDKException(
                 static::ERROR_MESSAGE .
-                'The function mcrypt_create_iv() does not exist.'
+                'The function '. $func .' does not exist.'
             );
         }
     }
@@ -54,12 +55,12 @@ class McryptPseudoRandomStringGenerator implements PseudoRandomStringGeneratorIn
     {
         $this->validateLength($length);
 
-        $binaryString = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+        $binaryString = (PHP_VERSION_ID >= 70000) ? random_bytes($length) : mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
 
         if ($binaryString === false) {
             throw new FacebookSDKException(
                 static::ERROR_MESSAGE .
-                'mcrypt_create_iv() returned an error.'
+                'random bytes function returned an error.'
             );
         }
 
