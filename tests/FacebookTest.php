@@ -30,13 +30,9 @@ use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooClientInterface;
-use Facebook\Tests\Fixtures\FooPersistentDataInterface;
-use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
-use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphUser;
 
@@ -138,49 +134,6 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSettingAnInvalidPersistentDataHandlerThrows()
-    {
-        $config = array_merge($this->config, [
-            'persistent_data_handler' => 'foo_handler',
-        ]);
-        new Facebook($config);
-    }
-
-    public function testPersistentDataHandlerCanBeForced()
-    {
-        $config = array_merge($this->config, [
-            'persistent_data_handler' => 'memory'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            FacebookMemoryPersistentDataHandler::class,
-            $fb->getRedirectLoginHelper()->getPersistentDataHandler()
-        );
-    }
-
-    public function testSettingAnInvalidUrlHandlerThrows()
-    {
-        $expectedException = (PHP_MAJOR_VERSION > 5 && class_exists('TypeError'))
-            ? 'TypeError'
-            : \PHPUnit_Framework_Error::class;
-
-        $this->setExpectedException($expectedException);
-
-        $config = array_merge($this->config, [
-            'url_detection_handler' => 'foo_handler',
-        ]);
-        new Facebook($config);
-    }
-
-    public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
-    {
-        $fb = new Facebook($this->config);
-        $this->assertInstanceOf(FacebookUrlDetectionHandler::class, $fb->getUrlDetectionHandler());
-    }
-
     public function testAnAccessTokenCanBeSetAsAString()
     {
         $fb = new Facebook($this->config);
@@ -236,22 +189,12 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     {
         $config = array_merge($this->config, [
             'http_client_handler' => new FooClientInterface(),
-            'persistent_data_handler' => new FooPersistentDataInterface(),
-            'url_detection_handler' => new FooUrlDetectionInterface(),
         ]);
         $fb = new Facebook($config);
 
         $this->assertInstanceOf(
             FooClientInterface::class,
             $fb->getClient()->getHttpClientHandler()
-        );
-        $this->assertInstanceOf(
-            FooPersistentDataInterface::class,
-            $fb->getRedirectLoginHelper()->getPersistentDataHandler()
-        );
-        $this->assertInstanceOf(
-            FooUrlDetectionInterface::class,
-            $fb->getRedirectLoginHelper()->getUrlDetectionHandler()
         );
     }
 

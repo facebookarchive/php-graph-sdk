@@ -50,113 +50,15 @@ The `Facebook\Facebook` service ties all the components of the SDK for PHP toget
 
 The SDK can be used to support logging a Facebook user into your site using Facebook Login which is based on OAuth 2.0.
 
-Most all request made to the Graph API require an access token. We can obtain user access tokens with the SDK using the [helper classes](reference.md).
-
-
-### Obtaining an access token from redirect
-
-For most websites, you'll use the [`Facebook\Helpers\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md) to generate a login URL with the `getLoginUrl()` method. The link will take the user to an app authorization screen and upon approval, will redirect them back to a URL that you specified. On the redirect callback page we can obtain the user access token as an [`AccessToken`](reference/AccessToken.md) entity.
-
-> For this example we'll assume `login.php` will present the login link and the user will be redirected to `login-callback.php` where we will obtain the access token.
-
-```php
-# login.php
-$fb = new Facebook\Facebook([/* . . . */]);
-
-$helper = $fb->getRedirectLoginHelper();
-$permissions = ['email', 'user_likes']; // optional
-$loginUrl = $helper->getLoginUrl('http://{your-website}/login-callback.php', $permissions);
-
-echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-```
-
-> **Warning:** The `FacebookRedirectLoginHelper` makes use of sessions to store a [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) value. You need to make sure you have sessions enabled before invoking the `getLoginUrl()` method. This is usually done automatically in most web frameworks, but if you're not using a web framework you can add [`session_start();`](http://php.net/session_start) to the top of your `login.php` & `login-callback.php` scripts.
-
-```php
-# login-callback.php
-$fb = new Facebook\Facebook([/* . . . */]);
-
-$helper = $fb->getRedirectLoginHelper();
-try {
-  $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
-}
-
-if (isset($accessToken)) {
-  // Logged in!
-  $_SESSION['facebook_access_token'] = (string) $accessToken;
-
-  // Now you can redirect to another page and use the
-  // access token from $_SESSION['facebook_access_token']
-}
-```
-
+Most all request made to the Graph API require an access token. We can obtain user access tokens with libraries dedicated to OAuth 2.0.
 
 ### Obtaining an access token from a Facebook Canvas context
 
-If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
-
-> **Warning:** The `FacebookCanvasHelper` will detect a [signed request](reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#obtaining-an-access-token-from-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#obtaining-an-access-token-from-the-sdk-for-javascript) the SDK for JavaScript set.
-
-```php
-# example-canvas-app.php
-$fb = new Facebook\Facebook([/* . . . */]);
-
-$helper = $fb->getCanvasHelper();
-try {
-  $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
-}
-
-if (isset($accessToken)) {
-  // Logged in.
-}
-```
-
-> If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)
-
+**TODO**: Rewrite
 
 ### Obtaining an access token from the SDK for JavaScript
 
-If you're already using the Facebook SDK for JavaScript to authenticate users, you can obtain the access token with PHP by using the [FacebookJavaScriptHelper](reference/FacebookJavaScriptHelper.md). The `getAccessToken()` method will return an [`AccessToken`](reference/AccessToken.md) entity.
-
-```php
-# example-obtain-from-js-cookie-app.php
-$fb = new Facebook\Facebook([/* . . . */]);
-
-$helper = $fb->getJavaScriptHelper();
-try {
-  $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
-}
-
-if (isset($accessToken)) {
-  // Logged in
-}
-```
-
-> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.9). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
+**TODO**: Rewrite
 
 ## Extending the access token
 

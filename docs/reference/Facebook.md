@@ -50,8 +50,6 @@ $fb = new Facebook\Facebook([
   'enable_beta_mode' => true,
   'default_graph_version' => 'v2.9',
   'http_client_handler' => 'guzzle',
-  'persistent_data_handler' => 'memory',
-  'url_detection_handler' => new MyUrlDetectionHandler(),
 ]);
 ```
 
@@ -82,34 +80,6 @@ If you wish to write your own HTTP client, you can code your HTTP client to the 
 ```php
 $fb = new Facebook([
   'http_client_handler' => new MyCustomHttpClient(),
-]);
-```
-
-If any other value is provided an `InvalidArgumentException` will be thrown.
-
-### `persistent_data_handler`
-Allows you to overwrite the default persistent data store.
-
-By default, the SDK will try to use the native PHP session for the persistent data store. There is also an in-memory persistent data handler which is useful when running your script from the command line for example. You can force either implementation by setting this value to `session` or `memory`.
-
-If you wish to write your own persistent data handler, you can code your persistent data handler to the [`Facebook\PersistentData\PersistentDataInterface`](PersistentDataInterface.md) and set the value of `persistent_data_handler` to an instance of your custom handler.
-
-```php
-$fb = new Facebook([
-  'persistent_data_handler' => new MyCustomPersistentDataHandler(),
-]);
-```
-
-If any other value is provided an `InvalidArgumentException` will be thrown.
-
-### `url_detection_handler`
-Allows you to overwrite the default URL detection logic.
-
-The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the ['Facebook\Url\UrlDetectionInterface'](UrlDetectionInterface.md)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
-
-```php
-$fb = new Facebook([
-  'url_detection_handler' => new MyUrlDetectionHandler(),
 ]);
 ```
 
@@ -152,12 +122,6 @@ Returns an instance of `Facebook\Authentication\OAuth2Client`.
 public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
 ```
 Returns the last response received from the Graph API in the form of a `Facebook\FacebookResponse` or `Facebook\FacebookBatchResponse`.
-
-## getUrlDetectionHandler()
-```php
-public Facebook\Url\UrlDetectionInterface getUrlDetectionHandler()
-```
-Returns an instance of [`Facebook\Url\UrlDetectionInterface`](UrlDetectionInterface.md).
 
 ## getDefaultAccessToken()
 ```php
@@ -327,49 +291,6 @@ $batchResponse = $fb->sendBatchRequest($requests);
 
 [See a full batch example](../examples/batch_request.md).
 
-## getRedirectLoginHelper()
-```php
-public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
-```
-
-Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](FacebookRedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
-
-```php
-$helper = $fb->getRedirectLoginHelper();
-```
-
-## getJavaScriptHelper()
-```php
-public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
-```
-
-Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](FacebookJavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
-
-```php
-$helper = $fb->getJavaScriptHelper();
-```
-
-## getCanvasHelper()
-```php
-public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
-```
-
-Returns a [`Facebook\Helpers\FacebookCanvasHelper`](FacebookCanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
-
-```php
-$helper = $fb->getCanvasHelper();
-```
-
-## getPageTabHelper()
-```php
-public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
-```
-
-Returns a [`Facebook\Helpers\FacebookPageTabHelper`](FacebookPageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
-
-```php
-$helper = $fb->getPageTabHelper();
-```
 
 ## next()
 ```php
