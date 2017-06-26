@@ -146,6 +146,7 @@ class GraphNode extends Collection
             'created_time',
             'updated_time',
             'start_time',
+            'stop_time',
             'end_time',
             'backdated_time',
             'issued_at',
