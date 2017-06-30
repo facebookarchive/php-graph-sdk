@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -54,7 +55,7 @@ class GraphObjectFactory extends GraphNodeFactory
      *
      * @deprecated 5.0.0 GraphObjectFactory has been renamed to GraphNodeFactory
      */
-    public function makeGraphObject($subclassName = null)
+    public function makeGraphObject(?string $subclassName = null): GraphNode
     {
         return $this->makeGraphNode($subclassName);
     }
@@ -66,7 +67,7 @@ class GraphObjectFactory extends GraphNodeFactory
      *
      * @throws FacebookSDKException
      */
-    public function makeGraphEvent()
+    public function makeGraphEvent(): GraphEvent
     {
         return $this->makeGraphNode(static::BASE_GRAPH_OBJECT_PREFIX . 'GraphEvent');
     }
@@ -81,7 +82,7 @@ class GraphObjectFactory extends GraphNodeFactory
      *
      * @deprecated 5.0.0 GraphObjectFactory has been renamed to GraphNodeFactory
      */
-    public function makeGraphList($subclassName = null, $auto_prefix = true)
+    public function makeGraphList($subclassName = null, $auto_prefix = true): GraphEdge
     {
         return $this->makeGraphEdge($subclassName, $auto_prefix);
     }

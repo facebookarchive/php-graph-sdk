@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -38,7 +39,7 @@ class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
     /**
      * @inheritdoc
      */
-    public function get($key)
+    public function get(string $key)
     {
         return isset($this->sessionData[$key]) ? $this->sessionData[$key] : null;
     }
@@ -46,7 +47,7 @@ class FacebookMemoryPersistentDataHandler implements PersistentDataInterface
     /**
      * @inheritdoc
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         $this->sessionData[$key] = $value;
     }

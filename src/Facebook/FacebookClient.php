@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -91,7 +92,7 @@ class FacebookClient
      * @param FacebookHttpClientInterface|null $httpClientHandler
      * @param boolean                          $enableBeta
      */
-    public function __construct(FacebookHttpClientInterface $httpClientHandler = null, $enableBeta = false)
+    public function __construct(?FacebookHttpClientInterface $httpClientHandler = null, bool $enableBeta = false)
     {
         $this->httpClientHandler = $httpClientHandler ?: $this->detectHttpClientHandler();
         $this->enableBetaMode = $enableBeta;
@@ -102,7 +103,7 @@ class FacebookClient
      *
      * @param FacebookHttpClientInterface $httpClientHandler
      */
-    public function setHttpClientHandler(FacebookHttpClientInterface $httpClientHandler)
+    public function setHttpClientHandler(FacebookHttpClientInterface $httpClientHandler): void
     {
         $this->httpClientHandler = $httpClientHandler;
     }
@@ -112,7 +113,7 @@ class FacebookClient
      *
      * @return FacebookHttpClientInterface
      */
-    public function getHttpClientHandler()
+    public function getHttpClientHandler(): FacebookHttpClientInterface
     {
         return $this->httpClientHandler;
     }
@@ -122,7 +123,7 @@ class FacebookClient
      *
      * @return FacebookHttpClientInterface
      */
-    public function detectHttpClientHandler()
+    public function detectHttpClientHandler(): FacebookHttpClientInterface
     {
         return extension_loaded('curl') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
     }
@@ -132,7 +133,7 @@ class FacebookClient
      *
      * @param boolean $betaMode
      */
-    public function enableBetaMode($betaMode = true)
+    public function enableBetaMode(bool $betaMode = true): void
     {
         $this->enableBetaMode = $betaMode;
     }
@@ -144,7 +145,7 @@ class FacebookClient
      *
      * @return string
      */
-    public function getBaseGraphUrl($postToVideoUrl = false)
+    public function getBaseGraphUrl(bool $postToVideoUrl = false): string
     {
         if ($postToVideoUrl) {
             return $this->enableBetaMode ? static::BASE_GRAPH_VIDEO_URL_BETA : static::BASE_GRAPH_VIDEO_URL;
@@ -160,7 +161,7 @@ class FacebookClient
      *
      * @return array
      */
-    public function prepareRequestMessage(FacebookRequest $request)
+    public function prepareRequestMessage(FacebookRequest $request): array
     {
         $postToVideoUrl = $request->containsVideoUploads();
         $url = $this->getBaseGraphUrl($postToVideoUrl) . $request->getUrl();
@@ -195,7 +196,7 @@ class FacebookClient
      *
      * @throws FacebookSDKException
      */
-    public function sendRequest(FacebookRequest $request)
+    public function sendRequest(FacebookRequest $request): FacebookResponse
     {
         if (get_class($request) === 'Facebook\FacebookRequest') {
             $request->validateAccessToken();
@@ -240,7 +241,7 @@ class FacebookClient
      *
      * @throws FacebookSDKException
      */
-    public function sendBatchRequest(FacebookBatchRequest $request)
+    public function sendBatchRequest(FacebookBatchRequest $request): FacebookBatchResponse
     {
         $request->prepareRequestsForBatch();
         $facebookResponse = $this->sendRequest($request);

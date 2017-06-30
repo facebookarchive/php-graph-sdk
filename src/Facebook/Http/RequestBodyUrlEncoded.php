@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -48,7 +49,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): string
     {
         return http_build_query($this->params, null, '&');
     }

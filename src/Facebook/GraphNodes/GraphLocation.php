@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -35,7 +36,7 @@ class GraphLocation extends GraphNode
      *
      * @return string|null
      */
-    public function getStreet()
+    public function getStreet(): ?string
     {
         return $this->getField('street');
     }
@@ -45,7 +46,7 @@ class GraphLocation extends GraphNode
      *
      * @return string|null
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->getField('city');
     }
@@ -55,7 +56,7 @@ class GraphLocation extends GraphNode
      *
      * @return string|null
      */
-    public function getState()
+    public function getState(): ?string
     {
         return $this->getField('state');
     }
@@ -65,7 +66,7 @@ class GraphLocation extends GraphNode
      *
      * @return string|null
      */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->getField('country');
     }
@@ -75,7 +76,7 @@ class GraphLocation extends GraphNode
      *
      * @return string|null
      */
-    public function getZip()
+    public function getZip(): ?string
     {
         return $this->getField('zip');
     }
@@ -85,7 +86,7 @@ class GraphLocation extends GraphNode
      *
      * @return float|null
      */
-    public function getLatitude()
+    public function getLatitude(): ?float
     {
         return $this->getField('latitude');
     }
@@ -95,7 +96,7 @@ class GraphLocation extends GraphNode
      *
      * @return float|null
      */
-    public function getLongitude()
+    public function getLongitude(): ?float
     {
         return $this->getField('longitude');
     }

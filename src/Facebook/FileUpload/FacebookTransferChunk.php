@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -62,7 +63,7 @@ class FacebookTransferChunk
      * @param int $startOffset
      * @param int $endOffset
      */
-    public function __construct(FacebookFile $file, $uploadSessionId, $videoId, $startOffset, $endOffset)
+    public function __construct(FacebookFile $file, int $uploadSessionId, int $videoId, int $startOffset, int $endOffset)
     {
         $this->file = $file;
         $this->uploadSessionId = $uploadSessionId;
@@ -76,7 +77,7 @@ class FacebookTransferChunk
      *
      * @return FacebookFile
      */
-    public function getFile()
+    public function getFile(): FacebookFile
     {
         return $this->file;
     }
@@ -86,7 +87,7 @@ class FacebookTransferChunk
      *
      * @return FacebookFile
      */
-    public function getPartialFile()
+    public function getPartialFile(): FacebookFile
     {
         $maxLength = $this->endOffset - $this->startOffset;
 
@@ -98,7 +99,7 @@ class FacebookTransferChunk
      *
      * @return int
      */
-    public function getUploadSessionId()
+    public function getUploadSessionId(): int
     {
         return $this->uploadSessionId;
     }
@@ -106,9 +107,9 @@ class FacebookTransferChunk
     /**
      * Check whether is the last chunk
      *
-     * @return bool
+     * @return boolean
      */
-    public function isLastChunk()
+    public function isLastChunk(): bool
     {
         return $this->startOffset === $this->endOffset;
     }
@@ -116,7 +117,7 @@ class FacebookTransferChunk
     /**
      * @return int
      */
-    public function getStartOffset()
+    public function getStartOffset(): int
     {
         return $this->startOffset;
     }
@@ -126,7 +127,7 @@ class FacebookTransferChunk
      *
      * @return int
      */
-    public function getVideoId()
+    public function getVideoId(): int
     {
         return $this->videoId;
     }

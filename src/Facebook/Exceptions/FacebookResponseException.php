@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,6 +24,7 @@
  */
 namespace Facebook\Exceptions;
 
+use Facebook\Facebook;
 use Facebook\FacebookResponse;
 
 /**
@@ -66,7 +68,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return FacebookResponseException
      */
-    public static function create(FacebookResponse $response)
+    public static function create(FacebookResponse $response): FacebookResponseException
     {
         $data = $response->getDecodedBody();
 
@@ -143,7 +145,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return mixed
      */
-    private function get($key, $default = null)
+    private function get(string $key, $default = null)
     {
         if (isset($this->responseData['error'][$key])) {
             return $this->responseData['error'][$key];
@@ -157,7 +159,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return int
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): int
     {
         return $this->response->getHttpStatusCode();
     }
@@ -167,7 +169,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return int
      */
-    public function getSubErrorCode()
+    public function getSubErrorCode(): int
     {
         return $this->get('error_subcode', -1);
     }
@@ -177,7 +179,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return string
      */
-    public function getErrorType()
+    public function getErrorType(): string
     {
         return $this->get('type', '');
     }
@@ -187,7 +189,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return string
      */
-    public function getRawResponse()
+    public function getRawResponse(): string
     {
         return $this->response->getBody();
     }
@@ -197,7 +199,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return array
      */
-    public function getResponseData()
+    public function getResponseData(): array
     {
         return $this->responseData;
     }
@@ -207,7 +209,7 @@ class FacebookResponseException extends FacebookSDKException
      *
      * @return FacebookResponse
      */
-    public function getResponse()
+    public function getResponse(): FacebookResponse
     {
         return $this->response;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -69,7 +70,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
      *
      * @return array
      */
-    public function getResponses()
+    public function getResponses(): array
     {
         return $this->responses;
     }
@@ -80,7 +81,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
      *
      * @param array $responses
      */
-    public function setResponses(array $responses)
+    public function setResponses(array $responses): void
     {
         $this->responses = [];
 
@@ -92,10 +93,10 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * Add a response to the list.
      *
-     * @param int        $key
+     * @param mixed        $key
      * @param array|null $response
      */
-    public function addResponse($key, $response)
+    public function addResponse($key, ?array $response): void
     {
         $originalRequestName = isset($this->batchRequest[$key]['name']) ? $this->batchRequest[$key]['name'] : $key;
         $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : null;
@@ -124,7 +125,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->addResponse($offset, $value);
     }
@@ -132,7 +133,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->responses[$offset]);
     }
@@ -140,7 +141,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * @inheritdoc
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->responses[$offset]);
     }
@@ -161,7 +162,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
      *
      * @return array
      */
-    private function normalizeBatchHeaders(array $batchHeaders)
+    private function normalizeBatchHeaders(array $batchHeaders): array
     {
         $headers = [];
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -44,7 +45,7 @@ class FacebookApp implements \Serializable
      *
      * @throws FacebookSDKException
      */
-    public function __construct($id, $secret)
+    public function __construct(string $id, string $secret)
     {
         if (!is_string($id)
           // Keeping this for BC. Integers greater than PHP_INT_MAX will make is_int() return false
@@ -61,7 +62,7 @@ class FacebookApp implements \Serializable
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -71,7 +72,7 @@ class FacebookApp implements \Serializable
      *
      * @return string
      */
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->secret;
     }
@@ -81,7 +82,7 @@ class FacebookApp implements \Serializable
      *
      * @return AccessToken
      */
-    public function getAccessToken()
+    public function getAccessToken(): AccessToken
     {
         return new AccessToken($this->id . '|' . $this->secret);
     }
@@ -91,7 +92,7 @@ class FacebookApp implements \Serializable
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return implode('|', [$this->id, $this->secret]);
     }
@@ -101,7 +102,7 @@ class FacebookApp implements \Serializable
      *
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         list($id, $secret) = explode('|', $serialized);
 

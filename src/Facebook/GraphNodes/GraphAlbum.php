@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -44,7 +45,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getField('id');
     }
@@ -54,7 +55,7 @@ class GraphAlbum extends GraphNode
      *
      * @return boolean|null
      */
-    public function getCanUpload()
+    public function getCanUpload(): ?bool
     {
         return $this->getField('can_upload');
     }
@@ -64,7 +65,7 @@ class GraphAlbum extends GraphNode
      *
      * @return int|null
      */
-    public function getCount()
+    public function getCount(): ?int
     {
         return $this->getField('count');
     }
@@ -74,7 +75,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getCoverPhoto()
+    public function getCoverPhoto(): ?string
     {
         return $this->getField('cover_photo');
     }
@@ -84,7 +85,7 @@ class GraphAlbum extends GraphNode
      *
      * @return \DateTime|null
      */
-    public function getCreatedTime()
+    public function getCreatedTime(): ?\DateTime
     {
         return $this->getField('created_time');
     }
@@ -94,7 +95,7 @@ class GraphAlbum extends GraphNode
      *
      * @return \DateTime|null
      */
-    public function getUpdatedTime()
+    public function getUpdatedTime(): ?\DateTime
     {
         return $this->getField('updated_time');
     }
@@ -104,7 +105,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->getField('description');
     }
@@ -114,7 +115,7 @@ class GraphAlbum extends GraphNode
      *
      * @return GraphUser|null
      */
-    public function getFrom()
+    public function getFrom(): ?GraphUser
     {
         return $this->getField('from');
     }
@@ -124,7 +125,7 @@ class GraphAlbum extends GraphNode
      *
      * @return GraphPage|null
      */
-    public function getPlace()
+    public function getPlace(): ?GraphPage
     {
         return $this->getField('place');
     }
@@ -134,7 +135,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getLink()
+    public function getLink(): ?string
     {
         return $this->getField('link');
     }
@@ -144,7 +145,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getLocation()
+    public function getLocation(): ?string
     {
         return $this->getField('location');
     }
@@ -154,7 +155,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->getField('name');
     }
@@ -164,7 +165,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getPrivacy()
+    public function getPrivacy(): ?string
     {
         return $this->getField('privacy');
     }
@@ -176,7 +177,7 @@ class GraphAlbum extends GraphNode
      *
      * @return string|null
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->getField('type');
     }

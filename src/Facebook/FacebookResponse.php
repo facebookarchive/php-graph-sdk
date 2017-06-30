@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,6 +24,7 @@
  */
 namespace Facebook;
 
+use Facebook\GraphNodes\GraphEdge;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
@@ -397,11 +399,11 @@ class FacebookResponse
      * @param string|null $subclassName The GraphNode subclass to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
-     * @return \Facebook\GraphNodes\GraphEdge
+     * @return GraphEdge
      *
      * @throws FacebookSDKException
      */
-    public function getGraphEdge($subclassName = null, $auto_prefix = true)
+    public function getGraphEdge(?string $subclassName = null, $auto_prefix = true): GraphEdge
     {
         $factory = new GraphNodeFactory($this);
 

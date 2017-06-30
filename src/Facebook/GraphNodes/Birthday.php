@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -53,7 +54,7 @@ class Birthday extends DateTime
      *
      * @param string $date
      */
-    public function __construct($date)
+    public function __construct(string $date)
     {
         $parts = explode('/', $date);
 
@@ -66,9 +67,9 @@ class Birthday extends DateTime
     /**
      * Returns whether date object contains birth day and month
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasDate()
+    public function hasDate(): bool
     {
         return $this->hasDate;
     }
@@ -76,9 +77,9 @@ class Birthday extends DateTime
     /**
      * Returns whether date object contains birth year
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasYear()
+    public function hasYear(): bool
     {
         return $this->hasYear;
     }

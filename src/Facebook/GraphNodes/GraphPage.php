@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -46,7 +47,7 @@ class GraphPage extends GraphNode
      *
      * @return string|null
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getField('id');
     }
@@ -56,7 +57,7 @@ class GraphPage extends GraphNode
      *
      * @return string|null
      */
-    public function getCategory()
+    public function getCategory(): ?string
     {
         return $this->getField('category');
     }
@@ -66,7 +67,7 @@ class GraphPage extends GraphNode
      *
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->getField('name');
     }
@@ -76,7 +77,7 @@ class GraphPage extends GraphNode
      *
      * @return GraphPage|null
      */
-    public function getBestPage()
+    public function getBestPage(): ?GraphPage
     {
         return $this->getField('best_page');
     }
@@ -86,7 +87,7 @@ class GraphPage extends GraphNode
      *
      * @return GraphPage|null
      */
-    public function getGlobalBrandParentPage()
+    public function getGlobalBrandParentPage(): ?GraphPage
     {
         return $this->getField('global_brand_parent_page');
     }
@@ -96,7 +97,7 @@ class GraphPage extends GraphNode
      *
      * @return GraphLocation|null
      */
-    public function getLocation()
+    public function getLocation(): ?GraphLocation
     {
         return $this->getField('location');
     }
@@ -106,7 +107,7 @@ class GraphPage extends GraphNode
      *
      * @return GraphCoverPhoto|null
      */
-    public function getCover()
+    public function getCover(): ?GraphCoverPhoto
     {
         return $this->getField('cover');
     }
@@ -116,7 +117,7 @@ class GraphPage extends GraphNode
      *
      * @return GraphPicture|null
      */
-    public function getPicture()
+    public function getPicture(): ?GraphPicture
     {
         return $this->getField('picture');
     }
@@ -128,7 +129,7 @@ class GraphPage extends GraphNode
      *
      * @return string|null
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         return $this->getField('access_token');
     }
@@ -140,7 +141,7 @@ class GraphPage extends GraphNode
      *
      * @return array|null
      */
-    public function getPerms()
+    public function getPerms(): ?array
     {
         return $this->getField('perms');
     }

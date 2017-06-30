@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -967,7 +968,7 @@ class Mimetypes
      *
      * @return string|null
      */
-    public function fromExtension($extension)
+    public function fromExtension($extension): ?string
     {
         $extension = strtolower($extension);
 
@@ -981,7 +982,7 @@ class Mimetypes
      *
      * @return string|null
      */
-    public function fromFilename($filename)
+    public function fromFilename($filename): ?string
     {
         return $this->fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
     }

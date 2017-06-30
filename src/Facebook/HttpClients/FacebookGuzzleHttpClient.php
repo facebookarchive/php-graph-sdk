@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -41,7 +42,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
     /**
      * @param \GuzzleHttp\Client|null The Guzzle client.
      */
-    public function __construct(Client $guzzleClient = null)
+    public function __construct(?Client $guzzleClient = null)
     {
         $this->guzzleClient = $guzzleClient ?: new Client();
     }
@@ -49,7 +50,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         $options = [
             'headers' => $headers,
@@ -84,7 +85,7 @@ class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
      *
      * @return string
      */
-    public function getHeadersAsString(ResponseInterface $response)
+    public function getHeadersAsString(ResponseInterface $response): string
     {
         $headers = $response->getHeaders();
         $rawHeaders = [];

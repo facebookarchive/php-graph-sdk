@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -53,7 +54,7 @@ class SignedRequest
      * @param FacebookApp $facebookApp      The FacebookApp entity.
      * @param string|null $rawSignedRequest The raw signed request.
      */
-    public function __construct(FacebookApp $facebookApp, $rawSignedRequest = null)
+    public function __construct(FacebookApp $facebookApp, ?string $rawSignedRequest = null)
     {
         $this->app = $facebookApp;
 
@@ -71,7 +72,7 @@ class SignedRequest
      *
      * @return string|null
      */
-    public function getRawSignedRequest()
+    public function getRawSignedRequest(): ?string
     {
         return $this->rawSignedRequest;
     }
@@ -81,7 +82,7 @@ class SignedRequest
      *
      * @return array|null
      */
-    public function getPayload()
+    public function getPayload(): ?array
     {
         return $this->payload;
     }
@@ -94,7 +95,7 @@ class SignedRequest
      *
      * @return mixed|null
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         if (isset($this->payload[$key])) {
             return $this->payload[$key];
@@ -108,7 +109,7 @@ class SignedRequest
      *
      * @return string|null
      */
-    public function getUserId()
+    public function getUserId(): ?string
     {
         return $this->get('user_id');
     }
@@ -118,7 +119,7 @@ class SignedRequest
      *
      * @return boolean
      */
-    public function hasOAuthData()
+    public function hasOAuthData(): bool
     {
         return $this->get('oauth_token') || $this->get('code');
     }
@@ -130,7 +131,7 @@ class SignedRequest
      *
      * @return string
      */
-    public function make(array $payload)
+    public function make(array $payload): string
     {
         $payload['algorithm'] = isset($payload['algorithm']) ? $payload['algorithm'] : 'HMAC-SHA256';
         $payload['issued_at'] = isset($payload['issued_at']) ? $payload['issued_at'] : time();
@@ -146,7 +147,7 @@ class SignedRequest
      * Validates and decodes a signed request and saves
      * the payload to an array.
      */
-    protected function parse()
+    protected function parse(): void
     {
         list($encodedSig, $encodedPayload) = $this->split();
 
@@ -168,7 +169,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function split()
+    protected function split(): array
     {
         if (strpos($this->rawSignedRequest, '.') === false) {
             throw new FacebookSDKException('Malformed signed request.', 606);
@@ -186,7 +187,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function decodeSignature($encodedSig)
+    protected function decodeSignature(string $encodedSig): string
     {
         $sig = $this->base64UrlDecode($encodedSig);
 
@@ -206,7 +207,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function decodePayload($encodedPayload)
+    protected function decodePayload(string $encodedPayload): array
     {
         $payload = $this->base64UrlDecode($encodedPayload);
 
@@ -226,7 +227,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function validateAlgorithm()
+    protected function validateAlgorithm(): void
     {
         if ($this->get('algorithm') !== 'HMAC-SHA256') {
             throw new FacebookSDKException('Signed request is using the wrong algorithm.', 605);
@@ -266,7 +267,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function validateSignature($hashedSig, $sig)
+    protected function validateSignature(string $hashedSig, string $sig): void
     {
         if (\hash_equals($hashedSig, $sig)) {
             return;
@@ -286,7 +287,7 @@ class SignedRequest
      *
      * @return string decoded string
      */
-    public function base64UrlDecode($input)
+    public function base64UrlDecode(string $input): string
     {
         $urlDecodedBase64 = strtr($input, '-_', '+/');
         $this->validateBase64($urlDecodedBase64);
@@ -305,7 +306,7 @@ class SignedRequest
      *
      * @return string base64 url encoded input
      */
-    public function base64UrlEncode($input)
+    public function base64UrlEncode(string $input): string
     {
         return strtr(base64_encode($input), '+/', '-_');
     }
@@ -317,7 +318,7 @@ class SignedRequest
      *
      * @throws FacebookSDKException
      */
-    protected function validateBase64($input)
+    protected function validateBase64(string $input): void
     {
         if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $input)) {
             throw new FacebookSDKException('Signed request contains malformed base64 encoding.', 608);

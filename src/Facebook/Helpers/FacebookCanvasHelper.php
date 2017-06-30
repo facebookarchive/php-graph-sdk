@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -45,7 +46,7 @@ class FacebookCanvasHelper extends FacebookSignedRequestFromInputHelper
      *
      * @return string|null
      */
-    public function getRawSignedRequest()
+    public function getRawSignedRequest(): ?string
     {
         return $this->getRawSignedRequestFromPost() ?: null;
     }
