@@ -26,7 +26,7 @@ $response = $fb->get('/something');
 $graphNode = $response->getGraphNode();
 
 // Get the response typed as a GraphUser
-$user = $response->getGraphUser());
+$user = $response->getGraphUser();
 
 // Get the response typed as a GraphPage
 $page = $response->getGraphPage();
