@@ -23,6 +23,10 @@
  */
 namespace Facebook\Tests\HttpClients;
 
+/**
+ * Class AbstractTestHttpClient
+ * @package Facebook\Tests\HttpClients
+ */
 abstract class AbstractTestHttpClient extends \PHPUnit_Framework_TestCase
 {
     protected $fakeRawRedirectHeader = "HTTP/1.1 302 Found

@@ -34,6 +34,10 @@ use Facebook\Tests\Fixtures\FooClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 
+/**
+ * Class FacebookTest
+ * @package Facebook\Tests
+ */
 class FacebookTest extends \PHPUnit_Framework_TestCase
 {
     protected $config = [

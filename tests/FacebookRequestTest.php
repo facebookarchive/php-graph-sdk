@@ -29,6 +29,10 @@ use Facebook\FacebookRequest;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 
+/**
+ * Class FacebookRequestTest
+ * @package Facebook\Tests
+ */
 class FacebookRequestTest extends \PHPUnit_Framework_TestCase
 {
     public function testAnEmptyRequestEntityCanInstantiate()

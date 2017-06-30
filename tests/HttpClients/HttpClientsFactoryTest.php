@@ -30,6 +30,10 @@ use Facebook\HttpClients\HttpClientsFactory;
 use GuzzleHttp\Client;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class HttpClientsFactoryTest
+ * @package Facebook\Tests\HttpClients
+ */
 class HttpClientsFactoryTest extends PHPUnit_Framework_TestCase
 {
     const COMMON_NAMESPACE = 'Facebook\HttpClients\\';

@@ -42,7 +42,7 @@ class FacebookCurl
     /**
      * Make a new curl reference instance
      */
-    public function init()
+    public function init(): void
     {
         $this->curl = curl_init();
     }

@@ -37,7 +37,7 @@ class FacebookTransferChunk
     private $file;
 
     /**
-     * @var int The ID of the upload session.
+     * @var string The ID of the upload session.
      */
     private $uploadSessionId;
 
@@ -52,18 +52,18 @@ class FacebookTransferChunk
     private $endOffset;
 
     /**
-     * @var int The ID of the video.
+     * @var string The ID of the video.
      */
     private $videoId;
 
     /**
      * @param FacebookFile $file
-     * @param int $uploadSessionId
-     * @param int $videoId
+     * @param string $uploadSessionId
+     * @param string $videoId
      * @param int $startOffset
      * @param int $endOffset
      */
-    public function __construct(FacebookFile $file, int $uploadSessionId, int $videoId, int $startOffset, int $endOffset)
+    public function __construct(FacebookFile $file, string $uploadSessionId, string $videoId, int $startOffset, int $endOffset)
     {
         $this->file = $file;
         $this->uploadSessionId = $uploadSessionId;
@@ -97,9 +97,9 @@ class FacebookTransferChunk
     /**
      * Return upload session Id
      *
-     * @return int
+     * @return string
      */
-    public function getUploadSessionId(): int
+    public function getUploadSessionId(): string
     {
         return $this->uploadSessionId;
     }
@@ -125,9 +125,9 @@ class FacebookTransferChunk
     /**
      * Get uploaded video Id
      *
-     * @return int
+     * @return string
      */
-    public function getVideoId(): int
+    public function getVideoId(): string
     {
         return $this->videoId;
     }

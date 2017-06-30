@@ -26,6 +26,10 @@ namespace Facebook\Tests;
 use Facebook\FacebookApp;
 use Facebook\SignedRequest;
 
+/**
+ * Class SignedRequestTest
+ * @package Facebook\Tests
+ */
 class SignedRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -29,6 +29,10 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookBatchRequest;
 use Facebook\FileUpload\FacebookFile;
 
+/**
+ * Class FacebookBatchRequestTest
+ * @package Facebook\Tests
+ */
 class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -213,6 +217,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedArray, $batchRequestArray);
     }
 
+    /**
+     * @return array
+     */
     public function requestsAndExpectedResponsesProvider()
     {
         $headers = $this->defaultHeaders();
@@ -377,6 +384,11 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedBatchParams, $params);
     }
 
+    /**
+     * @param FacebookRequest $request
+     * @param FacebookApp     $expectedApp
+     * @param                 $expectedToken
+     */
     private function assertRequestContainsAppAndToken(FacebookRequest $request, FacebookApp $expectedApp, $expectedToken)
     {
         $app = $request->getApp();
@@ -386,6 +398,9 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedToken, $token);
     }
 
+    /**
+     * @return array
+     */
     private function defaultHeaders()
     {
         $headers = [];
@@ -396,6 +411,10 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         return $headers;
     }
 
+    /**
+     * @param FacebookBatchRequest $batchRequest
+     * @param                      $number
+     */
     private function createAndAppendRequestsTo(FacebookBatchRequest $batchRequest, $number)
     {
         for ($i = 0; $i < $number; $i++) {
@@ -403,11 +422,19 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return FacebookBatchRequest
+     */
     private function createBatchRequest()
     {
         return new FacebookBatchRequest($this->app, [], 'foo_token');
     }
 
+    /**
+     * @param array $requests
+     *
+     * @return FacebookBatchRequest
+     */
     private function createBatchRequestWithRequests(array $requests)
     {
         $batchRequest = $this->createBatchRequest();
@@ -416,6 +443,10 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         return $batchRequest;
     }
 
+    /**
+     * @param $requests
+     * @param $formattedRequests
+     */
     private function assertRequestsMatch($requests, $formattedRequests)
     {
         $expectedRequests = [];

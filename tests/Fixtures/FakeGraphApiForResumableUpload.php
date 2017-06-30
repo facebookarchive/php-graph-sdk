@@ -27,6 +27,10 @@ namespace Facebook\Tests\Fixtures;
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 
+/**
+ * Class FakeGraphApiForResumableUpload
+ * @package Facebook\Tests\Fixtures
+ */
 class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
 {
     public $transferCount = 0;
@@ -42,7 +46,16 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         $this->respondWith = 'FAIL_ON_TRANSFER';
     }
 
-    public function send($url, $method, $body, array $headers, $timeOut)
+    /**
+     * @param string $url
+     * @param string $method
+     * @param string $body
+     * @param array  $headers
+     * @param int    $timeOut
+     *
+     * @return GraphRawResponse
+     */
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         // Could be start, transfer or finish
         if (strpos($body, 'transfer') !== false) {
@@ -54,6 +67,9 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         return $this->respondStart();
     }
 
+    /**
+     * @return GraphRawResponse
+     */
     private function respondStart()
     {
         if ($this->respondWith == 'FAIL_ON_START') {
@@ -71,6 +87,9 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         );
     }
 
+    /**
+     * @return GraphRawResponse
+     */
     private function respondTransfer()
     {
         if ($this->respondWith == 'FAIL_ON_TRANSFER') {
@@ -101,6 +120,9 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         );
     }
 
+    /**
+     * @return GraphRawResponse
+     */
     private function respondFinish()
     {
         return new GraphRawResponse(

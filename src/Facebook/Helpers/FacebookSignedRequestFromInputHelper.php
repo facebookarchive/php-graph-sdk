@@ -95,16 +95,19 @@ abstract class FacebookSignedRequestFromInputHelper
     public function getAccessToken(): ?AccessToken
     {
         if ($this->signedRequest && $this->signedRequest->hasOAuthData()) {
-            $code = $this->signedRequest->get('code');
+            /** @var string $code */
+            $code = (string)$this->signedRequest->get('code');
+            /** @var string|null $accessToken */
             $accessToken = $this->signedRequest->get('oauth_token');
 
             if ($code && !$accessToken) {
                 return $this->oAuth2Client->getAccessTokenFromCode($code);
             }
 
-            $expiresAt = $this->signedRequest->get('expires', 0);
+            /** @var int $expiresAt */
+            $expiresAt = (int)$this->signedRequest->get('expires', 0);
 
-            return new AccessToken($accessToken, $expiresAt);
+            return new AccessToken((string)$accessToken, $expiresAt);
         }
 
         return null;

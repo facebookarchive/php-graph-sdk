@@ -26,6 +26,10 @@ namespace Facebook\PseudoRandomString;
 
 use Facebook\Exceptions\FacebookSDKException;
 
+/**
+ * Class RandomBytesPseudoRandomStringGenerator
+ * @package Facebook\PseudoRandomString
+ */
 class RandomBytesPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
 {
     use PseudoRandomStringGeneratorTrait;

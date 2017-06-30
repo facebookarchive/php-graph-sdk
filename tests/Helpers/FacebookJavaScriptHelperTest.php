@@ -27,6 +27,10 @@ use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookJavaScriptHelper;
 
+/**
+ * Class FacebookJavaScriptHelperTest
+ * @package Facebook\Tests\Helpers
+ */
 class FacebookJavaScriptHelperTest extends \PHPUnit_Framework_TestCase
 {
     public $rawSignedRequestAuthorized = 'vdZXlVEQ5NTRRTFvJ7Jeo_kP4SKnBDvbNP0fEYKS0Sg=.eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNDAyNTUxMDMxLCJ1c2VyX2lkIjoiMTIzIn0=';

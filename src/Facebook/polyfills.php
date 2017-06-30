@@ -27,6 +27,12 @@ declare(strict_types=1);
  * @see https://github.com/sarciszewski/php-future/blob/master/src/Security.php#L37-L51
  */
 if (!function_exists('hash_equals')) {
+    /**
+     * @param $knownString
+     * @param $userString
+     *
+     * @return bool
+     */
     function hash_equals($knownString, $userString)
     {
         if (function_exists('mb_strlen')) {

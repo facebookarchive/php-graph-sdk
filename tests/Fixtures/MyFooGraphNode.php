@@ -25,6 +25,10 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\GraphNodes\GraphNode;
 
+/**
+ * Class MyFooGraphNode
+ * @package Facebook\Tests\Fixtures
+ */
 class MyFooGraphNode extends GraphNode
 {
     protected static $graphObjectMap = [

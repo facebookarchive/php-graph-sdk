@@ -24,6 +24,10 @@ declare(strict_types=1);
  */
 namespace Facebook\PseudoRandomString;
 
+/**
+ * Trait PseudoRandomStringGeneratorTrait
+ * @package Facebook\PseudoRandomString
+ */
 trait PseudoRandomStringGeneratorTrait
 {
     /**

@@ -30,6 +30,10 @@ use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Class FacebookGuzzleHttpClientTest
+ * @package Facebook\Tests\HttpClients
+ */
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
     /**

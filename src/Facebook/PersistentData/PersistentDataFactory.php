@@ -26,8 +26,15 @@ namespace Facebook\PersistentData;
 
 use InvalidArgumentException;
 
+/**
+ * Class PersistentDataFactory
+ * @package Facebook\PersistentData
+ */
 class PersistentDataFactory
 {
+    /**
+     * PersistentDataFactory constructor.
+     */
     private function __construct()
     {
         // a factory constructor should never be invoked
@@ -42,7 +49,7 @@ class PersistentDataFactory
      *
      * @return PersistentDataInterface
      */
-    public static function createPersistentDataHandler($handler)
+    public static function createPersistentDataHandler($handler): PersistentDataInterface
     {
         if (!$handler) {
             return session_status() === PHP_SESSION_ACTIVE

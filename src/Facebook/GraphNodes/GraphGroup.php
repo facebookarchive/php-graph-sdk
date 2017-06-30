@@ -163,7 +163,7 @@ class GraphGroup extends GraphNode
      * Returns the `venue` (The location for the Group) as GraphLocation if present.
      *
      * @return GraphLocation|null
-     * @todo undocumented field, already exist ?
+     * @todo Undocumented field, already exist ?
      */
     public function getVenue(): ?GraphLocation
     {

@@ -84,22 +84,6 @@ class AccessTokenMetadata
     }
 
     /**
-     * Returns a value from the metadata.
-     *
-     * @param string $field   The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
-     *
-     * @return mixed
-     *
-     * @deprecated 5.0.0 getProperty() has been renamed to getField()
-     * @todo v6: Remove this method
-     */
-    public function getProperty(string $field, $default = null)
-    {
-        return $this->getField($field, $default);
-    }
-
-    /**
      * Returns a value from a child property in the metadata.
      *
      * @param string $parentField The parent property.

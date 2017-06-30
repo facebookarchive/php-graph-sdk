@@ -25,8 +25,17 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface;
 
+/**
+ * Class FooBarPseudoRandomStringGenerator
+ * @package Facebook\Tests\Fixtures
+ */
 class FooBarPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
 {
+    /**
+     * @param int $length
+     *
+     * @return string
+     */
     public function getPseudoRandomString($length)
     {
         return 'csprs123';

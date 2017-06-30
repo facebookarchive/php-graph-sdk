@@ -25,6 +25,10 @@ namespace Facebook\Tests\PseudoRandomString;
 
 use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
 
+/**
+ * Class UrandomPseudoRandomStringGeneratorTest
+ * @package Facebook\Tests\PseudoRandomString
+ */
 class UrandomPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanGenerateRandomStringOfArbitraryLength()

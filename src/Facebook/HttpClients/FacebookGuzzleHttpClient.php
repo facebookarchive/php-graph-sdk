@@ -32,6 +32,10 @@ use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Ring\Exception\RingException;
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * Class FacebookGuzzleHttpClient
+ * @package Facebook\HttpClients
+ */
 class FacebookGuzzleHttpClient implements FacebookHttpClientInterface
 {
     /**

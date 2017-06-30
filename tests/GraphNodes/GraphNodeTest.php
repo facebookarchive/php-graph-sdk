@@ -25,6 +25,10 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\GraphNodes\GraphNode;
 
+/**
+ * Class GraphNodeTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphNodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testAnEmptyBaseGraphNodeCanInstantiate()

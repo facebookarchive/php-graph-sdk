@@ -26,6 +26,10 @@ namespace Facebook\Tests\HttpClients;
 use Mockery as m;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 
+/**
+ * Class FacebookCurlHttpClientTest
+ * @package Facebook\Tests\HttpClients
+ */
 class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
     /**

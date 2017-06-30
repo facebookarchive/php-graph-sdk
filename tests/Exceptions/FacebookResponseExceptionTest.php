@@ -28,6 +28,10 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\Exceptions\FacebookResponseException;
 
+/**
+ * Class FacebookResponseExceptionTest
+ * @package Facebook\Tests\Exceptions
+ */
 class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
 {
 

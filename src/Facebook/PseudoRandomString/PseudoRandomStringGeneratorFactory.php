@@ -27,8 +27,15 @@ namespace Facebook\PseudoRandomString;
 use Facebook\Exceptions\FacebookSDKException;
 use InvalidArgumentException;
 
+/**
+ * Class PseudoRandomStringGeneratorFactory
+ * @package Facebook\PseudoRandomString
+ */
 class PseudoRandomStringGeneratorFactory
 {
+    /**
+     * PseudoRandomStringGeneratorFactory constructor.
+     */
     private function __construct()
     {
         // a factory constructor should never be invoked

@@ -25,14 +25,27 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\PersistentData\PersistentDataInterface;
 
+/**
+ * Class FooPersistentDataInterface
+ * @package Facebook\Tests\Fixtures
+ */
 class FooPersistentDataInterface implements PersistentDataInterface
 {
-    public function get($key)
+    /**
+     * @param string $key
+     *
+     * @return string
+     */
+    public function get(string $key)
     {
         return 'foo';
     }
 
-    public function set($key, $value)
+    /**
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function set(string $key, $value)
     {
     }
 }

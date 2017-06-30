@@ -27,26 +27,44 @@ use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 
+/**
+ * Class FooFacebookClientForOAuth2Test
+ * @package Facebook\Tests\Authentication
+ */
 class FooFacebookClientForOAuth2Test extends FacebookClient
 {
     protected $response = '';
 
-    public function setMetadataResponse()
+    /**
+     * @return string
+     */
+    public function setMetadataResponse(): string
     {
         $this->response = '{"data":{"user_id":"444"}}';
     }
 
-    public function setAccessTokenResponse()
+    /**
+     * @return string
+     */
+    public function setAccessTokenResponse(): string
     {
         $this->response = '{"access_token":"my_access_token","expires":"1422115200"}';
     }
 
-    public function setCodeResponse()
+    /**
+     * @return string
+     */
+    public function setCodeResponse(): string
     {
         $this->response = '{"code":"my_neat_code"}';
     }
 
-    public function sendRequest(FacebookRequest $request)
+    /**
+     * @param FacebookRequest $request
+     *
+     * @return FacebookResponse
+     */
+    public function sendRequest(FacebookRequest $request): FacebookResponse
     {
         return new FacebookResponse(
             $request,

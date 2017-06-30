@@ -25,6 +25,10 @@ namespace Facebook\Tests\FileUpload;
 
 use Facebook\FileUpload\FacebookFile;
 
+/**
+ * Class FacebookFileTest
+ * @package Facebook\Tests\FileUpload
+ */
 class FacebookFileTest extends \PHPUnit_Framework_TestCase
 {
     protected $testFile = '';

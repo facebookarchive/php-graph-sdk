@@ -23,12 +23,23 @@
  */
 namespace Facebook\Tests\Fixtures;
 
+use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 
+/**
+ * Class FooRedirectLoginOAuth2Client
+ * @package Facebook\Tests\Fixtures
+ */
 class FooRedirectLoginOAuth2Client extends OAuth2Client
 {
-    public function getAccessTokenFromCode($code, $redirectUri = '', $machineId = null)
+    /**
+     * @param string $code
+     * @param string $redirectUri
+     *
+     * @return AccessToken
+     */
+    public function getAccessTokenFromCode(string $code, string $redirectUri = ''): AccessToken
     {
-        return 'foo_token_from_code|' . $code . '|' . $redirectUri;
+        return new AccessToken('foo_token_from_code|' . $code . '|' . $redirectUri);
     }
 }

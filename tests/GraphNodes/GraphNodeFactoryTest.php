@@ -28,6 +28,10 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphNodeFactory;
 
+/**
+ * Class GraphNodeFactoryTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

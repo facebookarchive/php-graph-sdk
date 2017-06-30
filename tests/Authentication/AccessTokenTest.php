@@ -25,6 +25,10 @@ namespace Facebook\Tests\Authentication;
 
 use Facebook\Authentication\AccessToken;
 
+/**
+ * Class AccessTokenTest
+ * @package Facebook\Tests\Authentication
+ */
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -104,6 +108,9 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($accessToken->getExpiresAt(), $newAccessToken->getExpiresAt());
     }
 
+    /**
+     * @return int
+     */
     private function aWeekFromNow()
     {
         return time() + (60 * 60 * 24 * 7);//a week from now

@@ -25,6 +25,10 @@ namespace Facebook\Tests\GraphNodes;
 
 use Facebook\GraphNodes\Collection;
 
+/**
+ * Class CollectionTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -34,10 +38,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $field = $graphNode->getField('foo');
         $this->assertEquals('bar', $field);
-
-        // @todo v6: Remove this assertion
-        $property = $graphNode->getProperty('foo');
-        $this->assertEquals('bar', $property);
     }
 
     public function testAMissingPropertyWillReturnNull()
@@ -55,9 +55,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $field = $graphNode->getField('baz', 'faz');
         $this->assertEquals('faz', $field);
 
-        // @todo v6: Remove this assertion
-        $property = $graphNode->getProperty('baz', 'faz');
-        $this->assertEquals('faz', $property);
     }
 
     public function testFalseDefaultsWillReturnSameType()
@@ -85,9 +82,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $fieldNames = $graphNode->getFieldNames();
         $this->assertEquals(['key1', 'key2', 'key3'], $fieldNames);
 
-        // @todo v6: Remove this assertion
-        $propertyNames = $graphNode->getPropertyNames();
-        $this->assertEquals(['key1', 'key2', 'key3'], $propertyNames);
     }
 
     public function testAnArrayCanBeInjectedViaTheConstructor()

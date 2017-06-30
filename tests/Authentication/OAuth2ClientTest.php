@@ -27,6 +27,10 @@ use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
 
+/**
+ * Class OAuth2ClientTest
+ * @package Facebook\Tests\Authentication
+ */
 class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 {
 

@@ -28,8 +28,15 @@ use GuzzleHttp\Client;
 use InvalidArgumentException;
 use Exception;
 
+/**
+ * Class HttpClientsFactory
+ * @package Facebook\HttpClients
+ */
 class HttpClientsFactory
 {
+    /**
+     * HttpClientsFactory constructor.
+     */
     private function __construct()
     {
         // a factory constructor should never be invoked
@@ -45,7 +52,7 @@ class HttpClientsFactory
      *
      * @return FacebookHttpClientInterface
      */
-    public static function createHttpClient($handler)
+    public static function createHttpClient($handler): FacebookHttpClientInterface
     {
         if (!$handler) {
             return self::detectDefaultClient();
@@ -85,7 +92,7 @@ class HttpClientsFactory
      *
      * @return FacebookHttpClientInterface
      */
-    private static function detectDefaultClient()
+    private static function detectDefaultClient(): FacebookHttpClientInterface
     {
         if (extension_loaded('curl')) {
             return new FacebookCurlHttpClient();

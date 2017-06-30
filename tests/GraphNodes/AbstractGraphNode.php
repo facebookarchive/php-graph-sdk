@@ -26,6 +26,10 @@ namespace Facebook\Tests\GraphNodes;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
+/**
+ * Class AbstractGraphNode
+ * @package Facebook\Tests\GraphNodes
+ */
 abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,6 +43,11 @@ abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
         $this->responseMock = m::mock('\Facebook\FacebookResponse');
     }
 
+    /**
+     * @param $data
+     *
+     * @return GraphNodeFactory
+     */
     protected function makeFactoryWithData($data)
     {
         $this->responseMock

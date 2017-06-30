@@ -25,6 +25,10 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorTrait;
 
+/**
+ * Class MyFooBarPseudoRandomStringGenerator
+ * @package Facebook\Tests\Fixtures
+ */
 class MyFooBarPseudoRandomStringGenerator
 {
     use PseudoRandomStringGeneratorTrait;

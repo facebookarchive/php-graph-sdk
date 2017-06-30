@@ -25,6 +25,10 @@ namespace Facebook\Tests\Url;
 
 use Facebook\Url\FacebookUrlManipulator;
 
+/**
+ * Class FacebookUrlManipulatorTest
+ * @package Facebook\Tests\Url
+ */
 class FacebookUrlManipulatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,6 +48,9 @@ class FacebookUrlManipulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCleanUrl, $currentUri);
     }
 
+    /**
+     * @return array
+     */
     public function provideUris()
     {
         return [
@@ -162,6 +169,9 @@ class FacebookUrlManipulatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $expected);
     }
 
+    /**
+     * @return array
+     */
     public function provideMergableEndpoints()
     {
         return [

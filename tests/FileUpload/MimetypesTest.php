@@ -25,6 +25,10 @@ namespace Facebook\Tests\FileUpload;
 
 use Facebook\FileUpload\Mimetypes;
 
+/**
+ * Class MimetypesTest
+ * @package Facebook\Tests\FileUpload
+ */
 class MimetypesTest extends \PHPUnit_Framework_TestCase
 {
 

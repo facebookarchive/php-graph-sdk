@@ -26,6 +26,10 @@ namespace Facebook\Tests\HttpClients;
 use Mockery as m;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 
+/**
+ * Class FacebookStreamHttpClientTest
+ * @package Facebook\Tests\HttpClients
+ */
 class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 {
     /**

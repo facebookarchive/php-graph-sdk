@@ -24,7 +24,6 @@ declare(strict_types=1);
  */
 namespace Facebook\Exceptions;
 
-use Facebook\Facebook;
 use Facebook\FacebookResponse;
 
 /**
