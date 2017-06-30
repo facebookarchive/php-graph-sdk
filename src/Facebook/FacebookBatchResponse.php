@@ -92,7 +92,7 @@ class FacebookBatchResponse extends FacebookResponse implements IteratorAggregat
     /**
      * Add a response to the list.
      *
-     * @param int        $key
+     * @param mixed      $key
      * @param array|null $response
      */
     public function addResponse($key, $response)

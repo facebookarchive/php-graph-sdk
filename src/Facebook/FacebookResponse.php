@@ -60,7 +60,7 @@ class FacebookResponse
     protected $request;
 
     /**
-     * @var FacebookSDKException The exception thrown by this request.
+     * @var FacebookResponseException The exception thrown by this request.
      */
     protected $thrownException;
 
@@ -195,7 +195,7 @@ class FacebookResponse
     /**
      * Throws the exception.
      *
-     * @throws FacebookSDKException
+     * @throws FacebookResponseException
      */
     public function throwException()
     {

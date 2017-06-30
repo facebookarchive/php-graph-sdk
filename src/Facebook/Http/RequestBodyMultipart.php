@@ -54,7 +54,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * @param array  $params   The parameters to send with this request.
      * @param array  $files    The files to send with this request.
-     * @param string $boundary Provide a specific boundary.
+     * @param string|null $boundary Provide a specific boundary.
      */
     public function __construct(array $params = [], array $files = [], $boundary = null)
     {

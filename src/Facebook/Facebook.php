@@ -576,7 +576,7 @@ class Facebook
     /**
      * Upload a video in chunks.
      *
-     * @param int $target The id of the target node before the /videos edge.
+     * @param string $target The id of the target node before the /videos edge.
      * @param string $pathToFile The full path to the file.
      * @param array $metadata The metadata associated with the video file.
      * @param string|null $accessToken The access token.

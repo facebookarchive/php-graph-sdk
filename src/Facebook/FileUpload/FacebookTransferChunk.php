@@ -36,7 +36,7 @@ class FacebookTransferChunk
     private $file;
 
     /**
-     * @var int The ID of the upload session.
+     * @var string The ID of the upload session.
      */
     private $uploadSessionId;
 
@@ -51,14 +51,14 @@ class FacebookTransferChunk
     private $endOffset;
 
     /**
-     * @var int The ID of the video.
+     * @var string The ID of the video.
      */
     private $videoId;
 
     /**
      * @param FacebookFile $file
-     * @param int $uploadSessionId
-     * @param int $videoId
+     * @param string $uploadSessionId
+     * @param string $videoId
      * @param int $startOffset
      * @param int $endOffset
      */
@@ -96,7 +96,7 @@ class FacebookTransferChunk
     /**
      * Return upload session Id
      *
-     * @return int
+     * @return string
      */
     public function getUploadSessionId()
     {
@@ -106,7 +106,7 @@ class FacebookTransferChunk
     /**
      * Check whether is the last chunk
      *
-     * @return bool
+     * @return boolean
      */
     public function isLastChunk()
     {
@@ -124,7 +124,7 @@ class FacebookTransferChunk
     /**
      * Get uploaded video Id
      *
-     * @return int
+     * @return string
      */
     public function getVideoId()
     {
