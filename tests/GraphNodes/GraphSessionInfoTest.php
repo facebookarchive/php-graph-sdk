@@ -26,6 +26,10 @@ namespace Facebook\Tests\GraphNodes;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
+/**
+ * Class GraphSessionInfoTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**

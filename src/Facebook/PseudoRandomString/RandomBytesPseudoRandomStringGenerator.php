@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -25,6 +26,10 @@ namespace Facebook\PseudoRandomString;
 
 use Facebook\Exceptions\FacebookSDKException;
 
+/**
+ * Class RandomBytesPseudoRandomStringGenerator
+ * @package Facebook\PseudoRandomString
+ */
 class RandomBytesPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
 {
     use PseudoRandomStringGeneratorTrait;

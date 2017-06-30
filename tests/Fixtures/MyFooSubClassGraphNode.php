@@ -25,6 +25,10 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\GraphNodes\GraphNode;
 
+/**
+ * Class MyFooSubClassGraphNode
+ * @package Facebook\Tests\Fixtures
+ */
 class MyFooSubClassGraphNode extends GraphNode
 {
 }

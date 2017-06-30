@@ -23,6 +23,10 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
+/**
+ * Class GraphAchievementTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphAchievementTest extends AbstractGraphNode
 {
 

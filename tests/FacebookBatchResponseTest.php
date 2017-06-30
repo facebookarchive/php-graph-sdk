@@ -29,6 +29,10 @@ use Facebook\FacebookResponse;
 use Facebook\FacebookBatchRequest;
 use Facebook\FacebookBatchResponse;
 
+/**
+ * Class FacebookBatchResponseTest
+ * @package Facebook\Tests
+ */
 class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**

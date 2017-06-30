@@ -31,6 +31,10 @@ use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Tests\Fixtures\FooPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooRedirectLoginOAuth2Client;
 
+/**
+ * Class FacebookRedirectLoginHelperTest
+ * @package Facebook\Tests\Helpers
+ */
 class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**

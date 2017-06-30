@@ -28,6 +28,10 @@ use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataFactory;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class PersistentDataFactoryTest
+ * @package Facebook\Tests\PersistentData
+ */
 class PersistentDataFactoryTest extends PHPUnit_Framework_TestCase
 {
     const COMMON_NAMESPACE = 'Facebook\PersistentData\\';

@@ -25,9 +25,16 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
+/**
+ * Class FooSignedRequestHelper
+ * @package Facebook\Tests\Fixtures
+ */
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
 {
-    public function getRawSignedRequest()
+    /**
+     * @return null|string
+     */
+    public function getRawSignedRequest(): ?string
     {
         return null;
     }

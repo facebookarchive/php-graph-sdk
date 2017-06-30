@@ -38,6 +38,10 @@ use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
 use Facebook\Tests\Fixtures\MyFooClientHandler;
 
+/**
+ * Class FacebookClientTest
+ * @package Facebook\Tests
+ */
 class FacebookClientTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -26,6 +27,10 @@ namespace Facebook\HttpClients;
 use Facebook\Http\GraphRawResponse;
 use Facebook\Exceptions\FacebookSDKException;
 
+/**
+ * Class FacebookStreamHttpClient
+ * @package Facebook\HttpClients
+ */
 class FacebookStreamHttpClient implements FacebookHttpClientInterface
 {
     /**
@@ -36,7 +41,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
     /**
      * @param FacebookStream|null Procedural stream wrapper as object.
      */
-    public function __construct(FacebookStream $facebookStream = null)
+    public function __construct(?FacebookStream $facebookStream = null)
     {
         $this->facebookStream = $facebookStream ?: new FacebookStream();
     }
@@ -44,7 +49,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         $options = [
             'http' => [
@@ -82,7 +87,7 @@ class FacebookStreamHttpClient implements FacebookHttpClientInterface
      *
      * @return string
      */
-    public function compileHeader(array $headers)
+    public function compileHeader(array $headers): string
     {
         $header = [];
         foreach ($headers as $k => $v) {

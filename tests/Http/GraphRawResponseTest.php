@@ -25,6 +25,10 @@ namespace Facebook\Tests\Http;
 
 use Facebook\Http\GraphRawResponse;
 
+/**
+ * Class GraphRawResponseTest
+ * @package Facebook\Tests\Http
+ */
 class GraphRawResponseTest extends \PHPUnit_Framework_TestCase
 {
 

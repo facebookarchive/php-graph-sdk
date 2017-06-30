@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -64,7 +65,7 @@ class FacebookResumableUploader
      * @param AccessToken|string|null $accessToken
      * @param string                  $graphVersion
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, $graphVersion)
+    public function __construct(FacebookApp $app, FacebookClient $client, $accessToken, string $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -82,7 +83,7 @@ class FacebookResumableUploader
      *
      * @throws FacebookSDKException
      */
-    public function start($endpoint, FacebookFile $file)
+    public function start(string $endpoint, FacebookFile $file): FacebookTransferChunk
     {
         $params = [
             'upload_phase' => 'start',
@@ -104,7 +105,7 @@ class FacebookResumableUploader
      *
      * @throws FacebookResponseException
      */
-    public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false)
+    public function transfer(string $endpoint, FacebookTransferChunk $chunk, bool $allowToThrow = false): FacebookTransferChunk
     {
         $params = [
             'upload_phase' => 'transfer',
@@ -139,7 +140,7 @@ class FacebookResumableUploader
      *
      * @throws FacebookSDKException
      */
-    public function finish($endpoint, $uploadSessionId, $metadata = [])
+    public function finish(string $endpoint, string $uploadSessionId, array $metadata = []): bool
     {
         $params = array_merge($metadata, [
             'upload_phase' => 'finish',
@@ -158,7 +159,7 @@ class FacebookResumableUploader
      *
      * @return array
      */
-    private function sendUploadRequest($endpoint, $params = [])
+    private function sendUploadRequest(string $endpoint, array $params = []): array
     {
         $request = new FacebookRequest($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
 

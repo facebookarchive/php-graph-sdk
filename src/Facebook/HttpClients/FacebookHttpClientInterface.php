@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,6 +24,8 @@
  */
 namespace Facebook\HttpClients;
 
+use Facebook\Http\GraphRawResponse;
+
 /**
  * Interface FacebookHttpClientInterface
  *
@@ -39,9 +42,9 @@ interface FacebookHttpClientInterface
      * @param array  $headers The request headers.
      * @param int    $timeOut The timeout in seconds for the request.
      *
-     * @return \Facebook\Http\GraphRawResponse Raw response from the server.
+     * @return GraphRawResponse Raw response from the server.
      *
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function send($url, $method, $body, array $headers, $timeOut);
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse;
 }

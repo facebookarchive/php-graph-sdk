@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -54,9 +55,9 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * @param array  $params   The parameters to send with this request.
      * @param array  $files    The files to send with this request.
-     * @param string $boundary Provide a specific boundary.
+     * @param string|null $boundary Provide a specific boundary.
      */
-    public function __construct(array $params = [], array $files = [], $boundary = null)
+    public function __construct(array $params = [], array $files = [], ?string $boundary = null)
     {
         $this->params = $params;
         $this->files = $files;
@@ -66,7 +67,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): string
     {
         $body = '';
 
@@ -92,7 +93,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    public function getBoundary()
+    public function getBoundary(): string
     {
         return $this->boundary;
     }
@@ -105,7 +106,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    private function getFileString($name, FacebookFile $file)
+    private function getFileString(string $name, FacebookFile $file): string
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n",
@@ -125,7 +126,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    private function getParamString($name, $value)
+    private function getParamString(string $name, string $value): string
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
@@ -142,7 +143,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return array
      */
-    private function getNestedParams(array $params)
+    private function getNestedParams(array $params): array
     {
         $query = http_build_query($params, null, '&');
         $params = explode('&', $query);
@@ -163,7 +164,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    protected function getFileHeaders(FacebookFile $file)
+    protected function getFileHeaders(FacebookFile $file): string
     {
         return "\r\nContent-Type: {$file->getMimetype()}";
     }

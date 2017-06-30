@@ -26,9 +26,22 @@ namespace Facebook\Tests\Fixtures;
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 
+/**
+ * Class MyFooBatchClientHandler
+ * @package Facebook\Tests\Fixtures
+ */
 class MyFooBatchClientHandler implements FacebookHttpClientInterface
 {
-    public function send($url, $method, $body, array $headers, $timeOut)
+    /**
+     * @param string $url
+     * @param string $method
+     * @param string $body
+     * @param array  $headers
+     * @param int    $timeOut
+     *
+     * @return GraphRawResponse
+     */
+    public function send(string $url, string $method, string $body, array $headers, int $timeOut): GraphRawResponse
     {
         return new GraphRawResponse(
             "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -35,5 +36,5 @@ interface UrlDetectionInterface
      *
      * @return string
      */
-    public function getCurrentUrl();
+    public function getCurrentUrl(): string;
 }

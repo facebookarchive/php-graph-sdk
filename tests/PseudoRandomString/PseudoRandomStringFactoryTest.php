@@ -26,6 +26,10 @@ namespace Facebook\Tests\PseudoRandomString;
 use Facebook\PseudoRandomString\PseudoRandomStringGeneratorFactory;
 use PHPUnit_Framework_TestCase;
 
+/**
+ * Class PseudoRandomStringFactoryTest
+ * @package Facebook\Tests\PseudoRandomString
+ */
 class PseudoRandomStringFactoryTest extends PHPUnit_Framework_TestCase
 {
     const COMMON_NAMESPACE = 'Facebook\PseudoRandomString\\';

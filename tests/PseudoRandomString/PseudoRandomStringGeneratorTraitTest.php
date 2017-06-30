@@ -25,6 +25,10 @@ namespace Facebook\Tests\PseudoRandomString;
 
 use Facebook\Tests\Fixtures\MyFooBarPseudoRandomStringGenerator;
 
+/**
+ * Class PseudoRandomStringGeneratorTraitTest
+ * @package Facebook\Tests\PseudoRandomString
+ */
 class PseudoRandomStringGeneratorTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**

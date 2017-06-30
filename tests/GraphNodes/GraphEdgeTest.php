@@ -28,6 +28,10 @@ use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\GraphNodes\GraphNode;
 
+/**
+ * Class GraphEdgeTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphEdgeTest extends \PHPUnit_Framework_TestCase
 {
 

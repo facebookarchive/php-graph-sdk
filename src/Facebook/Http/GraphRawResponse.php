@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -52,7 +53,7 @@ class GraphRawResponse
      * @param string       $body           The raw response body.
      * @param int          $httpStatusCode The HTTP response code (if sending headers as parsed array).
      */
-    public function __construct($headers, $body, $httpStatusCode = null)
+    public function __construct($headers, string $body, int $httpStatusCode = null)
     {
         if (is_numeric($httpStatusCode)) {
             $this->httpResponseCode = (int)$httpStatusCode;
@@ -72,7 +73,7 @@ class GraphRawResponse
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -82,7 +83,7 @@ class GraphRawResponse
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }
@@ -92,7 +93,7 @@ class GraphRawResponse
      *
      * @return int
      */
-    public function getHttpResponseCode()
+    public function getHttpResponseCode(): int
     {
         return $this->httpResponseCode;
     }

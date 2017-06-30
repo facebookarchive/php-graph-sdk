@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -44,7 +45,7 @@ class FacebookSessionPersistentDataHandler implements PersistentDataInterface
      *
      * @throws FacebookSDKException
      */
-    public function __construct($enableSessionCheck = true)
+    public function __construct(bool $enableSessionCheck = true)
     {
         if ($enableSessionCheck && session_status() !== PHP_SESSION_ACTIVE) {
             throw new FacebookSDKException(
@@ -57,7 +58,7 @@ class FacebookSessionPersistentDataHandler implements PersistentDataInterface
     /**
      * @inheritdoc
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (isset($_SESSION[$this->sessionPrefix . $key])) {
             return $_SESSION[$this->sessionPrefix . $key];
@@ -69,7 +70,7 @@ class FacebookSessionPersistentDataHandler implements PersistentDataInterface
     /**
      * @inheritdoc
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         $_SESSION[$this->sessionPrefix . $key] = $value;
     }

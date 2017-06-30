@@ -26,6 +26,10 @@ namespace Facebook\Tests\GraphNodes;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
+/**
+ * Class GraphAlbumTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphAlbumTest extends \PHPUnit_Framework_TestCase
 {
 

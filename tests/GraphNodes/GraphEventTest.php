@@ -27,6 +27,10 @@ use Facebook\FacebookResponse;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
+/**
+ * Class GraphEventTest
+ * @package Facebook\Tests\GraphNodes
+ */
 class GraphEventTest extends \PHPUnit_Framework_TestCase
 {
     /**

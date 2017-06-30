@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,6 +24,10 @@
  */
 namespace Facebook\PseudoRandomString;
 
+/**
+ * Trait PseudoRandomStringGeneratorTrait
+ * @package Facebook\PseudoRandomString
+ */
 trait PseudoRandomStringGeneratorTrait
 {
     /**

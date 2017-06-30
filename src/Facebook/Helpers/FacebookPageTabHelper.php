@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -45,7 +46,7 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
      * @param FacebookClient $client       The client to make HTTP requests.
      * @param string|null    $graphVersion The version of Graph to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(FacebookApp $app, FacebookClient $client, ?string $graphVersion = null)
     {
         parent::__construct($app, $client, $graphVersion);
 
@@ -64,7 +65,7 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
      *
      * @return mixed|null
      */
-    public function getPageData($key, $default = null)
+    public function getPageData(string $key, $default = null)
     {
         if (isset($this->pageData[$key])) {
             return $this->pageData[$key];
@@ -78,7 +79,7 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
      *
      * @return boolean
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->getPageData('admin') === true;
     }
@@ -88,7 +89,7 @@ class FacebookPageTabHelper extends FacebookCanvasHelper
      *
      * @return string|null
      */
-    public function getPageId()
+    public function getPageId(): ?string
     {
         return $this->getPageData('id');
     }

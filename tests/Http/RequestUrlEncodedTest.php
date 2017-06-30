@@ -25,6 +25,10 @@ namespace Facebook\Tests\Http;
 
 use Facebook\Http\RequestBodyUrlEncoded;
 
+/**
+ * Class RequestUrlEncodedTest
+ * @package Facebook\Tests\Http
+ */
 class RequestUrlEncodedTest extends \PHPUnit_Framework_TestCase
 {
     public function testCanProperlyEncodeAnArrayOfParams()

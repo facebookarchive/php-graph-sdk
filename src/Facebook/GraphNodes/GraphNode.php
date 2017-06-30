@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -55,7 +56,7 @@ class GraphNode extends Collection
      *
      * @return array
      */
-    public function castItems(array $data)
+    public function castItems(array $data): array
     {
         $items = [];
 
@@ -81,7 +82,7 @@ class GraphNode extends Collection
      *
      * @return array
      */
-    public function uncastItems()
+    public function uncastItems(): array
     {
         $items = $this->asArray();
 
@@ -101,7 +102,7 @@ class GraphNode extends Collection
      *
      * @return string
      */
-    public function asJson($options = 0)
+    public function asJson(int $options = 0): string
     {
         return json_encode($this->uncastItems(), $options);
     }
@@ -117,7 +118,7 @@ class GraphNode extends Collection
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
      * @see http://en.wikipedia.org/wiki/ISO_8601
      */
-    public function isIso8601DateString($string)
+    public function isIso8601DateString(string $string): bool
     {
         // This insane regex was yoinked from here:
         // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -140,7 +141,7 @@ class GraphNode extends Collection
      *
      * @return boolean
      */
-    public function shouldCastAsDateTime($key)
+    public function shouldCastAsDateTime(string $key): bool
     {
         return in_array($key, [
             'created_time',
@@ -161,7 +162,7 @@ class GraphNode extends Collection
      *
      * @return \DateTime
      */
-    public function castToDateTime($value)
+    public function castToDateTime($value): \DateTime
     {
         if (is_int($value)) {
             $dt = new \DateTime();
@@ -180,7 +181,7 @@ class GraphNode extends Collection
      *
      * @return Birthday
      */
-    public function castToBirthday($value)
+    public function castToBirthday(string $value): Birthday
     {
         return new Birthday($value);
     }
@@ -190,7 +191,7 @@ class GraphNode extends Collection
      *
      * @return array
      */
-    public static function getObjectMap()
+    public static function getObjectMap(): array
     {
         return static::$graphObjectMap;
     }

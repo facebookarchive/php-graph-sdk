@@ -25,6 +25,10 @@ namespace Facebook\Tests;
 
 use Facebook\FacebookApp;
 
+/**
+ * Class FacebookAppTest
+ * @package Facebook\Tests
+ */
 class FacebookAppTest extends \PHPUnit_Framework_TestCase
 {
     /**

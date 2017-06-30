@@ -27,6 +27,10 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 
+/**
+ * Class FacebookResponseTest
+ * @package Facebook\Tests
+ */
 class FacebookResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**

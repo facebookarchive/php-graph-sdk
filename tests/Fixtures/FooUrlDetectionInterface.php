@@ -25,9 +25,16 @@ namespace Facebook\Tests\Fixtures;
 
 use Facebook\Url\UrlDetectionInterface;
 
+/**
+ * Class FooUrlDetectionInterface
+ * @package Facebook\Tests\Fixtures
+ */
 class FooUrlDetectionInterface implements UrlDetectionInterface
 {
-    public function getCurrentUrl()
+    /**
+     * @return string
+     */
+    public function getCurrentUrl(): string
     {
         return 'https://foo.bar';
     }

@@ -25,6 +25,10 @@ namespace Facebook\Tests\PersistentData;
 
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 
+/**
+ * Class FacebookSessionPersistentDataHandlerTest
+ * @package Facebook\Tests\PersistentData
+ */
 class FacebookSessionPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**

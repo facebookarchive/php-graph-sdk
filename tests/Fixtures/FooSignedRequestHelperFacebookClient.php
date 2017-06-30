@@ -27,9 +27,18 @@ use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 
+/**
+ * Class FooSignedRequestHelperFacebookClient
+ * @package Facebook\Tests\Fixtures
+ */
 class FooSignedRequestHelperFacebookClient extends FacebookClient
 {
-    public function sendRequest(FacebookRequest $request)
+    /**
+     * @param FacebookRequest $request
+     *
+     * @return FacebookResponse
+     */
+    public function sendRequest(FacebookRequest $request): FacebookResponse
     {
         $params = $request->getParams();
         $rawResponse = json_encode([

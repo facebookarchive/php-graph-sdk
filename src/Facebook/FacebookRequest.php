@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -94,7 +95,7 @@ class FacebookRequest
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      */
-    public function __construct(FacebookApp $app = null, $accessToken = null, $method = null, $endpoint = null, array $params = [], $eTag = null, $graphVersion = null)
+    public function __construct(FacebookApp $app = null, $accessToken = null, ?string $method = null, ?string $endpoint = null, ?array $params = [], $eTag = null, $graphVersion = null)
     {
         $this->setApp($app);
         $this->setAccessToken($accessToken);
@@ -350,7 +351,7 @@ class FacebookRequest
      *
      * @return FacebookRequest
      */
-    public function dangerouslySetParams(array $params = [])
+    public function dangerouslySetParams(array $params = []): FacebookRequest
     {
         $this->params = array_merge($this->params, $params);
 
@@ -364,7 +365,7 @@ class FacebookRequest
      *
      * @return array
      */
-    public function sanitizeFileParams(array $params)
+    public function sanitizeFileParams(array $params): array
     {
         foreach ($params as $key => $value) {
             if ($value instanceof FacebookFile) {
@@ -382,7 +383,7 @@ class FacebookRequest
      * @param string       $key
      * @param FacebookFile $file
      */
-    public function addFile($key, FacebookFile $file)
+    public function addFile(string $key, FacebookFile $file): void
     {
         $this->files[$key] = $file;
     }
@@ -390,7 +391,7 @@ class FacebookRequest
     /**
      * Removes all the files from the upload queue.
      */
-    public function resetFiles()
+    public function resetFiles(): void
     {
         $this->files = [];
     }
@@ -400,7 +401,7 @@ class FacebookRequest
      *
      * @return array
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
@@ -410,7 +411,7 @@ class FacebookRequest
      *
      * @return boolean
      */
-    public function containsFileUploads()
+    public function containsFileUploads(): bool
     {
         return !empty($this->files);
     }
@@ -420,7 +421,7 @@ class FacebookRequest
      *
      * @return boolean
      */
-    public function containsVideoUploads()
+    public function containsVideoUploads(): bool
     {
         foreach ($this->files as $file) {
             if ($file instanceof FacebookVideo) {
@@ -436,7 +437,7 @@ class FacebookRequest
      *
      * @return RequestBodyMultipart
      */
-    public function getMultipartBody()
+    public function getMultipartBody(): RequestBodyMultipart
     {
         $params = $this->getPostParams();
 
@@ -448,7 +449,7 @@ class FacebookRequest
      *
      * @return RequestBodyUrlEncoded
      */
-    public function getUrlEncodedBody()
+    public function getUrlEncodedBody(): RequestBodyUrlEncoded
     {
         $params = $this->getPostParams();
 
@@ -502,7 +503,7 @@ class FacebookRequest
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         $this->validateMethod();
 
@@ -524,7 +525,7 @@ class FacebookRequest
      *
      * @return array
      */
-    public static function getDefaultHeaders()
+    public static function getDefaultHeaders(): array
     {
         return [
             'User-Agent' => 'fb-php-' . Facebook::VERSION,

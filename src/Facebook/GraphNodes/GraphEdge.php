@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -63,7 +64,7 @@ class GraphEdge extends Collection
      * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
      * @param string|null     $subclassName       The subclass of the child GraphNode's.
      */
-    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
+    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], ?string $parentEdgeEndpoint = null, ?string $subclassName = null)
     {
         $this->request = $request;
         $this->metaData = $metaData;
@@ -78,7 +79,7 @@ class GraphEdge extends Collection
      *
      * @return string|null
      */
-    public function getParentGraphEdge()
+    public function getParentGraphEdge(): ?string
     {
         return $this->parentEdgeEndpoint;
     }
@@ -88,7 +89,7 @@ class GraphEdge extends Collection
      *
      * @return string|null
      */
-    public function getSubClassName()
+    public function getSubClassName(): ?string
     {
         return $this->subclassName;
     }
@@ -98,7 +99,7 @@ class GraphEdge extends Collection
      *
      * @return array
      */
-    public function getMetaData()
+    public function getMetaData(): array
     {
         return $this->metaData;
     }
@@ -108,7 +109,7 @@ class GraphEdge extends Collection
      *
      * @return string|null
      */
-    public function getNextCursor()
+    public function getNextCursor(): ?string
     {
         return $this->getCursor('after');
     }
@@ -118,7 +119,7 @@ class GraphEdge extends Collection
      *
      * @return string|null
      */
-    public function getPreviousCursor()
+    public function getPreviousCursor(): ?string
     {
         return $this->getCursor('before');
     }
@@ -130,10 +131,10 @@ class GraphEdge extends Collection
      *
      * @return string|null
      */
-    public function getCursor($direction)
+    public function getCursor(string $direction): ?string
     {
         if (isset($this->metaData['paging']['cursors'][$direction])) {
-            return $this->metaData['paging']['cursors'][$direction];
+            return (string)$this->metaData['paging']['cursors'][$direction];
         }
 
         return null;
@@ -148,7 +149,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function getPaginationUrl($direction)
+    public function getPaginationUrl($direction): ?string
     {
         $this->validateForPagination();
 
@@ -167,7 +168,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function validateForPagination()
+    public function validateForPagination(): void
     {
         if ($this->request->getMethod() !== 'GET') {
             throw new FacebookSDKException('You can only paginate on a GET request.', 720);
@@ -183,7 +184,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function getPaginationRequest($direction)
+    public function getPaginationRequest(string $direction): ?FacebookRequest
     {
         $pageUrl = $this->getPaginationUrl($direction);
         if (!$pageUrl) {
@@ -203,7 +204,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function getNextPageRequest()
+    public function getNextPageRequest(): ?FacebookRequest
     {
         return $this->getPaginationRequest('next');
     }
@@ -215,7 +216,7 @@ class GraphEdge extends Collection
      *
      * @throws FacebookSDKException
      */
-    public function getPreviousPageRequest()
+    public function getPreviousPageRequest(): ?FacebookRequest
     {
         return $this->getPaginationRequest('previous');
     }
@@ -227,10 +228,10 @@ class GraphEdge extends Collection
      *
      * @return int|null
      */
-    public function getTotalCount()
+    public function getTotalCount(): ?int
     {
         if (isset($this->metaData['summary']['total_count'])) {
-            return $this->metaData['summary']['total_count'];
+            return (int)$this->metaData['summary']['total_count'];
         }
 
         return null;

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -41,7 +42,7 @@ class FacebookCurl
     /**
      * Make a new curl reference instance
      */
-    public function init()
+    public function init(): void
     {
         $this->curl = curl_init();
     }

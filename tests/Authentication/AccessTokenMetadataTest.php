@@ -25,6 +25,10 @@ namespace Facebook\Tests\Authentication;
 
 use Facebook\Authentication\AccessTokenMetadata;
 
+/**
+ * Class AccessTokenMetadataTest
+ * @package Facebook\Tests\Authentication
+ */
 class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
 {
 

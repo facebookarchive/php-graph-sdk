@@ -27,6 +27,10 @@ use Facebook\FacebookApp;
 use Facebook\Tests\Fixtures\FooSignedRequestHelper;
 use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
 
+/**
+ * Class FacebookSignedRequestFromInputHelperTest
+ * @package Facebook\Tests\Helpers
+ */
 class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
