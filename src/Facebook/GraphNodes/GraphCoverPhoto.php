@@ -33,7 +33,7 @@ class GraphCoverPhoto extends GraphNode
     /**
      * Returns the id of cover if it exists
      *
-     * @return int|null
+     * @return string|null
      */
     public function getId()
     {
