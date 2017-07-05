@@ -39,12 +39,12 @@ class FacebookBatchRequest extends FacebookRequest implements IteratorAggregate,
     /**
      * @var array An array of FacebookRequest entities to send.
      */
-    protected $requests;
+    protected $requests = [];
 
     /**
      * @var array An array of files to upload.
      */
-    protected $attachedFiles;
+    protected $attachedFiles = [];
 
     /**
      * Creates a new Request entity.
