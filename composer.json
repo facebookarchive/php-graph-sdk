@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Facebook\\": "src/Facebook/"
+            "Facebook\\": "src/"
         }
     },
     "autoload-dev": {
