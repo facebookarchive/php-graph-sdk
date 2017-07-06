@@ -70,6 +70,8 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
         $this->sendRequest();
 
         if ($curlErrorCode = $this->facebookCurl->errno()) {
+            $this->closeConnection();
+
             throw new FacebookSDKException($this->facebookCurl->error(), $curlErrorCode);
         }
 

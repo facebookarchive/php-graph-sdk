@@ -23,7 +23,6 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-use Facebook\Exceptions\FacebookSDKException;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookCurl;
 use Facebook\Http\GraphRawResponse;
@@ -183,7 +182,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testCanSendNormalRequest()
     {
         $this->curlMock->init()->shouldBeCalled();
-        $this->curlMock->setoptArray()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::type('array'))->shouldBeCalled();
         $this->curlMock->exec()->willReturn($this->fakeRawHeader . $this->fakeRawBody);
         $this->curlMock->errno()->shouldBeCalled();
         $this->curlMock->close()->shouldBeCalled();
@@ -197,14 +196,14 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     }
 
     /**
-     * @expectedException FacebookSDKException
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
      * @expectedExceptionCode 123
-     * @expectedExceptionMessage "Foo error"
+     * @expectedExceptionMessage Foo error
      */
     public function testThrowsExceptionOnClientError()
     {
         $this->curlMock->init()->shouldBeCalled();
-        $this->curlMock->setoptArray()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::type('array'))->shouldBeCalled();
         $this->curlMock->exec()->willReturn(false);
         $this->curlMock->errno()->willReturn(123);
         $this->curlMock->error()->willReturn('Foo error');
