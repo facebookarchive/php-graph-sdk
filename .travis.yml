@@ -1,5 +1,7 @@
 language: php
 
+dist: trusty
+
 sudo: false
 
 cache:
@@ -11,15 +13,11 @@ matrix:
     - php: 7.1
     - php: nightly
     - php: hhvm
-      dist: trusty
     - php: hhvm-nightly
-      dist: trusty
   # Allow failures until Travis build includes HHVM 3.20.2 which fix the issue with composer (see http://hhvm.com/blog/2017/06/07/hhvm-3-20.html)
   allow_failures:
     - php: hhvm
-      dist: trusty
     - php: hhvm-nightly
-      dist: trusty
   fast_finish: true
 
 before_install:
