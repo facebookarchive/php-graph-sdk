@@ -32,8 +32,9 @@ use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\MyFooGraphNode;
 use Facebook\Tests\Fixtures\MyFooSubClassGraphNode;
 use Facebook\GraphNodes\GraphAlbum;
+use PHPUnit\Framework\TestCase;
 
-class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
+class GraphNodeFactoryTest extends TestCase
 {
     /**
      * @var \Facebook\FacebookRequest

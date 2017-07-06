@@ -28,8 +28,9 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphNode;
 use Facebook\Exceptions\FacebookResponseException;
+use PHPUnit\Framework\TestCase;
 
-class FacebookResponseTest extends \PHPUnit_Framework_TestCase
+class FacebookResponseTest extends TestCase
 {
     /**
      * @var \Facebook\FacebookRequest

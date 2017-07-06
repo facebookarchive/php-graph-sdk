@@ -28,8 +28,9 @@ use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphLocation;
 use Facebook\GraphNodes\GraphCoverPhoto;
+use PHPUnit\Framework\TestCase;
 
-class GraphGroupTest extends \PHPUnit_Framework_TestCase
+class GraphGroupTest extends TestCase
 {
     /**
      * @var FacebookResponse

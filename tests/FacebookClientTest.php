@@ -39,8 +39,9 @@ use Facebook\Tests\Fixtures\MyFooClientHandler;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchResponse;
 use Facebook\GraphNodes\GraphNode;
+use PHPUnit\Framework\TestCase;
 
-class FacebookClientTest extends \PHPUnit_Framework_TestCase
+class FacebookClientTest extends TestCase
 {
     /**
      * @var FacebookApp

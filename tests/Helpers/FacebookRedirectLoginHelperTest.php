@@ -29,8 +29,9 @@ use Facebook\FacebookClient;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Tests\Fixtures\FooRedirectLoginOAuth2Client;
+use PHPUnit\Framework\TestCase;
 
-class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookRedirectLoginHelperTest extends TestCase
 {
     /**
      * @var FacebookMemoryPersistentDataHandler

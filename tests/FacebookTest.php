@@ -39,8 +39,10 @@ use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphUser;
+use PHPUnit\Framework\Error\Error;
+use PHPUnit\Framework\TestCase;
 
-class FacebookTest extends \PHPUnit_Framework_TestCase
+class FacebookTest extends TestCase
 {
     protected $config = [
         'app_id' => '1337',
@@ -163,11 +165,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
 
     public function testSettingAnInvalidUrlHandlerThrows()
     {
-        $expectedException = (PHP_MAJOR_VERSION > 5 && class_exists('TypeError'))
-            ? 'TypeError'
-            : \PHPUnit_Framework_Error::class;
-
-        $this->setExpectedException($expectedException);
+        $this->setExpectedException(Error::class);
 
         $config = array_merge($this->config, [
             'url_detection_handler' => 'foo_handler',

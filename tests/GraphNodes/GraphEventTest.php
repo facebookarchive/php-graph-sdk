@@ -30,8 +30,9 @@ use Facebook\GraphNodes\GraphGroup;
 use Facebook\GraphNodes\GraphPicture;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\GraphNodes\GraphCoverPhoto;
+use PHPUnit\Framework\TestCase;
 
-class GraphEventTest extends \PHPUnit_Framework_TestCase
+class GraphEventTest extends TestCase
 {
     /**
      * @var FacebookResponse

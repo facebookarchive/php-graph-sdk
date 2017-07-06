@@ -28,8 +28,9 @@ use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\Authentication\AccessTokenMetadata;
 use Facebook\Authentication\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
+class OAuth2ClientTest extends TestCase
 {
 
     /**

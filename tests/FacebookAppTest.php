@@ -25,8 +25,9 @@ namespace Facebook\Tests;
 
 use Facebook\FacebookApp;
 use Facebook\Authentication\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class FacebookAppTest extends \PHPUnit_Framework_TestCase
+class FacebookAppTest extends TestCase
 {
     /**
      * @var FacebookApp

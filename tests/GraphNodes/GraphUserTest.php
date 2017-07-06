@@ -30,8 +30,9 @@ use Facebook\GraphNodes\GraphPicture;
 use Facebook\GraphNodes\GraphUser;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\GraphNodes\Birthday;
+use PHPUnit\Framework\TestCase;
 
-class GraphUserTest extends \PHPUnit_Framework_TestCase
+class GraphUserTest extends TestCase
 {
     /**
      * @var FacebookResponse

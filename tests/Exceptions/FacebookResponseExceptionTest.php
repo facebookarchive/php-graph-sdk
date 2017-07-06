@@ -33,8 +33,9 @@ use Facebook\Exceptions\FacebookThrottleException;
 use Facebook\Exceptions\FacebookAuthorizationException;
 use Facebook\Exceptions\FacebookClientException;
 use Facebook\Exceptions\FacebookOtherException;
+use PHPUnit\Framework\TestCase;
 
-class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
+class FacebookResponseExceptionTest extends TestCase
 {
 
     /**

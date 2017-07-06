@@ -28,8 +28,9 @@ use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\GraphNodes\GraphUser;
 use Facebook\FacebookResponse;
+use PHPUnit\Framework\TestCase;
 
-class GraphAlbumTest extends \PHPUnit_Framework_TestCase
+class GraphAlbumTest extends TestCase
 {
 
     /**

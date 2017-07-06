@@ -24,8 +24,9 @@
 namespace Facebook\Tests\PersistentData;
 
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
+use PHPUnit\Framework\TestCase;
 
-class FacebookMemoryPersistentDataHandlerTest extends \PHPUnit_Framework_TestCase
+class FacebookMemoryPersistentDataHandlerTest extends TestCase
 {
     public function testCanGetAndSetAVirtualValue()
     {
