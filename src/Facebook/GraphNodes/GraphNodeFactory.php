@@ -303,7 +303,7 @@ class GraphNodeFactory
             if (static::isCastableAsGraphEdge($data['data'])) {
                 return $this->safelyMakeGraphEdge($data, $subclassName, $parentKey, $parentNodeId);
             }
-            if (count($data['data']) === 1){
+            if (count($data) === 1){
             // Sometimes Graph is a weirdo and returns a GraphNode under the "data" key
                 $data = $data['data'];
             }
