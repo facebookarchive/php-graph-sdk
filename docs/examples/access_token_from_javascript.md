@@ -50,28 +50,24 @@ After the user successfully logs in, redirect the user (or make an AJAX request)
 ```php
 # /js-login.php
 $fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.9',
-  ]);
-
-$helper = $fb->getJavaScriptHelper();
+    'app_id' => '{app-id}',
+    'app_secret' => '{app-secret}',
+    'default_graph_version' => 'v2.9',
+]);
 
 try {
-  $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
-  // When Graph returns an error
-  echo 'Graph returned an error: ' . $e->getMessage();
-  exit;
+    $fbApp = $fb->getApp();
+    $signedRequest = new SignedRequest($fbApp, $_COOKIE['fbsr_' . $fbApp->getId()]))
+    $accessToken = $signedRequest->getAccessToken();
 } catch(Facebook\Exceptions\FacebookSDKException $e) {
-  // When validation fails or other local issues
-  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-  exit;
+    // When validation fails or other local issues
+    echo 'Facebook SDK returned an error: ' . $e->getMessage();
+    exit;
 }
 
-if (! isset($accessToken)) {
-  echo 'No cookie set or no OAuth data could be obtained from cookie.';
-  exit;
+if (!isset($accessToken)) {
+    echo 'No cookie set or no OAuth data could be obtained from cookie.';
+    exit;
 }
 
 // Logged in

@@ -17,7 +17,6 @@ These classes facilitate authenticating a Facebook user with OAuth 2.0.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helpers\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md)  | An OAuth 2.0 service to obtain a user access token from a redirect using a "Log in with Facebook" link.  |
 | [`Facebook\Authentication\AccessToken`](reference/AccessToken.md)  | An entity that represents an access token.  |
 | `Facebook\Authentication\AccessTokenMetadata`  | An entity that represents metadata from an access token.  |
 | `Facebook\Authentication\OAuth2Client`  | An OAuth 2.0 client that sends and receives HTTP requests related to user authentication.  |
@@ -41,9 +40,6 @@ Classes to help obtain and manage signed requests.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helpers\FacebookJavaScriptHelper`](reference/FacebookJavaScriptHelper.md) | Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.  |
-| [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md)  | Used to obtain an access token or signed request from within the context of an app canvas.  |
-| [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)  | Used to obtain an access token or signed request from within the context of a page tab.  |
 | [`Facebook\SignedRequest`](reference/SignedRequest.md)  | An entity that represents a signed request.  |
 
 # Core Exceptions
@@ -89,5 +85,3 @@ You can overwrite certain functionality of the SDK by coding to an interface and
 | ------------- | ------------- |
 | `Facebook\HttpClients\ FacebookHttpClientInterface` | An interface to code your own HTTP client implementation.  |
 | `Facebook\Http\GraphRawResponse`  | An entity that is returned from an instance of a `FacebookHttpClientInterface` that represents a raw HTTP response from the Graph API.  |
-| [`Facebook\PersistentData\PersistentDataInterface`](reference/PersistentDataInterface.md) | An interface to code your own persistent data storage implementation.  |
-| [`Facebook\Url\UrlDetectionInterface`](reference/UrlDetectionInterface.md) | An interface to code your own URL detection logic.  |

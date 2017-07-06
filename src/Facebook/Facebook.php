@@ -30,15 +30,7 @@ use Facebook\FileUpload\FacebookResumableUploader;
 use Facebook\FileUpload\FacebookTransferChunk;
 use Facebook\FileUpload\FacebookVideo;
 use Facebook\GraphNodes\GraphEdge;
-use Facebook\Url\UrlDetectionInterface;
-use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\HttpClients\HttpClientsFactory;
-use Facebook\PersistentData\PersistentDataFactory;
-use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\Helpers\FacebookCanvasHelper;
-use Facebook\Helpers\FacebookJavaScriptHelper;
-use Facebook\Helpers\FacebookPageTabHelper;
-use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\Exceptions\FacebookSDKException;
 
 /**
@@ -79,11 +71,6 @@ class Facebook
     protected $oAuth2Client;
 
     /**
-     * @var UrlDetectionInterface|null The URL detection handler.
-     */
-    protected $urlDetectionHandler;
-
-    /**
      * @var AccessToken|null The default access token to use with requests.
      */
     protected $defaultAccessToken;
@@ -92,11 +79,6 @@ class Facebook
      * @var string|null The default Graph version we want to use.
      */
     protected $defaultGraphVersion;
-
-    /**
-     * @var PersistentDataInterface|null The persistent data handler.
-     */
-    protected $persistentDataHandler;
 
     /**
      * @var FacebookResponse|FacebookBatchResponse|null Stores the last request made to Graph.
@@ -118,8 +100,6 @@ class Facebook
             'default_graph_version' => null,
             'enable_beta_mode' => false,
             'http_client_handler' => null,
-            'persistent_data_handler' => null,
-            'url_detection_handler' => null,
         ], $config);
 
         if (!$config['app_id']) {
@@ -136,10 +116,6 @@ class Facebook
         $this->client = new FacebookClient(
             HttpClientsFactory::createHttpClient($config['http_client_handler']),
             $config['enable_beta_mode']
-        );
-        $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new FacebookUrlDetectionHandler());
-        $this->persistentDataHandler = PersistentDataFactory::createPersistentDataHandler(
-            $config['persistent_data_handler']
         );
 
         if (isset($config['default_access_token'])) {
@@ -196,26 +172,6 @@ class Facebook
     }
 
     /**
-     * Returns the URL detection handler.
-     *
-     * @return UrlDetectionInterface
-     */
-    public function getUrlDetectionHandler()
-    {
-        return $this->urlDetectionHandler;
-    }
-
-    /**
-     * Changes the URL detection handler.
-     *
-     * @param UrlDetectionInterface $urlDetectionHandler
-     */
-    private function setUrlDetectionHandler(UrlDetectionInterface $urlDetectionHandler)
-    {
-        $this->urlDetectionHandler = $urlDetectionHandler;
-    }
-
-    /**
      * Returns the default AccessToken entity.
      *
      * @return AccessToken|null
@@ -257,50 +213,6 @@ class Facebook
     public function getDefaultGraphVersion()
     {
         return $this->defaultGraphVersion;
-    }
-
-    /**
-     * Returns the redirect login helper.
-     *
-     * @return FacebookRedirectLoginHelper
-     */
-    public function getRedirectLoginHelper()
-    {
-        return new FacebookRedirectLoginHelper(
-            $this->getOAuth2Client(),
-            $this->persistentDataHandler,
-            $this->urlDetectionHandler
-        );
-    }
-
-    /**
-     * Returns the JavaScript helper.
-     *
-     * @return FacebookJavaScriptHelper
-     */
-    public function getJavaScriptHelper()
-    {
-        return new FacebookJavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
-    }
-
-    /**
-     * Returns the canvas helper.
-     *
-     * @return FacebookCanvasHelper
-     */
-    public function getCanvasHelper()
-    {
-        return new FacebookCanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
-    }
-
-    /**
-     * Returns the page tab helper.
-     *
-     * @return FacebookPageTabHelper
-     */
-    public function getPageTabHelper()
-    {
-        return new FacebookPageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
 
     /**
