@@ -23,7 +23,6 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-use Facebook\Exceptions\FacebookSDKException;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\FacebookStream;
 use Facebook\Http\GraphRawResponse;
@@ -104,7 +103,7 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
     }
 
     /**
-     * @expectedException FacebookSDKException
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
      */
     public function testThrowsExceptionOnClientError()
     {

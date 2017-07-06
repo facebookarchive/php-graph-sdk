@@ -163,10 +163,11 @@ class FacebookTest extends TestCase
         );
     }
 
+    /**
+     * @expectedException Error
+     */
     public function testSettingAnInvalidUrlHandlerThrows()
     {
-        $this->setExpectedException(Error::class);
-
         $config = array_merge($this->config, [
             'url_detection_handler' => 'foo_handler',
         ]);

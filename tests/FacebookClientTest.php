@@ -199,10 +199,11 @@ class FacebookClientTest extends TestCase
         $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
     }
 
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     */
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
-        $this->setExpectedException(FacebookSDKException::class);
-
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
     }
