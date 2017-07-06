@@ -23,31 +23,29 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\FacebookResponse;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
 abstract class AbstractGraphNode extends TestCase
 {
     /**
-     * @var \Facebook\FacebookResponse|\Mockery\MockInterface
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->responseMock = m::mock(FacebookResponse::class);
+
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     protected function makeFactoryWithData($data)
     {
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($data);
+        $this->responseMock->getDecodedBody()->willReturn($data);
 
-        return new GraphNodeFactory($this->responseMock);
+        return new GraphNodeFactory($this->responseMock->reveal());
     }
 }

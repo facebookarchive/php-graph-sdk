@@ -23,21 +23,21 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\FacebookResponse;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class GraphSessionInfoTest extends TestCase
 {
     /**
-     * @var \Facebook\FacebookResponse
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = m::mock(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     public function testDatesGetCastToDateTime()
@@ -47,11 +47,8 @@ class GraphSessionInfoTest extends TestCase
             'issued_at' => 1337,
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
 
         $graphNode = $factory->makeGraphSessionInfo();
 

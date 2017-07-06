@@ -23,23 +23,23 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphLocation;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\FacebookResponse;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class GraphPageTest extends TestCase
 {
     /**
-     * @var \Facebook\FacebookResponse
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = m::mock(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     public function testPagePropertiesReturnGraphPageObjects()
@@ -57,11 +57,8 @@ class GraphPageTest extends TestCase
             ],
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphPage();
 
         $bestPage = $graphNode->getBestPage();
@@ -85,11 +82,8 @@ class GraphPageTest extends TestCase
             ],
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphPage();
 
         $location = $graphNode->getLocation();
