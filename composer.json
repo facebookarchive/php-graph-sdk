@@ -19,7 +19,6 @@
     },
     "require-dev": {
         "guzzlehttp/guzzle": "~5.0",
-        "mockery/mockery": "~0.8",
         "phpunit/phpunit": "^6.2"
     },
     "suggest": {
