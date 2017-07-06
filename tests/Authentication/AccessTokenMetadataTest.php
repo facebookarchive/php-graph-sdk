@@ -94,6 +94,8 @@ class AccessTokenMetadataTest extends TestCase
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateAppId('123');
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -103,12 +105,16 @@ class AccessTokenMetadataTest extends TestCase
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateAppId('foo');
+
+        $this->assertTrue(true);
     }
 
     public function testAnExpectedUserIdWillNotThrow()
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateUserId('1337');
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -125,6 +131,8 @@ class AccessTokenMetadataTest extends TestCase
         $this->graphResponseData['data']['expires_at'] = time() + 1000;
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateExpiration();
+
+        $this->assertTrue(true);
     }
 
     /**

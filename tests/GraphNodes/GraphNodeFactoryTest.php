@@ -62,6 +62,8 @@ class GraphNodeFactoryTest extends TestCase
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphNode();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -83,6 +85,8 @@ class GraphNodeFactoryTest extends TestCase
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphEdge();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -121,6 +125,8 @@ class GraphNodeFactoryTest extends TestCase
         GraphNodeFactory::validateSubclass(GraphNode::class);
         GraphNodeFactory::validateSubclass(GraphAlbum::class);
         GraphNodeFactory::validateSubclass(MyFooGraphNode::class);
+
+        $this->assertTrue(true);
     }
 
     public function testCastingAsASubClassObjectWillInstantiateTheSubClass()
