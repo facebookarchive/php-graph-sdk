@@ -125,8 +125,8 @@ class OAuth2Client
      * Generates an authorization URL to begin the process of authenticating a user.
      *
      * @param string $redirectUrl The callback URL to redirect to.
-     * @param array  $scope       An array of permissions to request.
      * @param string $state       The CSPRNG-generated CSRF value.
+     * @param array  $scope       An array of permissions to request.
      * @param array  $params      An array of parameters to generate URL.
      * @param string $separator   The separator to use in http_build_query().
      *
