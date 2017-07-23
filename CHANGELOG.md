@@ -7,6 +7,8 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
 
+- 5.6.0 (2017-07-23)
+  - Bump Graph API version to v2.10 (#829)
 - 5.5.0 (2017-04-20)
   - Added support for batch options (#713)
   - Bump Graph API version to v2.9.
