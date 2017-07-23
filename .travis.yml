@@ -32,8 +32,8 @@ before_install:
 
 install:
   - travis_retry composer require --dev --no-update squizlabs/php_codesniffer
-  - if [ $deps != low ]; then travis_retry composer update --no-interaction --prefer-dist; fi;
-  - if [ $deps == low ]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest; fi;
+  - if [ "$deps" != low ]; then travis_retry composer update --no-interaction --prefer-dist; fi;
+  - if [ "$deps" == low ]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest; fi;
 
 script:
   - vendor/bin/phpcs
