@@ -24,8 +24,9 @@
 namespace Facebook\Tests\Url;
 
 use Facebook\Url\FacebookUrlDetectionHandler;
+use PHPUnit\Framework\TestCase;
 
-class FacebookUrlDetectionHandlerTest extends \PHPUnit_Framework_TestCase
+class FacebookUrlDetectionHandlerTest extends TestCase
 {
     public function testProperlyGeneratesUrlFromCommonScenario()
     {

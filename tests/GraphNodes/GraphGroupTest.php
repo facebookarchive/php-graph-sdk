@@ -24,21 +24,22 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Facebook\FacebookResponse;
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphLocation;
 use Facebook\GraphNodes\GraphCoverPhoto;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
-class GraphGroupTest extends \PHPUnit_Framework_TestCase
+class GraphGroupTest extends TestCase
 {
     /**
-     * @var FacebookResponse
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = m::mock(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     public function testCoverGetsCastAsGraphCoverPhoto()
@@ -47,11 +48,8 @@ class GraphGroupTest extends \PHPUnit_Framework_TestCase
             'cover' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphGroup();
 
         $cover = $graphNode->getCover();
@@ -64,11 +62,8 @@ class GraphGroupTest extends \PHPUnit_Framework_TestCase
             'venue' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphGroup();
 
         $venue = $graphNode->getVenue();

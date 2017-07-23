@@ -27,8 +27,9 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookBatchRequest;
 use Facebook\FileUpload\FacebookFile;
+use PHPUnit\Framework\TestCase;
 
-class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
+class FacebookBatchRequestTest extends TestCase
 {
     /**
      * @var FacebookApp
@@ -196,6 +197,8 @@ class FacebookBatchRequestTest extends \PHPUnit_Framework_TestCase
         $this->createAndAppendRequestsTo($batchRequest, 50);
 
         $batchRequest->validateBatchRequestCount();
+
+        $this->assertTrue(true);
     }
 
     /**

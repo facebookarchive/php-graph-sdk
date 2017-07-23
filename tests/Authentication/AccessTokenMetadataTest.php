@@ -24,8 +24,9 @@
 namespace Facebook\Tests\Authentication;
 
 use Facebook\Authentication\AccessTokenMetadata;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
+class AccessTokenMetadataTest extends TestCase
 {
 
     protected $graphResponseData = [
@@ -93,6 +94,8 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateAppId('123');
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -102,12 +105,16 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateAppId('foo');
+
+        $this->assertTrue(true);
     }
 
     public function testAnExpectedUserIdWillNotThrow()
     {
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateUserId('1337');
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -124,6 +131,8 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
         $this->graphResponseData['data']['expires_at'] = time() + 1000;
         $metadata = new AccessTokenMetadata($this->graphResponseData);
         $metadata->validateExpiration();
+
+        $this->assertTrue(true);
     }
 
     /**

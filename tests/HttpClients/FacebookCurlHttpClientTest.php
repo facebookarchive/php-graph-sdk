@@ -23,15 +23,16 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-use Mockery as m;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookCurl;
 use Facebook\Http\GraphRawResponse;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 {
     /**
-     * @var \Facebook\HttpClients\FacebookCurl
+     * @var FacebookCurl|ObjectProphecy
      */
     protected $curlMock;
 
@@ -48,113 +49,92 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
         if (!extension_loaded('curl')) {
             $this->markTestSkipped('cURL must be installed to test cURL client handler.');
         }
-        $this->curlMock = m::mock(FacebookCurl::class);
-        $this->curlClient = new FacebookCurlHttpClient($this->curlMock);
+        $this->curlMock = $this->prophesize(FacebookCurl::class);
+        $this->curlClient = new FacebookCurlHttpClient($this->curlMock->reveal());
     }
 
     public function testCanOpenGetCurlConnection()
     {
-        $this->curlMock
-            ->shouldReceive('init')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('setoptArray')
-            ->with(m::on(function ($arg) {
+        $this->curlMock->init()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::that(function ($arg) {
+            // array_diff() will sometimes trigger error on child-arrays
+            if (['X-Foo-Header: X-Bar'] !== $arg[CURLOPT_HTTPHEADER]) {
+                return false;
+            }
+            unset($arg[CURLOPT_HTTPHEADER]);
 
-                // array_diff() will sometimes trigger error on child-arrays
-                if (['X-Foo-Header: X-Bar'] !== $arg[CURLOPT_HTTPHEADER]) {
-                    return false;
-                }
-                unset($arg[CURLOPT_HTTPHEADER]);
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_URL => 'http://foo.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT => 123,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+            ]);
 
-                $caInfo = array_diff($arg, [
-                    CURLOPT_CUSTOMREQUEST => 'GET',
-                    CURLOPT_URL => 'http://foo.com',
-                    CURLOPT_CONNECTTIMEOUT => 10,
-                    CURLOPT_TIMEOUT => 123,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HEADER => true,
-                    CURLOPT_SSL_VERIFYHOST => 2,
-                    CURLOPT_SSL_VERIFYPEER => true,
-                ]);
+            if (count($caInfo) !== 1) {
+                return false;
+            }
 
-                if (count($caInfo) !== 1) {
-                    return false;
-                }
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+                return false;
+            }
 
-                if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
-                    return false;
-                }
-
-                return true;
-            }))
-            ->once()
-            ->andReturn(null);
+            return true;
+        }))->shouldBeCalled();
 
         $this->curlClient->openConnection('http://foo.com', 'GET', 'foo_body', ['X-Foo-Header' => 'X-Bar'], 123);
     }
 
     public function testCanOpenCurlConnectionWithPostBody()
     {
-        $this->curlMock
-            ->shouldReceive('init')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('setoptArray')
-            ->with(m::on(function ($arg) {
+        $this->curlMock->init()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::that(function ($arg) {
 
-                // array_diff() will sometimes trigger error on child-arrays
-                if ([] !== $arg[CURLOPT_HTTPHEADER]) {
-                    return false;
-                }
-                unset($arg[CURLOPT_HTTPHEADER]);
+            // array_diff() will sometimes trigger error on child-arrays
+            if ([] !== $arg[CURLOPT_HTTPHEADER]) {
+                return false;
+            }
+            unset($arg[CURLOPT_HTTPHEADER]);
 
-                $caInfo = array_diff($arg, [
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_URL => 'http://bar.com',
-                    CURLOPT_CONNECTTIMEOUT => 10,
-                    CURLOPT_TIMEOUT => 60,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HEADER => true,
-                    CURLOPT_SSL_VERIFYHOST => 2,
-                    CURLOPT_SSL_VERIFYPEER => true,
-                    CURLOPT_POSTFIELDS => 'baz=bar',
-                ]);
+            $caInfo = array_diff($arg, [
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_URL => 'http://bar.com',
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT => 60,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_POSTFIELDS => 'baz=bar',
+            ]);
 
-                if (count($caInfo) !== 1) {
-                    return false;
-                }
+            if (count($caInfo) !== 1) {
+                return false;
+            }
 
-                if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
-                    return false;
-                }
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo[CURLOPT_CAINFO])) {
+                return false;
+            }
 
-                return true;
-            }))
-            ->once()
-            ->andReturn(null);
+            return true;
+        }))->shouldBeCalled();
 
         $this->curlClient->openConnection('http://bar.com', 'POST', 'baz=bar', [], 60);
     }
 
     public function testCanCloseConnection()
     {
-        $this->curlMock
-            ->shouldReceive('close')
-            ->once()
-            ->andReturn(null);
+        $this->curlMock->close()->shouldBeCalled();
 
         $this->curlClient->closeConnection();
     }
 
     public function testIsolatesTheHeaderAndBody()
     {
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($this->fakeRawHeader . $this->fakeRawBody);
+        $this->curlMock->exec()->willReturn($this->fakeRawHeader . $this->fakeRawBody);
 
         $this->curlClient->sendRequest();
         list($rawHeader, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
@@ -166,10 +146,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testProperlyHandlesProxyHeaders()
     {
         $rawHeader = $this->fakeRawProxyHeader . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($rawHeader . $this->fakeRawBody);
+        $this->curlMock->exec()->willReturn($rawHeader . $this->fakeRawBody);
 
         $this->curlClient->sendRequest();
         list($rawHeaders, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
@@ -180,26 +157,8 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
     public function testProperlyHandlesProxyHeadersWithCurlBug()
     {
-        $rawHeader = $this->fakeRawProxyHeader . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($rawHeader . $this->fakeRawBody);
-
-        $this->curlClient->sendRequest();
-        list($rawHeaders, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
-
-        $this->assertEquals($rawHeaders, trim($rawHeader));
-        $this->assertEquals($rawBody, $this->fakeRawBody);
-    }
-
-    public function testProperlyHandlesProxyHeadersWithCurlBug2()
-    {
         $rawHeader = $this->fakeRawProxyHeader2 . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($rawHeader . $this->fakeRawBody);
+        $this->curlMock->exec()->willReturn($rawHeader . $this->fakeRawBody);
 
         $this->curlClient->sendRequest();
         list($rawHeaders, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
@@ -211,10 +170,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     public function testProperlyHandlesRedirectHeaders()
     {
         $rawHeader = $this->fakeRawRedirectHeader . $this->fakeRawHeader;
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($rawHeader . $this->fakeRawBody);
+        $this->curlMock->exec()->willReturn($rawHeader . $this->fakeRawBody);
 
         $this->curlClient->sendRequest();
         list($rawHeaders, $rawBody) = $this->curlClient->extractResponseHeadersAndBody();
@@ -225,26 +181,11 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
     public function testCanSendNormalRequest()
     {
-        $this->curlMock
-            ->shouldReceive('init')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('setoptArray')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn($this->fakeRawHeader . $this->fakeRawBody);
-        $this->curlMock
-            ->shouldReceive('errno')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('close')
-            ->once()
-            ->andReturn(null);
+        $this->curlMock->init()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::type('array'))->shouldBeCalled();
+        $this->curlMock->exec()->willReturn($this->fakeRawHeader . $this->fakeRawBody);
+        $this->curlMock->errno()->shouldBeCalled();
+        $this->curlMock->close()->shouldBeCalled();
 
         $response = $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
 
@@ -256,29 +197,17 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
 
     /**
      * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedExceptionCode 123
+     * @expectedExceptionMessage Foo error
      */
     public function testThrowsExceptionOnClientError()
     {
-        $this->curlMock
-            ->shouldReceive('init')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('setoptArray')
-            ->once()
-            ->andReturn(null);
-        $this->curlMock
-            ->shouldReceive('exec')
-            ->once()
-            ->andReturn(false);
-        $this->curlMock
-            ->shouldReceive('errno')
-            ->once()
-            ->andReturn(123);
-        $this->curlMock
-            ->shouldReceive('error')
-            ->once()
-            ->andReturn('Foo error');
+        $this->curlMock->init()->shouldBeCalled();
+        $this->curlMock->setoptArray(Argument::type('array'))->shouldBeCalled();
+        $this->curlMock->exec()->willReturn(false);
+        $this->curlMock->errno()->willReturn(123);
+        $this->curlMock->error()->willReturn('Foo error');
+        $this->curlMock->close()->shouldBeCalled();
 
         $this->curlClient->send('http://foo.com/', 'GET', '', [], 60);
     }

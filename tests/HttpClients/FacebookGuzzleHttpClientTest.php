@@ -23,7 +23,6 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-use Mockery as m;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Message\Response;
@@ -31,11 +30,13 @@ use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Facebook\Http\GraphRawResponse;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 {
     /**
-     * @var \GuzzleHttp\Client
+     * @var Client|ObjectProphecy
      */
     protected $guzzleMock;
 
@@ -46,8 +47,8 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
 
     protected function setUp()
     {
-        $this->guzzleMock = m::mock(Client::class);
-        $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock);
+        $this->guzzleMock = $this->prophesize(Client::class);
+        $this->guzzleClient = new FacebookGuzzleHttpClient($this->guzzleMock->reveal());
     }
 
     public function testCanSendNormalRequest()
@@ -57,39 +58,31 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
         $body = Stream::factory($this->fakeRawBody);
         $response = new Response(200, $this->fakeHeadersAsArray, $body);
 
-        $this->guzzleMock
-            ->shouldReceive('createRequest')
-            ->once()
-            ->with('GET', 'http://foo.com/', m::on(function ($arg) {
+        $this->guzzleMock->createRequest('GET', 'http://foo.com/', Argument::that(function ($arg) {
 
-                // array_diff_assoc() will sometimes trigger error on child-arrays
-                if (['X-foo' => 'bar'] !== $arg['headers']) {
-                    return false;
-                }
-                unset($arg['headers']);
+            // array_diff_assoc() will sometimes trigger error on child-arrays
+            if (['X-foo' => 'bar'] !== $arg['headers']) {
+                return false;
+            }
+            unset($arg['headers']);
 
-                $caInfo = array_diff_assoc($arg, [
-                    'body' => 'foo_body',
-                    'timeout' => 123,
-                    'connect_timeout' => 10,
-                ]);
+            $caInfo = array_diff_assoc($arg, [
+                'body' => 'foo_body',
+                'timeout' => 123,
+                'connect_timeout' => 10,
+            ]);
 
-                if (count($caInfo) !== 1) {
-                    return false;
-                }
+            if (count($caInfo) !== 1) {
+                return false;
+            }
 
-                if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
-                    return false;
-                }
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+                return false;
+            }
 
-                return true;
-            }))
-            ->andReturn($request);
-        $this->guzzleMock
-            ->shouldReceive('send')
-            ->once()
-            ->with($request)
-            ->andReturn($response);
+            return true;
+        }))->willReturn($request);
+        $this->guzzleMock->send($request)->willReturn($response);
 
         $response = $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
@@ -106,39 +99,30 @@ class FacebookGuzzleHttpClientTest extends AbstractTestHttpClient
     {
         $request = new Request('GET', 'http://foo.com');
 
-        $this->guzzleMock
-            ->shouldReceive('createRequest')
-            ->once()
-            ->with('GET', 'http://foo.com/', m::on(function ($arg) {
+        $this->guzzleMock->createRequest('GET', 'http://foo.com/', Argument::that(function ($arg) {
+            // array_diff_assoc() will sometimes trigger error on child-arrays
+            if ([] !== $arg['headers']) {
+                return false;
+            }
+            unset($arg['headers']);
 
-                // array_diff_assoc() will sometimes trigger error on child-arrays
-                if ([] !== $arg['headers']) {
-                    return false;
-                }
-                unset($arg['headers']);
+            $caInfo = array_diff_assoc($arg, [
+                'body' => 'foo_body',
+                'timeout' => 60,
+                'connect_timeout' => 10,
+            ]);
 
-                $caInfo = array_diff_assoc($arg, [
-                    'body' => 'foo_body',
-                    'timeout' => 60,
-                    'connect_timeout' => 10,
-                ]);
+            if (count($caInfo) !== 1) {
+                return false;
+            }
 
-                if (count($caInfo) !== 1) {
-                    return false;
-                }
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
+                return false;
+            }
 
-                if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['verify'])) {
-                    return false;
-                }
-
-                return true;
-            }))
-            ->andReturn($request);
-        $this->guzzleMock
-            ->shouldReceive('send')
-            ->once()
-            ->with($request)
-            ->andThrow(new RequestException('Foo', $request));
+            return true;
+        }))->willReturn($request);
+        $this->guzzleMock->send($request)->willThrow(new RequestException('Foo', $request));
 
         $this->guzzleClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
     }

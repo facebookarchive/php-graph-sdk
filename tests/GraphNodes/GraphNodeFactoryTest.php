@@ -32,8 +32,9 @@ use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\MyFooGraphNode;
 use Facebook\Tests\Fixtures\MyFooSubClassGraphNode;
 use Facebook\GraphNodes\GraphAlbum;
+use PHPUnit\Framework\TestCase;
 
-class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
+class GraphNodeFactoryTest extends TestCase
 {
     /**
      * @var \Facebook\FacebookRequest
@@ -61,6 +62,8 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphNode();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -82,6 +85,8 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphEdge();
+
+        $this->assertTrue(true);
     }
 
     /**
@@ -120,6 +125,8 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         GraphNodeFactory::validateSubclass(GraphNode::class);
         GraphNodeFactory::validateSubclass(GraphAlbum::class);
         GraphNodeFactory::validateSubclass(MyFooGraphNode::class);
+
+        $this->assertTrue(true);
     }
 
     public function testCastingAsASubClassObjectWillInstantiateTheSubClass()

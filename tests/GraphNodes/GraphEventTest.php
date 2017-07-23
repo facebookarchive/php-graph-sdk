@@ -24,23 +24,24 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Facebook\FacebookResponse;
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphGroup;
 use Facebook\GraphNodes\GraphPicture;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\GraphNodes\GraphCoverPhoto;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
-class GraphEventTest extends \PHPUnit_Framework_TestCase
+class GraphEventTest extends TestCase
 {
     /**
-     * @var FacebookResponse
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = m::mock(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     public function testCoverGetsCastAsGraphCoverPhoto()
@@ -49,11 +50,8 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             'cover' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $cover = $graphObject->getCover();
@@ -66,11 +64,8 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             'place' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $place = $graphObject->getPlace();
@@ -83,11 +78,8 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             'picture' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $picture = $graphObject->getPicture();
@@ -100,11 +92,8 @@ class GraphEventTest extends \PHPUnit_Framework_TestCase
             'parent_group' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $parentGroup = $graphObject->getParentGroup();

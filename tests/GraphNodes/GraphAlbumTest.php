@@ -23,23 +23,24 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 use Facebook\GraphNodes\GraphPage;
 use Facebook\GraphNodes\GraphUser;
 use Facebook\FacebookResponse;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
-class GraphAlbumTest extends \PHPUnit_Framework_TestCase
+class GraphAlbumTest extends TestCase
 {
 
     /**
-     * @var \Facebook\FacebookResponse
+     * @var FacebookResponse|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = m::mock(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(FacebookResponse::class);
     }
 
     public function testDatesGetCastToDateTime()
@@ -51,11 +52,8 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             'name' => 'Bar',
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $createdTime = $graphNode->getCreatedTime();
@@ -75,11 +73,8 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $from = $graphNode->getFrom();
@@ -98,11 +93,8 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $place = $graphNode->getPlace();

@@ -24,8 +24,9 @@
 namespace Facebook\Tests\Url;
 
 use Facebook\Url\FacebookUrlManipulator;
+use PHPUnit\Framework\TestCase;
 
-class FacebookUrlManipulatorTest extends \PHPUnit_Framework_TestCase
+class FacebookUrlManipulatorTest extends TestCase
 {
     /**
      * @dataProvider provideUris

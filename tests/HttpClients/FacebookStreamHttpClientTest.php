@@ -23,15 +23,16 @@
  */
 namespace Facebook\Tests\HttpClients;
 
-use Mockery as m;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\FacebookStream;
 use Facebook\Http\GraphRawResponse;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 {
     /**
-     * @var \Facebook\HttpClients\FacebookStream
+     * @var FacebookStream|ObjectProphecy
      */
     protected $streamMock;
 
@@ -42,8 +43,8 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
     protected function setUp()
     {
-        $this->streamMock = m::mock(FacebookStream::class);
-        $this->streamClient = new FacebookStreamHttpClient($this->streamMock);
+        $this->streamMock = $this->prophesize(FacebookStream::class);
+        $this->streamClient = new FacebookStreamHttpClient($this->streamMock->reveal());
     }
 
     public function testCanCompileHeader()
@@ -58,51 +59,40 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
 
     public function testCanSendNormalRequest()
     {
-        $this->streamMock
-            ->shouldReceive('streamContextCreate')
-            ->once()
-            ->with(m::on(function ($arg) {
-                if (!isset($arg['http']) || !isset($arg['ssl'])) {
-                    return false;
-                }
+        $this->streamMock->streamContextCreate(Argument::that(function ($arg) {
+            if (!isset($arg['http']) || !isset($arg['ssl'])) {
+                return false;
+            }
 
-                if ($arg['http'] !== [
-                        'method' => 'GET',
-                        'header' => 'X-foo: bar',
-                        'content' => 'foo_body',
-                        'timeout' => 123,
-                        'ignore_errors' => true,
-                    ]
-                ) {
-                    return false;
-                }
+            if ($arg['http'] !== [
+                    'method' => 'GET',
+                    'header' => 'X-foo: bar',
+                    'content' => 'foo_body',
+                    'timeout' => 123,
+                    'ignore_errors' => true,
+                ]
+            ) {
+                return false;
+            }
 
-                $caInfo = array_diff_assoc($arg['ssl'], [
-                    'verify_peer' => true,
-                    'verify_peer_name' => true,
-                    'allow_self_signed' => true,
-                ]);
+            $caInfo = array_diff_assoc($arg['ssl'], [
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => true,
+            ]);
 
-                if (count($caInfo) !== 1) {
-                    return false;
-                }
+            if (count($caInfo) !== 1) {
+                return false;
+            }
 
-                if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['cafile'])) {
-                    return false;
-                }
+            if (1 !== preg_match('/.+\/certs\/DigiCertHighAssuranceEVRootCA\.pem$/', $caInfo['cafile'])) {
+                return false;
+            }
 
-                return true;
-            }))
-            ->andReturn(null);
-        $this->streamMock
-            ->shouldReceive('getResponseHeaders')
-            ->once()
-            ->andReturn(explode("\n", trim($this->fakeRawHeader)));
-        $this->streamMock
-            ->shouldReceive('fileGetContents')
-            ->once()
-            ->with('http://foo.com/')
-            ->andReturn($this->fakeRawBody);
+            return true;
+        }))->shouldBeCalled();
+        $this->streamMock->getResponseHeaders()->willReturn(explode("\n", trim($this->fakeRawHeader)));
+        $this->streamMock->fileGetContents('http://foo.com/')->willReturn($this->fakeRawBody);
 
         $response = $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', ['X-foo' => 'bar'], 123);
 
@@ -117,19 +107,9 @@ class FacebookStreamHttpClientTest extends AbstractTestHttpClient
      */
     public function testThrowsExceptionOnClientError()
     {
-        $this->streamMock
-            ->shouldReceive('streamContextCreate')
-            ->once()
-            ->andReturn(null);
-        $this->streamMock
-            ->shouldReceive('getResponseHeaders')
-            ->once()
-            ->andReturn(null);
-        $this->streamMock
-            ->shouldReceive('fileGetContents')
-            ->once()
-            ->with('http://foo.com/')
-            ->andReturn(false);
+        $this->streamMock->streamContextCreate(Argument::type('array'))->shouldBeCalled();
+        $this->streamMock->getResponseHeaders()->willReturn('');
+        $this->streamMock->fileGetContents('http://foo.com/')->willReturn(false);
 
         $this->streamClient->send('http://foo.com/', 'GET', 'foo_body', [], 60);
     }

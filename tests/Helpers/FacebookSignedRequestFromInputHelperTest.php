@@ -27,8 +27,9 @@ use Facebook\FacebookApp;
 use Facebook\Tests\Fixtures\FooSignedRequestHelper;
 use Facebook\Tests\Fixtures\FooSignedRequestHelperFacebookClient;
 use Facebook\Authentication\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class FacebookSignedRequestFromInputHelperTest extends \PHPUnit_Framework_TestCase
+class FacebookSignedRequestFromInputHelperTest extends TestCase
 {
     /**
      * @var FooSignedRequestHelper

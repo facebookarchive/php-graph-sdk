@@ -28,10 +28,10 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\HttpClientsFactory;
 use GuzzleHttp\Client;
-use PHPUnit_Framework_TestCase;
 use Facebook\HttpClients\FacebookHttpClientInterface;
+use PHPUnit\Framework\TestCase;
 
-class HttpClientsFactoryTest extends PHPUnit_Framework_TestCase
+class HttpClientsFactoryTest extends TestCase
 {
     const COMMON_NAMESPACE = 'Facebook\HttpClients\\';
     const COMMON_INTERFACE = FacebookHttpClientInterface::class;

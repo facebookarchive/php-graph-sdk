@@ -29,11 +29,12 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphList;
 use Facebook\GraphNodes\GraphObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @todo v6: Remove this test
  */
-class GraphObjectFactoryTest extends \PHPUnit_Framework_TestCase
+class GraphObjectFactoryTest extends TestCase
 {
     /**
      * @var \Facebook\FacebookRequest

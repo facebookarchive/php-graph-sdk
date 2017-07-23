@@ -39,8 +39,9 @@ use Facebook\Tests\Fixtures\MyFooClientHandler;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchResponse;
 use Facebook\GraphNodes\GraphNode;
+use PHPUnit\Framework\TestCase;
 
-class FacebookClientTest extends \PHPUnit_Framework_TestCase
+class FacebookClientTest extends TestCase
 {
     /**
      * @var FacebookApp
@@ -198,10 +199,11 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
     }
 
+    /**
+     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     */
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
-        $this->setExpectedException(FacebookSDKException::class);
-
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
     }
