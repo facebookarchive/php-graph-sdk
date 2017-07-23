@@ -29,7 +29,7 @@ Simple GET example of a user's profile.
 $fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.9',
+  'default_graph_version' => 'v2.10',
   //'default_access_token' => '{access-token}', // optional
 ]);
 
