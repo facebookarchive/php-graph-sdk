@@ -26,6 +26,8 @@ composer require facebook/graph-sdk
 Simple GET example of a user's profile.
 
 ```php
+require_once 'vendor/autoload.php'; // change path as needed
+
 $fb = new \Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
