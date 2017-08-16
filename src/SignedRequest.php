@@ -164,7 +164,7 @@ class SignedRequest
     /**
      * Splits a raw signed request into signature and payload.
      *
-     * @returns array
+     * @return array
      *
      * @throws FacebookSDKException
      */
@@ -182,7 +182,7 @@ class SignedRequest
      *
      * @param string $encodedSig
      *
-     * @returns string
+     * @return string
      *
      * @throws FacebookSDKException
      */
@@ -202,7 +202,7 @@ class SignedRequest
      *
      * @param string $encodedPayload
      *
-     * @returns array
+     * @return array
      *
      * @throws FacebookSDKException
      */
