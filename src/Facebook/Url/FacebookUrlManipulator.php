@@ -45,7 +45,7 @@ class FacebookUrlManipulator
         $query = '';
         if (isset($parts['query'])) {
             $params = [];
-            parse_str($parts['query'], $params);
+            $params = Util::parseUrlQuery($parts['query']);
 
             // Remove query params
             foreach ($paramsToFilter as $paramName) {
@@ -86,7 +86,7 @@ class FacebookUrlManipulator
 
         list($path, $query) = explode('?', $url, 2);
         $existingParams = [];
-        parse_str($query, $existingParams);
+        $existingParams = Util::parseUrlQuery($query);
 
         // Favor params from the original URL over $newParams
         $newParams = array_merge($newParams, $existingParams);
@@ -111,7 +111,7 @@ class FacebookUrlManipulator
             return [];
         }
         $params = [];
-        parse_str($query, $params);
+        $params = Util::parseUrlQuery($query);
 
         return $params;
     }

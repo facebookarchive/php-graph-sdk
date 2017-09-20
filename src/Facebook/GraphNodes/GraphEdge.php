@@ -32,7 +32,7 @@ use Facebook\Exceptions\FacebookSDKException;
  *
  * @package Facebook
  */
-class GraphEdge extends Collection
+class GraphEdge extends GraphCollection
 {
     /**
      * @var FacebookRequest The original request that generated this data.
