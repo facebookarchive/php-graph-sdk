@@ -24,7 +24,8 @@
 
 namespace Facebook\Url;
 
-abstract class Util {
+abstract class Util
+{
 
   /**
    * Avoid parse_str() for HHVM compatibility
@@ -35,14 +36,15 @@ abstract class Util {
    * @param $query_string
    * @return array
    */
-  public static function parseUrlQuery($query_string) {
-    $query = array();
-    $pairs = explode('&', $query_string);
-    foreach ($pairs as $pair) {
-      list($key, $value) = explode('=', $pair);
-      $query[$key] = urldecode($value);
-    }
+    public static function parseUrlQuery($query_string)
+    {
+        $query = array();
+        $pairs = explode('&', $query_string);
+        foreach ($pairs as $pair) {
+            list($key, $value) = explode('=', $pair);
+            $query[$key] = urldecode($value);
+        }
 
-    return $query;
-  }
+        return $query;
+    }
 }
