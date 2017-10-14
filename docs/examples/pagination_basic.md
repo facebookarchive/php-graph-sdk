@@ -12,7 +12,7 @@ In this example we'll pull five entries from a user's feed (assuming the user ap
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.10',
   ]);
 
 try {

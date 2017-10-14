@@ -10,7 +10,7 @@ A signed request will be sent to your app via the HTTP POST method within the co
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.10',
   ]);
 
 $helper = $fb->getCanvasHelper();

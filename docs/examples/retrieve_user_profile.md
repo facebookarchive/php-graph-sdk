@@ -12,7 +12,7 @@ For more information, see the documentation for [`Facebook\Facebook`](../referen
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.10',
   ]);
 
 try {

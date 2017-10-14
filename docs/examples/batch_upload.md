@@ -12,7 +12,7 @@ The following example will upload two photos and one video.
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.8',
+  'default_graph_version' => 'v2.10',
   ]);
 
 // Since all the requests will be sent on behalf of the same user,

@@ -26,7 +26,7 @@ $response = $fb->get('/something');
 $graphNode = $response->getGraphNode();
 
 // Get the response typed as a GraphUser
-$user = $response->getGraphUser());
+$user = $response->getGraphUser();
 
 // Get the response typed as a GraphPage
 $page = $response->getGraphPage();
@@ -162,7 +162,7 @@ Returns the `hometown` property for the user as a `Facebook\GraphNodes\GraphPage
 
 ### getSignificantOther()
 ```php
-public Facebook\GraphNodes\GraphUser|null getHometown()
+public Facebook\GraphNodes\GraphUser|null getSignificantOther()
 ```
 Returns the `significant_other` property for the user as a `Facebook\GraphNodes\GraphUser` if present.
 
