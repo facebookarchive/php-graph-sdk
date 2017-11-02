@@ -29,7 +29,7 @@ use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
-use Facebook\Tests\Fixtures\FooClientInterface;
+use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
@@ -93,53 +93,24 @@ class FacebookTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSettingAnInvalidHttpClientHandlerThrows()
+    public function testSettingAnInvalidHttpClientTypeThrows()
     {
         $config = array_merge($this->config, [
-            'http_client_handler' => 'foo_handler',
+            'http_client' => 'foo_client',
         ]);
         new Facebook($config);
     }
 
-    public function testCurlHttpClientHandlerCanBeForced()
-    {
-        if (!extension_loaded('curl')) {
-            $this->markTestSkipped('cURL must be installed to test cURL client handler.');
-        }
-        $config = array_merge($this->config, [
-            'http_client_handler' => 'curl'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            FacebookCurlHttpClient::class,
-            $fb->getClient()->getHttpClientHandler()
-        );
-    }
-
-    public function testStreamHttpClientHandlerCanBeForced()
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSettingAnInvalidHttpClientClassThrows()
     {
         $config = array_merge($this->config, [
-            'http_client_handler' => 'stream'
+            'http_client' => new \stdClass(),
         ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            FacebookStreamHttpClient::class,
-            $fb->getClient()->getHttpClientHandler()
-        );
+        new Facebook($config);
     }
-
-    public function testGuzzleHttpClientHandlerCanBeForced()
-    {
-        $config = array_merge($this->config, [
-            'http_client_handler' => 'guzzle'
-        ]);
-        $fb = new Facebook($config);
-        $this->assertInstanceOf(
-            FacebookGuzzleHttpClient::class,
-            $fb->getClient()->getHttpClientHandler()
-        );
-    }
-
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -234,15 +205,15 @@ class FacebookTest extends TestCase
     public function testCanInjectCustomHandlers()
     {
         $config = array_merge($this->config, [
-            'http_client_handler' => new FooClientInterface(),
+            'http_client' => new FooHttpClientInterface(),
             'persistent_data_handler' => new FooPersistentDataInterface(),
             'url_detection_handler' => new FooUrlDetectionInterface(),
         ]);
         $fb = new Facebook($config);
 
         $this->assertInstanceOf(
-            FooClientInterface::class,
-            $fb->getClient()->getHttpClientHandler()
+            FooHttpClientInterface::class,
+            $fb->getClient()->getHttpClient()
         );
         $this->assertInstanceOf(
             FooPersistentDataInterface::class,
@@ -257,7 +228,7 @@ class FacebookTest extends TestCase
     public function testPaginationReturnsProperResponse()
     {
         $config = array_merge($this->config, [
-            'http_client_handler' => new FooClientInterface(),
+            'http_client' => new FooHttpClientInterface(),
         ]);
         $fb = new Facebook($config);
 
@@ -292,7 +263,7 @@ class FacebookTest extends TestCase
     public function testCanGetSuccessfulTransferWithMaxTries()
     {
         $config = array_merge($this->config, [
-          'http_client_handler' => new FakeGraphApiForResumableUpload(),
+          'http_client' => new FakeGraphApiForResumableUpload(),
         ]);
         $fb = new Facebook($config);
         $response = $fb->uploadVideo('me', __DIR__.'/foo.txt', [], 'foo-token', 3);
@@ -311,7 +282,7 @@ class FacebookTest extends TestCase
         $client->failOnTransfer();
 
         $config = array_merge($this->config, [
-          'http_client_handler' => $client,
+          'http_client' => $client,
         ]);
         $fb = new Facebook($config);
         $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);

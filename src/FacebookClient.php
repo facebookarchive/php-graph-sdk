@@ -23,10 +23,10 @@
  */
 namespace Facebook;
 
-use Facebook\HttpClients\FacebookHttpClientInterface;
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Exceptions\FacebookSDKException;
+use Http\Client\HttpClient;
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
 
 /**
  * Class FacebookClient
@@ -76,9 +76,9 @@ class FacebookClient
     protected $enableBetaMode = false;
 
     /**
-     * @var FacebookHttpClientInterface HTTP client handler.
+     * @var HttpClient HTTP client handler.
      */
-    protected $httpClientHandler;
+    protected $httpClient;
 
     /**
      * @var int The number of calls that have been made to Graph.
@@ -88,43 +88,33 @@ class FacebookClient
     /**
      * Instantiates a new FacebookClient object.
      *
-     * @param FacebookHttpClientInterface|null $httpClientHandler
-     * @param boolean                          $enableBeta
+     * @param HttpClient|null $httpClient
+     * @param boolean         $enableBeta
      */
-    public function __construct(FacebookHttpClientInterface $httpClientHandler = null, $enableBeta = false)
+    public function __construct(HttpClient $httpClient = null, $enableBeta = false)
     {
-        $this->httpClientHandler = $httpClientHandler ?: $this->detectHttpClientHandler();
+        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->enableBetaMode = $enableBeta;
     }
 
     /**
      * Sets the HTTP client handler.
      *
-     * @param FacebookHttpClientInterface $httpClientHandler
+     * @param HttpClient $httpClient
      */
-    public function setHttpClientHandler(FacebookHttpClientInterface $httpClientHandler)
+    public function setHttpClient(HttpClient $httpClient)
     {
-        $this->httpClientHandler = $httpClientHandler;
+        $this->httpClient = $httpClient;
     }
 
     /**
      * Returns the HTTP client handler.
      *
-     * @return FacebookHttpClientInterface
+     * @return HttpClient
      */
-    public function getHttpClientHandler()
+    public function getHttpClient()
     {
-        return $this->httpClientHandler;
-    }
-
-    /**
-     * Detects which HTTP client handler to use.
-     *
-     * @return FacebookHttpClientInterface
-     */
-    public function detectHttpClientHandler()
-    {
-        return extension_loaded('curl') ? new FacebookCurlHttpClient() : new FacebookStreamHttpClient();
+        return $this->httpClient;
     }
 
     /**
@@ -203,32 +193,30 @@ class FacebookClient
 
         list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
 
-        // Since file uploads can take a while, we need to give more time for uploads
-        $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
-        if ($request->containsFileUploads()) {
-            $timeOut = static::DEFAULT_FILE_UPLOAD_REQUEST_TIMEOUT;
-        } elseif ($request->containsVideoUploads()) {
-            $timeOut = static::DEFAULT_VIDEO_UPLOAD_REQUEST_TIMEOUT;
-        }
-
-        // Should throw `FacebookSDKException` exception on HTTP client error.
-        // Don't catch to allow it to bubble up.
-        $rawResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut);
+        $psr7Response = $this->httpClient->sendRequest(
+            MessageFactoryDiscovery::find()->createRequest($method, $url, $headers, $body)
+        );
 
         static::$requestCount++;
 
-        $returnResponse = new FacebookResponse(
-            $request,
-            $rawResponse->getBody(),
-            $rawResponse->getHttpResponseCode(),
-            $rawResponse->getHeaders()
-        );
-
-        if ($returnResponse->isError()) {
-            throw $returnResponse->getThrownException();
+        // Prepare headers from associative array to a single string for each header.
+        $responseHeaders = [];
+        foreach ($psr7Response->getHeaders() as $name => $values) {
+            $responseHeaders[] = sprintf('%s: %s', $name, implode(", ", $values));
         }
 
-        return $returnResponse;
+        $facebookResponse = new FacebookResponse(
+            $request,
+            $psr7Response->getBody(),
+            $psr7Response->getStatusCode(),
+            $responseHeaders
+        );
+
+        if ($facebookResponse->isError()) {
+            throw $facebookResponse->getThrownException();
+        }
+
+        return $facebookResponse;
     }
 
     /**

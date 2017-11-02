@@ -11,6 +11,10 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
   - Replace custom CSPRNG implementation with `paragonie/random_compat` (#644)
   - Removed the built-in autoloader in favor of composer's autoloader (#646)
   - Big integers in signed requests get decoded as `string` instead of `float` (#699)
+  - We use an HTTP client abstraction called HTTPlug to give the user more control over *how* to send PSR7 messages. See updated installation instructions. 
+  - Removed option `http_client_handler`
+  - Added option `http_client` which should be an object implementing `\Http\Client\HttpClient`
+  - Removed functions `FacebookClient::setHttpClientHandler()` and `FacebookClient::getHttpClientHandler()` in favor for `FacebookClient::getHttpClient()` and `FacebookClient::setHttpClient()`.
 
 ## 5.x
 

@@ -19,15 +19,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 
 namespace Facebook\Tests\Fixtures;
 
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
+use GuzzleHttp\Psr7\Response;
+use Http\Client\HttpClient;
+use Psr\Http\Message\RequestInterface;
 
-class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
+class FakeGraphApiForResumableUpload implements HttpClient
 {
     public $transferCount = 0;
     private $respondWith = 'SUCCESS';
@@ -42,8 +42,9 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         $this->respondWith = 'FAIL_ON_TRANSFER';
     }
 
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function sendRequest(RequestInterface $request)
     {
+        $body = $request->getBody()->__toString();
         // Could be start, transfer or finish
         if (strpos($body, 'transfer') !== false) {
             return $this->respondTransfer();
@@ -57,16 +58,18 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
     private function respondStart()
     {
         if ($this->respondWith == 'FAIL_ON_START') {
-            return new GraphRawResponse(
-                "HTTP/1.1 500 OK\r\nFoo: Bar",
-                '{"error":{"message":"Error validating access token: Session has expired on Monday, ' .
-                '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",' .
+            return new Response(
+                500,
+                ['Foo' => 'Bar'],
+                '{"error":{"message":"Error validating access token: Session has expired on Monday, '.
+                '10-Aug-15 01:00:00 PDT. The current time is Monday, 10-Aug-15 01:14:23 PDT.",'.
                 '"type":"OAuthException","code":190,"error_subcode":463}}'
             );
         }
 
-        return new GraphRawResponse(
-            "HTTP/1.1 200 OK\r\nFoo: Bar",
+        return new Response(
+            200,
+            ['Foo' => 'Bar'],
             '{"video_id":"1337","start_offset":"0","end_offset":"20","upload_session_id":"42"}'
         );
     }
@@ -74,9 +77,10 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
     private function respondTransfer()
     {
         if ($this->respondWith == 'FAIL_ON_TRANSFER') {
-            return new GraphRawResponse(
-                "HTTP/1.1 500 OK\r\nFoo: Bar",
-                '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
+            return new Response(
+                500,
+                ['Foo' => 'Bar'],
+                '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",'.
                 '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}'
             );
         }
@@ -95,17 +99,11 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
 
         $this->transferCount++;
 
-        return new GraphRawResponse(
-            "HTTP/1.1 200 OK\r\nFoo: Bar",
-            json_encode($data)
-        );
+        return new Response(200, ['Foo' => 'Bar'], json_encode($data));
     }
 
     private function respondFinish()
     {
-        return new GraphRawResponse(
-            "HTTP/1.1 200 OK\r\nFoo: Bar",
-            '{"success":true}'
-        );
+        return new Response(500, ['Foo' => 'Bar'], '{"success":true}');
     }
 }
