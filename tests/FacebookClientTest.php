@@ -37,8 +37,9 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
 use Facebook\Tests\Fixtures\MyFooClientHandler;
+use PHPUnit\Framework\TestCase;
 
-class FacebookClientTest extends \PHPUnit_Framework_TestCase
+class FacebookClientTest extends TestCase
 {
     /**
      * @var FacebookApp
