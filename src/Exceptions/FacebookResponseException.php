@@ -89,6 +89,7 @@ class FacebookResponseException extends FacebookSDKException
                     return new static($response, new FacebookAuthenticationException($message, $code));
                 // Video upload resumable error
                 case 1363030:
+
                 case 1363019:
                 case 1363037:
                 case 1363033:
@@ -113,7 +114,9 @@ class FacebookResponseException extends FacebookSDKException
             // API Throttling
             case 4:
             case 17:
+            case 32:
             case 341:
+            case 613:
                 return new static($response, new FacebookThrottleException($message, $code));
 
             // Duplicate Post
