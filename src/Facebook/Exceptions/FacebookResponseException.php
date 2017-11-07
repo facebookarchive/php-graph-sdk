@@ -70,6 +70,7 @@ class FacebookResponseException extends FacebookSDKException
     {
         $data = $response->getDecodedBody();
 
+
         if (!isset($data['error']['code']) && isset($data['code'])) {
             $data = ['error' => $data];
         }
@@ -113,7 +114,9 @@ class FacebookResponseException extends FacebookSDKException
             // API Throttling
             case 4:
             case 17:
+            case 32:
             case 341:
+            case 613:
                 return new static($response, new FacebookThrottleException($message, $code));
 
             // Duplicate Post
