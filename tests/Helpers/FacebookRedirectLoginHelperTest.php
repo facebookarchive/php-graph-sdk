@@ -103,7 +103,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     {
         $scope = ['foo', 'bar'];
         $separator = '&';
-        $this->setExpectedException(FacebookLoginUnknownDisplayTypeException::class, 'Unknown display type \'invalid\'.');
+        $this->setExpectedException('Facebook\Exceptions\FacebookLoginUnknownDisplayTypeException', 'Unknown display type \'invalid\'.');
         $this->redirectLoginHelper->getLoginUrl(self::REDIRECT_URL, $scope, $separator, 'invalid');
     }
 
