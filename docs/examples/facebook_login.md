@@ -99,3 +99,14 @@ $_SESSION['fb_access_token'] = (string) $accessToken;
 // You can redirect them to a members-only page.
 //header('Location: https://example.com/members.php');
 ```
+
+## Login display type
+
+You might want to change the default 'page' display type. There is an enumeration that can be used to select the desired display when calling FacebookRedirectLoginHelper::getLoginUrl() method:
+
+* **async:** FacebookDisplayTypeHelper::DISPLAY_TYPE_ASYNC
+* **iframe:** FacebookDisplayTypeHelper::DISPLAY_TYPE_IFRAME
+* **page:** FacebookDisplayTypeHelper::DISPLAY_TYPE_PAGE
+* **popup:** FacebookDisplayTypeHelper::DISPLAY_TYPE_POPUP
+* **touch:** FacebookDisplayTypeHelper::DISPLAY_TYPE_TOUCH
+* **wap:** FacebookDisplayTypeHelper::DISPLAY_TYPE_WAP

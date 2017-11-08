@@ -23,9 +23,11 @@
  */
 namespace Facebook\Tests\Helpers;
 
+use Facebook\Exceptions\FacebookLoginUnknownDisplayTypeException;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
+use Facebook\Helpers\FacebookDisplayTypeHelper;
 use Facebook\Helpers\FacebookRedirectLoginHelper;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Tests\Fixtures\FooPseudoRandomStringGenerator;
@@ -68,10 +70,41 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
             'state' => $this->persistentDataHandler->get('state'),
             'sdk' => 'php-sdk-' . Facebook::VERSION,
             'scope' => implode(',', $scope),
+            'display' => 'page',
         ];
         foreach ($params as $key => $value) {
             $this->assertContains($key . '=' . urlencode($value), $loginUrl);
         }
+    }
+
+    public function testLoginURLWithCustomDisplayType()
+    {
+        $scope = ['foo', 'bar'];
+        $separator = '&';
+        $loginUrl = $this->redirectLoginHelper->getLoginUrl(self::REDIRECT_URL, $scope, $separator, FacebookDisplayTypeHelper::DISPLAY_TYPE_POPUP);
+
+        $expectedUrl = 'https://www.facebook.com/v1337/dialog/oauth?';
+        $this->assertTrue(strpos($loginUrl, $expectedUrl) === 0, 'Unexpected base login URL returned from getLoginUrl().');
+
+        $params = [
+            'client_id' => '123',
+            'redirect_uri' => self::REDIRECT_URL,
+            'state' => $this->persistentDataHandler->get('state'),
+            'sdk' => 'php-sdk-' . Facebook::VERSION,
+            'scope' => implode(',', $scope),
+            'display' => 'popup',
+        ];
+        foreach ($params as $key => $value) {
+            $this->assertContains($key . '=' . urlencode($value), $loginUrl);
+        }
+    }
+
+    public function testLoginURLWithInvalidDisplayType()
+    {
+        $scope = ['foo', 'bar'];
+        $separator = '&';
+        $this->setExpectedException(FacebookLoginUnknownDisplayTypeException::class, 'Unknown display type \'invalid\'.');
+        $this->redirectLoginHelper->getLoginUrl(self::REDIRECT_URL, $scope, $separator, 'invalid');
     }
 
     public function testLogoutURL()
