@@ -3,7 +3,7 @@ Contributing
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/facebook/facebook-php-sdk-v4).
+We accept contributions via Pull Requests on [Github](https://github.com/facebook/php-graph-sdk/pull/new).
 
 ## Code of Conduct
 The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
