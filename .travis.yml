@@ -31,12 +31,10 @@ before_install:
   - travis_retry composer self-update
 
 install:
-  - travis_retry composer require --dev --no-update squizlabs/php_codesniffer
   - if [ "$deps" != low ]; then travis_retry composer update --no-interaction --prefer-dist; fi;
   - if [ "$deps" == low ]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest; fi;
 
 script:
-  - vendor/bin/phpcs
   - vendor/bin/phpunit --coverage-clover=coverage.clover --exclude-group integration
 
 after_script:
