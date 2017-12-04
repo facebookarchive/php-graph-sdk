@@ -19,17 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Authentication;
 
 use Facebook\Exception\SDKException;
 
 /**
- *
  * Represents metadata from an access token.
  *
  * @package Facebook
+ *
  * @see     https://developers.facebook.com/docs/graph-api/reference/debug_token
  */
 class AccessTokenMetadata
@@ -67,8 +66,8 @@ class AccessTokenMetadata
     /**
      * Returns a value from the metadata.
      *
-     * @param string $field   The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $field   the property to retrieve
+     * @param mixed  $default the default to return if the property doesn't exist
      *
      * @return mixed
      */
@@ -84,12 +83,13 @@ class AccessTokenMetadata
     /**
      * Returns a value from the metadata.
      *
-     * @param string $field   The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $field   the property to retrieve
+     * @param mixed  $default the default to return if the property doesn't exist
      *
      * @return mixed
      *
      * @deprecated 5.0.0 getProperty() has been renamed to getField()
+     *
      * @todo v6: Remove this method
      */
     public function getProperty($field, $default = null)
@@ -100,9 +100,9 @@ class AccessTokenMetadata
     /**
      * Returns a value from a child property in the metadata.
      *
-     * @param string $parentField The parent property.
-     * @param string $field       The property to retrieve.
-     * @param mixed  $default     The default to return if the property doesn't exist.
+     * @param string $parentField the parent property
+     * @param string $field       the property to retrieve
+     * @param mixed  $default     the default to return if the property doesn't exist
      *
      * @return mixed
      */
@@ -122,8 +122,8 @@ class AccessTokenMetadata
     /**
      * Returns a value from the error metadata.
      *
-     * @param string $field   The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $field   the property to retrieve
+     * @param mixed  $default the default to return if the property doesn't exist
      *
      * @return mixed
      */
@@ -133,10 +133,10 @@ class AccessTokenMetadata
     }
 
     /**
-     * Returns a value from the "metadata" metadata. *Brain explodes*
+     * Returns a value from the "metadata" metadata. *Brain explodes*.
      *
-     * @param string $field   The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $field   the property to retrieve
+     * @param mixed  $default the default to return if the property doesn't exist
      *
      * @return mixed
      */
@@ -148,7 +148,7 @@ class AccessTokenMetadata
     /**
      * The ID of the application this access token is for.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAppId()
     {
@@ -158,7 +158,7 @@ class AccessTokenMetadata
     /**
      * Name of the application this access token is for.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getApplication()
     {
@@ -169,7 +169,7 @@ class AccessTokenMetadata
      * Any error that a request to the graph api
      * would return due to the access token.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function isError()
     {
@@ -179,7 +179,7 @@ class AccessTokenMetadata
     /**
      * The error code for the error.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getErrorCode()
     {
@@ -189,7 +189,7 @@ class AccessTokenMetadata
     /**
      * The error message for the error.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getErrorMessage()
     {
@@ -199,7 +199,7 @@ class AccessTokenMetadata
     /**
      * The error subcode for the error.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getErrorSubcode()
     {
@@ -209,7 +209,7 @@ class AccessTokenMetadata
     /**
      * DateTime when this access token expires.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getExpiresAt()
     {
@@ -219,7 +219,7 @@ class AccessTokenMetadata
     /**
      * Whether the access token is still valid or not.
      *
-     * @return boolean|null
+     * @return null|bool
      */
     public function getIsValid()
     {
@@ -234,7 +234,7 @@ class AccessTokenMetadata
      *
      * @see https://developers.facebook.com/docs/facebook-login/access-tokens#debug
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getIssuedAt()
     {
@@ -245,7 +245,7 @@ class AccessTokenMetadata
      * General metadata associated with the access token.
      * Can contain data like 'sso', 'auth_type', 'auth_nonce'.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getMetadata()
     {
@@ -255,7 +255,7 @@ class AccessTokenMetadata
     /**
      * The 'sso' child property from the 'metadata' parent property.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSso()
     {
@@ -265,7 +265,7 @@ class AccessTokenMetadata
     /**
      * The 'auth_type' child property from the 'metadata' parent property.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAuthType()
     {
@@ -275,7 +275,7 @@ class AccessTokenMetadata
     /**
      * The 'auth_nonce' child property from the 'metadata' parent property.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAuthNonce()
     {
@@ -286,7 +286,7 @@ class AccessTokenMetadata
      * For impersonated access tokens, the ID of
      * the page this token contains.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getProfileId()
     {
@@ -307,7 +307,7 @@ class AccessTokenMetadata
     /**
      * The ID of the user this access token is for.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getUserId()
     {

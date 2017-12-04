@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -29,7 +28,6 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
 
 /**
- *
  * @package Facebook
  */
 class Client
@@ -70,25 +68,25 @@ class Client
     const DEFAULT_VIDEO_UPLOAD_REQUEST_TIMEOUT = 7200;
 
     /**
-     * @var bool Toggle to use Graph beta url.
+     * @var bool toggle to use Graph beta url
      */
     protected $enableBetaMode = false;
 
     /**
-     * @var HttpClient HTTP client handler.
+     * @var httpClient HTTP client handler
      */
     protected $httpClient;
 
     /**
-     * @var int The number of calls that have been made to Graph.
+     * @var int the number of calls that have been made to Graph
      */
     public static $requestCount = 0;
 
     /**
      * Instantiates a new FacebookClient object.
      *
-     * @param HttpClient|null $httpClient
-     * @param boolean         $enableBeta
+     * @param null|HttpClient $httpClient
+     * @param bool            $enableBeta
      */
     public function __construct(HttpClient $httpClient = null, $enableBeta = false)
     {
@@ -119,7 +117,7 @@ class Client
     /**
      * Toggle beta mode.
      *
-     * @param boolean $betaMode
+     * @param bool $betaMode
      */
     public function enableBetaMode($betaMode = true)
     {
@@ -129,7 +127,7 @@ class Client
     /**
      * Returns the base Graph URL.
      *
-     * @param boolean $postToVideoUrl Post to the video API if videos are being uploaded.
+     * @param bool $postToVideoUrl post to the video API if videos are being uploaded
      *
      * @return string
      */
@@ -180,9 +178,9 @@ class Client
      *
      * @param Request $request
      *
-     * @return Response
-     *
      * @throws SDKException
+     *
+     * @return Response
      */
     public function sendRequest(Request $request)
     {
@@ -223,9 +221,9 @@ class Client
      *
      * @param BatchRequest $request
      *
-     * @return BatchResponse
-     *
      * @throws SDKException
+     *
+     * @return BatchResponse
      */
     public function sendBatchRequest(BatchRequest $request)
     {

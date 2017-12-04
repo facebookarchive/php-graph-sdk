@@ -19,17 +19,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\FileUpload;
 
 /**
- * Provides mappings of file extensions to mimetypes
+ * Provides mappings of file extensions to mimetypes.
  *
  * Taken from Guzzle
  *
  * @see https://github.com/guzzle/guzzle/blob/master/src/Mimetypes.php
- *
  * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
  */
 class Mimetypes
@@ -946,7 +944,7 @@ class Mimetypes
     ];
 
     /**
-     * Get a singleton instance of the class
+     * Get a singleton instance of the class.
      *
      * @return self
      * @codeCoverageIgnore
@@ -961,11 +959,11 @@ class Mimetypes
     }
 
     /**
-     * Get a mimetype value from a file extension
+     * Get a mimetype value from a file extension.
      *
      * @param string $extension File extension
      *
-     * @return string|null
+     * @return null|string
      */
     public function fromExtension($extension)
     {
@@ -975,11 +973,11 @@ class Mimetypes
     }
 
     /**
-     * Get a mimetype from a filename
+     * Get a mimetype from a filename.
      *
      * @param string $filename Filename to generate a mimetype from
      *
-     * @return string|null
+     * @return null|string
      */
     public function fromFilename($filename)
     {

@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\Url;
 
@@ -30,6 +29,9 @@ class UrlManipulatorTest extends TestCase
 {
     /**
      * @dataProvider provideUris
+     *
+     * @param mixed $dirtyUrl
+     * @param mixed $expectedCleanUrl
      */
     public function testParamsGetRemovedFromAUrl($dirtyUrl, $expectedCleanUrl)
     {
@@ -155,6 +157,10 @@ class UrlManipulatorTest extends TestCase
 
     /**
      * @dataProvider provideMergableEndpoints
+     *
+     * @param mixed $urlOne
+     * @param mixed $urlTwo
+     * @param mixed $expected
      */
     public function testParamsCanBeMergedOntoUrlProperly($urlOne, $urlTwo, $expected)
     {

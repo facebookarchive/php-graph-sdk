@@ -1,5 +1,6 @@
 <?php
-$config = PhpCsFixer\Config::create()
+
+return PhpCsFixer\Config::create()
     ->setRiskyAllowed(false)
     ->setRules([
         '@Symfony' => false,
@@ -26,9 +27,4 @@ $config = PhpCsFixer\Config::create()
         'no_empty_comment' => true,
         'no_trailing_whitespace_in_comment' => true,
     ])
-    ->setFinder(
-        PhpCsFixer\Finder::create()
-            ->in(__DIR__.'/src')
-    )
 ;
-return $config;

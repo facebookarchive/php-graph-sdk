@@ -19,13 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
- * Modified version of Collection in "illuminate/support" by Taylor Otwell
+ * Modified version of Collection in "illuminate/support" by Taylor Otwell.
  *
  * @package Facebook
  */
@@ -57,8 +55,8 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Gets the value of a field from the Graph node.
      *
-     * @param string $name    The field to retrieve.
-     * @param mixed  $default The default to return if the field doesn't exist.
+     * @param string $name    the field to retrieve
+     * @param mixed  $default the default to return if the field doesn't exist
      *
      * @return mixed
      */
@@ -74,12 +72,13 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Gets the value of the named property for this graph object.
      *
-     * @param string $name    The property to retrieve.
-     * @param mixed  $default The default to return if the property doesn't exist.
+     * @param string $name    the property to retrieve
+     * @param mixed  $default the default to return if the property doesn't exist
      *
      * @return mixed
      *
      * @deprecated 5.0.0 getProperty() has been renamed to getField()
+     *
      * @todo v6: Remove this method
      */
     public function getProperty($name, $default = null)
@@ -103,6 +102,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
      * @return array
      *
      * @deprecated 5.0.0 getPropertyNames() has been renamed to getFieldNames()
+     *
      * @todo v6: Remove this method
      */
     public function getPropertyNames()

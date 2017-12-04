@@ -19,20 +19,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\FileUpload;
 
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class File
 {
     /**
-     * @var string The path to the file on the system.
+     * @var string the path to the file on the system
      */
     protected $path;
 
@@ -47,7 +45,7 @@ class File
     private $offset;
 
     /**
-     * @var resource The stream pointing to the file.
+     * @var resource the stream pointing to the file
      */
     protected $stream;
 
@@ -55,8 +53,8 @@ class File
      * Creates a new FacebookFile entity.
      *
      * @param string $filePath
-     * @param int $maxLength
-     * @param int $offset
+     * @param int    $maxLength
+     * @param int    $offset
      *
      * @throws SDKException
      */
@@ -159,7 +157,7 @@ class File
      *
      * @param string $pathToFile
      *
-     * @return boolean
+     * @return bool
      */
     protected function isRemoteFile($pathToFile)
     {

@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Authentication;
 
@@ -32,7 +31,6 @@ use Facebook\Exception\ResponseException;
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class OAuth2Client
@@ -66,14 +64,14 @@ class OAuth2Client
     /**
      * The last request sent to Graph.
      *
-     * @var Request|null
+     * @var null|Request
      */
     protected $lastRequest;
 
     /**
-     * @param Application    $app
-     * @param Client $client
-     * @param string         $graphVersion The version of the Graph API to use.
+     * @param Application $app
+     * @param Client      $client
+     * @param string      $graphVersion the version of the Graph API to use
      */
     public function __construct(Application $app, Client $client, $graphVersion)
     {
@@ -86,7 +84,7 @@ class OAuth2Client
      * Returns the last FacebookRequest that was sent.
      * Useful for debugging and testing.
      *
-     * @return Request|null
+     * @return null|Request
      */
     public function getLastRequest()
     {
@@ -96,7 +94,7 @@ class OAuth2Client
     /**
      * Get the metadata associated with the access token.
      *
-     * @param AccessToken|string $accessToken The access token to debug.
+     * @param AccessToken|string $accessToken the access token to debug
      *
      * @return AccessTokenMetadata
      */
@@ -151,9 +149,9 @@ class OAuth2Client
      * @param string $code
      * @param string $redirectUri
      *
-     * @return AccessToken
-     *
      * @throws SDKException
+     *
+     * @return AccessToken
      */
     public function getAccessTokenFromCode($code, $redirectUri = '')
     {
@@ -170,9 +168,9 @@ class OAuth2Client
      *
      * @param AccessToken|string $accessToken
      *
-     * @return AccessToken
-     *
      * @throws SDKException
+     *
+     * @return AccessToken
      */
     public function getLongLivedAccessToken($accessToken)
     {
@@ -191,9 +189,9 @@ class OAuth2Client
      * @param AccessToken|string $accessToken
      * @param string             $redirectUri
      *
-     * @return AccessToken
-     *
      * @throws SDKException
+     *
+     * @return AccessToken
      */
     public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
     {
@@ -216,9 +214,9 @@ class OAuth2Client
      *
      * @param array $params
      *
-     * @return AccessToken
-     *
      * @throws SDKException
+     *
+     * @return AccessToken
      */
     protected function requestAnAccessToken(array $params)
     {
@@ -251,11 +249,11 @@ class OAuth2Client
      *
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     *
-     * @return Response
+     * @param null|AccessToken|string $accessToken
      *
      * @throws ResponseException
+     *
+     * @return Response
      */
     protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
     {

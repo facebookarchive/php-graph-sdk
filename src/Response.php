@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -28,48 +27,47 @@ use Facebook\Exception\ResponseException;
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class Response
 {
     /**
-     * @var int The HTTP status code response from Graph.
+     * @var int the HTTP status code response from Graph
      */
     protected $httpStatusCode;
 
     /**
-     * @var array The headers returned from Graph.
+     * @var array the headers returned from Graph
      */
     protected $headers;
 
     /**
-     * @var string The raw body of the response from Graph.
+     * @var string the raw body of the response from Graph
      */
     protected $body;
 
     /**
-     * @var array The decoded body of the Graph response.
+     * @var array the decoded body of the Graph response
      */
     protected $decodedBody = [];
 
     /**
-     * @var Request The original request that returned this response.
+     * @var Request the original request that returned this response
      */
     protected $request;
 
     /**
-     * @var SDKException The exception thrown by this request.
+     * @var SDKException the exception thrown by this request
      */
     protected $thrownException;
 
     /**
      * Creates a new Response entity.
      *
-     * @param Request $request
-     * @param string|null     $body
-     * @param int|null        $httpStatusCode
-     * @param array|null      $headers
+     * @param Request     $request
+     * @param null|string $body
+     * @param null|int    $httpStatusCode
+     * @param null|array  $headers
      */
     public function __construct(Request $request, $body = null, $httpStatusCode = null, array $headers = [])
     {
@@ -104,7 +102,7 @@ class Response
     /**
      * Return the access token that was used for this response.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAccessToken()
     {
@@ -154,7 +152,7 @@ class Response
     /**
      * Get the app secret proof that was used for this response.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAppSecretProof()
     {
@@ -164,7 +162,7 @@ class Response
     /**
      * Get the ETag associated with the response.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getETag()
     {
@@ -174,7 +172,7 @@ class Response
     /**
      * Get the version of Graph that returned this response.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getGraphVersion()
     {
@@ -184,7 +182,7 @@ class Response
     /**
      * Returns true if Graph returned an error message.
      *
-     * @return boolean
+     * @return bool
      */
     public function isError()
     {
@@ -212,7 +210,7 @@ class Response
     /**
      * Returns the exception that was thrown for this request.
      *
-     * @return ResponseException|null
+     * @return null|ResponseException
      */
     public function getThrownException()
     {
@@ -258,13 +256,14 @@ class Response
     /**
      * Instantiate a new GraphObject from response.
      *
-     * @param string|null $subclassName The GraphNode subclass to cast to.
-     *
-     * @return \Facebook\GraphNode\GraphObject
+     * @param null|string $subclassName the GraphNode subclass to cast to
      *
      * @throws SDKException
      *
+     * @return \Facebook\GraphNode\GraphObject
+     *
      * @deprecated 5.0.0 getGraphObject() has been renamed to getGraphNode()
+     *
      * @todo v6: Remove this method
      */
     public function getGraphObject($subclassName = null)
@@ -275,11 +274,11 @@ class Response
     /**
      * Instantiate a new GraphNode from response.
      *
-     * @param string|null $subclassName The GraphNode subclass to cast to.
-     *
-     * @return \Facebook\GraphNode\GraphNode
+     * @param null|string $subclassName the GraphNode subclass to cast to
      *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphNode
      */
     public function getGraphNode($subclassName = null)
     {
@@ -291,9 +290,9 @@ class Response
     /**
      * Convenience method for creating a GraphAlbum collection.
      *
-     * @return \Facebook\GraphNode\GraphAlbum
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphAlbum
      */
     public function getGraphAlbum()
     {
@@ -305,9 +304,9 @@ class Response
     /**
      * Convenience method for creating a GraphPage collection.
      *
-     * @return \Facebook\GraphNode\GraphPage
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphPage
      */
     public function getGraphPage()
     {
@@ -319,9 +318,9 @@ class Response
     /**
      * Convenience method for creating a GraphSessionInfo collection.
      *
-     * @return \Facebook\GraphNode\GraphSessionInfo
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphSessionInfo
      */
     public function getGraphSessionInfo()
     {
@@ -333,9 +332,9 @@ class Response
     /**
      * Convenience method for creating a GraphUser collection.
      *
-     * @return \Facebook\GraphNode\GraphUser
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphUser
      */
     public function getGraphUser()
     {
@@ -347,9 +346,9 @@ class Response
     /**
      * Convenience method for creating a GraphEvent collection.
      *
-     * @return \Facebook\GraphNode\GraphEvent
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphEvent
      */
     public function getGraphEvent()
     {
@@ -361,9 +360,9 @@ class Response
     /**
      * Convenience method for creating a GraphGroup collection.
      *
-     * @return \Facebook\GraphNode\GraphGroup
-     *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphGroup
      */
     public function getGraphGroup()
     {
@@ -375,14 +374,15 @@ class Response
     /**
      * Instantiate a new GraphList from response.
      *
-     * @param string|null $subclassName The GraphNode subclass to cast list items to.
-     * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
-     *
-     * @return \Facebook\GraphNode\GraphList
+     * @param null|string $subclassName the GraphNode subclass to cast list items to
+     * @param bool        $auto_prefix  toggle to auto-prefix the subclass name
      *
      * @throws SDKException
      *
+     * @return \Facebook\GraphNode\GraphList
+     *
      * @deprecated 5.0.0 getGraphList() has been renamed to getGraphEdge()
+     *
      * @todo v6: Remove this method
      */
     public function getGraphList($subclassName = null, $auto_prefix = true)
@@ -393,12 +393,12 @@ class Response
     /**
      * Instantiate a new GraphEdge from response.
      *
-     * @param string|null $subclassName The GraphNode subclass to cast list items to.
-     * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
-     *
-     * @return \Facebook\GraphNode\GraphEdge
+     * @param null|string $subclassName the GraphNode subclass to cast list items to
+     * @param bool        $auto_prefix  toggle to auto-prefix the subclass name
      *
      * @throws SDKException
+     *
+     * @return \Facebook\GraphNode\GraphEdge
      */
     public function getGraphEdge($subclassName = null, $auto_prefix = true)
     {

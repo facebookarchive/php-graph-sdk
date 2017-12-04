@@ -19,18 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 class GraphUser extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array maps object key names to Graph object types
      */
     protected static $graphObjectMap = [
         'hometown' => GraphPage::class,
@@ -42,7 +40,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the ID for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -52,7 +50,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the name for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName()
     {
@@ -62,7 +60,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the first name for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getFirstName()
     {
@@ -72,7 +70,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the middle name for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getMiddleName()
     {
@@ -82,7 +80,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the last name for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLastName()
     {
@@ -92,7 +90,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the email for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getEmail()
     {
@@ -102,7 +100,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the gender for the user as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getGender()
     {
@@ -112,7 +110,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the Facebook URL for the user as a string if available.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLink()
     {
@@ -122,7 +120,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the users birthday, if available.
      *
-     * @return Birthday|null
+     * @return null|Birthday
      */
     public function getBirthday()
     {
@@ -132,7 +130,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the current location of the user as a GraphPage.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getLocation()
     {
@@ -142,7 +140,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the current location of the user as a GraphPage.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getHometown()
     {
@@ -152,7 +150,7 @@ class GraphUser extends GraphNode
     /**
      * Returns the current location of the user as a GraphUser.
      *
-     * @return GraphUser|null
+     * @return null|GraphUser
      */
     public function getSignificantOther()
     {
@@ -160,9 +158,9 @@ class GraphUser extends GraphNode
     }
 
     /**
-     * Returns the picture of the user as a GraphPicture
+     * Returns the picture of the user as a GraphPicture.
      *
-     * @return GraphPicture|null
+     * @return null|GraphPicture
      */
     public function getPicture()
     {

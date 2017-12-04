@@ -19,18 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 class GraphGroup extends GraphNode
 {
     /**
-     * @var array Maps object key names to GraphNode types.
+     * @var array maps object key names to GraphNode types
      */
     protected static $graphObjectMap = [
         'cover' => GraphCoverPhoto::class,
@@ -40,7 +38,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `id` (The Group ID) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -50,7 +48,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `cover` (The cover photo of the Group) as GraphCoverPhoto if present.
      *
-     * @return GraphCoverPhoto|null
+     * @return null|GraphCoverPhoto
      */
     public function getCover()
     {
@@ -60,7 +58,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `description` (A brief description of the Group) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -70,7 +68,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `email` (The email address to upload content to the Group. Only current members of the Group can use this) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getEmail()
     {
@@ -80,7 +78,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `icon` (The URL for the Group's icon) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getIcon()
     {
@@ -90,7 +88,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `link` (The Group's website) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLink()
     {
@@ -100,7 +98,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `name` (The name of the Group) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName()
     {
@@ -110,7 +108,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `member_request_count` (Number of people asking to join the group.) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getMemberRequestCount()
     {
@@ -120,7 +118,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `owner` (The profile that created this Group) as GraphNode if present.
      *
-     * @return GraphNode|null
+     * @return null|GraphNode
      */
     public function getOwner()
     {
@@ -130,7 +128,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `parent` (The parent Group of this Group, if it exists) as GraphNode if present.
      *
-     * @return GraphNode|null
+     * @return null|GraphNode
      */
     public function getParent()
     {
@@ -140,7 +138,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `privacy` (The privacy setting of the Group) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPrivacy()
     {
@@ -150,7 +148,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `updated_time` (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) as \DateTime if present.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getUpdatedTime()
     {
@@ -160,7 +158,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `venue` (The location for the Group) as GraphLocation if present.
      *
-     * @return GraphLocation|null
+     * @return null|GraphLocation
      */
     public function getVenue()
     {

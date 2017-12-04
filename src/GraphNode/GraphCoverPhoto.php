@@ -19,20 +19,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 class GraphCoverPhoto extends GraphNode
 {
     /**
-     * Returns the id of cover if it exists
+     * Returns the id of cover if it exists.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getId()
     {
@@ -40,9 +38,9 @@ class GraphCoverPhoto extends GraphNode
     }
     
     /**
-     * Returns the source of cover if it exists
+     * Returns the source of cover if it exists.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSource()
     {
@@ -50,9 +48,9 @@ class GraphCoverPhoto extends GraphNode
     }
 
     /**
-     * Returns the offset_x of cover if it exists
+     * Returns the offset_x of cover if it exists.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getOffsetX()
     {
@@ -60,9 +58,9 @@ class GraphCoverPhoto extends GraphNode
     }
 
     /**
-     * Returns the offset_y of cover if it exists
+     * Returns the offset_y of cover if it exists.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getOffsetY()
     {

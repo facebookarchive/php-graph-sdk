@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\FileUpload;
 
@@ -32,7 +31,6 @@ use Facebook\Client;
 use Facebook\Request;
 
 /**
- *
  * @package Facebook
  */
 class ResumableUploader
@@ -48,19 +46,19 @@ class ResumableUploader
     protected $accessToken;
 
     /**
-     * @var Client The Facebook client service.
+     * @var Client the Facebook client service
      */
     protected $client;
 
     /**
-     * @var string Graph version to use for this request.
+     * @var string graph version to use for this request
      */
     protected $graphVersion;
 
     /**
      * @param Application             $app
-     * @param Client          $client
-     * @param AccessToken|string|null $accessToken
+     * @param Client                  $client
+     * @param null|AccessToken|string $accessToken
      * @param string                  $graphVersion
      */
     public function __construct(Application $app, Client $client, $accessToken, $graphVersion)
@@ -72,14 +70,14 @@ class ResumableUploader
     }
 
     /**
-     * Upload by chunks - start phase
+     * Upload by chunks - start phase.
      *
      * @param string $endpoint
-     * @param File $file
-     *
-     * @return TransferChunk
+     * @param File   $file
      *
      * @throws SDKException
+     *
+     * @return TransferChunk
      */
     public function start($endpoint, File $file)
     {
@@ -93,15 +91,15 @@ class ResumableUploader
     }
 
     /**
-     * Upload by chunks - transfer phase
+     * Upload by chunks - transfer phase.
      *
-     * @param string $endpoint
+     * @param string        $endpoint
      * @param TransferChunk $chunk
-     * @param boolean $allowToThrow
-     *
-     * @return TransferChunk
+     * @param bool          $allowToThrow
      *
      * @throws ResponseException
+     *
+     * @return TransferChunk
      */
     public function transfer($endpoint, TransferChunk $chunk, $allowToThrow = false)
     {
@@ -128,15 +126,15 @@ class ResumableUploader
     }
 
     /**
-     * Upload by chunks - finish phase
+     * Upload by chunks - finish phase.
      *
      * @param string $endpoint
      * @param string $uploadSessionId
-     * @param array $metadata The metadata associated with the file.
-     *
-     * @return boolean
+     * @param array  $metadata        the metadata associated with the file
      *
      * @throws SDKException
+     *
+     * @return bool
      */
     public function finish($endpoint, $uploadSessionId, $metadata = [])
     {
@@ -152,8 +150,8 @@ class ResumableUploader
     /**
      * Helper to make a FacebookRequest and send it.
      *
-     * @param string $endpoint The endpoint to POST to.
-     * @param array $params The params to send with the request.
+     * @param string $endpoint the endpoint to POST to
+     * @param array  $params   the params to send with the request
      *
      * @return array
      */

@@ -19,20 +19,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 class GraphLocation extends GraphNode
 {
     /**
-     * Returns the street component of the location
+     * Returns the street component of the location.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getStreet()
     {
@@ -40,9 +38,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the city component of the location
+     * Returns the city component of the location.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCity()
     {
@@ -50,9 +48,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the state component of the location
+     * Returns the state component of the location.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getState()
     {
@@ -60,9 +58,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the country component of the location
+     * Returns the country component of the location.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCountry()
     {
@@ -70,9 +68,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the zipcode component of the location
+     * Returns the zipcode component of the location.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getZip()
     {
@@ -80,9 +78,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the latitude component of the location
+     * Returns the latitude component of the location.
      *
-     * @return float|null
+     * @return null|float
      */
     public function getLatitude()
     {
@@ -90,9 +88,9 @@ class GraphLocation extends GraphNode
     }
 
     /**
-     * Returns the street component of the location
+     * Returns the street component of the location.
      *
-     * @return float|null
+     * @return null|float
      */
     public function getLongitude()
     {

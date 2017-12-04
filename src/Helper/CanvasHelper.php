@@ -19,12 +19,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Helper;
 
 /**
- *
  * @package Facebook
  */
 class CanvasHelper extends SignedRequestFromInputHelper
@@ -32,7 +30,7 @@ class CanvasHelper extends SignedRequestFromInputHelper
     /**
      * Returns the app data value.
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function getAppData()
     {
@@ -42,7 +40,7 @@ class CanvasHelper extends SignedRequestFromInputHelper
     /**
      * Get raw signed request from POST.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRawSignedRequest()
     {

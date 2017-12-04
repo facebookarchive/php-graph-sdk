@@ -19,27 +19,25 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\PersistentData;
 
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class SessionPersistentDataHandler implements PersistentDataInterface
 {
     /**
-     * @var string Prefix to use for session variables.
+     * @var string prefix to use for session variables
      */
     protected $sessionPrefix = 'FBRLH_';
 
     /**
      * Init the session handler.
      *
-     * @param boolean $enableSessionCheck
+     * @param bool $enableSessionCheck
      *
      * @throws SDKException
      */
@@ -54,7 +52,7 @@ class SessionPersistentDataHandler implements PersistentDataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($key)
     {
@@ -66,7 +64,7 @@ class SessionPersistentDataHandler implements PersistentDataInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function set($key, $value)
     {

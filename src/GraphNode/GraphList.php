@@ -19,15 +19,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  *
  * @deprecated 5.0.0 GraphList has been renamed to GraphEdge
+ *
  * @todo v6: Remove this class
  */
 class GraphList extends GraphEdge

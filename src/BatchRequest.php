@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -30,28 +29,27 @@ use Facebook\Authentication\AccessToken;
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
 {
     /**
-     * @var array An array of FacebookRequest entities to send.
+     * @var array an array of FacebookRequest entities to send
      */
     protected $requests = [];
 
     /**
-     * @var array An array of files to upload.
+     * @var array an array of files to upload
      */
     protected $attachedFiles = [];
 
     /**
      * Creates a new Request entity.
      *
-     * @param Application|null        $app
+     * @param null|Application        $app
      * @param array                   $requests
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $graphVersion
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $graphVersion
      */
     public function __construct(Application $app = null, array $requests = [], $accessToken = null, $graphVersion = null)
     {
@@ -70,6 +68,8 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      * @return BatchRequest
      *
      * @throws \InvalidArgumentException
+     *
+     * @return BatchRequest
      */
     public function add($request, $options = null)
     {
@@ -143,9 +143,9 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @param Request $request
      *
-     * @return string|null
-     *
      * @throws SDKException
+     *
+     * @return null|string
      */
     public function extractFileAttachments(Request $request)
     {
@@ -288,7 +288,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -296,7 +296,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
@@ -304,7 +304,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetUnset($offset)
     {
@@ -312,7 +312,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetGet($offset)
     {

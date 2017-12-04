@@ -19,33 +19,31 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Exception;
 
 use Facebook\Response;
 
 /**
- *
  * @package Facebook
  */
 class ResponseException extends SDKException
 {
     /**
-     * @var Response The response that threw the exception.
+     * @var Response the response that threw the exception
      */
     protected $response;
 
     /**
-     * @var array Decoded response.
+     * @var array decoded response
      */
     protected $responseData;
 
     /**
      * Creates a FacebookResponseException.
      *
-     * @param Response     $response          The response that threw the exception.
-     * @param SDKException $previousException The more detailed exception.
+     * @param Response     $response          the response that threw the exception
+     * @param SDKException $previousException the more detailed exception
      */
     public function __construct(Response $response, SDKException $previousException = null)
     {
@@ -61,7 +59,7 @@ class ResponseException extends SDKException
     /**
      * A factory for creating the appropriate exception based on the response from Graph.
      *
-     * @param Response $response The response that threw the exception.
+     * @param Response $response the response that threw the exception
      *
      * @return ResponseException
      */
@@ -154,7 +152,7 @@ class ResponseException extends SDKException
     }
 
     /**
-     * Returns the HTTP status code
+     * Returns the HTTP status code.
      *
      * @return int
      */
@@ -164,7 +162,7 @@ class ResponseException extends SDKException
     }
 
     /**
-     * Returns the sub-error code
+     * Returns the sub-error code.
      *
      * @return int
      */
@@ -174,7 +172,7 @@ class ResponseException extends SDKException
     }
 
     /**
-     * Returns the error type
+     * Returns the error type.
      *
      * @return string
      */

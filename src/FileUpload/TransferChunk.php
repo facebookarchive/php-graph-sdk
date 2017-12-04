@@ -19,47 +19,45 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\FileUpload;
 
 /**
- *
  * @package Facebook
  */
 class TransferChunk
 {
     /**
-     * @var File The file to chunk during upload.
+     * @var File the file to chunk during upload
      */
     private $file;
 
     /**
-     * @var int The ID of the upload session.
+     * @var int the ID of the upload session
      */
     private $uploadSessionId;
 
     /**
-     * @var int Start byte position of the next file chunk.
+     * @var int start byte position of the next file chunk
      */
     private $startOffset;
 
     /**
-     * @var int End byte position of the next file chunk.
+     * @var int end byte position of the next file chunk
      */
     private $endOffset;
 
     /**
-     * @var int The ID of the video.
+     * @var int the ID of the video
      */
     private $videoId;
 
     /**
      * @param File $file
-     * @param int $uploadSessionId
-     * @param int $videoId
-     * @param int $startOffset
-     * @param int $endOffset
+     * @param int  $uploadSessionId
+     * @param int  $videoId
+     * @param int  $startOffset
+     * @param int  $endOffset
      */
     public function __construct(File $file, $uploadSessionId, $videoId, $startOffset, $endOffset)
     {
@@ -93,7 +91,7 @@ class TransferChunk
     }
 
     /**
-     * Return upload session Id
+     * Return upload session Id.
      *
      * @return int
      */
@@ -103,7 +101,7 @@ class TransferChunk
     }
 
     /**
-     * Check whether is the last chunk
+     * Check whether is the last chunk.
      *
      * @return bool
      */
@@ -121,7 +119,7 @@ class TransferChunk
     }
 
     /**
-     * Get uploaded video Id
+     * Get uploaded video Id.
      *
      * @return int
      */

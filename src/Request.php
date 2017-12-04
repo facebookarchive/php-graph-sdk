@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -32,67 +31,67 @@ use Facebook\Http\RequestBodyUrlEncoded;
 use Facebook\Exception\SDKException;
 
 /**
- * Class Request
+ * Class Request.
  *
  * @package Facebook
  */
 class Request
 {
     /**
-     * @var Application The Facebook app entity.
+     * @var Application the Facebook app entity
      */
     protected $app;
 
     /**
-     * @var string|null The access token to use for this request.
+     * @var null|string the access token to use for this request
      */
     protected $accessToken;
 
     /**
-     * @var string The HTTP method for this request.
+     * @var string the HTTP method for this request
      */
     protected $method;
 
     /**
-     * @var string The Graph endpoint for this request.
+     * @var string the Graph endpoint for this request
      */
     protected $endpoint;
 
     /**
-     * @var array The headers to send with this request.
+     * @var array the headers to send with this request
      */
     protected $headers = [];
 
     /**
-     * @var array The parameters to send with this request.
+     * @var array the parameters to send with this request
      */
     protected $params = [];
 
     /**
-     * @var array The files to send with this request.
+     * @var array the files to send with this request
      */
     protected $files = [];
 
     /**
-     * @var string ETag to send with this request.
+     * @var string ETag to send with this request
      */
     protected $eTag;
 
     /**
-     * @var string Graph version to use for this request.
+     * @var string graph version to use for this request
      */
     protected $graphVersion;
 
     /**
      * Creates a new Request entity.
      *
-     * @param Application|null        $app
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $method
-     * @param string|null             $endpoint
-     * @param array|null              $params
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
+     * @param null|Application        $app
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $method
+     * @param null|string             $endpoint
+     * @param null|array              $params
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      */
     public function __construct(Application $app = null, $accessToken = null, $method = null, $endpoint = null, array $params = [], $eTag = null, $graphVersion = null)
     {
@@ -108,7 +107,8 @@ class Request
     /**
      * Set the access token for this request.
      *
-     * @param AccessToken|string|null
+     * @param null|AccessToken|string
+     * @param mixed $accessToken
      *
      * @return Request
      */
@@ -125,11 +125,11 @@ class Request
     /**
      * Sets the access token with one harvested from a URL or POST params.
      *
-     * @param string $accessToken The access token.
-     *
-     * @return Request
+     * @param string $accessToken the access token
      *
      * @throws SDKException
+     *
+     * @return Request
      */
     public function setAccessTokenFromParams($accessToken)
     {
@@ -146,7 +146,7 @@ class Request
     /**
      * Return the access token for this request.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAccessToken()
     {
@@ -156,7 +156,7 @@ class Request
     /**
      * Return the access token for this request as an AccessToken entity.
      *
-     * @return AccessToken|null
+     * @return null|AccessToken
      */
     public function getAccessTokenEntity()
     {
@@ -166,7 +166,7 @@ class Request
     /**
      * Set the FacebookApp entity used for this request.
      *
-     * @param Application|null $app
+     * @param null|Application $app
      */
     public function setApp(Application $app = null)
     {
@@ -186,7 +186,7 @@ class Request
     /**
      * Generate an app secret proof to sign this request.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAppSecretProof()
     {
@@ -214,6 +214,7 @@ class Request
      * Set the HTTP method for this request.
      *
      * @param string
+     * @param mixed $method
      */
     public function setMethod($method)
     {
@@ -250,10 +251,11 @@ class Request
      * Set the endpoint for this request.
      *
      * @param string
-     *
-     * @return Request
+     * @param mixed $endpoint
      *
      * @throws SDKException
+     *
+     * @return Request
      */
     public function setEndpoint($endpoint)
     {
@@ -322,9 +324,9 @@ class Request
      *
      * @param array $params
      *
-     * @return Request
-     *
      * @throws SDKException
+     *
+     * @return Request
      */
     public function setParams(array $params = [])
     {
@@ -379,8 +381,8 @@ class Request
     /**
      * Add a file to be uploaded.
      *
-     * @param string       $key
-     * @param File $file
+     * @param string $key
+     * @param File   $file
      */
     public function addFile($key, File $file)
     {
@@ -408,7 +410,7 @@ class Request
     /**
      * Let's us know if there is a file upload with this request.
      *
-     * @return boolean
+     * @return bool
      */
     public function containsFileUploads()
     {
@@ -418,7 +420,7 @@ class Request
     /**
      * Let's us know if there is a video upload with this request.
      *
-     * @return boolean
+     * @return bool
      */
     public function containsVideoUploads()
     {
@@ -490,7 +492,7 @@ class Request
     /**
      * The graph version used for this request.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getGraphVersion()
     {

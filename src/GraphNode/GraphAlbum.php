@@ -19,19 +19,17 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 
 class GraphAlbum extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array maps object key names to Graph object types
      */
     protected static $graphObjectMap = [
         'from' => GraphUser::class,
@@ -41,7 +39,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the ID for the album.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -51,7 +49,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns whether the viewer can upload photos to this album.
      *
-     * @return boolean|null
+     * @return null|bool
      */
     public function getCanUpload()
     {
@@ -61,7 +59,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the number of photos in this album.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getCount()
     {
@@ -71,7 +69,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the ID of the album's cover photo.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCoverPhoto()
     {
@@ -81,7 +79,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the time the album was initially created.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getCreatedTime()
     {
@@ -91,7 +89,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the time the album was updated.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getUpdatedTime()
     {
@@ -101,7 +99,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the description of the album.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -111,7 +109,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns profile that created the album.
      *
-     * @return GraphUser|null
+     * @return null|GraphUser
      */
     public function getFrom()
     {
@@ -121,7 +119,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns profile that created the album.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getPlace()
     {
@@ -131,7 +129,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns a link to this album on Facebook.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLink()
     {
@@ -141,7 +139,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the textual location of the album.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getLocation()
     {
@@ -151,7 +149,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the title of the album.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName()
     {
@@ -161,7 +159,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the privacy settings for the album.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPrivacy()
     {
@@ -173,7 +171,7 @@ class GraphAlbum extends GraphNode
      *
      * enum{ profile, mobile, wall, normal, album }
      *
-     * @return string|null
+     * @return null|string
      */
     public function getType()
     {

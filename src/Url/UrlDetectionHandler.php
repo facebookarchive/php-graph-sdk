@@ -19,18 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Url;
 
 /**
- *
  * @package Facebook
  */
 class UrlDetectionHandler implements UrlDetectionInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrentUrl()
     {
@@ -50,7 +48,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
     /**
      * Tries to detect if the server is running behind an SSL.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isBehindSsl()
     {
@@ -73,7 +71,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @param string $protocol
      *
-     * @return boolean
+     * @return bool
      */
     protected function protocolWithActiveSsl($protocol)
     {
@@ -163,11 +161,11 @@ class UrlDetectionHandler implements UrlDetectionInterface
 
     /**
      * Checks if the value in X_FORWARDED_HOST is a valid hostname
-     * Could prevent unintended redirections
+     * Could prevent unintended redirections.
      *
      * @param string $header
      *
-     * @return boolean
+     * @return bool
      */
     protected function isValidForwardedHost($header)
     {

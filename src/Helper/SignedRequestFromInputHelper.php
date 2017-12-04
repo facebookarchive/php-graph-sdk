@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Helper;
 
@@ -31,18 +30,17 @@ use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
 
 /**
- *
  * @package Facebook
  */
 abstract class SignedRequestFromInputHelper
 {
     /**
-     * @var SignedRequest|null The SignedRequest entity.
+     * @var null|SignedRequest the SignedRequest entity
      */
     protected $signedRequest;
 
     /**
-     * @var Application The FacebookApp entity.
+     * @var Application the FacebookApp entity
      */
     protected $app;
 
@@ -54,9 +52,9 @@ abstract class SignedRequestFromInputHelper
     /**
      * Initialize the helper and process available signed request data.
      *
-     * @param Application    $app          The FacebookApp entity.
-     * @param Client $client       The client to make HTTP requests.
-     * @param string         $graphVersion The version of Graph to use.
+     * @param Application $app          the FacebookApp entity
+     * @param Client      $client       the client to make HTTP requests
+     * @param string      $graphVersion the version of Graph to use
      */
     public function __construct(Application $app, Client $client, $graphVersion)
     {
@@ -69,7 +67,8 @@ abstract class SignedRequestFromInputHelper
     /**
      * Instantiates a new SignedRequest entity.
      *
-     * @param string|null
+     * @param null|string
+     * @param null|mixed $rawSignedRequest
      */
     public function instantiateSignedRequest($rawSignedRequest = null)
     {
@@ -85,9 +84,9 @@ abstract class SignedRequestFromInputHelper
     /**
      * Returns an AccessToken entity from the signed request.
      *
-     * @return AccessToken|null
-     *
      * @throws \Facebook\Exception\SDKException
+     *
+     * @return null|AccessToken
      */
     public function getAccessToken()
     {
@@ -110,7 +109,7 @@ abstract class SignedRequestFromInputHelper
     /**
      * Returns the SignedRequest entity.
      *
-     * @return SignedRequest|null
+     * @return null|SignedRequest
      */
     public function getSignedRequest()
     {
@@ -120,7 +119,7 @@ abstract class SignedRequestFromInputHelper
     /**
      * Returns the user_id if available.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getUserId()
     {
@@ -130,14 +129,14 @@ abstract class SignedRequestFromInputHelper
     /**
      * Get raw signed request from input.
      *
-     * @return string|null
+     * @return null|string
      */
     abstract public function getRawSignedRequest();
 
     /**
      * Get raw signed request from POST input.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRawSignedRequestFromPost()
     {
@@ -151,7 +150,7 @@ abstract class SignedRequestFromInputHelper
     /**
      * Get raw signed request from cookie set from the Javascript SDK.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRawSignedRequestFromCookie()
     {

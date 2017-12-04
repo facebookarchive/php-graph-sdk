@@ -19,12 +19,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- *
  * @package Facebook
  */
 
@@ -33,7 +31,7 @@ class GraphApplication extends GraphNode
     /**
      * Returns the ID for the application.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {

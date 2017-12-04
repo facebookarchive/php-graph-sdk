@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -28,18 +27,17 @@ use IteratorAggregate;
 use ArrayAccess;
 
 /**
- *
  * @package Facebook
  */
 class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
 {
     /**
-     * @var BatchRequest The original entity that made the batch request.
+     * @var BatchRequest the original entity that made the batch request
      */
     protected $batchRequest;
 
     /**
-     * @var Response[] An array of FacebookResponse entities.
+     * @var Response[] an array of FacebookResponse entities
      */
     protected $responses = [];
 
@@ -92,7 +90,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      * Add a response to the list.
      *
      * @param int        $key
-     * @param array|null $response
+     * @param null|array $response
      */
     public function addResponse($key, $response)
     {
@@ -113,7 +111,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getIterator()
     {
@@ -121,7 +119,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -129,7 +127,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
@@ -137,7 +135,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetUnset($offset)
     {
@@ -145,7 +143,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function offsetGet($offset)
     {
@@ -154,6 +152,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
 
     /**
      * Converts the batch header array into a standard format.
+     *
      * @TODO replace with array_column() when PHP 5.5 is supported.
      *
      * @param array $batchHeaders

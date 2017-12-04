@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
@@ -28,39 +27,38 @@ use Facebook\Url\UrlManipulator;
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class GraphEdge extends Collection
 {
     /**
-     * @var Request The original request that generated this data.
+     * @var Request the original request that generated this data
      */
     protected $request;
 
     /**
-     * @var array An array of Graph meta data like pagination, etc.
+     * @var array an array of Graph meta data like pagination, etc
      */
     protected $metaData = [];
 
     /**
-     * @var string|null The parent Graph edge endpoint that generated the list.
+     * @var null|string the parent Graph edge endpoint that generated the list
      */
     protected $parentEdgeEndpoint;
 
     /**
-     * @var string|null The subclass of the child GraphNode's.
+     * @var null|string the subclass of the child GraphNode's
      */
     protected $subclassName;
 
     /**
      * Init this collection of GraphNode's.
      *
-     * @param Request $request            The original request that generated this data.
-     * @param array           $data               An array of GraphNode's.
-     * @param array           $metaData           An array of Graph meta data like pagination, etc.
-     * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
-     * @param string|null     $subclassName       The subclass of the child GraphNode's.
+     * @param Request     $request            the original request that generated this data
+     * @param array       $data               an array of GraphNode's
+     * @param array       $metaData           an array of Graph meta data like pagination, etc
+     * @param null|string $parentEdgeEndpoint the parent Graph edge endpoint that generated the list
+     * @param null|string $subclassName       the subclass of the child GraphNode's
      */
     public function __construct(Request $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
     {
@@ -75,7 +73,7 @@ class GraphEdge extends Collection
     /**
      * Gets the parent Graph edge endpoint that generated the list.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getParentGraphEdge()
     {
@@ -85,7 +83,7 @@ class GraphEdge extends Collection
     /**
      * Gets the subclass name that the child GraphNode's are cast as.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getSubClassName()
     {
@@ -105,7 +103,7 @@ class GraphEdge extends Collection
     /**
      * Returns the next cursor if it exists.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getNextCursor()
     {
@@ -115,7 +113,7 @@ class GraphEdge extends Collection
     /**
      * Returns the previous cursor if it exists.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPreviousCursor()
     {
@@ -127,7 +125,7 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: after|before
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCursor($direction)
     {
@@ -143,9 +141,9 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return string|null
-     *
      * @throws SDKException
+     *
+     * @return null|string
      */
     public function getPaginationUrl($direction)
     {
@@ -178,9 +176,9 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return Request|null
-     *
      * @throws SDKException
+     *
+     * @return null|Request
      */
     public function getPaginationRequest($direction)
     {
@@ -198,9 +196,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "next" page request.
      *
-     * @return Request|null
-     *
      * @throws SDKException
+     *
+     * @return null|Request
      */
     public function getNextPageRequest()
     {
@@ -210,9 +208,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "previous" page request.
      *
-     * @return Request|null
-     *
      * @throws SDKException
+     *
+     * @return null|Request
      */
     public function getPreviousPageRequest()
     {
@@ -224,7 +222,7 @@ class GraphEdge extends Collection
      *
      * This will be returned if the summary=true modifier is present in the request.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getTotalCount()
     {
@@ -236,7 +234,7 @@ class GraphEdge extends Collection
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function map(\Closure $callback)
     {

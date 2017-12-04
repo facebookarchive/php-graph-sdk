@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
@@ -42,7 +41,6 @@ use Facebook\Exception\SDKException;
 use Http\Client\HttpClient;
 
 /**
- *
  * @package Facebook
  */
 class Facebook
@@ -63,12 +61,12 @@ class Facebook
     const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';
 
     /**
-     * @var Application The FacebookApp entity.
+     * @var Application the FacebookApp entity
      */
     protected $app;
 
     /**
-     * @var Client The Facebook client service.
+     * @var Client the Facebook client service
      */
     protected $client;
 
@@ -78,27 +76,27 @@ class Facebook
     protected $oAuth2Client;
 
     /**
-     * @var UrlDetectionInterface|null The URL detection handler.
+     * @var null|UrlDetectionInterface the URL detection handler
      */
     protected $urlDetectionHandler;
 
     /**
-     * @var AccessToken|null The default access token to use with requests.
+     * @var null|AccessToken the default access token to use with requests
      */
     protected $defaultAccessToken;
 
     /**
-     * @var string|null The default Graph version we want to use.
+     * @var null|string the default Graph version we want to use
      */
     protected $defaultGraphVersion;
 
     /**
-     * @var PersistentDataInterface|null The persistent data handler.
+     * @var null|PersistentDataInterface the persistent data handler
      */
     protected $persistentDataHandler;
 
     /**
-     * @var Response|BatchResponse|null Stores the last request made to Graph.
+     * @var null|BatchResponse|Response stores the last request made to Graph
      */
     protected $lastResponse;
 
@@ -190,7 +188,7 @@ class Facebook
     /**
      * Returns the last response returned from Graph.
      *
-     * @return Response|BatchResponse|null
+     * @return null|BatchResponse|Response
      */
     public function getLastResponse()
     {
@@ -220,7 +218,7 @@ class Facebook
     /**
      * Returns the default AccessToken entity.
      *
-     * @return AccessToken|null
+     * @return null|AccessToken
      */
     public function getDefaultAccessToken()
     {
@@ -230,7 +228,7 @@ class Facebook
     /**
      * Sets the default access token to use with requests.
      *
-     * @param AccessToken|string $accessToken The access token to save.
+     * @param AccessToken|string $accessToken the access token to save
      *
      * @throws \InvalidArgumentException
      */
@@ -309,13 +307,13 @@ class Facebook
      * Sends a GET request to Graph and returns the result.
      *
      * @param string                  $endpoint
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
-     *
-     * @return Response
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return Response
      */
     public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -334,13 +332,13 @@ class Facebook
      *
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
-     *
-     * @return Response
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return Response
      */
     public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -359,13 +357,13 @@ class Facebook
      *
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
-     *
-     * @return Response
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return Response
      */
     public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -382,11 +380,11 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
-     *
-     * @return GraphEdge|null
+     * @param GraphEdge $graphEdge the GraphEdge to paginate over
      *
      * @throws SDKException
+     *
+     * @return null|GraphEdge
      */
     public function next(GraphEdge $graphEdge)
     {
@@ -396,11 +394,11 @@ class Facebook
     /**
      * Sends a request to Graph for the previous page of results.
      *
-     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
-     *
-     * @return GraphEdge|null
+     * @param GraphEdge $graphEdge the GraphEdge to paginate over
      *
      * @throws SDKException
+     *
+     * @return null|GraphEdge
      */
     public function previous(GraphEdge $graphEdge)
     {
@@ -410,12 +408,12 @@ class Facebook
     /**
      * Sends a request to Graph for the next page of results.
      *
-     * @param GraphEdge $graphEdge The GraphEdge to paginate over.
-     * @param string    $direction The direction of the pagination: next|previous.
-     *
-     * @return GraphEdge|null
+     * @param GraphEdge $graphEdge the GraphEdge to paginate over
+     * @param string    $direction the direction of the pagination: next|previous
      *
      * @throws SDKException
+     *
+     * @return null|GraphEdge
      */
     public function getPaginationResults(GraphEdge $graphEdge, $direction)
     {
@@ -439,13 +437,13 @@ class Facebook
      * @param string                  $method
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
-     *
-     * @return Response
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return Response
      */
     public function sendRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -460,12 +458,12 @@ class Facebook
      * Sends a batched request to Graph and returns the result.
      *
      * @param array                   $requests
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $graphVersion
-     *
-     * @return BatchResponse
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return BatchResponse
      */
     public function sendBatchRequest(array $requests, $accessToken = null, $graphVersion = null)
     {
@@ -508,13 +506,13 @@ class Facebook
      * @param string                  $method
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
-     *
-     * @return Request
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
      *
      * @throws SDKException
+     *
+     * @return Request
      */
     public function request($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -537,9 +535,9 @@ class Facebook
      *
      * @param string $pathToFile
      *
-     * @return File
-     *
      * @throws SDKException
+     *
+     * @return File
      */
     public function fileToUpload($pathToFile)
     {
@@ -551,9 +549,9 @@ class Facebook
      *
      * @param string $pathToFile
      *
-     * @return Video
-     *
      * @throws SDKException
+     *
+     * @return Video
      */
     public function videoToUpload($pathToFile)
     {
@@ -563,16 +561,16 @@ class Facebook
     /**
      * Upload a video in chunks.
      *
-     * @param int $target The id of the target node before the /videos edge.
-     * @param string $pathToFile The full path to the file.
-     * @param array $metadata The metadata associated with the video file.
-     * @param string|null $accessToken The access token.
-     * @param int $maxTransferTries The max times to retry a failed upload chunk.
-     * @param string|null $graphVersion The Graph API version to use.
-     *
-     * @return array
+     * @param int         $target           the id of the target node before the /videos edge
+     * @param string      $pathToFile       the full path to the file
+     * @param array       $metadata         the metadata associated with the video file
+     * @param null|string $accessToken      the access token
+     * @param int         $maxTransferTries the max times to retry a failed upload chunk
+     * @param null|string $graphVersion     the Graph API version to use
      *
      * @throws SDKException
+     *
+     * @return array
      */
     public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null)
     {
@@ -598,13 +596,13 @@ class Facebook
      * Attempts to upload a chunk of a file in $retryCountdown tries.
      *
      * @param ResumableUploader $uploader
-     * @param string $endpoint
-     * @param TransferChunk $chunk
-     * @param int $retryCountdown
-     *
-     * @return TransferChunk
+     * @param string            $endpoint
+     * @param TransferChunk     $chunk
+     * @param int               $retryCountdown
      *
      * @throws SDKException
+     *
+     * @return TransferChunk
      */
     private function maxTriesTransfer(ResumableUploader $uploader, $endpoint, TransferChunk $chunk, $retryCountdown)
     {

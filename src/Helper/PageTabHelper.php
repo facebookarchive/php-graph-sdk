@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Helper;
 
@@ -27,22 +26,21 @@ use Facebook\Application;
 use Facebook\Client;
 
 /**
- *
  * @package Facebook
  */
 class PageTabHelper extends CanvasHelper
 {
     /**
-     * @var array|null
+     * @var null|array
      */
     protected $pageData;
 
     /**
      * Initialize the helper and process available signed request data.
      *
-     * @param Application    $app          The FacebookApp entity.
-     * @param Client $client       The client to make HTTP requests.
-     * @param string         $graphVersion The version of Graph to use.
+     * @param Application $app          the FacebookApp entity
+     * @param Client      $client       the client to make HTTP requests
+     * @param string      $graphVersion the version of Graph to use
      */
     public function __construct(Application $app, Client $client, $graphVersion)
     {
@@ -59,9 +57,9 @@ class PageTabHelper extends CanvasHelper
      * Returns a value from the page data.
      *
      * @param string     $key
-     * @param mixed|null $default
+     * @param null|mixed $default
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function getPageData($key, $default = null)
     {
@@ -75,7 +73,7 @@ class PageTabHelper extends CanvasHelper
     /**
      * Returns true if the user is an admin.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAdmin()
     {
@@ -85,7 +83,7 @@ class PageTabHelper extends CanvasHelper
     /**
      * Returns the page id if available.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPageId()
     {

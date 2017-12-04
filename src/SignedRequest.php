@@ -19,38 +19,36 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook;
 
 use Facebook\Exception\SDKException;
 
 /**
- *
  * @package Facebook
  */
 class SignedRequest
 {
     /**
-     * @var Application The FacebookApp entity.
+     * @var Application the FacebookApp entity
      */
     protected $app;
 
     /**
-     * @var string The raw encrypted signed request.
+     * @var string the raw encrypted signed request
      */
     protected $rawSignedRequest;
 
     /**
-     * @var array The payload from the decrypted signed request.
+     * @var array the payload from the decrypted signed request
      */
     protected $payload;
 
     /**
      * Instantiate a new SignedRequest entity.
      *
-     * @param Application $facebookApp      The FacebookApp entity.
-     * @param string|null $rawSignedRequest The raw signed request.
+     * @param Application $facebookApp      the FacebookApp entity
+     * @param null|string $rawSignedRequest the raw signed request
      */
     public function __construct(Application $facebookApp, $rawSignedRequest = null)
     {
@@ -68,7 +66,7 @@ class SignedRequest
     /**
      * Returns the raw signed request data.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getRawSignedRequest()
     {
@@ -78,7 +76,7 @@ class SignedRequest
     /**
      * Returns the parsed signed request data.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getPayload()
     {
@@ -89,9 +87,9 @@ class SignedRequest
      * Returns a property from the signed request data if available.
      *
      * @param string     $key
-     * @param mixed|null $default
+     * @param null|mixed $default
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function get($key, $default = null)
     {
@@ -105,7 +103,7 @@ class SignedRequest
     /**
      * Returns user_id from signed request data if available.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getUserId()
     {
@@ -115,7 +113,7 @@ class SignedRequest
     /**
      * Checks for OAuth data in the payload.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasOAuthData()
     {
@@ -163,9 +161,9 @@ class SignedRequest
     /**
      * Splits a raw signed request into signature and payload.
      *
-     * @return array
-     *
      * @throws SDKException
+     *
+     * @return array
      */
     protected function split()
     {
@@ -181,9 +179,9 @@ class SignedRequest
      *
      * @param string $encodedSig
      *
-     * @return string
-     *
      * @throws SDKException
+     *
+     * @return string
      */
     protected function decodeSignature($encodedSig)
     {
@@ -201,9 +199,9 @@ class SignedRequest
      *
      * @param string $encodedPayload
      *
-     * @return array
-     *
      * @throws SDKException
+     *
+     * @return array
      */
     protected function decodePayload($encodedPayload)
     {
@@ -237,9 +235,9 @@ class SignedRequest
      *
      * @param string $encodedData
      *
-     * @return string
-     *
      * @throws SDKException
+     *
+     * @return string
      */
     protected function hashSignature($encodedData)
     {
@@ -277,7 +275,7 @@ class SignedRequest
     /**
      * Base64 decoding which replaces characters:
      *   + instead of -
-     *   / instead of _
+     *   / instead of _.
      *
      * @link http://en.wikipedia.org/wiki/Base64#URL_applications
      *
@@ -296,7 +294,7 @@ class SignedRequest
     /**
      * Base64 encoding which replaces characters:
      *   + instead of -
-     *   / instead of _
+     *   / instead of _.
      *
      * @link http://en.wikipedia.org/wiki/Base64#URL_applications
      *
