@@ -70,7 +70,6 @@ class FacebookResponseException extends FacebookSDKException
     {
         $data = $response->getDecodedBody();
 
-
         if (!isset($data['error']['code']) && isset($data['code'])) {
             $data = ['error' => $data];
         }
