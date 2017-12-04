@@ -4,7 +4,8 @@ Represents a batch request that will be sent to the Graph API.
 
 ## Facebook\FacebookBatchRequest
 
-You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor.
+You can instantiate a new `FacebookBatchRequest` entity directly by sending the arguments to the constructor or
+by using the [`Facebook\Facebook::newBatchRequest()`](Facebook.md#newBatchRequest) factory method.
 
 ```php
 use Facebook\FacebookBatchRequest;
@@ -61,9 +62,9 @@ Since the `Facebook\FacebookBatchRequest` is extended from the [`Facebook\Facebo
 ### add()
 ```php
 public add(
-  array|Facebook\FacebookBatchRequest $request,
-  string|null $name
-  )
+    array|Facebook\FacebookBatchRequest $request,
+    string|null $name
+)
 ```
 Adds a request to be sent in the batch request. The `$request` can be a single [`Facebook\FacebookRequest`](FacebookRequest.md) or an array of `Facebook\FacebookRequest`'s.
 
