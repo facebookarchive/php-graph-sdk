@@ -23,7 +23,6 @@
 namespace Facebook\Tests;
 
 use Facebook\Application;
-use Facebook\Facebook;
 use Facebook\Request;
 use Facebook\BatchRequest;
 use Facebook\FileUpload\File;
