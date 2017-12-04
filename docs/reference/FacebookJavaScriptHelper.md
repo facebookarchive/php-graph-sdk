@@ -1,4 +1,4 @@
-# Facebook\Helpers\FacebookJavaScriptHelper
+# Facebook\Helper\FacebookJavaScriptHelper
 
 If you're using the [JavaScript SDK](https://developers.facebook.com/docs/javascript) on your site, information on the logged in user is stored in a cookie. Use the `FacebookJavaScriptHelper` to obtain an access token or signed request from the cookie.
 
@@ -25,10 +25,10 @@ $jsHelper = $fb->getJavaScriptHelper();
 
 try {
   $accessToken = $jsHelper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
 }

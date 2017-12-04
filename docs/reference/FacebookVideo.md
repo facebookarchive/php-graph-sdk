@@ -37,7 +37,7 @@ $data = [
 
 try {
   $response = $fb->uploadVideo('me', '/path/to/video.mp4', $data, '{user-access-token}');
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Error: ' . $e->getMessage();
   exit;
 }
@@ -57,7 +57,7 @@ $data = [
 
 try {
   $response = $fb->post('/me/videos', $data);
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Error: ' . $e->getMessage();
   exit;
 }

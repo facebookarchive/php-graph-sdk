@@ -82,7 +82,7 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInvalidMetadataWillThrow()
     {
@@ -96,7 +96,7 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnUnexpectedAppIdWillThrow()
     {
@@ -111,7 +111,7 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnUnexpectedUserIdWillThrow()
     {
@@ -127,7 +127,7 @@ class AccessTokenMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnExpiredAccessTokenWillThrow()
     {

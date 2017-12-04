@@ -23,9 +23,9 @@
  */
 namespace Facebook;
 
-use Facebook\GraphNodes\GraphNodeFactory;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\GraphNode\GraphNodeFactory;
+use Facebook\Exception\FacebookResponseException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class FacebookResponse
@@ -261,7 +261,7 @@ class FacebookResponse
      *
      * @param string|null $subclassName The GraphNode subclass to cast to.
      *
-     * @return \Facebook\GraphNodes\GraphObject
+     * @return \Facebook\GraphNode\GraphObject
      *
      * @throws FacebookSDKException
      *
@@ -278,7 +278,7 @@ class FacebookResponse
      *
      * @param string|null $subclassName The GraphNode subclass to cast to.
      *
-     * @return \Facebook\GraphNodes\GraphNode
+     * @return \Facebook\GraphNode\GraphNode
      *
      * @throws FacebookSDKException
      */
@@ -292,7 +292,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphAlbum collection.
      *
-     * @return \Facebook\GraphNodes\GraphAlbum
+     * @return \Facebook\GraphNode\GraphAlbum
      *
      * @throws FacebookSDKException
      */
@@ -306,7 +306,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphPage collection.
      *
-     * @return \Facebook\GraphNodes\GraphPage
+     * @return \Facebook\GraphNode\GraphPage
      *
      * @throws FacebookSDKException
      */
@@ -320,7 +320,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphSessionInfo collection.
      *
-     * @return \Facebook\GraphNodes\GraphSessionInfo
+     * @return \Facebook\GraphNode\GraphSessionInfo
      *
      * @throws FacebookSDKException
      */
@@ -334,7 +334,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphUser collection.
      *
-     * @return \Facebook\GraphNodes\GraphUser
+     * @return \Facebook\GraphNode\GraphUser
      *
      * @throws FacebookSDKException
      */
@@ -348,7 +348,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphEvent collection.
      *
-     * @return \Facebook\GraphNodes\GraphEvent
+     * @return \Facebook\GraphNode\GraphEvent
      *
      * @throws FacebookSDKException
      */
@@ -362,7 +362,7 @@ class FacebookResponse
     /**
      * Convenience method for creating a GraphGroup collection.
      *
-     * @return \Facebook\GraphNodes\GraphGroup
+     * @return \Facebook\GraphNode\GraphGroup
      *
      * @throws FacebookSDKException
      */
@@ -379,7 +379,7 @@ class FacebookResponse
      * @param string|null $subclassName The GraphNode subclass to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
-     * @return \Facebook\GraphNodes\GraphList
+     * @return \Facebook\GraphNode\GraphList
      *
      * @throws FacebookSDKException
      *
@@ -397,7 +397,7 @@ class FacebookResponse
      * @param string|null $subclassName The GraphNode subclass to cast list items to.
      * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
      *
-     * @return \Facebook\GraphNodes\GraphEdge
+     * @return \Facebook\GraphNode\GraphEdge
      *
      * @throws FacebookSDKException
      */

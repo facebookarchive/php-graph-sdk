@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests\Fixtures;
 
-use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
+use Facebook\Helper\FacebookSignedRequestFromInputHelper;
 
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
 {

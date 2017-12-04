@@ -24,7 +24,7 @@
 namespace Facebook\HttpClients;
 
 use Facebook\Http\GraphRawResponse;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Message\ResponseInterface;

@@ -41,7 +41,7 @@ interface FacebookHttpClientInterface
      *
      * @return \Facebook\Http\GraphRawResponse Raw response from the server.
      *
-     * @throws \Facebook\Exceptions\FacebookSDKException
+     * @throws \Facebook\Exception\FacebookSDKException
      */
     public function send($url, $method, $body, array $headers, $timeOut);
 }

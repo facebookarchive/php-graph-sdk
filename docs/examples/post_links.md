@@ -4,7 +4,7 @@ This example covers posting a link to the current user's timeline using the Grap
 
 It assumes that you've already obtained an access token from one of the helpers found [here](../reference.md). The access token must have the `publish_actions` permission for this to work.
 
-For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNodes\GraphNode`](../reference/GraphNode.md), [`Facebook\Exceptions\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exceptions\FacebookResponseException`](../reference/FacebookResponseException.md).
+For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNode\GraphNode`](../reference/GraphNode.md), [`Facebook\Exception\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exception\FacebookResponseException`](../reference/FacebookResponseException.md).
 
 ## Example
 
@@ -23,10 +23,10 @@ $linkData = [
 try {
   // Returns a `Facebook\FacebookResponse` object
   $response = $fb->post('/me/feed', $linkData, '{access-token}');
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
 }
