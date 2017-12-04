@@ -77,7 +77,7 @@ By default, the SDK will try to use cURL as the HTTP client. If a cURL implement
 
 If you wish to use Guzzle, you can set this value to `guzzle`, but it requires that you [install Guzzle](http://docs.guzzlephp.org/en/latest/) with composer.
 
-If you wish to write your own HTTP client, you can code your HTTP client to the `Facebook\HttpClients\FacebookHttpClientInterface` and set this value to an instance of your custom client.
+If you wish to write your own HTTP client, you can code your HTTP client to the `Facebook\HttpClients\HttpClientInterface` and set this value to an instance of your custom client.
 
 ```php
 $fb = new Facebook([
@@ -131,15 +131,15 @@ $fb = new Facebook\Facebook([
 
 ## getApp()
 ```php
-public FacebookApp getApp()
+public Application getApp()
 ```
-Returns the instance of `Facebook\FacebookApp` for the instantiated service.
+Returns the instance of `Facebook\Application` for the instantiated service.
 
 ## getClient()
 ```php
-public Facebook\FacebookClient getClient()
+public Facebook\Client getClient()
 ```
-Returns the instance of [`Facebook\FacebookClient`](FacebookClient.md) for the instantiated service.
+Returns the instance of [`Facebook\Client`](Client.md) for the instantiated service.
 
 ## getOAuth2Client()
 ```php
@@ -149,9 +149,9 @@ Returns an instance of `Facebook\Authentication\OAuth2Client`.
 
 ## getLastResponse()
 ```php
-public Facebook\FacebookResponse|Facebook\FacebookBatchResponse|null getLastResponse()
+public Facebook\Response|Facebook\BatchResponse|null getLastResponse()
 ```
-Returns the last response received from the Graph API in the form of a `Facebook\FacebookResponse` or `Facebook\FacebookBatchResponse`.
+Returns the last response received from the Graph API in the form of a `Facebook\Response` or `Facebook\BatchResponse`.
 
 ## getUrlDetectionHandler()
 ```php
@@ -190,7 +190,7 @@ Returns the default version of Graph set with the `default_graph_version` config
 
 ## get()
 ```php
-public Facebook\FacebookResponse get(
+public Facebook\Response get(
   string $endpoint,
   string|AccessToken|null $accessToken,
   string|null $eTag,
@@ -198,7 +198,7 @@ public Facebook\FacebookResponse get(
 )
 ```
 
-Sends a GET request to Graph and returns a `Facebook\FacebookResponse`.
+Sends a GET request to Graph and returns a `Facebook\Response`.
 
 `$endpoint`
 The url to send to Graph without the version prefix (required).
@@ -218,7 +218,7 @@ This will overwrite the Graph version that was set in the `default_graph_version
 
 ## post()
 ```php
-public Facebook\FacebookResponse post(
+public Facebook\Response post(
   string $endpoint,
   array $params,
   string|AccessToken|null $accessToken,
@@ -227,7 +227,7 @@ public Facebook\FacebookResponse post(
 )
 ```
 
-Sends a POST request to Graph and returns a `Facebook\FacebookResponse`.
+Sends a POST request to Graph and returns a `Facebook\Response`.
 
 The arguments are the same as `get()` above with the exception of `$params`.
 
@@ -240,7 +240,7 @@ $response = $fb->post('/me/feed', ['message' => 'Foo message']);
 
 ## delete()
 ```php
-public Facebook\FacebookResponse delete(
+public Facebook\Response delete(
   string $endpoint,
   array $params,
   string|AccessToken|null $accessToken,
@@ -249,7 +249,7 @@ public Facebook\FacebookResponse delete(
 )
 ```
 
-Sends a DELETE request to Graph and returns a `Facebook\FacebookResponse`.
+Sends a DELETE request to Graph and returns a `Facebook\Response`.
 
 The arguments are the same as `post()` above.
 
@@ -259,7 +259,7 @@ $response = $fb->delete('/{node-id}', ['object' => '1234']);
 
 ## request()
 ```php
-public Facebook\FacebookRequest request(
+public Facebook\Request request(
   string $method,
   string $endpoint,
   array $params,
@@ -269,7 +269,7 @@ public Facebook\FacebookRequest request(
 )
 ```
 
-Instantiates a new `Facebook\FacebookRequest` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
+Instantiates a new `Facebook\Request` entity **but does not send the request to Graph**. This is useful for creating a number of requests to be sent later in a batch request (see `sendBatchRequest()` below).
 
 The arguments are the same as `post()` above with the exception of `$method`.
 
@@ -282,7 +282,7 @@ $request = $fb->request('GET', '/{node-id}');
 
 ## sendRequest()
 ```php
-public Facebook\FacebookResponse sendRequest(
+public Facebook\Response sendRequest(
   string $method,
   string $endpoint,
   array $params,
@@ -300,19 +300,19 @@ $response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.10'
 
 ## sendBatchRequest()
 ```php
-public Facebook\FacebookBatchResponse sendBatchRequest(
+public Facebook\BatchResponse sendBatchRequest(
   array $requests,
   string|AccessToken|null $accessToken,
   string|null $graphVersion
 )
 ```
 
-Sends an array of `Facebook\FacebookRequest` entities as a batch request to Graph.
+Sends an array of `Facebook\Request` entities as a batch request to Graph.
 
 The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 
 `$requests`
-An array of `Facebook\FacebookRequest` entities. This can be a numeric or associative array but every value of the array has to be an instance of `Facebook\FacebookRequest`.
+An array of `Facebook\Request` entities. This can be a numeric or associative array but every value of the array has to be an instance of `Facebook\Request`.
 
 If the requests are sent as an associative array, the key will be used as the `name` of the request so that it can be referenced by another request. See more on [batch request naming and using JSONPath](https://developers.facebook.com/docs/graph-api/making-multiple-requests).
 
@@ -346,10 +346,10 @@ it fallbacks to the values provided in the instantiation of the batch request.
 
 ## getRedirectLoginHelper()
 ```php
-public Facebook\Helper\FacebookRedirectLoginHelper getRedirectLoginHelper()
+public Facebook\Helper\RedirectLoginHelper getRedirectLoginHelper()
 ```
 
-Returns a [`Facebook\Helper\FacebookRedirectLoginHelper`](FacebookRedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
+Returns a [`Facebook\Helper\RedirectLoginHelper`](RedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
 
 ```php
 $helper = $fb->getRedirectLoginHelper();
@@ -357,10 +357,10 @@ $helper = $fb->getRedirectLoginHelper();
 
 ## getJavaScriptHelper()
 ```php
-public Facebook\Helper\FacebookJavaScriptHelper getJavaScriptHelper()
+public Facebook\Helper\JavaScriptHelper getJavaScriptHelper()
 ```
 
-Returns a [`Facebook\Helper\FacebookJavaScriptHelper`](FacebookJavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
+Returns a [`Facebook\Helper\JavaScriptHelper`](JavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
 
 ```php
 $helper = $fb->getJavaScriptHelper();
@@ -368,10 +368,10 @@ $helper = $fb->getJavaScriptHelper();
 
 ## getCanvasHelper()
 ```php
-public Facebook\Helper\FacebookCanvasHelper getCanvasHelper()
+public Facebook\Helper\CanvasHelper getCanvasHelper()
 ```
 
-Returns a [`Facebook\Helper\FacebookCanvasHelper`](FacebookCanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
+Returns a [`Facebook\Helper\CanvasHelper`](CanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
 
 ```php
 $helper = $fb->getCanvasHelper();
@@ -379,10 +379,10 @@ $helper = $fb->getCanvasHelper();
 
 ## getPageTabHelper()
 ```php
-public Facebook\Helper\FacebookPageTabHelper getPageTabHelper()
+public Facebook\Helper\PageTabHelper getPageTabHelper()
 ```
 
-Returns a [`Facebook\Helper\FacebookPageTabHelper`](FacebookPageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
+Returns a [`Facebook\Helper\PageTabHelper`](PageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
 
 ```php
 $helper = $fb->getPageTabHelper();
@@ -431,7 +431,7 @@ Requests and returns the previous page of results in a `Facebook\GraphNode\Graph
 
 ## fileToUpload()
 ```php
-public Facebook\FileUpload\FacebookFile fileToUpload(string $pathToFile)
+public Facebook\FileUpload\File fileToUpload(string $pathToFile)
 ```
 
 When a valid path to a local or remote file is provided, `fileToUpload()` will returns a `FacebookFile` entity that can be used in the params in a POST request to Graph.
@@ -457,7 +457,7 @@ echo 'Photo ID: ' . $graphNode['id'];
 
 ## videoToUpload()
 ```php
-public Facebook\FileUpload\FacebookVideo videoToUpload(string $pathToVideoFile)
+public Facebook\FileUpload\Video videoToUpload(string $pathToVideoFile)
 ```
 
 Uploading videos to Graph requires that you send the request to `https://graph-video.facebook.com` instead of the normal `https://graph.facebook.com` host name. When you use `videoToUpload()` to upload a video, the SDK for PHP will automatically point the request to the `graph-video.facebook.com` host name for you.
@@ -531,7 +531,7 @@ $data = [
 
 try {
   $response = $fb->uploadVideo('me', '/path/to/video.mp4', $data, '{user-access-token}');
-} catch(Facebook\Exception\FacebookSDKException $e) {
+} catch(Facebook\Exception\SDKException $e) {
   echo 'Error: ' . $e->getMessage();
   exit;
 }

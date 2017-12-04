@@ -24,15 +24,14 @@
 namespace Facebook\Authentication;
 
 use Facebook\Facebook;
-use Facebook\FacebookApp;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
-use Facebook\FacebookClient;
-use Facebook\Exception\FacebookResponseException;
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Application;
+use Facebook\Request;
+use Facebook\Response;
+use Facebook\Client;
+use Facebook\Exception\ResponseException;
+use Facebook\Exception\SDKException;
 
 /**
- * Class OAuth2Client
  *
  * @package Facebook
  */
@@ -46,14 +45,14 @@ class OAuth2Client
     /**
      * The FacebookApp entity.
      *
-     * @var FacebookApp
+     * @var Application
      */
     protected $app;
 
     /**
      * The Facebook client.
      *
-     * @var FacebookClient
+     * @var Client
      */
     protected $client;
 
@@ -67,16 +66,16 @@ class OAuth2Client
     /**
      * The last request sent to Graph.
      *
-     * @var FacebookRequest|null
+     * @var Request|null
      */
     protected $lastRequest;
 
     /**
-     * @param FacebookApp    $app
-     * @param FacebookClient $client
+     * @param Application    $app
+     * @param Client $client
      * @param string         $graphVersion The version of the Graph API to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion)
+    public function __construct(Application $app, Client $client, $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -87,7 +86,7 @@ class OAuth2Client
      * Returns the last FacebookRequest that was sent.
      * Useful for debugging and testing.
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      */
     public function getLastRequest()
     {
@@ -106,7 +105,7 @@ class OAuth2Client
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = ['input_token' => $accessToken];
 
-        $this->lastRequest = new FacebookRequest(
+        $this->lastRequest = new Request(
             $this->app,
             $this->app->getAccessToken(),
             'GET',
@@ -154,7 +153,7 @@ class OAuth2Client
      *
      * @return AccessToken
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getAccessTokenFromCode($code, $redirectUri = '')
     {
@@ -173,7 +172,7 @@ class OAuth2Client
      *
      * @return AccessToken
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getLongLivedAccessToken($accessToken)
     {
@@ -194,7 +193,7 @@ class OAuth2Client
      *
      * @return AccessToken
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
     {
@@ -206,7 +205,7 @@ class OAuth2Client
         $data = $response->getDecodedBody();
 
         if (!isset($data['code'])) {
-            throw new FacebookSDKException('Code was not returned from Graph.', 401);
+            throw new SDKException('Code was not returned from Graph.', 401);
         }
 
         return $data['code'];
@@ -219,7 +218,7 @@ class OAuth2Client
      *
      * @return AccessToken
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     protected function requestAnAccessToken(array $params)
     {
@@ -227,7 +226,7 @@ class OAuth2Client
         $data = $response->getDecodedBody();
 
         if (!isset($data['access_token'])) {
-            throw new FacebookSDKException('Access token was not returned from Graph.', 401);
+            throw new SDKException('Access token was not returned from Graph.', 401);
         }
 
         // Graph returns two different key names for expiration time
@@ -254,9 +253,9 @@ class OAuth2Client
      * @param array                   $params
      * @param AccessToken|string|null $accessToken
      *
-     * @return FacebookResponse
+     * @return Response
      *
-     * @throws FacebookResponseException
+     * @throws ResponseException
      */
     protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
     {
@@ -264,7 +263,7 @@ class OAuth2Client
 
         $accessToken = $accessToken ?: $this->app->getAccessToken();
 
-        $this->lastRequest = new FacebookRequest(
+        $this->lastRequest = new Request(
             $this->app,
             $accessToken,
             'GET',

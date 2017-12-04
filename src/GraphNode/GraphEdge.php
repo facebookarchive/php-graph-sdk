@@ -23,19 +23,18 @@
  */
 namespace Facebook\GraphNode;
 
-use Facebook\FacebookRequest;
-use Facebook\Url\FacebookUrlManipulator;
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Request;
+use Facebook\Url\UrlManipulator;
+use Facebook\Exception\SDKException;
 
 /**
- * Class GraphEdge
  *
  * @package Facebook
  */
 class GraphEdge extends Collection
 {
     /**
-     * @var FacebookRequest The original request that generated this data.
+     * @var Request The original request that generated this data.
      */
     protected $request;
 
@@ -57,13 +56,13 @@ class GraphEdge extends Collection
     /**
      * Init this collection of GraphNode's.
      *
-     * @param FacebookRequest $request            The original request that generated this data.
+     * @param Request $request            The original request that generated this data.
      * @param array           $data               An array of GraphNode's.
      * @param array           $metaData           An array of Graph meta data like pagination, etc.
      * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
      * @param string|null     $subclassName       The subclass of the child GraphNode's.
      */
-    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
+    public function __construct(Request $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
     {
         $this->request = $request;
         $this->metaData = $metaData;
@@ -146,7 +145,7 @@ class GraphEdge extends Collection
      *
      * @return string|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getPaginationUrl($direction)
     {
@@ -159,18 +158,18 @@ class GraphEdge extends Collection
 
         $pageUrl = $this->metaData['paging'][$direction];
 
-        return FacebookUrlManipulator::baseGraphUrlEndpoint($pageUrl);
+        return UrlManipulator::baseGraphUrlEndpoint($pageUrl);
     }
 
     /**
      * Validates whether or not we can paginate on this request.
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function validateForPagination()
     {
         if ($this->request->getMethod() !== 'GET') {
-            throw new FacebookSDKException('You can only paginate on a GET request.', 720);
+            throw new SDKException('You can only paginate on a GET request.', 720);
         }
     }
 
@@ -179,9 +178,9 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getPaginationRequest($direction)
     {
@@ -199,9 +198,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "next" page request.
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getNextPageRequest()
     {
@@ -211,9 +210,9 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "previous" page request.
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getPreviousPageRequest()
     {

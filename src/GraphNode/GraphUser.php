@@ -24,7 +24,6 @@
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphUser
  *
  * @package Facebook
  */

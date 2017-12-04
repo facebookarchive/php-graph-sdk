@@ -24,7 +24,6 @@
 namespace Facebook\Http;
 
 /**
- * Class RequestBodyUrlEncoded
  *
  * @package Facebook
  */

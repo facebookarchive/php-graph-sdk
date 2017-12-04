@@ -28,7 +28,6 @@ use Facebook\GraphNode\GraphUser;
 
 class GraphAchievementTest extends AbstractGraphNode
 {
-
     public function testIdIsString()
     {
         $dataFromGraph = [

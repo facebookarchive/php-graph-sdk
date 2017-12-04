@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 
 class AccessTokenTest extends TestCase
 {
-
     public function testAnAccessTokenCanBeReturnedAsAString()
     {
         $accessToken = new AccessToken('foo_token');

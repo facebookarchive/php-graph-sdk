@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 
 class AccessTokenMetadataTest extends TestCase
 {
-
     protected $graphResponseData = [
         'data' => [
             'app_id' => '123',
@@ -83,7 +82,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInvalidMetadataWillThrow()
     {
@@ -99,7 +98,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnUnexpectedAppIdWillThrow()
     {
@@ -118,7 +117,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnUnexpectedUserIdWillThrow()
     {
@@ -136,7 +135,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnExpiredAccessTokenWillThrow()
     {

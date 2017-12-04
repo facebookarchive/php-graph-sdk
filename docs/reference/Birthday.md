@@ -18,7 +18,7 @@ Usage:
 
 ```php
 $fb = new Facebook\Facebook(\* *\);
-// Returns a `Facebook\FacebookResponse` object
+// Returns a `Facebook\Response` object
 $response = $fb->get('/me');
 
 // Get the response typed as a GraphUser

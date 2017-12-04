@@ -28,7 +28,6 @@ use PHPUnit\Framework\TestCase;
 
 class CollectionTest extends TestCase
 {
-
     public function testAnExistingPropertyCanBeAccessed()
     {
         $graphNode = new Collection(['foo' => 'bar']);

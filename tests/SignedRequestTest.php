@@ -23,14 +23,14 @@
  */
 namespace Facebook\Tests;
 
-use Facebook\FacebookApp;
+use Facebook\Application;
 use Facebook\SignedRequest;
 use PHPUnit\Framework\TestCase;
 
 class SignedRequestTest extends TestCase
 {
     /**
-     * @var FacebookApp
+     * @var Application
      */
     protected $app;
 
@@ -49,7 +49,7 @@ class SignedRequestTest extends TestCase
 
     protected function setUp()
     {
-        $this->app = new FacebookApp('123', 'foo_app_secret');
+        $this->app = new Application('123', 'foo_app_secret');
     }
 
     public function testAValidSignedRequestCanBeCreated()
@@ -66,7 +66,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInvalidSignedRequestsWillFailFormattingValidation()
     {
@@ -90,7 +90,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnImproperlyEncodedSignatureWillThrowAnException()
     {
@@ -98,7 +98,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnImproperlyEncodedPayloadWillThrowAnException()
     {
@@ -106,7 +106,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testNonApprovedAlgorithmsWillThrowAnException()
     {

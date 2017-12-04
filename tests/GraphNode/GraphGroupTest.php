@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests\GraphNode;
 
-use Facebook\FacebookResponse;
+use Facebook\Response;
 use Facebook\GraphNode\GraphNodeFactory;
 use Facebook\GraphNode\GraphLocation;
 use Facebook\GraphNode\GraphCoverPhoto;
@@ -33,13 +33,13 @@ use Prophecy\Prophecy\ObjectProphecy;
 class GraphGroupTest extends TestCase
 {
     /**
-     * @var FacebookResponse|ObjectProphecy
+     * @var Response|ObjectProphecy
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = $this->prophesize(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(Response::class);
     }
 
     public function testCoverGetsCastAsGraphCoverPhoto()

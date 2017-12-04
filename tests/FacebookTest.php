@@ -24,8 +24,8 @@
 namespace Facebook\Tests;
 
 use Facebook\Facebook;
-use Facebook\FacebookClient;
-use Facebook\FacebookRequest;
+use Facebook\Client;
+use Facebook\Request;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNode\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
@@ -35,9 +35,9 @@ use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\HttpClients\FacebookGuzzleHttpClient;
-use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\Url\FacebookUrlDetectionHandler;
-use Facebook\FacebookResponse;
+use Facebook\PersistentData\InMemoryPersistentDataHandler;
+use Facebook\Url\UrlDetectionHandler;
+use Facebook\Response;
 use Facebook\GraphNode\GraphUser;
 use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +51,7 @@ class FacebookTest extends TestCase
     ];
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInstantiatingWithoutAppIdThrows()
     {
@@ -65,7 +65,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInstantiatingWithoutAppSecretThrows()
     {
@@ -129,7 +129,7 @@ class FacebookTest extends TestCase
         ]);
         $fb = new Facebook($config);
         $this->assertInstanceOf(
-            FacebookMemoryPersistentDataHandler::class,
+            InMemoryPersistentDataHandler::class,
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
         );
     }
@@ -148,7 +148,7 @@ class FacebookTest extends TestCase
     public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
     {
         $fb = new Facebook($this->config);
-        $this->assertInstanceOf(FacebookUrlDetectionHandler::class, $fb->getUrlDetectionHandler());
+        $this->assertInstanceOf(UrlDetectionHandler::class, $fb->getUrlDetectionHandler());
     }
 
     public function testAnAccessTokenCanBeSetAsAString()
@@ -197,7 +197,7 @@ class FacebookTest extends TestCase
         $this->assertEquals('foo_token', (string)$request->getAccessToken());
         $this->assertEquals('v1337', $request->getGraphVersion());
         $this->assertEquals(
-            FacebookClient::BASE_GRAPH_URL_BETA,
+            Client::BASE_GRAPH_URL_BETA,
             $fb->getClient()->getBaseGraphUrl()
         );
     }
@@ -254,7 +254,7 @@ class FacebookTest extends TestCase
         ]);
         $fb = new Facebook($config);
 
-        $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
+        $request = new Request($fb->getApp(), 'foo_token', 'GET');
         $graphEdge = new GraphEdge(
             $request,
             [],
@@ -278,7 +278,7 @@ class FacebookTest extends TestCase
         $this->assertEquals('Foo', $nextPage[0]['name']);
 
         $lastResponse = $fb->getLastResponse();
-        $this->assertInstanceOf(FacebookResponse::class, $lastResponse);
+        $this->assertInstanceOf(Response::class, $lastResponse);
         $this->assertEquals(1337, $lastResponse->getHttpStatusCode());
     }
 
@@ -296,7 +296,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookResponseException
+     * @expectedException \Facebook\Exception\ResponseException
      */
     public function testMaxingOutRetriesWillThrow()
     {

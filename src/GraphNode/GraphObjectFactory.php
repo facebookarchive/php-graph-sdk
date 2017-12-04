@@ -23,10 +23,9 @@
  */
 namespace Facebook\GraphNode;
 
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Exception\SDKException;
 
 /**
- * Class GraphObjectFactory
  *
  * @package Facebook
  *

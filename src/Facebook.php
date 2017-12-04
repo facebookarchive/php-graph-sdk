@@ -25,24 +25,23 @@ namespace Facebook;
 
 use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
-use Facebook\FileUpload\FacebookFile;
-use Facebook\FileUpload\FacebookResumableUploader;
-use Facebook\FileUpload\FacebookTransferChunk;
-use Facebook\FileUpload\FacebookVideo;
+use Facebook\FileUpload\File;
+use Facebook\FileUpload\ResumableUploader;
+use Facebook\FileUpload\TransferChunk;
+use Facebook\FileUpload\Video;
 use Facebook\GraphNode\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
-use Facebook\Url\FacebookUrlDetectionHandler;
+use Facebook\Url\UrlDetectionHandler;
 use Facebook\PersistentData\PersistentDataFactory;
 use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\Helper\FacebookCanvasHelper;
-use Facebook\Helper\FacebookJavaScriptHelper;
-use Facebook\Helper\FacebookPageTabHelper;
-use Facebook\Helper\FacebookRedirectLoginHelper;
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Helper\CanvasHelper;
+use Facebook\Helper\JavaScriptHelper;
+use Facebook\Helper\PageTabHelper;
+use Facebook\Helper\RedirectLoginHelper;
+use Facebook\Exception\SDKException;
 use Http\Client\HttpClient;
 
 /**
- * Class Facebook
  *
  * @package Facebook
  */
@@ -64,12 +63,12 @@ class Facebook
     const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';
 
     /**
-     * @var FacebookApp The FacebookApp entity.
+     * @var Application The FacebookApp entity.
      */
     protected $app;
 
     /**
-     * @var FacebookClient The Facebook client service.
+     * @var Client The Facebook client service.
      */
     protected $client;
 
@@ -99,7 +98,7 @@ class Facebook
     protected $persistentDataHandler;
 
     /**
-     * @var FacebookResponse|FacebookBatchResponse|null Stores the last request made to Graph.
+     * @var Response|BatchResponse|null Stores the last request made to Graph.
      */
     protected $lastResponse;
 
@@ -108,7 +107,7 @@ class Facebook
      *
      * @param array $config
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function __construct(array $config = [])
     {
@@ -123,10 +122,10 @@ class Facebook
         ], $config);
 
         if (!$config['app_id']) {
-            throw new FacebookSDKException('Required "app_id" key not supplied in config and could not find fallback environment variable "' . static::APP_ID_ENV_NAME . '"');
+            throw new SDKException('Required "app_id" key not supplied in config and could not find fallback environment variable "' . static::APP_ID_ENV_NAME . '"');
         }
         if (!$config['app_secret']) {
-            throw new FacebookSDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
+            throw new SDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
         }
         if ($config['http_client'] !== null && !$config['http_client'] instanceof HttpClient) {
             throw new \InvalidArgumentException('Required "http_client" key to be null or an instance of \Http\Client\HttpClient');
@@ -135,12 +134,12 @@ class Facebook
             throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config');
         }
 
-        $this->app = new FacebookApp($config['app_id'], $config['app_secret']);
-        $this->client = new FacebookClient(
+        $this->app = new Application($config['app_id'], $config['app_secret']);
+        $this->client = new Client(
             $config['http_client'],
             $config['enable_beta_mode']
         );
-        $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new FacebookUrlDetectionHandler());
+        $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new UrlDetectionHandler());
         $this->persistentDataHandler = PersistentDataFactory::createPersistentDataHandler(
             $config['persistent_data_handler']
         );
@@ -155,7 +154,7 @@ class Facebook
     /**
      * Returns the FacebookApp entity.
      *
-     * @return FacebookApp
+     * @return Application
      */
     public function getApp()
     {
@@ -165,7 +164,7 @@ class Facebook
     /**
      * Returns the FacebookClient service.
      *
-     * @return FacebookClient
+     * @return Client
      */
     public function getClient()
     {
@@ -191,7 +190,7 @@ class Facebook
     /**
      * Returns the last response returned from Graph.
      *
-     * @return FacebookResponse|FacebookBatchResponse|null
+     * @return Response|BatchResponse|null
      */
     public function getLastResponse()
     {
@@ -265,11 +264,11 @@ class Facebook
     /**
      * Returns the redirect login helper.
      *
-     * @return FacebookRedirectLoginHelper
+     * @return RedirectLoginHelper
      */
     public function getRedirectLoginHelper()
     {
-        return new FacebookRedirectLoginHelper(
+        return new RedirectLoginHelper(
             $this->getOAuth2Client(),
             $this->persistentDataHandler,
             $this->urlDetectionHandler
@@ -279,31 +278,31 @@ class Facebook
     /**
      * Returns the JavaScript helper.
      *
-     * @return FacebookJavaScriptHelper
+     * @return JavaScriptHelper
      */
     public function getJavaScriptHelper()
     {
-        return new FacebookJavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
+        return new JavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
 
     /**
      * Returns the canvas helper.
      *
-     * @return FacebookCanvasHelper
+     * @return CanvasHelper
      */
     public function getCanvasHelper()
     {
-        return new FacebookCanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
+        return new CanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
 
     /**
      * Returns the page tab helper.
      *
-     * @return FacebookPageTabHelper
+     * @return PageTabHelper
      */
     public function getPageTabHelper()
     {
-        return new FacebookPageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
+        return new PageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
 
     /**
@@ -314,9 +313,9 @@ class Facebook
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      *
-     * @return FacebookResponse
+     * @return Response
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -339,9 +338,9 @@ class Facebook
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      *
-     * @return FacebookResponse
+     * @return Response
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -364,9 +363,9 @@ class Facebook
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      *
-     * @return FacebookResponse
+     * @return Response
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -387,7 +386,7 @@ class Facebook
      *
      * @return GraphEdge|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function next(GraphEdge $graphEdge)
     {
@@ -401,7 +400,7 @@ class Facebook
      *
      * @return GraphEdge|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function previous(GraphEdge $graphEdge)
     {
@@ -416,7 +415,7 @@ class Facebook
      *
      * @return GraphEdge|null
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function getPaginationResults(GraphEdge $graphEdge, $direction)
     {
@@ -444,9 +443,9 @@ class Facebook
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      *
-     * @return FacebookResponse
+     * @return Response
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function sendRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
@@ -464,15 +463,15 @@ class Facebook
      * @param AccessToken|string|null $accessToken
      * @param string|null             $graphVersion
      *
-     * @return FacebookBatchResponse
+     * @return BatchResponse
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function sendBatchRequest(array $requests, $accessToken = null, $graphVersion = null)
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
-        $batchRequest = new FacebookBatchRequest(
+        $batchRequest = new BatchRequest(
             $this->app,
             $requests,
             $accessToken,
@@ -513,16 +512,16 @@ class Facebook
      * @param string|null             $eTag
      * @param string|null             $graphVersion
      *
-     * @return FacebookRequest
+     * @return Request
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function request($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
-        return new FacebookRequest(
+        return new Request(
             $this->app,
             $accessToken,
             $method,
@@ -538,13 +537,13 @@ class Facebook
      *
      * @param string $pathToFile
      *
-     * @return FacebookFile
+     * @return File
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function fileToUpload($pathToFile)
     {
-        return new FacebookFile($pathToFile);
+        return new File($pathToFile);
     }
 
     /**
@@ -552,13 +551,13 @@ class Facebook
      *
      * @param string $pathToFile
      *
-     * @return FacebookVideo
+     * @return Video
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function videoToUpload($pathToFile)
     {
-        return new FacebookVideo($pathToFile);
+        return new Video($pathToFile);
     }
 
     /**
@@ -573,14 +572,14 @@ class Facebook
      *
      * @return array
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
     public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null)
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
-        $uploader = new FacebookResumableUploader($this->app, $this->client, $accessToken, $graphVersion);
+        $uploader = new ResumableUploader($this->app, $this->client, $accessToken, $graphVersion);
         $endpoint = '/'.$target.'/videos';
         $file = $this->videoToUpload($pathToFile);
         $chunk = $uploader->start($endpoint, $file);
@@ -598,16 +597,16 @@ class Facebook
     /**
      * Attempts to upload a chunk of a file in $retryCountdown tries.
      *
-     * @param FacebookResumableUploader $uploader
+     * @param ResumableUploader $uploader
      * @param string $endpoint
-     * @param FacebookTransferChunk $chunk
+     * @param TransferChunk $chunk
      * @param int $retryCountdown
      *
-     * @return FacebookTransferChunk
+     * @return TransferChunk
      *
-     * @throws FacebookSDKException
+     * @throws SDKException
      */
-    private function maxTriesTransfer(FacebookResumableUploader $uploader, $endpoint, FacebookTransferChunk $chunk, $retryCountdown)
+    private function maxTriesTransfer(ResumableUploader $uploader, $endpoint, TransferChunk $chunk, $retryCountdown)
     {
         $newChunk = $uploader->transfer($endpoint, $chunk, $retryCountdown < 1);
 

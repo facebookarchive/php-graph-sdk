@@ -24,7 +24,7 @@
 namespace Facebook\Tests\Http;
 
 use Facebook\Http\RequestBodyMultipart;
-use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\File;
 use PHPUnit\Framework\TestCase;
 
 class RequestBodyMultipartTest extends TestCase
@@ -48,7 +48,7 @@ class RequestBodyMultipartTest extends TestCase
 
     public function testCanProperlyEncodeFilesAndParams()
     {
-        $file = new FacebookFile(__DIR__ . '/../foo.txt');
+        $file = new File(__DIR__ . '/../foo.txt');
         $message = new RequestBodyMultipart([
             'foo' => 'bar',
         ], [

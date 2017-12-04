@@ -24,7 +24,6 @@
 namespace Facebook\PersistentData;
 
 /**
- * Interface PersistentDataInterface
  *
  * @package Facebook
  */

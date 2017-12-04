@@ -23,10 +23,9 @@
  */
 namespace Facebook\Http;
 
-use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\File;
 
 /**
- * Class RequestBodyMultipartt
  *
  * Some things copied from Guzzle
  *
@@ -101,11 +100,11 @@ class RequestBodyMultipart implements RequestBodyInterface
      * Get the string needed to transfer a file.
      *
      * @param string       $name
-     * @param FacebookFile $file
+     * @param File $file
      *
      * @return string
      */
-    private function getFileString($name, FacebookFile $file)
+    private function getFileString($name, File $file)
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n",
@@ -159,11 +158,11 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * Get the headers needed before transferring the content of a POST file.
      *
-     * @param FacebookFile $file
+     * @param File $file
      *
      * @return string
      */
-    protected function getFileHeaders(FacebookFile $file)
+    protected function getFileHeaders(File $file)
     {
         return "\r\nContent-Type: {$file->getMimetype()}";
     }

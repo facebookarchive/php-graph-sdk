@@ -17,11 +17,11 @@ $helper = $fb->getCanvasHelper();
 
 try {
   $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exception\FacebookResponseException $e) {
+} catch(Facebook\Exception\ResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exception\FacebookSDKException $e) {
+} catch(Facebook\Exception\SDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;

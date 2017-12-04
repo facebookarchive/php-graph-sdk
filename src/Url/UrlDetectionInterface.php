@@ -24,7 +24,6 @@
 namespace Facebook\Url;
 
 /**
- * Interface UrlDetectionInterface
  *
  * @package Facebook
  */

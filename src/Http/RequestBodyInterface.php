@@ -24,7 +24,6 @@
 namespace Facebook\Http;
 
 /**
- * Interface
  *
  * @package Facebook
  */

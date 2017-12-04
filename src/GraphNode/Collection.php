@@ -24,7 +24,6 @@
 namespace Facebook\GraphNode;
 
 /**
- * Class Collection
  *
  * Modified version of Collection in "illuminate/support" by Taylor Otwell
  *
