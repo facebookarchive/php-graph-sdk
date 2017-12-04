@@ -27,7 +27,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use ArrayAccess;
 use Facebook\Authentication\AccessToken;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class BatchRequest

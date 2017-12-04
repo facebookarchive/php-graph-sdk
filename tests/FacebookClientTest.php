@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
@@ -198,7 +198,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
-        $this->setExpectedException('Facebook\Exceptions\FacebookSDKException');
+        $this->setExpectedException('Facebook\Exception\FacebookSDKException');
 
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
@@ -241,7 +241,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         );
         $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
+        $this->assertInstanceOf('Facebook\GraphNode\GraphNode', $graphNode);
         $this->assertNotNull($graphNode->getField('id'));
         $this->assertEquals('Foo Phpunit User', $graphNode->getField('name'));
 

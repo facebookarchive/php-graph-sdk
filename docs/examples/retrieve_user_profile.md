@@ -4,7 +4,7 @@ This example covers getting profile information for the current user and printin
 
 It assumes that you've already obtained an access token from one of the helpers found [here](../reference.md).
 
-For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNodes\GraphUser`](../reference/GraphNode.md#graphuser-instance-methods), [`Facebook\Exceptions\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exceptions\FacebookResponseException`](../reference/FacebookResponseException.md).
+For more information, see the documentation for [`Facebook\Facebook`](../reference/Facebook.md), [`Facebook\FacebookResponse`](../reference/FacebookResponse.md), [`Facebook\GraphNode\GraphUser`](../reference/GraphNode.md#graphuser-instance-methods), [`Facebook\Exception\FacebookSDKException`](../reference/FacebookSDKException.md) and [`Facebook\Exception\FacebookResponseException`](../reference/FacebookResponseException.md).
 
 ## Example
 
@@ -18,10 +18,10 @@ $fb = new Facebook\Facebook([
 try {
   // Returns a `Facebook\FacebookResponse` object
   $response = $fb->get('/me?fields=id,name', '{access-token}');
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
 }

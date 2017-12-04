@@ -40,7 +40,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAMissingAccessTokenWillThrow()
     {
@@ -51,7 +51,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAMissingMethodWillThrow()
     {
@@ -62,7 +62,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnInvalidMethodWillThrow()
     {
@@ -110,7 +110,7 @@ class FacebookRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAccessTokenConflictsWillThrow()
     {

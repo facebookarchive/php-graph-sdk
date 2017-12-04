@@ -23,7 +23,7 @@
  */
 namespace Facebook\PersistentData;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class FacebookSessionPersistentDataHandler

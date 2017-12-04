@@ -4,7 +4,7 @@ The cryptographically secure pseudo-random string generator interface allows you
 
 ## Facebook\PseudoRandomString\PseudoRandomStringGeneratorInterface
 
-By default the SDK will attempt to generate a cryptographically secure random string using a number of methods. If a cryptographically secure method is not detected, a `Facebook\Exceptions\FacebookSDKException` will be thrown.
+By default the SDK will attempt to generate a cryptographically secure random string using a number of methods. If a cryptographically secure method is not detected, a `Facebook\Exception\FacebookSDKException` will be thrown.
 
 If your hosting environment does not support any of the CSPRSG methods used by the SDK or if you have preferred CSPRSG, you can provide your own CSPRSG to the SDK using this interface.
 
@@ -41,10 +41,10 @@ $fb = new Facebook\Facebook([
   ]);
 ```
 
-Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom generator via the constructor.
+Alternatively, if you're working with the `Facebook\Helper\FacebookRedirectLoginHelper` directly, you can inject your custom generator via the constructor.
 
 ```php
-use Facebook\Helpers\FacebookRedirectLoginHelper;
+use Facebook\Helper\FacebookRedirectLoginHelper;
 
 $myPseudoRandomStringGenerator = new MyCustomPseudoRandomStringGenerator();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);

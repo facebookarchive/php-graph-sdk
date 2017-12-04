@@ -51,7 +51,7 @@ class FacebookFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testTryingToOpenAFileThatDoesntExistsThrows()
     {

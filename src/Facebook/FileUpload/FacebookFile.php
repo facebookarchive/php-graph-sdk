@@ -23,7 +23,7 @@
  */
 namespace Facebook\FileUpload;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class FacebookFile

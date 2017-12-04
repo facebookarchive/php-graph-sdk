@@ -27,7 +27,7 @@ use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
-use Facebook\GraphNodes\GraphEdge;
+use Facebook\GraphNode\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooClientInterface;
@@ -42,7 +42,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInstantiatingWithoutAppIdThrows()
     {
@@ -55,7 +55,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInstantiatingWithoutAppSecretThrows()
     {
@@ -376,12 +376,12 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             '/1337/photos',
-            '\Facebook\GraphNodes\GraphUser'
+            '\Facebook\GraphNode\GraphUser'
         );
 
         $nextPage = $fb->next($graphEdge);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphEdge', $nextPage);
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphUser', $nextPage[0]);
+        $this->assertInstanceOf('Facebook\GraphNode\GraphEdge', $nextPage);
+        $this->assertInstanceOf('Facebook\GraphNode\GraphUser', $nextPage[0]);
         $this->assertEquals('Foo', $nextPage[0]['name']);
 
         $lastResponse = $fb->getLastResponse();
@@ -403,7 +403,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     * @expectedException \Facebook\Exception\FacebookResponseException
      */
     public function testMaxingOutRetriesWillThrow()
     {

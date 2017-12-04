@@ -79,7 +79,7 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     * @expectedException \Facebook\Exception\FacebookResponseException
      */
     public function testStartWillLetErrorResponsesThrow()
     {

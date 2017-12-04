@@ -105,7 +105,7 @@ Most all request made to the Graph API require an access token. We can obtain us
 
 ### Obtaining an access token from redirect
 
-For most websites, you'll use the [`Facebook\Helpers\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md) to generate a login URL with the `getLoginUrl()` method. The link will take the user to an app authorization screen and upon approval, will redirect them back to a URL that you specified. On the redirect callback page we can obtain the user access token as an [`AccessToken`](reference/AccessToken.md) entity.
+For most websites, you'll use the [`Facebook\Helper\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md) to generate a login URL with the `getLoginUrl()` method. The link will take the user to an app authorization screen and upon approval, will redirect them back to a URL that you specified. On the redirect callback page we can obtain the user access token as an [`AccessToken`](reference/AccessToken.md) entity.
 
 > For this example we'll assume `login.php` will present the login link and the user will be redirected to `login-callback.php` where we will obtain the access token.
 
@@ -129,11 +129,11 @@ $fb = new Facebook\Facebook([/* . . . */]);
 $helper = $fb->getRedirectLoginHelper();
 try {
   $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -151,7 +151,7 @@ if (isset($accessToken)) {
 
 ### Obtaining an access token from a Facebook Canvas context
 
-If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
+If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helper\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
 
 > **Warning:** The `FacebookCanvasHelper` will detect a [signed request](reference.md#signed-requests) for you and attempt to obtain an access token using the payload data from the signed request. The signed request will only contain the data needed to obtain an access token if the user has already authorized your app sometime in the past. If they have not yet authorized your app the `getAccessToken()` will return `null` and you will need to log the user in with either the [redirect method](#obtaining-an-access-token-from-redirect) or by using the [SDK for JavaScript](https://developers.facebook.com/docs/javascript) and then use the SDK for PHP to [obtain the access token from the cookie](#obtaining-an-access-token-from-the-sdk-for-javascript) the SDK for JavaScript set.
 
@@ -162,11 +162,11 @@ $fb = new Facebook\Facebook([/* . . . */]);
 $helper = $fb->getCanvasHelper();
 try {
   $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -177,7 +177,7 @@ if (isset($accessToken)) {
 }
 ```
 
-> If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)
+> If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helper\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)
 
 
 ### Obtaining an access token from the SDK for JavaScript
@@ -191,11 +191,11 @@ $fb = new Facebook\Facebook([/* . . . */]);
 $helper = $fb->getJavaScriptHelper();
 try {
   $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -239,11 +239,11 @@ $fb->setDefaultAccessToken('{access-token}');
 try {
   $response = $fb->get('/me');
   $userNode = $response->getGraphUser();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -254,14 +254,14 @@ echo 'Logged in as ' . $userNode->getName();
 
 The `get()` method will return a [`Facebook\FacebookResponse`](reference/FacebookResponse.md) which is an entity that represents an HTTP response from the Graph API.
 
-To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphuser-instance-methods) entity which represents a user node.
+To get the response in the form of a nifty collection, we call `getGraphUser()` which returns a [`Facebook\GraphNode\GraphUser`](reference/GraphNode.md#graphuser-instance-methods) entity which represents a user node.
 
 If you don't care about fancy collections and just want the response as a plain-old array, you can call the `getDecodedBody()` method on the `FacebookResponse` entity.
 
 ```php
 try {
   $response = $fb->get('/me');
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // . . .
   exit;
 }

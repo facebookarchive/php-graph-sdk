@@ -253,7 +253,7 @@ class FacebookCurlHttpClientTest extends AbstractTestHttpClient
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testThrowsExceptionOnClientError()
     {

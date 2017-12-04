@@ -23,7 +23,7 @@
  */
 namespace Facebook\Authentication;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class AccessTokenMetadata

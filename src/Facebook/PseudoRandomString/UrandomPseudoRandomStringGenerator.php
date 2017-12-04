@@ -23,7 +23,7 @@
  */
 namespace Facebook\PseudoRandomString;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 class UrandomPseudoRandomStringGenerator implements PseudoRandomStringGeneratorInterface
 {
