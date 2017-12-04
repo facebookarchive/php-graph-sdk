@@ -300,7 +300,7 @@ class FacebookBatchRequestTest extends TestCase
         $this->assertEquals([
             'headers' => $this->defaultHeaders(),
             'method' => 'GET',
-            'relative_url' => '/' . Facebook::DEFAULT_GRAPH_VERSION . '/bar?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
+            'relative_url' => '/bar?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9',
             'name' => 'foo_name',
             'omit_response_on_success' => false,
         ], $batchRequestArray);
@@ -364,10 +364,9 @@ class FacebookBatchRequestTest extends TestCase
         $params = $batchRequest->getParams();
 
         $expectedHeaders = json_encode($this->defaultHeaders());
-        $version = Facebook::DEFAULT_GRAPH_VERSION;
 
         $expectedBatchParams = [
-            'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/' . $version . '\\/foo?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9",'
+            'batch' => '[{"headers":' . $expectedHeaders . ',"method":"GET","relative_url":"\\/foo?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9",'
                 . '"name":"foo_name","omit_response_on_success":false}]',
             'include_headers' => true,
             'access_token' => 'foo_token',
