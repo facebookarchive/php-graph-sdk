@@ -28,7 +28,7 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchRequest;
 use Facebook\FacebookBatchResponse;
-use Facebook\GraphNodes\GraphNode;
+use Facebook\GraphNode\GraphNode;
 use PHPUnit\Framework\TestCase;
 
 class FacebookBatchResponseTest extends TestCase

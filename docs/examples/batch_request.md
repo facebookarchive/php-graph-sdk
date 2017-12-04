@@ -52,11 +52,11 @@ echo '<h1>Make a batch request</h1>' . "\n\n";
 
 try {
   $responses = $fb->sendBatchRequest($batch);
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -118,11 +118,11 @@ $batch = [
 
 try {
   $responses = $fb->sendBatchRequest($batch);
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;

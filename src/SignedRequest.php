@@ -23,7 +23,7 @@
  */
 namespace Facebook;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class SignedRequest

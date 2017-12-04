@@ -1,9 +1,9 @@
-# Facebook\Helpers\FacebookCanvasHelper
+# Facebook\Helper\FacebookCanvasHelper
 
 The `FacebookCanvasHelper` is used to obtain an access token or signed request when working within the context of an [app canvas](https://developers.facebook.com/docs/games/canvas).
 
 ```php
-Facebook\Helpers\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
+Facebook\Helper\FacebookCanvasHelper( Facebook\FacebookApp $facebookApp )
 ```
 
 ## Usage
@@ -29,10 +29,10 @@ $canvasHelper = $fb->getCanvasHelper();
 
 try {
   $accessToken = $canvasHelper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
 }

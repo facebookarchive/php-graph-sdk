@@ -80,7 +80,7 @@ class FacebookResumableUploaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     * @expectedException \Facebook\Exception\FacebookResponseException
      */
     public function testStartWillLetErrorResponsesThrow()
     {

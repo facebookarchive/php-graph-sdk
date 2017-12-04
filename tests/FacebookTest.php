@@ -27,7 +27,7 @@ use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
 use Facebook\Authentication\AccessToken;
-use Facebook\GraphNodes\GraphEdge;
+use Facebook\GraphNode\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
@@ -38,7 +38,7 @@ use Facebook\HttpClients\FacebookGuzzleHttpClient;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\FacebookResponse;
-use Facebook\GraphNodes\GraphUser;
+use Facebook\GraphNode\GraphUser;
 use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
 
@@ -51,7 +51,7 @@ class FacebookTest extends TestCase
     ];
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInstantiatingWithoutAppIdThrows()
     {
@@ -65,7 +65,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInstantiatingWithoutAppSecretThrows()
     {
@@ -274,7 +274,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
+     * @expectedException \Facebook\Exception\FacebookResponseException
      */
     public function testMaxingOutRetriesWillThrow()
     {

@@ -1,8 +1,8 @@
 # GraphNode for the Facebook SDK for PHP
 
-A `Facebook\GraphNodes\GraphNode` is a collection that represents a node returned by the Graph API.
+A `Facebook\GraphNode\GraphNode` is a collection that represents a node returned by the Graph API.
 
-## Facebook\GraphNodes\GraphNode
+## Facebook\GraphNode\GraphNode
 
 This base class has several subclasses:
 
@@ -100,9 +100,9 @@ The following properties on the `GraphUser` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `hometown` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods)  |
-| `location`  | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods) |
-| `significant_other`  | [`Facebook\GraphNodes\GraphUser`](#graphuser-instance-methods)  |
+| `hometown` | [`Facebook\GraphNode\GraphPage`](#graphpage-instance-methods)  |
+| `location`  | [`Facebook\GraphNode\GraphPage`](#graphpage-instance-methods) |
+| `significant_other`  | [`Facebook\GraphNode\GraphUser`](#graphuser-instance-methods)  |
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -144,27 +144,27 @@ Returns the `link` property for the user as a string if present.
 
 ### getBirthday()
 ```php
-public \Facebook\GraphNodes\Birthday|null getBirthday()
+public \Facebook\GraphNode\Birthday|null getBirthday()
 ```
-Returns the `birthday` property for the user as a [`Facebook\GraphNodes\Birthday`](Birthday.md) if present.
+Returns the `birthday` property for the user as a [`Facebook\GraphNode\Birthday`](Birthday.md) if present.
 
 ### getLocation()
 ```php
-public Facebook\GraphNodes\GraphPage|null getLocation()
+public Facebook\GraphNode\GraphPage|null getLocation()
 ```
-Returns the `location` property for the user as a `Facebook\GraphNodes\GraphPage` if present.
+Returns the `location` property for the user as a `Facebook\GraphNode\GraphPage` if present.
 
 ### getHometown()
 ```php
-public Facebook\GraphNodes\GraphPage|null getHometown()
+public Facebook\GraphNode\GraphPage|null getHometown()
 ```
-Returns the `hometown` property for the user as a `Facebook\GraphNodes\GraphPage` if present.
+Returns the `hometown` property for the user as a `Facebook\GraphNode\GraphPage` if present.
 
 ### getSignificantOther()
 ```php
-public Facebook\GraphNodes\GraphUser|null getHometown()
+public Facebook\GraphNode\GraphUser|null getHometown()
 ```
-Returns the `significant_other` property for the user as a `Facebook\GraphNodes\GraphUser` if present.
+Returns the `significant_other` property for the user as a `Facebook\GraphNode\GraphUser` if present.
 
 ## GraphPage Instance Methods
 
@@ -176,9 +176,9 @@ The following properties on the `GraphPage` collection will get automatically ca
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `best_page` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods)  |
-| `global_brand_parent_page`  | [`Facebook\GraphNodes\GraphPage`](graph#page-instance-methods) |
-| `location`  | [`Facebook\GraphNodes\GraphLocation`](#graphlocation-instance-methods)  |
+| `best_page` | [`Facebook\GraphNode\GraphPage`](#graphpage-instance-methods)  |
+| `global_brand_parent_page`  | [`Facebook\GraphNode\GraphPage`](graph#page-instance-methods) |
+| `location`  | [`Facebook\GraphNode\GraphLocation`](#graphlocation-instance-methods)  |
 
 
 All getter methods return `null` if the property does not exist on the node.
@@ -203,21 +203,21 @@ Returns the `category` property for the page as a string if present.
 
 ### getBestPage()
 ```php
-public Facebook\GraphNodes\GraphPage|null getBestPage()
+public Facebook\GraphNode\GraphPage|null getBestPage()
 ```
-Returns the `best_page` property for the page as a `Facebook\GraphNodes\GraphPage` if present.
+Returns the `best_page` property for the page as a `Facebook\GraphNode\GraphPage` if present.
 
 ### getGlobalBrandParentPage()
 ```php
-public Facebook\GraphNodes\GraphPage|null getGlobalBrandParentPage()
+public Facebook\GraphNode\GraphPage|null getGlobalBrandParentPage()
 ```
-Returns the `global_brand_parent_page` property for the page as a `Facebook\GraphNodes\GraphPage` if present.
+Returns the `global_brand_parent_page` property for the page as a `Facebook\GraphNode\GraphPage` if present.
 
 ### getLocation()
 ```php
-public Facebook\GraphNodes\GraphLocation|null getLocation()
+public Facebook\GraphNode\GraphLocation|null getLocation()
 ```
-Returns the `location` property for the page as a `Facebook\GraphNodes\GraphLocation` if present.
+Returns the `location` property for the page as a `Facebook\GraphNode\GraphLocation` if present.
 
 ### getAccessToken()
 ```php
@@ -241,8 +241,8 @@ The following properties on the `GraphAlbum` collection will get automatically c
 
 | Property  | GraphNode subtype |
 | ------------- | ------------- |
-| `from` | [`Facebook\GraphNodes\GraphUser`](#graphuser-instance-methods)  |
-| `place` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods) |
+| `from` | [`Facebook\GraphNode\GraphUser`](#graphuser-instance-methods)  |
+| `place` | [`Facebook\GraphNode\GraphPage`](#graphpage-instance-methods) |
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -296,15 +296,15 @@ Returns the `description` property for the album as a string if present.
 
 ### getFrom()
 ```php
-public Facebook\GraphNodes\GraphUser|null getFrom()
+public Facebook\GraphNode\GraphUser|null getFrom()
 ```
-Returns the `from` property for the album as a `Facebook\GraphNodes\GraphUser` if present.
+Returns the `from` property for the album as a `Facebook\GraphNode\GraphUser` if present.
 
 ### getPlace()
 ```php
-public Facebook\GraphNodes\GraphPage|null getPlace()
+public Facebook\GraphNode\GraphPage|null getPlace()
 ```
-Returns the `place` property for the album as a `Facebook\GraphNodes\GraphPage` if present.
+Returns the `place` property for the album as a `Facebook\GraphNode\GraphPage` if present.
 
 ### getLink()
 ```php
@@ -314,9 +314,9 @@ Returns the `link` property for the album as a string if present.
 
 ### getLocation()
 ```php
-public Facebook\GraphNodes\GraphNode|string|null getLocation()
+public Facebook\GraphNode\GraphNode|string|null getLocation()
 ```
-Returns the `location` property for the album as a `Facebook\GraphNodes\GraphNode` or string if present.
+Returns the `location` property for the album as a `Facebook\GraphNode\GraphNode` or string if present.
 
 ### getPrivacy()
 ```php

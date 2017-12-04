@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class FacebookSessionPersistentDataHandlerTest extends TestCase
 {
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInactiveSessionsWillThrow()
     {

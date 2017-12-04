@@ -66,7 +66,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testInvalidSignedRequestsWillFailFormattingValidation()
     {
@@ -90,7 +90,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnImproperlyEncodedSignatureWillThrowAnException()
     {
@@ -98,7 +98,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAnImproperlyEncodedPayloadWillThrowAnException()
     {
@@ -106,7 +106,7 @@ class SignedRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testNonApprovedAlgorithmsWillThrowAnException()
     {

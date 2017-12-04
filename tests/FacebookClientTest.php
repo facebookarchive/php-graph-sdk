@@ -23,7 +23,7 @@
  */
 namespace Facebook\Tests;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookBatchRequest;
@@ -38,7 +38,7 @@ use Facebook\Tests\Fixtures\MyFooBatchHttpClient;
 use Facebook\Tests\Fixtures\MyFooHttpClient;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchResponse;
-use Facebook\GraphNodes\GraphNode;
+use Facebook\GraphNode\GraphNode;
 use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
 
@@ -197,7 +197,7 @@ class FacebookClientTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {

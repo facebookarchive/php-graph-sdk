@@ -1,4 +1,4 @@
-# Facebook\Helpers\FacebookPageTabHelper
+# Facebook\Helper\FacebookPageTabHelper
 
 Page tabs are similar to the context to app canvases but are treated slightly differently. Use the `FacebookPageTabHelper` to obtain an access token or signed request within the context of a page tab.
 
@@ -25,10 +25,10 @@ $pageHelper = $fb->getPageTabHelper();
 
 try {
   $accessToken = $pageHelper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
 }

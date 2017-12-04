@@ -2,7 +2,7 @@
 
 When a list of nodes is returned from a Graph request, it can be cast as a `GraphEdge` which provides convenient ways of interacting with the data which includes pagination.
 
-## Facebook\GraphNodes\GraphEdge
+## Facebook\GraphNode\GraphEdge
 
 You can grab a `GraphEdge` from a response from Graph.
 

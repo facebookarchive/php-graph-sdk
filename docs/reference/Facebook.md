@@ -329,10 +329,10 @@ $batchResponse = $fb->sendBatchRequest($requests);
 
 ## getRedirectLoginHelper()
 ```php
-public Facebook\Helpers\FacebookRedirectLoginHelper getRedirectLoginHelper()
+public Facebook\Helper\FacebookRedirectLoginHelper getRedirectLoginHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookRedirectLoginHelper`](FacebookRedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
+Returns a [`Facebook\Helper\FacebookRedirectLoginHelper`](FacebookRedirectLoginHelper.md) which is used to generate a "Login with Facebook" link and obtain an access token from a redirect.
 
 ```php
 $helper = $fb->getRedirectLoginHelper();
@@ -340,10 +340,10 @@ $helper = $fb->getRedirectLoginHelper();
 
 ## getJavaScriptHelper()
 ```php
-public Facebook\Helpers\FacebookJavaScriptHelper getJavaScriptHelper()
+public Facebook\Helper\FacebookJavaScriptHelper getJavaScriptHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookJavaScriptHelper`](FacebookJavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
+Returns a [`Facebook\Helper\FacebookJavaScriptHelper`](FacebookJavaScriptHelper.md) which is used to access the signed request stored in the cookie set by the SDK for JavaScript.
 
 ```php
 $helper = $fb->getJavaScriptHelper();
@@ -351,10 +351,10 @@ $helper = $fb->getJavaScriptHelper();
 
 ## getCanvasHelper()
 ```php
-public Facebook\Helpers\FacebookCanvasHelper getCanvasHelper()
+public Facebook\Helper\FacebookCanvasHelper getCanvasHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookCanvasHelper`](FacebookCanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
+Returns a [`Facebook\Helper\FacebookCanvasHelper`](FacebookCanvasHelper.md) which is used to access the signed request that is `POST`ed to canvas apps.
 
 ```php
 $helper = $fb->getCanvasHelper();
@@ -362,10 +362,10 @@ $helper = $fb->getCanvasHelper();
 
 ## getPageTabHelper()
 ```php
-public Facebook\Helpers\FacebookPageTabHelper getPageTabHelper()
+public Facebook\Helper\FacebookPageTabHelper getPageTabHelper()
 ```
 
-Returns a [`Facebook\Helpers\FacebookPageTabHelper`](FacebookPageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
+Returns a [`Facebook\Helper\FacebookPageTabHelper`](FacebookPageTabHelper.md) which is used to access the signed request that is `POST`ed to canvas apps and provides a number of helper methods useful for apps living in a page tab context.
 
 ```php
 $helper = $fb->getPageTabHelper();
@@ -373,10 +373,10 @@ $helper = $fb->getPageTabHelper();
 
 ## next()
 ```php
-public Facebook\GraphNodes\GraphEdge|null next(Facebook\GraphNodes\GraphEdge $graphEdge)
+public Facebook\GraphNode\GraphEdge|null next(Facebook\GraphNode\GraphEdge $graphEdge)
 ```
 
-Requests and returns the next page of results in a [`Facebook\GraphNodes\GraphEdge`](GraphEdge.md) collection. If the next page returns no results, `null` will be returned.
+Requests and returns the next page of results in a [`Facebook\GraphNode\GraphEdge`](GraphEdge.md) collection. If the next page returns no results, `null` will be returned.
 
 ```php
 // Iterate over 5 pages max
@@ -407,10 +407,10 @@ if (count($photosEdge) > 0) {
 
 ## previous()
 ```php
-public Facebook\GraphNodes\GraphEdge|null previous(Facebook\GraphNodes\GraphEdge $graphEdge)
+public Facebook\GraphNode\GraphEdge|null previous(Facebook\GraphNode\GraphEdge $graphEdge)
 ```
 
-Requests and returns the previous page of results in a `Facebook\GraphNodes\GraphEdge` collection. Functions just like `next()` above, but in the opposite direction of pagination.
+Requests and returns the previous page of results in a `Facebook\GraphNode\GraphEdge` collection. Functions just like `next()` above, but in the opposite direction of pagination.
 
 ## fileToUpload()
 ```php
@@ -514,7 +514,7 @@ $data = [
 
 try {
   $response = $fb->uploadVideo('me', '/path/to/video.mp4', $data, '{user-access-token}');
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Error: ' . $e->getMessage();
   exit;
 }

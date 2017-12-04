@@ -52,7 +52,7 @@ class FacebookFileTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testTryingToOpenAFileThatDoesntExistsThrows()
     {

@@ -53,9 +53,9 @@ Takes a [`Facebook\FacebookRequest`](FacebookRequest.md) and sends it to the Gra
 
 Returns the response from Graph in the form of a [`Facebook\FacebookResponse`](FacebookResponse.md).
 
-If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](FacebookSDKException.md) will be thrown.
+If there was an error processing the request before sending, a [`Facebook\Exception\FacebookSDKException`](FacebookSDKException.md) will be thrown.
 
-If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](FacebookResponseException.md) will be thrown.
+If an error response from Graph was returned, a [`Facebook\Exception\FacebookResponseException`](FacebookResponseException.md) will be thrown.
 
 ### sendBatchRequest()
 ```php
@@ -67,6 +67,6 @@ Takes a [`Facebook\FacebookBatchRequest`](FacebookBatchRequest.md) and sends it 
 
 Returns the response from Graph in the form of a [`Facebook\FacebookBatchResponse`](FacebookBatchResponse.md).
 
-If there was an error processing the request before sending, a [`Facebook\Exceptions\FacebookSDKException`](FacebookSDKException.md) will be thrown.
+If there was an error processing the request before sending, a [`Facebook\Exception\FacebookSDKException`](FacebookSDKException.md) will be thrown.
 
-If an error response from Graph was returned, a [`Facebook\Exceptions\FacebookResponseException`](FacebookResponseException.md) will be thrown.
+If an error response from Graph was returned, a [`Facebook\Exception\FacebookResponseException`](FacebookResponseException.md) will be thrown.

@@ -23,7 +23,7 @@
  */
 namespace Facebook;
 
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;

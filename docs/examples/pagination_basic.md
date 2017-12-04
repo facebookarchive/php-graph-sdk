@@ -18,11 +18,11 @@ $fb = new Facebook\Facebook([
 try {
   // Requires the "read_stream" permission
   $response = $fb->get('/me/feed?fields=id,message&limit=5');
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;

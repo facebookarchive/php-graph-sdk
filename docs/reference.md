@@ -17,7 +17,7 @@ These classes facilitate authenticating a Facebook user with OAuth 2.0.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helpers\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md)  | An OAuth 2.0 service to obtain a user access token from a redirect using a "Log in with Facebook" link.  |
+| [`Facebook\Helper\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md)  | An OAuth 2.0 service to obtain a user access token from a redirect using a "Log in with Facebook" link.  |
 | [`Facebook\Authentication\AccessToken`](reference/AccessToken.md)  | An entity that represents an access token.  |
 | `Facebook\Authentication\AccessTokenMetadata`  | An entity that represents metadata from an access token.  |
 | `Facebook\Authentication\OAuth2Client`  | An OAuth 2.0 client that sends and receives HTTP requests related to user authentication.  |
@@ -41,9 +41,9 @@ Classes to help obtain and manage signed requests.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helpers\FacebookJavaScriptHelper`](reference/FacebookJavaScriptHelper.md) | Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.  |
-| [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md)  | Used to obtain an access token or signed request from within the context of an app canvas.  |
-| [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)  | Used to obtain an access token or signed request from within the context of a page tab.  |
+| [`Facebook\Helper\FacebookJavaScriptHelper`](reference/FacebookJavaScriptHelper.md) | Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.  |
+| [`Facebook\Helper\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md)  | Used to obtain an access token or signed request from within the context of an app canvas.  |
+| [`Facebook\Helper\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)  | Used to obtain an access token or signed request from within the context of a page tab.  |
 | [`Facebook\SignedRequest`](reference/SignedRequest.md)  | An entity that represents a signed request.  |
 
 # Core Exceptions
@@ -52,8 +52,8 @@ These are the core exceptions that the SDK will throw when an error occurs.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Exceptions\FacebookSDKException`](reference/FacebookSDKException.md) | The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.  |
-| [`Facebook\Exceptions\FacebookResponseException`](reference/FacebookResponseException.md)  | The base exception to all Graph error responses. This exception is never thrown directly.  |
+| [`Facebook\Exception\FacebookSDKException`](reference/FacebookSDKException.md) | The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.  |
+| [`Facebook\Exception\FacebookResponseException`](reference/FacebookResponseException.md)  | The base exception to all Graph error responses. This exception is never thrown directly.  |
 
 
 # Graph Nodes and Edges
@@ -62,14 +62,14 @@ Graph nodes are collections that represent nodes returned by the Graph API. And 
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\GraphNodes\GraphNode`](reference/GraphNode.md) | The base collection object that represents a generic node.  |
-| [`Facebook\GraphNodes\GraphEdge`](reference/GraphEdge.md)  | A collection of GraphNode\'s with special methods to help paginate over the edge.  |
-| [`Facebook\GraphNodes\GraphAchievement`](reference/GraphNode.md#graphachievement-instance-methods) | A collection that represents an Achievement node.  |
-| [`Facebook\GraphNodes\GraphAlbum`](reference/GraphNode.md#graphalbum-instance-methods)  | A collection that represents an Album node. |
-| [`Facebook\GraphNodes\GraphLocation`](reference/GraphNode.md#graphlocation-instance-methods)  | A collection that represents a Location node. |
-| [`Facebook\GraphNodes\GraphPage`](reference/GraphNode.md#graphpage-instance-methods)  | A collection that represents a Page node. |
-| [`Facebook\GraphNodes\GraphPicture`](reference/GraphNode.md#graphpicture-instance-methods)  | A collection that represents a Picture node. |
-| [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphuser-instance-methods)  | A collection that represents a User node. |
+| [`Facebook\GraphNode\GraphNode`](reference/GraphNode.md) | The base collection object that represents a generic node.  |
+| [`Facebook\GraphNode\GraphEdge`](reference/GraphEdge.md)  | A collection of GraphNode\'s with special methods to help paginate over the edge.  |
+| [`Facebook\GraphNode\GraphAchievement`](reference/GraphNode.md#graphachievement-instance-methods) | A collection that represents an Achievement node.  |
+| [`Facebook\GraphNode\GraphAlbum`](reference/GraphNode.md#graphalbum-instance-methods)  | A collection that represents an Album node. |
+| [`Facebook\GraphNode\GraphLocation`](reference/GraphNode.md#graphlocation-instance-methods)  | A collection that represents a Location node. |
+| [`Facebook\GraphNode\GraphPage`](reference/GraphNode.md#graphpage-instance-methods)  | A collection that represents a Page node. |
+| [`Facebook\GraphNode\GraphPicture`](reference/GraphNode.md#graphpicture-instance-methods)  | A collection that represents a Picture node. |
+| [`Facebook\GraphNode\GraphUser`](reference/GraphNode.md#graphuser-instance-methods)  | A collection that represents a User node. |
 
 
 # File Uploads
