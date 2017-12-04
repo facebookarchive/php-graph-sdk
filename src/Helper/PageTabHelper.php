@@ -38,7 +38,7 @@ class PageTabHelper extends CanvasHelper
     /**
      * Initialize the helper and process available signed request data.
      *
-     * @param Application $app          the FacebookApp entity
+     * @param Application $app          the App entity
      * @param Client      $client       the client to make HTTP requests
      * @param string      $graphVersion the version of Graph to use
      */

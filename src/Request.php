@@ -137,7 +137,7 @@ class Request
         if (!$existingAccessToken) {
             $this->setAccessToken($accessToken);
         } elseif ($accessToken !== $existingAccessToken) {
-            throw new SDKException('Access token mismatch. The access token provided in the FacebookRequest and the one provided in the URL or POST params do not match.');
+            throw new SDKException('Access token mismatch. The access token provided in the Request and the one provided in the URL or POST params do not match.');
         }
 
         return $this;
@@ -164,7 +164,7 @@ class Request
     }
 
     /**
-     * Set the FacebookApp entity used for this request.
+     * Set the App entity used for this request.
      *
      * @param null|Application $app
      */
@@ -174,7 +174,7 @@ class Request
     }
 
     /**
-     * Return the FacebookApp entity used for this request.
+     * Return the App entity used for this request.
      *
      * @return Application
      */

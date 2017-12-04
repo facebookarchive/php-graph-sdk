@@ -41,7 +41,7 @@ class OAuth2Client
     const BASE_AUTHORIZATION_URL = 'https://www.facebook.com';
 
     /**
-     * The FacebookApp entity.
+     * The App entity.
      *
      * @var Application
      */
@@ -81,7 +81,7 @@ class OAuth2Client
     }
 
     /**
-     * Returns the last FacebookRequest that was sent.
+     * Returns the last Request that was sent.
      * Useful for debugging and testing.
      *
      * @return null|Request

@@ -30,7 +30,7 @@ use Facebook\Exception\SDKException;
 class SignedRequest
 {
     /**
-     * @var Application the FacebookApp entity
+     * @var Application the App entity
      */
     protected $app;
 
@@ -47,12 +47,12 @@ class SignedRequest
     /**
      * Instantiate a new SignedRequest entity.
      *
-     * @param Application $facebookApp      the FacebookApp entity
+     * @param Application $App      the App entity
      * @param null|string $rawSignedRequest the raw signed request
      */
-    public function __construct(Application $facebookApp, $rawSignedRequest = null)
+    public function __construct(Application $App, $rawSignedRequest = null)
     {
-        $this->app = $facebookApp;
+        $this->app = $App;
 
         if (!$rawSignedRequest) {
             return;

@@ -25,7 +25,7 @@ namespace Facebook\Tests\PersistentData;
 use Facebook\PersistentData\SessionPersistentDataHandler;
 use PHPUnit\Framework\TestCase;
 
-class FacebookSessionPersistentDataHandlerTest extends TestCase
+class SessionPersistentDataHandlerTest extends TestCase
 {
     /**
      * @expectedException \Facebook\Exception\SDKException

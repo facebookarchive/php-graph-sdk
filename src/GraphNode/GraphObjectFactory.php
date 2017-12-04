@@ -44,7 +44,7 @@ class GraphObjectFactory extends GraphNodeFactory
     const BASE_GRAPH_EDGE_CLASS = GraphList::class;
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphNode.
+     * Tries to convert a Response entity into a GraphNode.
      *
      * @param null|string $subclassName the GraphNode sub class to cast to
      *
@@ -58,7 +58,7 @@ class GraphObjectFactory extends GraphNodeFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphEdge.
+     * Tries to convert a Response entity into a GraphEdge.
      *
      * @param null|string $subclassName the GraphNode sub class to cast the list items to
      * @param bool        $auto_prefix  toggle to auto-prefix the subclass name

@@ -23,6 +23,7 @@
 namespace Facebook\Tests;
 
 use Facebook\Application;
+use Facebook\Facebook;
 use Facebook\Request;
 use Facebook\BatchRequest;
 use Facebook\FileUpload\File;
@@ -285,7 +286,7 @@ class BatchRequestTest extends TestCase
 
     public function testBatchRequestsWithOptionsGetConvertedToAnArray()
     {
-        $request = new FacebookRequest(null, null, 'GET', '/bar');
+        $request = new Request(null, null, 'GET', '/bar');
         $batchRequest = $this->createBatchRequest();
         $batchRequest->add($request, [
             'name' => 'foo_name',
@@ -357,7 +358,7 @@ class BatchRequestTest extends TestCase
     public function testPreppingABatchRequestWithOptionsProperlySetsThePostParams()
     {
         $batchRequest = $this->createBatchRequest();
-        $batchRequest->add(new FacebookRequest(null, null, 'GET', '/foo'), [
+        $batchRequest->add(new Request(null, null, 'GET', '/foo'), [
             'name' => 'foo_name',
             'omit_response_on_success' => false,
         ]);

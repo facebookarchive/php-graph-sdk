@@ -40,7 +40,7 @@ abstract class SignedRequestFromInputHelper
     protected $signedRequest;
 
     /**
-     * @var Application the FacebookApp entity
+     * @var Application the App entity
      */
     protected $app;
 
@@ -52,7 +52,7 @@ abstract class SignedRequestFromInputHelper
     /**
      * Initialize the helper and process available signed request data.
      *
-     * @param Application $app          the FacebookApp entity
+     * @param Application $app          the App entity
      * @param Client      $client       the client to make HTTP requests
      * @param string      $graphVersion the version of Graph to use
      */

@@ -62,7 +62,7 @@ class GraphNodeFactory
     protected $response;
 
     /**
-     * @var array the decoded body of the FacebookResponse entity from Graph
+     * @var array the decoded body of the Response entity from Graph
      */
     protected $decodedBody;
 
@@ -78,7 +78,7 @@ class GraphNodeFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphNode.
+     * Tries to convert a Response entity into a GraphNode.
      *
      * @param null|string $subclassName the GraphNode sub class to cast to
      *
@@ -179,7 +179,7 @@ class GraphNodeFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphEdge.
+     * Tries to convert a Response entity into a GraphEdge.
      *
      * @param null|string $subclassName the GraphNode sub class to cast the list items to
      * @param bool        $auto_prefix  toggle to auto-prefix the subclass name

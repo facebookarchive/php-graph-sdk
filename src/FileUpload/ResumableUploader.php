@@ -148,7 +148,7 @@ class ResumableUploader
     }
 
     /**
-     * Helper to make a FacebookRequest and send it.
+     * Helper to make a Request and send it.
      *
      * @param string $endpoint the endpoint to POST to
      * @param array  $params   the params to send with the request

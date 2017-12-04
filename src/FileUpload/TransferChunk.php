@@ -79,7 +79,7 @@ class TransferChunk
     }
 
     /**
-     * Return a FacebookFile entity with partial content.
+     * Return a File entity with partial content.
      *
      * @return File
      */

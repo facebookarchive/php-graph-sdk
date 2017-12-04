@@ -61,7 +61,7 @@ class Facebook
     const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';
 
     /**
-     * @var Application the FacebookApp entity
+     * @var Application the App entity
      */
     protected $app;
 
@@ -150,7 +150,7 @@ class Facebook
     }
 
     /**
-     * Returns the FacebookApp entity.
+     * Returns the App entity.
      *
      * @return Application
      */
@@ -160,7 +160,7 @@ class Facebook
     }
 
     /**
-     * Returns the FacebookClient service.
+     * Returns the Client service.
      *
      * @return Client
      */
@@ -480,20 +480,20 @@ class Facebook
     }
 
     /**
-     * Instantiates an empty FacebookBatchRequest entity.
+     * Instantiates an empty BatchRequest entity.
      *
      * @param null|AccessToken|string $accessToken  The top-level access token. Requests with no access token
      *                                              will fallback to this.
      * @param null|string             $graphVersion the Graph API version to use
      *
-     * @return FacebookBatchRequest
+     * @return BatchRequest
      */
     public function newBatchRequest($accessToken = null, $graphVersion = null)
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
-        return new FacebookBatchRequest(
+        return new BatchRequest(
             $this->app,
             [],
             $accessToken,
@@ -502,7 +502,7 @@ class Facebook
     }
 
     /**
-     * Instantiates a new FacebookRequest entity.
+     * Instantiates a new Request entity.
      *
      * @param string                  $method
      * @param string                  $endpoint
@@ -532,7 +532,7 @@ class Facebook
     }
 
     /**
-     * Factory to create FacebookFile's.
+     * Factory to create File's.
      *
      * @param string $pathToFile
      *
@@ -546,7 +546,7 @@ class Facebook
     }
 
     /**
-     * Factory to create FacebookVideo's.
+     * Factory to create Video's.
      *
      * @param string $pathToFile
      *

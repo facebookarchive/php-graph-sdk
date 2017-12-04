@@ -40,7 +40,7 @@ class ResponseException extends SDKException
     protected $responseData;
 
     /**
-     * Creates a FacebookResponseException.
+     * Creates a ResponseException.
      *
      * @param Response     $response          the response that threw the exception
      * @param SDKException $previousException the more detailed exception

@@ -30,9 +30,6 @@ use Facebook\Client;
 use Facebook\FileUpload\File;
 use Facebook\FileUpload\Video;
 // These are needed when you uncomment the HTTP clients below.
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookGuzzleHttpClient;
-use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchHttpClient;
 use Facebook\Tests\Fixtures\MyFooHttpClient;
 use Facebook\Response;
@@ -56,12 +53,12 @@ class ClientTest extends TestCase
     /**
      * @var Application
      */
-    public static $testFacebookApp;
+    public static $testApp;
 
     /**
      * @var Client
      */
-    public static $testFacebookClient;
+    public static $testClient;
 
     protected function setUp()
     {
@@ -121,7 +118,7 @@ class ClientTest extends TestCase
         $this->assertEquals(Client::BASE_GRAPH_VIDEO_URL_BETA, $url);
     }
 
-    public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph()
+    public function testARequestEntityCanBeUsedToSendARequestToGraph()
     {
         $fbRequest = new Request($this->fbApp, 'token', 'GET', '/foo');
         $response = $this->fbClient->sendRequest($fbRequest);
@@ -131,7 +128,7 @@ class ClientTest extends TestCase
         $this->assertEquals('{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}', $response->getBody());
     }
 
-    public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
+    public function testABatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
     {
         $fbRequests = [
             new Request($this->fbApp, 'token', 'GET', '/foo'),
@@ -147,7 +144,7 @@ class ClientTest extends TestCase
         $this->assertEquals('POST', $response[1]->getRequest()->getMethod());
     }
 
-    public function testAFacebookBatchRequestWillProperlyBatchFiles()
+    public function testABatchRequestWillProperlyBatchFiles()
     {
         $fbRequests = [
             new Request($this->fbApp, 'token', 'POST', '/photo', [
@@ -198,7 +195,7 @@ class ClientTest extends TestCase
     /**
      * @expectedException \Facebook\Exception\SDKException
      */
-    public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
+    public function testARequestValidatesTheAccessTokenWhenOneIsNotProvided()
     {
         $fbRequest = new Request($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
@@ -212,7 +209,7 @@ class ClientTest extends TestCase
         $this->initializeTestApp();
 
         // Create a test user
-        $testUserPath = '/' . FacebookTestCredentials::$appId . '/accounts/test-users';
+        $testUserPath = '/' . TestCredentials::$appId . '/accounts/test-users';
         $params = [
             'installed' => true,
             'name' => 'Foo Phpunit User',
@@ -221,25 +218,25 @@ class ClientTest extends TestCase
         ];
 
         $request = new Request(
-            static::$testFacebookApp,
-            static::$testFacebookApp->getAccessToken(),
+            static::$testApp,
+            static::$testApp->getAccessToken(),
             'POST',
             $testUserPath,
             $params
         );
-        $response = static::$testFacebookClient->sendRequest($request)->getGraphNode();
+        $response = static::$testClient->sendRequest($request)->getGraphNode();
 
         $testUserId = $response->getField('id');
         $testUserAccessToken = $response->getField('access_token');
 
         // Get the test user's profile
         $request = new Request(
-            static::$testFacebookApp,
+            static::$testApp,
             $testUserAccessToken,
             'GET',
             '/me'
         );
-        $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
+        $graphNode = static::$testClient->sendRequest($request)->getGraphNode();
 
         $this->assertInstanceOf(GraphNode::class, $graphNode);
         $this->assertNotNull($graphNode->getField('id'));
@@ -247,36 +244,36 @@ class ClientTest extends TestCase
 
         // Delete test user
         $request = new Request(
-            static::$testFacebookApp,
-            static::$testFacebookApp->getAccessToken(),
+            static::$testApp,
+            static::$testApp->getAccessToken(),
             'DELETE',
             '/' . $testUserId
         );
-        $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
+        $graphNode = static::$testClient->sendRequest($request)->getGraphNode();
 
         $this->assertTrue($graphNode->getField('success'));
     }
 
     public function initializeTestApp()
     {
-        if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
+        if (!file_exists(__DIR__ . '/TestCredentials.php')) {
             throw new SDKException(
-                'You must create a FacebookTestCredentials.php file from FacebookTestCredentials.php.dist'
+                'You must create a TestCredentials.php file from TestCredentials.php.dist'
             );
         }
 
-        if (!strlen(FacebookTestCredentials::$appId) ||
-            !strlen(FacebookTestCredentials::$appSecret)
+        if (!strlen(TestCredentials::$appId) ||
+            !strlen(TestCredentials::$appSecret)
         ) {
             throw new SDKException(
-                'You must fill out FacebookTestCredentials.php'
+                'You must fill out TestCredentials.php'
             );
         }
-        static::$testFacebookApp = new Application(
-            FacebookTestCredentials::$appId,
-            FacebookTestCredentials::$appSecret
+        static::$testApp = new Application(
+            TestCredentials::$appId,
+            TestCredentials::$appSecret
         );
 
-        static::$testFacebookClient = new Client();
+        static::$testClient = new Client();
     }
 }

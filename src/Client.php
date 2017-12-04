@@ -83,7 +83,7 @@ class Client
     public static $requestCount = 0;
 
     /**
-     * Instantiates a new FacebookClient object.
+     * Instantiates a new Client object.
      *
      * @param null|HttpClient $httpClient
      * @param bool            $enableBeta
@@ -202,18 +202,18 @@ class Client
             $responseHeaders[] = sprintf('%s: %s', $name, implode(", ", $values));
         }
 
-        $facebookResponse = new Response(
+        $Response = new Response(
             $request,
             $psr7Response->getBody(),
             $psr7Response->getStatusCode(),
             $responseHeaders
         );
 
-        if ($facebookResponse->isError()) {
-            throw $facebookResponse->getThrownException();
+        if ($Response->isError()) {
+            throw $Response->getThrownException();
         }
 
-        return $facebookResponse;
+        return $Response;
     }
 
     /**
@@ -228,8 +228,8 @@ class Client
     public function sendBatchRequest(BatchRequest $request)
     {
         $request->prepareRequestsForBatch();
-        $facebookResponse = $this->sendRequest($request);
+        $Response = $this->sendRequest($request);
 
-        return new BatchResponse($request, $facebookResponse);
+        return new BatchResponse($request, $Response);
     }
 }

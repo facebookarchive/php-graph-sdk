@@ -90,7 +90,7 @@ class Response
     }
 
     /**
-     * Return the FacebookApp entity used for this response.
+     * Return the App entity used for this response.
      *
      * @return Application
      */

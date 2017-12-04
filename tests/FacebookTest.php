@@ -31,9 +31,9 @@ use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookStreamHttpClient;
-use Facebook\HttpClients\FacebookGuzzleHttpClient;
+use Facebook\HttpClients\CurlHttpClient;
+use Facebook\HttpClients\StreamHttpClient;
+use Facebook\HttpClients\GuzzleHttpClient;
 use Facebook\PersistentData\InMemoryPersistentDataHandler;
 use Facebook\Url\UrlDetectionHandler;
 use Facebook\Response;
@@ -41,7 +41,7 @@ use Facebook\GraphNode\GraphUser;
 use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
 
-class FacebookTest extends TestCase
+class Test extends TestCase
 {
     protected $config = [
         'app_id' => '1337',
@@ -144,7 +144,7 @@ class FacebookTest extends TestCase
         new Facebook($config);
     }
 
-    public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
+    public function testTheUrlHandlerWillDefaultToTheImplementation()
     {
         $fb = new Facebook($this->config);
         $this->assertInstanceOf(UrlDetectionHandler::class, $fb->getUrlDetectionHandler());
@@ -216,10 +216,10 @@ class FacebookTest extends TestCase
         $this->assertEquals('foo_token', (string)$batchRequest->getAccessToken());
         $this->assertEquals('v1337', $batchRequest->getGraphVersion());
         $this->assertEquals(
-            FacebookClient::BASE_GRAPH_URL_BETA,
+            Client::BASE_GRAPH_URL_BETA,
             $fb->getClient()->getBaseGraphUrl()
         );
-        $this->assertInstanceOf('Facebook\FacebookBatchRequest', $batchRequest);
+        $this->assertInstanceOf('Facebook\BatchRequest', $batchRequest);
         $this->assertEquals(0, count($batchRequest->getRequests()));
     }
 

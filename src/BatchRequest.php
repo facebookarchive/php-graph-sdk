@@ -34,7 +34,7 @@ use Facebook\Exception\SDKException;
 class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
 {
     /**
-     * @var array an array of FacebookRequest entities to send
+     * @var array an array of Request entities to send
      */
     protected $requests = [];
 
@@ -81,7 +81,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
         }
 
         if (!$request instanceof Request) {
-            throw new \InvalidArgumentException('Argument for add() must be of type array or FacebookRequest.');
+            throw new \InvalidArgumentException('Argument for add() must be of type array or Request.');
         }
 
         if (null === $options) {
@@ -112,7 +112,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * Ensures that the FacebookApp and access token fall back when missing.
+     * Ensures that the App and access token fall back when missing.
      *
      * @param Request $request
      *
@@ -123,7 +123,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
         if (!$request->getApp()) {
             $app = $this->getApp();
             if (!$app) {
-                throw new SDKException('Missing FacebookApp on FacebookRequest and no fallback detected on FacebookBatchRequest.');
+                throw new SDKException('Missing App on Request and no fallback detected on BatchRequest.');
             }
             $request->setApp($app);
         }
@@ -131,7 +131,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
         if (!$request->getAccessToken()) {
             $accessToken = $this->getAccessToken();
             if (!$accessToken) {
-                throw new SDKException('Missing access token on FacebookRequest and no fallback detected on FacebookBatchRequest.');
+                throw new SDKException('Missing access token on Request and no fallback detected on BatchRequest.');
             }
             $request->setAccessToken($accessToken);
         }
@@ -167,7 +167,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * Return the FacebookRequest entities.
+     * Return the Request entities.
      *
      * @return array
      */

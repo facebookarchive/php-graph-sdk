@@ -86,7 +86,7 @@ class Application implements \Serializable
     }
 
     /**
-     * Serializes the FacebookApp entity as a string.
+     * Serializes the App entity as a string.
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class Application implements \Serializable
     }
 
     /**
-     * Unserializes a string as a FacebookApp entity.
+     * Unserializes a string as a App entity.
      *
      * @param string $serialized
      */
