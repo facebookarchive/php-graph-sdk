@@ -24,7 +24,7 @@
 namespace Facebook;
 
 use Facebook\Authentication\AccessToken;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 class FacebookApp implements \Serializable
 {

@@ -38,7 +38,7 @@ $data = [
 
 try {
   $response = $fb->post('/me/photos', $data);
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   echo 'Error: ' . $e->getMessage();
   exit;
 }

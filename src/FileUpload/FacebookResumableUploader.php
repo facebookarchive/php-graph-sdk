@@ -24,9 +24,9 @@
 namespace Facebook\FileUpload;
 
 use Facebook\Authentication\AccessToken;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookResumableUploadException;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookResponseException;
+use Facebook\Exception\FacebookResumableUploadException;
+use Facebook\Exception\FacebookSDKException;
 use Facebook\FacebookApp;
 use Facebook\FacebookClient;
 use Facebook\FacebookRequest;

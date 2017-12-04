@@ -81,7 +81,7 @@ class FacebookBatchRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testWillThrowWhenNoThereIsNoAppFallback()
     {
@@ -91,7 +91,7 @@ class FacebookBatchRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testWillThrowWhenNoThereIsNoAccessTokenFallback()
     {
@@ -169,7 +169,7 @@ class FacebookBatchRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testAZeroRequestCountWithThrow()
     {
@@ -179,7 +179,7 @@ class FacebookBatchRequestTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
+     * @expectedException \Facebook\Exception\FacebookSDKException
      */
     public function testMoreThanFiftyRequestsWillThrow()
     {

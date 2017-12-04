@@ -26,8 +26,8 @@ namespace Facebook\Tests;
 use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
-use Facebook\GraphNodes\GraphNode;
-use Facebook\Exceptions\FacebookResponseException;
+use Facebook\GraphNode\GraphNode;
+use Facebook\Exception\FacebookResponseException;
 use PHPUnit\Framework\TestCase;
 
 class FacebookResponseTest extends TestCase

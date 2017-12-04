@@ -29,16 +29,16 @@ use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookResumableUploader;
 use Facebook\FileUpload\FacebookTransferChunk;
 use Facebook\FileUpload\FacebookVideo;
-use Facebook\GraphNodes\GraphEdge;
+use Facebook\GraphNode\GraphEdge;
 use Facebook\Url\UrlDetectionInterface;
 use Facebook\Url\FacebookUrlDetectionHandler;
 use Facebook\PersistentData\PersistentDataFactory;
 use Facebook\PersistentData\PersistentDataInterface;
-use Facebook\Helpers\FacebookCanvasHelper;
-use Facebook\Helpers\FacebookJavaScriptHelper;
-use Facebook\Helpers\FacebookPageTabHelper;
-use Facebook\Helpers\FacebookRedirectLoginHelper;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Helper\FacebookCanvasHelper;
+use Facebook\Helper\FacebookJavaScriptHelper;
+use Facebook\Helper\FacebookPageTabHelper;
+use Facebook\Helper\FacebookRedirectLoginHelper;
+use Facebook\Exception\FacebookSDKException;
 use Http\Client\HttpClient;
 
 /**

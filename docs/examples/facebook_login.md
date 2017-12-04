@@ -38,11 +38,11 @@ $helper = $fb->getRedirectLoginHelper();
 
 try {
   $accessToken = $helper->getAccessToken();
-} catch(Facebook\Exceptions\FacebookResponseException $e) {
+} catch(Facebook\Exception\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();
   exit;
-} catch(Facebook\Exceptions\FacebookSDKException $e) {
+} catch(Facebook\Exception\FacebookSDKException $e) {
   // When validation fails or other local issues
   echo 'Facebook SDK returned an error: ' . $e->getMessage();
   exit;
@@ -84,7 +84,7 @@ if (! $accessToken->isLongLived()) {
   // Exchanges a short-lived access token for a long-lived one
   try {
     $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-  } catch (Facebook\Exceptions\FacebookSDKException $e) {
+  } catch (Facebook\Exception\FacebookSDKException $e) {
     echo "<p>Error getting long-lived access token: " . $e->getMessage() . "</p>\n\n";
     exit;
   }

@@ -29,7 +29,7 @@ use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 use Facebook\Http\RequestBodyMultipart;
 use Facebook\Http\RequestBodyUrlEncoded;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exception\FacebookSDKException;
 
 /**
  * Class Request
