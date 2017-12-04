@@ -4,6 +4,7 @@
 
 [![Build Status](https://img.shields.io/travis/facebook/php-graph-sdk/master.svg)](https://travis-ci.org/facebook/php-graph-sdk)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/facebook/php-graph-sdk/?branch=master)
 [![Development Version](http://img.shields.io/badge/Development%20Version-v6.0-orange.svg)](https://packagist.org/packages/facebook/graph-sdk)
 
 
