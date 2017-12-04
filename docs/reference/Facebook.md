@@ -329,14 +329,14 @@ $batchResponse = $fb->sendBatchRequest($requests);
 
 ## newBatchRequest()
 ```php
-public Facebook\FacebookBatchRequest newBatchRequest(
+public Facebook\BatchRequest newBatchRequest(
     string|AccessToken|null $accessToken,
     string|null $graphVersion
 )
 ```
 
-Instantiates an empty `Facebook\FacebookBatchRequest`.
-To populate it use the [`Facebook\FacebookBatchRequest::add()`](FacebookBatchRequest.md#add) method.
+Instantiates an empty `Facebook\BatchRequest`.
+To populate it use the [`Facebook\BatchRequest::add()`](BatchRequest.md#add) method.
 
 The `$accessToken` and `$graphVersion` arguments are the same as `get()` above.
 If any of the requests contained in the batch request does not have either the `$accessToken` or the `$graphVersion` set,

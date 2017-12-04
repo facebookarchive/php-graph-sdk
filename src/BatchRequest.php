@@ -61,14 +61,13 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * Adds a new request to the array.
      *
-     * @param Request|array     $request
-     * @param string|null|array $options Array of batch request options e.g. 'name', 'omit_response_on_success'.
+     * @param array|Request     $request
+     * @param null|array|string $options Array of batch request options e.g. 'name', 'omit_response_on_success'.
      *                                   If a string is given, it is the value of the 'name' option.
-     *
-     * @return BatchRequest
      *
      * @throws \InvalidArgumentException
      *
+     * @return BatchRequest
      * @return BatchRequest
      */
     public function add($request, $options = null)
@@ -233,10 +232,10 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * Converts a Request entity into an array that is batch-friendly.
      *
-     * @param Request   $request         The request entity to convert.
-     * @param string|null|array $options Array of batch request options e.g. 'name', 'omit_response_on_success'.
-     *                                   If a string is given, it is the value of the 'name' option.
-     * @param string|null       $attachedFiles Names of files associated with the request.
+     * @param Request           $request       the request entity to convert
+     * @param null|array|string $options       Array of batch request options e.g. 'name', 'omit_response_on_success'.
+     *                                         If a string is given, it is the value of the 'name' option.
+     * @param null|string       $attachedFiles names of files associated with the request
      *
      * @return array
      */

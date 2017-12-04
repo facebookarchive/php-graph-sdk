@@ -3,7 +3,7 @@
 The `FacebookCanvasHelper` is used to obtain an access token or signed request when working within the context of an [app canvas](https://developers.facebook.com/docs/games/canvas).
 
 ```php
-Facebook\Helper\CanvasHelper( Facebook\Application $facebookApp )
+Facebook\Helper\CanvasHelper( Facebook\Application $application )
 ```
 
 ## Usage
