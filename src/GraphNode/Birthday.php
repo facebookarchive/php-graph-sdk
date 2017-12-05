@@ -19,14 +19,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 use DateTime;
 
 /**
- * Birthday object to handle various Graph return formats
+ * Birthday object to handle various Graph return formats.
  *
  * @package Facebook
  */
@@ -43,7 +42,7 @@ class Birthday extends DateTime
     private $hasYear = false;
 
     /**
-     * Parses Graph birthday format to set indication flags, possible values:
+     * Parses Graph birthday format to set indication flags, possible values:.
      *
      *  MM/DD/YYYY
      *  MM/DD
@@ -64,7 +63,7 @@ class Birthday extends DateTime
     }
 
     /**
-     * Returns whether date object contains birth day and month
+     * Returns whether date object contains birth day and month.
      *
      * @return bool
      */
@@ -74,7 +73,7 @@ class Birthday extends DateTime
     }
 
     /**
-     * Returns whether date object contains birth year
+     * Returns whether date object contains birth year.
      *
      * @return bool
      */

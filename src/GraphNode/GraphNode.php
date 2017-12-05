@@ -19,19 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphNode
- *
  * @package Facebook
  */
 class GraphNode extends Collection
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array maps object key names to Graph object types
      */
     protected static $graphObjectMap = [];
 
@@ -51,7 +48,7 @@ class GraphNode extends Collection
      *
      * @TODO Add auto-casting to AccessToken entities.
      *
-     * @param array $data The array to iterate over.
+     * @param array $data the array to iterate over
      *
      * @return array
      */
@@ -111,7 +108,7 @@ class GraphNode extends Collection
      *
      * @param string $string
      *
-     * @return boolean
+     * @return bool
      *
      * @see https://developers.facebook.com/docs/graph-api/using-graph-api/#readmodifiers
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
@@ -138,7 +135,7 @@ class GraphNode extends Collection
      *
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function shouldCastAsDateTime($key)
     {
@@ -175,7 +172,7 @@ class GraphNode extends Collection
     }
 
     /**
-     * Casts a birthday value from Graph to Birthday
+     * Casts a birthday value from Graph to Birthday.
      *
      * @param string $value
      *

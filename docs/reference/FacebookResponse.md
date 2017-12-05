@@ -42,11 +42,11 @@ public string getAccessToken()
 ```
 Returns the access token that was used for the original request in the form of a string.
 
-### getApp()
+### getApplication()
 ```php
-public Facebook\FacebookApp getApp()
+public Facebook\Application getApplication()
 ```
-Returns the [`Facebook\FacebookApp`](FacebookApp.md) entity that was used with the original request.
+Returns the [`Facebook\Application`](Application.md) entity that was used with the original request.
 
 ### getHttpStatusCode()
 ```php

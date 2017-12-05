@@ -19,12 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\GraphNode;
 
-use Facebook\FacebookApp;
-use Facebook\FacebookRequest;
+use Facebook\Application;
+use Facebook\Request;
 use Facebook\GraphNode\GraphEdge;
 use Facebook\GraphNode\GraphNode;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +32,7 @@ class GraphEdgeTest extends TestCase
 {
 
     /**
-     * @var \Facebook\FacebookRequest
+     * @var \Facebook\Request
      */
     protected $request;
 
@@ -44,8 +43,8 @@ class GraphEdgeTest extends TestCase
 
     protected function setUp()
     {
-        $app = new FacebookApp('123', 'foo_app_secret');
-        $this->request = new FacebookRequest(
+        $app = new Application('123', 'foo_app_secret');
+        $this->request = new Request(
             $app,
             'foo_token',
             'GET',
@@ -57,7 +56,7 @@ class GraphEdgeTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testNonGetRequestsWillThrow()
     {
@@ -91,8 +90,8 @@ class GraphEdgeTest extends TestCase
         $nextPage = $graphEdge->getNextPageRequest();
         $prevPage = $graphEdge->getPreviousPageRequest();
 
-        $this->assertInstanceOf(FacebookRequest::class, $nextPage);
-        $this->assertInstanceOf(FacebookRequest::class, $prevPage);
+        $this->assertInstanceOf(Request::class, $nextPage);
+        $this->assertInstanceOf(Request::class, $prevPage);
         $this->assertNotSame($this->request, $nextPage);
         $this->assertNotSame($this->request, $prevPage);
         $this->assertEquals('/v1337/998899/photos?access_token=foo_token&after=foo_after_cursor&appsecret_proof=857d5f035a894f16b4180f19966e055cdeab92d4d53017b13dccd6d43b6497af&foo=bar&limit=25&pretty=0', $nextPage->getUrl());

@@ -19,19 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Http;
 
 /**
- * Class RequestBodyUrlEncoded
- *
  * @package Facebook
  */
 class RequestBodyUrlEncoded implements RequestBodyInterface
 {
     /**
-     * @var array The parameters to send with this request.
+     * @var array the parameters to send with this request
      */
     protected $params = [];
 
@@ -46,7 +43,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getBody()
     {

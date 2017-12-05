@@ -81,7 +81,7 @@ class FakeGraphApiForResumableUpload implements HttpClient
                 500,
                 ['Foo' => 'Bar'],
                 '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",'.
-                '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}'
+                '"type":"ApiException","code":6000,"error_subcode":1363019}}'
             );
         }
 

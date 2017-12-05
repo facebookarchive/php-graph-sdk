@@ -19,19 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphPage
- *
  * @package Facebook
  */
 class GraphPage extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array maps object key names to Graph object types
      */
     protected static $graphObjectMap = [
         'best_page' => GraphPage::class,
@@ -44,7 +41,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the ID for the user's page as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -54,7 +51,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the Category for the user's page as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getCategory()
     {
@@ -64,7 +61,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the Name of the user's page as a string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName()
     {
@@ -74,7 +71,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the best available Page on Facebook.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getBestPage()
     {
@@ -84,7 +81,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the brand's global (parent) Page.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getGlobalBrandParentPage()
     {
@@ -94,7 +91,7 @@ class GraphPage extends GraphNode
     /**
      * Returns the location of this place.
      *
-     * @return GraphLocation|null
+     * @return null|GraphLocation
      */
     public function getLocation()
     {
@@ -104,7 +101,7 @@ class GraphPage extends GraphNode
     /**
      * Returns CoverPhoto of the Page.
      *
-     * @return GraphCoverPhoto|null
+     * @return null|GraphCoverPhoto
      */
     public function getCover()
     {
@@ -114,7 +111,7 @@ class GraphPage extends GraphNode
     /**
      * Returns Picture of the Page.
      *
-     * @return GraphPicture|null
+     * @return null|GraphPicture
      */
     public function getPicture()
     {
@@ -126,7 +123,7 @@ class GraphPage extends GraphNode
      *
      * Only available in the `/me/accounts` context.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAccessToken()
     {
@@ -138,7 +135,7 @@ class GraphPage extends GraphNode
      *
      * Only available in the `/me/accounts` context.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getPerms()
     {

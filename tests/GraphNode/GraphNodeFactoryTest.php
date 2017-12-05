@@ -19,13 +19,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\GraphNode;
 
-use Facebook\FacebookApp;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
+use Facebook\Application;
+use Facebook\Request;
+use Facebook\Response;
 use Facebook\GraphNode\GraphNodeFactory;
 use Facebook\GraphNode\GraphNode;
 use Facebook\GraphNode\GraphEdge;
@@ -37,14 +36,14 @@ use PHPUnit\Framework\TestCase;
 class GraphNodeFactoryTest extends TestCase
 {
     /**
-     * @var \Facebook\FacebookRequest
+     * @var \Facebook\Request
      */
     protected $request;
 
     protected function setUp()
     {
-        $app = new FacebookApp('123', 'foo_app_secret');
-        $this->request = new FacebookRequest(
+        $app = new Application('123', 'foo_app_secret');
+        $this->request = new Request(
             $app,
             'foo_token',
             'GET',
@@ -58,7 +57,7 @@ class GraphNodeFactoryTest extends TestCase
     public function testAValidGraphNodeResponseWillNotThrow()
     {
         $data = '{"id":"123","name":"foo"}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphNode();
@@ -67,12 +66,12 @@ class GraphNodeFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testANonGraphNodeResponseWillThrow()
     {
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphNode();
@@ -81,7 +80,7 @@ class GraphNodeFactoryTest extends TestCase
     public function testAValidGraphEdgeResponseWillNotThrow()
     {
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphEdge();
@@ -90,12 +89,12 @@ class GraphNodeFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testANonGraphEdgeResponseWillThrow()
     {
         $data = '{"id":"123","name":"foo"}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $factory->validateResponseCastableAsGraphEdge();
@@ -113,7 +112,7 @@ class GraphNodeFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInvalidSubClassesWillThrow()
     {
@@ -132,7 +131,7 @@ class GraphNodeFactoryTest extends TestCase
     public function testCastingAsASubClassObjectWillInstantiateTheSubClass()
     {
         $data = '{"id":"123","name":"foo"}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $mySubClassObject = $factory->makeGraphNode(MyFooGraphNode::class);
@@ -143,7 +142,7 @@ class GraphNodeFactoryTest extends TestCase
     public function testASubClassMappingWillAutomaticallyInstantiateSubClass()
     {
         $data = '{"id":"123","name":"Foo Name","foo_object":{"id":"1337","name":"Should be sub classed!"}}';
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $mySubClassObject = $factory->makeGraphNode(MyFooGraphNode::class);
@@ -163,7 +162,7 @@ class GraphNodeFactoryTest extends TestCase
                 'name' => 'Should be generic!',
             ],
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
 
@@ -195,7 +194,7 @@ class GraphNodeFactoryTest extends TestCase
                 'previous' => 'http://facebook/prev',
             ],
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $graphEdge = $factory->makeGraphEdge();
@@ -221,7 +220,7 @@ class GraphNodeFactoryTest extends TestCase
             'name' => 'Foo McBar',
             'link' => 'http://facebook/foo',
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $graphNode = $factory->makeGraphNode();
@@ -245,7 +244,7 @@ class GraphNodeFactoryTest extends TestCase
             ],
         ]);
 
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $graphNode = $factory->makeGraphNode();
@@ -341,7 +340,7 @@ class GraphNodeFactoryTest extends TestCase
             ],
         ];
         $data = json_encode($dataFromGraph);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $graphNode = $factory->makeGraphEdge();
@@ -418,7 +417,7 @@ class GraphNodeFactoryTest extends TestCase
                 'previous' => 'http://facebook/prev',
             ],
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphNodeFactory($res);
         $graphEdge = $factory->makeGraphEdge();

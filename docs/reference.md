@@ -9,7 +9,7 @@ These classes are at the core of the Facebook SDK for PHP.
 | Class name  | Description |
 | ------------- | ------------- |
 | [`Facebook\Facebook`](reference/Facebook.md)  | The main service object that helps tie all the SDK components together.  |
-| [`Facebook\FacebookApp`](reference/FacebookApp.md)  | An entity that represents a Facebook app and is required to send requests to Graph.  |
+| [`Facebook\Application`](reference/Application.md)  | An entity that represents a Facebook app and is required to send requests to Graph.  |
 
 # Authentication
 
@@ -17,7 +17,7 @@ These classes facilitate authenticating a Facebook user with OAuth 2.0.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helper\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md)  | An OAuth 2.0 service to obtain a user access token from a redirect using a "Log in with Facebook" link.  |
+| [`Facebook\Helper\RedirectLoginHelper`](reference/RedirectLoginHelper.md)  | An OAuth 2.0 service to obtain a user access token from a redirect using a "Log in with Facebook" link.  |
 | [`Facebook\Authentication\AccessToken`](reference/AccessToken.md)  | An entity that represents an access token.  |
 | `Facebook\Authentication\AccessTokenMetadata`  | An entity that represents metadata from an access token.  |
 | `Facebook\Authentication\OAuth2Client`  | An OAuth 2.0 client that sends and receives HTTP requests related to user authentication.  |
@@ -28,11 +28,11 @@ These classes are used in a Graph API request/response cycle.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\FacebookRequest`](reference/FacebookRequest.md) | An entity that represents an HTTP request to be sent to Graph.  |
-| [`Facebook\FacebookResponse`](reference/FacebookResponse.md)  | An entity that represents an HTTP response from Graph.  |
-| [`Facebook\FacebookBatchRequest`](reference/FacebookBatchRequest.md)  | An entity that represents an HTTP batch request to be sent to Graph.  |
-| [`Facebook\FacebookBatchResponse`](reference/FacebookBatchResponse.md)  | An entity that represents an HTTP response from Graph after sending a batch request.  |
-| [`Facebook\FacebookClient`](reference/FacebookClient.md)  | A service object that sends HTTP requests and receives HTTP responses to and from the Graph API.  |
+| [`Facebook\Request`](reference/Request.md) | An entity that represents an HTTP request to be sent to Graph.  |
+| [`Facebook\Response`](reference/Response.md)  | An entity that represents an HTTP response from Graph.  |
+| [`Facebook\BatchRequest`](reference/BatchRequest.md)  | An entity that represents an HTTP batch request to be sent to Graph.  |
+| [`Facebook\BatchResponse`](reference/BatchResponse.md)  | An entity that represents an HTTP response from Graph after sending a batch request.  |
+| [`Facebook\Client`](reference/Client.md)  | A service object that sends HTTP requests and receives HTTP responses to and from the Graph API.  |
 
 
 # Signed Requests
@@ -41,9 +41,9 @@ Classes to help obtain and manage signed requests.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Helper\FacebookJavaScriptHelper`](reference/FacebookJavaScriptHelper.md) | Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.  |
-| [`Facebook\Helper\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md)  | Used to obtain an access token or signed request from within the context of an app canvas.  |
-| [`Facebook\Helper\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)  | Used to obtain an access token or signed request from within the context of a page tab.  |
+| [`Facebook\Helper\JavaScriptHelper`](reference/JavaScriptHelper.md) | Used to obtain an access token or signed request from the cookie set by the JavaScript SDK.  |
+| [`Facebook\Helper\CanvasHelper`](reference/CanvasHelper.md)  | Used to obtain an access token or signed request from within the context of an app canvas.  |
+| [`Facebook\Helper\PageTabHelper`](reference/PageTabHelper.md)  | Used to obtain an access token or signed request from within the context of a page tab.  |
 | [`Facebook\SignedRequest`](reference/SignedRequest.md)  | An entity that represents a signed request.  |
 
 # Core Exceptions
@@ -52,8 +52,8 @@ These are the core exceptions that the SDK will throw when an error occurs.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\Exception\FacebookSDKException`](reference/FacebookSDKException.md) | The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.  |
-| [`Facebook\Exception\FacebookResponseException`](reference/FacebookResponseException.md)  | The base exception to all Graph error responses. This exception is never thrown directly.  |
+| [`Facebook\Exception\SDKException`](reference/SDKException.md) | The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.  |
+| [`Facebook\Exception\ResponseException`](reference/ResponseException.md)  | The base exception to all Graph error responses. This exception is never thrown directly.  |
 
 
 # Graph Nodes and Edges
@@ -78,8 +78,8 @@ These are entities that represent files to be uploaded with a Graph request.
 
 | Class name  | Description |
 | ------------- | ------------- |
-| [`Facebook\FileUpload\FacebookFile`](reference/FacebookFile.md) | Represents a generic file to be uploaded to the Graph API.  |
-| [`Facebook\FileUpload\FacebookVideo`](reference/FacebookVideo.md)  | Represents a video file to be uploaded to the Graph API.  |
+| [`Facebook\FileUpload\File`](reference/File.md) | Represents a generic file to be uploaded to the Graph API.  |
+| [`Facebook\FileUpload\Video`](reference/Video.md)  | Represents a video file to be uploaded to the Graph API.  |
 
 # Extensibility
 

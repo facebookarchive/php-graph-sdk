@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\PersistentData;
 
@@ -35,9 +34,9 @@ class PersistentDataFactory
     /**
      * PersistentData generation.
      *
-     * @param PersistentDataInterface|string|null $handler
+     * @param null|PersistentDataInterface|string $handler
      *
-     * @throws InvalidArgumentException If the persistent data handler isn't "session", "memory", or an instance of Facebook\PersistentData\PersistentDataInterface.
+     * @throws InvalidArgumentException if the persistent data handler isn't "session", "memory", or an instance of Facebook\PersistentData\PersistentDataInterface
      *
      * @return PersistentDataInterface
      */
@@ -45,8 +44,8 @@ class PersistentDataFactory
     {
         if (!$handler) {
             return session_status() === PHP_SESSION_ACTIVE
-                ? new FacebookSessionPersistentDataHandler()
-                : new FacebookMemoryPersistentDataHandler();
+                ? new SessionPersistentDataHandler()
+                : new InMemoryPersistentDataHandler();
         }
 
         if ($handler instanceof PersistentDataInterface) {
@@ -54,10 +53,10 @@ class PersistentDataFactory
         }
 
         if ('session' === $handler) {
-            return new FacebookSessionPersistentDataHandler();
+            return new SessionPersistentDataHandler();
         }
         if ('memory' === $handler) {
-            return new FacebookMemoryPersistentDataHandler();
+            return new InMemoryPersistentDataHandler();
         }
 
         throw new InvalidArgumentException('The persistent data handler must be set to "session", "memory", or be an instance of Facebook\PersistentData\PersistentDataInterface');

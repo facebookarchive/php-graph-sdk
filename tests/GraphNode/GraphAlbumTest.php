@@ -19,14 +19,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\GraphNode;
 
 use Facebook\GraphNode\GraphNodeFactory;
 use Facebook\GraphNode\GraphPage;
 use Facebook\GraphNode\GraphUser;
-use Facebook\FacebookResponse;
+use Facebook\Response;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -34,13 +33,13 @@ class GraphAlbumTest extends TestCase
 {
 
     /**
-     * @var FacebookResponse|ObjectProphecy
+     * @var ObjectProphecy|Response
      */
     protected $responseMock;
 
     protected function setUp()
     {
-        $this->responseMock = $this->prophesize(FacebookResponse::class);
+        $this->responseMock = $this->prophesize(Response::class);
     }
 
     public function testDatesGetCastToDateTime()

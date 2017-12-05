@@ -19,13 +19,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Authentication;
 
 /**
- * Class AccessToken
- *
  * @package Facebook
  */
 class AccessToken
@@ -40,7 +37,7 @@ class AccessToken
     /**
      * Date when token expires.
      *
-     * @var \DateTime|null
+     * @var null|\DateTime
      */
     protected $expiresAt;
 
@@ -61,7 +58,7 @@ class AccessToken
     /**
      * Generate an app secret proof to sign a request to Graph.
      *
-     * @param string $appSecret The app secret.
+     * @param string $appSecret the app secret
      *
      * @return string
      */
@@ -73,7 +70,7 @@ class AccessToken
     /**
      * Getter for expiresAt.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getExpiresAt()
     {
@@ -107,7 +104,7 @@ class AccessToken
     /**
      * Checks the expiration of the access token.
      *
-     * @return boolean|null
+     * @return null|bool
      */
     public function isExpired()
     {

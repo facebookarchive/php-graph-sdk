@@ -19,12 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\PersistentData;
 
-use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
+use Facebook\PersistentData\InMemoryPersistentDataHandler;
+use Facebook\PersistentData\SessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataFactory;
 use Facebook\PersistentData\PersistentDataInterface;
 use PHPUnit\Framework\TestCase;
@@ -54,14 +53,14 @@ class PersistentDataFactoryTest extends TestCase
     public function persistentDataHandlerProviders()
     {
         $handlers = [
-            ['memory', self::COMMON_NAMESPACE . 'FacebookMemoryPersistentDataHandler'],
-            [new FacebookMemoryPersistentDataHandler(), self::COMMON_NAMESPACE . 'FacebookMemoryPersistentDataHandler'],
-            [new FacebookSessionPersistentDataHandler(false), self::COMMON_NAMESPACE . 'FacebookSessionPersistentDataHandler'],
+            ['memory', self::COMMON_NAMESPACE . 'InMemoryPersistentDataHandler'],
+            [new InMemoryPersistentDataHandler(), self::COMMON_NAMESPACE . 'InMemoryPersistentDataHandler'],
+            [new SessionPersistentDataHandler(false), self::COMMON_NAMESPACE . 'SessionPersistentDataHandler'],
             [null, self::COMMON_INTERFACE],
         ];
 
         if (session_status() === PHP_SESSION_ACTIVE) {
-            $handlers[] = ['session', self::COMMON_NAMESPACE . 'FacebookSessionPersistentDataHandler'];
+            $handlers[] = ['session', self::COMMON_NAMESPACE . 'SessionPersistentDataHandler'];
         }
 
         return $handlers;

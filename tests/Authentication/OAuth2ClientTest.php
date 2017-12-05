@@ -19,12 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\Authentication;
 
 use Facebook\Facebook;
-use Facebook\FacebookApp;
+use Facebook\Application;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\Authentication\AccessTokenMetadata;
 use Facebook\Authentication\AccessToken;
@@ -39,7 +38,7 @@ class OAuth2ClientTest extends TestCase
     const TESTING_GRAPH_VERSION = 'v1337';
 
     /**
-     * @var FooFacebookClientForOAuth2Test
+     * @var FooClientForOAuth2Test
      */
     protected $client;
 
@@ -50,8 +49,8 @@ class OAuth2ClientTest extends TestCase
 
     protected function setUp()
     {
-        $app = new FacebookApp('123', 'foo_secret');
-        $this->client = new FooFacebookClientForOAuth2Test();
+        $app = new Application('123', 'foo_secret');
+        $this->client = new FooClientForOAuth2Test();
         $this->oauth = new OAuth2Client($app, $this->client, static::TESTING_GRAPH_VERSION);
     }
 

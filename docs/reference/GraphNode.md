@@ -13,13 +13,13 @@ This base class has several subclasses:
 [__GraphPicture__](#graphpicture-instance-methods)
 [__GraphAchievement__](#graphachievement-instance-methods)
 
-`GraphNode`s are obtained from a [`Facebook\FacebookResponse`](FacebookResponse.md) object which represents an HTTP response from the Graph API.
+`GraphNode`s are obtained from a [`Facebook\Response`](Response.md) object which represents an HTTP response from the Graph API.
 
 Usage:
 
 ```php
 $fb = new Facebook\Facebook(\* *\);
-// Returns a `Facebook\FacebookResponse` object
+// Returns a `Facebook\Response` object
 $response = $fb->get('/something');
 
 // Get the base class GraphNode from the response

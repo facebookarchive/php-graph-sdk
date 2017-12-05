@@ -33,10 +33,10 @@ $fb = new Facebook\Facebook([
   ]);
 ```
 
-Alternatively, if you're working with the `Facebook\Helper\FacebookRedirectLoginHelper` directly, you can inject your custom handler via the constructor.
+Alternatively, if you're working with the `Facebook\Helper\RedirectLoginHelper` directly, you can inject your custom handler via the constructor.
 
 ```php
-use Facebook\Helper\FacebookRedirectLoginHelper;
+use Facebook\Helper\RedirectLoginHelper;
 
 $myUrlDetectionHandler = new MyLaravelUrlDetectionHandler();
 $helper = new FacebookRedirectLoginHelper($fbApp, null, $myUrlDetectionHandler);

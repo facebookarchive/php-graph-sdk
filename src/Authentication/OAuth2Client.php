@@ -19,21 +19,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Authentication;
 
 use Facebook\Facebook;
-use Facebook\FacebookApp;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
-use Facebook\FacebookClient;
-use Facebook\Exception\FacebookResponseException;
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Application;
+use Facebook\Request;
+use Facebook\Response;
+use Facebook\Client;
+use Facebook\Exception\ResponseException;
+use Facebook\Exception\SDKException;
 
 /**
- * Class OAuth2Client
- *
  * @package Facebook
  */
 class OAuth2Client
@@ -44,16 +41,16 @@ class OAuth2Client
     const BASE_AUTHORIZATION_URL = 'https://www.facebook.com';
 
     /**
-     * The FacebookApp entity.
+     * The Application entity.
      *
-     * @var FacebookApp
+     * @var Application
      */
     protected $app;
 
     /**
      * The Facebook client.
      *
-     * @var FacebookClient
+     * @var Client
      */
     protected $client;
 
@@ -67,16 +64,16 @@ class OAuth2Client
     /**
      * The last request sent to Graph.
      *
-     * @var FacebookRequest|null
+     * @var null|Request
      */
     protected $lastRequest;
 
     /**
-     * @param FacebookApp    $app
-     * @param FacebookClient $client
-     * @param string         $graphVersion The version of the Graph API to use.
+     * @param Application $app
+     * @param Client      $client
+     * @param string      $graphVersion the version of the Graph API to use
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion)
+    public function __construct(Application $app, Client $client, $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -84,10 +81,10 @@ class OAuth2Client
     }
 
     /**
-     * Returns the last FacebookRequest that was sent.
+     * Returns the last Request that was sent.
      * Useful for debugging and testing.
      *
-     * @return FacebookRequest|null
+     * @return null|Request
      */
     public function getLastRequest()
     {
@@ -97,7 +94,7 @@ class OAuth2Client
     /**
      * Get the metadata associated with the access token.
      *
-     * @param AccessToken|string $accessToken The access token to debug.
+     * @param AccessToken|string $accessToken the access token to debug
      *
      * @return AccessTokenMetadata
      */
@@ -106,7 +103,7 @@ class OAuth2Client
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = ['input_token' => $accessToken];
 
-        $this->lastRequest = new FacebookRequest(
+        $this->lastRequest = new Request(
             $this->app,
             $this->app->getAccessToken(),
             'GET',
@@ -124,11 +121,11 @@ class OAuth2Client
     /**
      * Generates an authorization URL to begin the process of authenticating a user.
      *
-     * @param string $redirectUrl The callback URL to redirect to.
-     * @param string $state       The CSPRNG-generated CSRF value.
-     * @param array  $scope       An array of permissions to request.
-     * @param array  $params      An array of parameters to generate URL.
-     * @param string $separator   The separator to use in http_build_query().
+     * @param string $redirectUrl the callback URL to redirect to
+     * @param string $state       the CSPRNG-generated CSRF value
+     * @param array  $scope       an array of permissions to request
+     * @param array  $params      an array of parameters to generate URL
+     * @param string $separator   the separator to use in http_build_query()
      *
      * @return string
      */
@@ -152,9 +149,9 @@ class OAuth2Client
      * @param string $code
      * @param string $redirectUri
      *
-     * @return AccessToken
+     * @throws SDKException
      *
-     * @throws FacebookSDKException
+     * @return AccessToken
      */
     public function getAccessTokenFromCode($code, $redirectUri = '')
     {
@@ -171,9 +168,9 @@ class OAuth2Client
      *
      * @param AccessToken|string $accessToken
      *
-     * @return AccessToken
+     * @throws SDKException
      *
-     * @throws FacebookSDKException
+     * @return AccessToken
      */
     public function getLongLivedAccessToken($accessToken)
     {
@@ -192,9 +189,9 @@ class OAuth2Client
      * @param AccessToken|string $accessToken
      * @param string             $redirectUri
      *
-     * @return AccessToken
+     * @throws SDKException
      *
-     * @throws FacebookSDKException
+     * @return AccessToken
      */
     public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
     {
@@ -206,7 +203,7 @@ class OAuth2Client
         $data = $response->getDecodedBody();
 
         if (!isset($data['code'])) {
-            throw new FacebookSDKException('Code was not returned from Graph.', 401);
+            throw new SDKException('Code was not returned from Graph.', 401);
         }
 
         return $data['code'];
@@ -217,9 +214,9 @@ class OAuth2Client
      *
      * @param array $params
      *
-     * @return AccessToken
+     * @throws SDKException
      *
-     * @throws FacebookSDKException
+     * @return AccessToken
      */
     protected function requestAnAccessToken(array $params)
     {
@@ -227,7 +224,7 @@ class OAuth2Client
         $data = $response->getDecodedBody();
 
         if (!isset($data['access_token'])) {
-            throw new FacebookSDKException('Access token was not returned from Graph.', 401);
+            throw new SDKException('Access token was not returned from Graph.', 401);
         }
 
         // Graph returns two different key names for expiration time
@@ -252,11 +249,11 @@ class OAuth2Client
      *
      * @param string                  $endpoint
      * @param array                   $params
-     * @param AccessToken|string|null $accessToken
+     * @param null|AccessToken|string $accessToken
      *
-     * @return FacebookResponse
+     * @throws ResponseException
      *
-     * @throws FacebookResponseException
+     * @return Response
      */
     protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
     {
@@ -264,7 +261,7 @@ class OAuth2Client
 
         $accessToken = $accessToken ?: $this->app->getAccessToken();
 
-        $this->lastRequest = new FacebookRequest(
+        $this->lastRequest = new Request(
             $this->app,
             $accessToken,
             'GET',

@@ -19,19 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphAchievement
- *
  * @package Facebook
  */
 class GraphAchievement extends GraphNode
 {
     /**
-     * @var array Maps object key names to Graph object types.
+     * @var array maps object key names to Graph object types
      */
     protected static $graphObjectMap = [
         'from' => GraphUser::class,
@@ -41,7 +38,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the ID for the achievement.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -51,7 +48,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the user who achieved this.
      *
-     * @return GraphUser|null
+     * @return null|GraphUser
      */
     public function getFrom()
     {
@@ -61,7 +58,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the time at which this was achieved.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getPublishTime()
     {
@@ -71,7 +68,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the app in which the user achieved this.
      *
-     * @return GraphApplication|null
+     * @return null|GraphApplication
      */
     public function getApplication()
     {
@@ -81,7 +78,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns information about the achievement type this instance is connected with.
      *
-     * @return array|null
+     * @return null|array
      */
     public function getData()
     {
@@ -103,7 +100,7 @@ class GraphAchievement extends GraphNode
     /**
      * Indicates whether gaining the achievement published a feed story for the user.
      *
-     * @return boolean|null
+     * @return null|bool
      */
     public function isNoFeedStory()
     {

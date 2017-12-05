@@ -19,18 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
-use Facebook\Exception\FacebookSDKException;
+use Facebook\Exception\SDKException;
 
 /**
- * Class GraphObjectFactory
- *
  * @package Facebook
  *
  * @deprecated 5.0.0 GraphObjectFactory has been renamed to GraphNodeFactory
+ *
  * @todo v6: Remove this class
  */
 class GraphObjectFactory extends GraphNodeFactory
@@ -46,9 +44,9 @@ class GraphObjectFactory extends GraphNodeFactory
     const BASE_GRAPH_EDGE_CLASS = GraphList::class;
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphNode.
+     * Tries to convert a Response entity into a GraphNode.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast to.
+     * @param null|string $subclassName the GraphNode sub class to cast to
      *
      * @return GraphNode
      *
@@ -60,10 +58,10 @@ class GraphObjectFactory extends GraphNodeFactory
     }
 
     /**
-     * Tries to convert a FacebookResponse entity into a GraphEdge.
+     * Tries to convert a Response entity into a GraphEdge.
      *
-     * @param string|null $subclassName The GraphNode sub class to cast the list items to.
-     * @param boolean     $auto_prefix  Toggle to auto-prefix the subclass name.
+     * @param null|string $subclassName the GraphNode sub class to cast the list items to
+     * @param bool        $auto_prefix  toggle to auto-prefix the subclass name
      *
      * @return GraphEdge
      *

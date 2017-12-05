@@ -19,16 +19,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphObject
- *
  * @package Facebook
  *
  * @deprecated 5.0.0 GraphObject has been renamed to GraphNode
+ *
  * @todo v6: Remove this class
  */
 class GraphObject extends GraphNode

@@ -19,13 +19,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\Fixtures;
 
-use Facebook\Helper\FacebookSignedRequestFromInputHelper;
+use Facebook\Helper\SignedRequestFromInputHelper;
 
-class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
+class FooSignedRequestHelper extends SignedRequestFromInputHelper
 {
     public function getRawSignedRequest()
     {

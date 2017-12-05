@@ -19,16 +19,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Http;
 
-use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\File;
 
 /**
- * Class RequestBodyMultipartt
- *
- * Some things copied from Guzzle
+ * Some things copied from Guzzle.
  *
  * @package Facebook
  *
@@ -37,24 +34,24 @@ use Facebook\FileUpload\FacebookFile;
 class RequestBodyMultipart implements RequestBodyInterface
 {
     /**
-     * @var string The boundary.
+     * @var string the boundary
      */
     private $boundary;
 
     /**
-     * @var array The parameters to send with this request.
+     * @var array the parameters to send with this request
      */
     private $params;
 
     /**
-     * @var array The files to send with this request.
+     * @var array the files to send with this request
      */
     private $files = [];
 
     /**
-     * @param array  $params   The parameters to send with this request.
-     * @param array  $files    The files to send with this request.
-     * @param string $boundary Provide a specific boundary.
+     * @param array  $params   the parameters to send with this request
+     * @param array  $files    the files to send with this request
+     * @param string $boundary provide a specific boundary
      */
     public function __construct(array $params = [], array $files = [], $boundary = null)
     {
@@ -64,7 +61,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getBody()
     {
@@ -88,7 +85,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     }
 
     /**
-     * Get the boundary
+     * Get the boundary.
      *
      * @return string
      */
@@ -100,12 +97,12 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * Get the string needed to transfer a file.
      *
-     * @param string       $name
-     * @param FacebookFile $file
+     * @param string $name
+     * @param File   $file
      *
      * @return string
      */
-    private function getFileString($name, FacebookFile $file)
+    private function getFileString($name, File $file)
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n",
@@ -159,11 +156,11 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * Get the headers needed before transferring the content of a POST file.
      *
-     * @param FacebookFile $file
+     * @param File $file
      *
      * @return string
      */
-    protected function getFileHeaders(FacebookFile $file)
+    protected function getFileHeaders(File $file)
     {
         return "\r\nContent-Type: {$file->getMimetype()}";
     }

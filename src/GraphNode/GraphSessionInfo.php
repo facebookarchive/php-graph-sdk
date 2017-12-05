@@ -19,13 +19,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphSessionInfo
- *
  * @package Facebook
  */
 class GraphSessionInfo extends GraphNode
@@ -33,7 +30,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the application id the token was issued for.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getAppId()
     {
@@ -43,7 +40,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the application name the token was issued for.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getApplication()
     {
@@ -53,7 +50,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the date & time that the token expires.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getExpiresAt()
     {
@@ -63,7 +60,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns whether the token is valid.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsValid()
     {
@@ -73,7 +70,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the date & time the token was issued at.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getIssuedAt()
     {
@@ -93,7 +90,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the login id of the user associated with the token.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getUserId()
     {

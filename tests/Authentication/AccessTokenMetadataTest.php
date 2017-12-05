@@ -19,7 +19,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\Authentication;
 
@@ -28,7 +27,6 @@ use PHPUnit\Framework\TestCase;
 
 class AccessTokenMetadataTest extends TestCase
 {
-
     protected $graphResponseData = [
         'data' => [
             'app_id' => '123',
@@ -83,7 +81,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInvalidMetadataWillThrow()
     {
@@ -99,7 +97,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnUnexpectedAppIdWillThrow()
     {
@@ -118,7 +116,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnUnexpectedUserIdWillThrow()
     {
@@ -136,7 +134,7 @@ class AccessTokenMetadataTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testAnExpiredAccessTokenWillThrow()
     {

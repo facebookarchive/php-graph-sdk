@@ -19,14 +19,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests\GraphNode;
 
 use Facebook\GraphNode\GraphObjectFactory;
-use Facebook\FacebookApp;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
+use Facebook\Application;
+use Facebook\Request;
+use Facebook\Response;
 use Facebook\GraphNode\GraphList;
 use Facebook\GraphNode\GraphObject;
 use PHPUnit\Framework\TestCase;
@@ -37,14 +36,14 @@ use PHPUnit\Framework\TestCase;
 class GraphObjectFactoryTest extends TestCase
 {
     /**
-     * @var \Facebook\FacebookRequest
+     * @var \Facebook\Request
      */
     protected $request;
 
     protected function setUp()
     {
-        $app = new FacebookApp('123', 'foo_app_secret');
-        $this->request = new FacebookRequest(
+        $app = new Application('123', 'foo_app_secret');
+        $this->request = new Request(
             $app,
             'foo_token',
             'GET',
@@ -62,7 +61,7 @@ class GraphObjectFactoryTest extends TestCase
             'name' => 'Foo McBar',
             'link' => 'http://facebook/foo',
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphObjectFactory($res);
         $graphObject = $factory->makeGraphObject();
@@ -96,7 +95,7 @@ class GraphObjectFactoryTest extends TestCase
             'previous' => 'http://facebook/prev',
           ],
         ]);
-        $res = new FacebookResponse($this->request, $data);
+        $res = new Response($this->request, $data);
 
         $factory = new GraphObjectFactory($res);
         $graphList = $factory->makeGraphList();

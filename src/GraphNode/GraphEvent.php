@@ -19,19 +19,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\GraphNode;
 
 /**
- * Class GraphEvent
- *
  * @package Facebook
  */
 class GraphEvent extends GraphNode
 {
     /**
-     * @var array Maps object key names to GraphNode types.
+     * @var array maps object key names to GraphNode types
      */
     protected static $graphObjectMap = [
         'cover' => GraphCoverPhoto::class,
@@ -43,7 +40,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `id` (The event ID) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getId()
     {
@@ -53,7 +50,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `cover` (Cover picture) as GraphCoverPhoto if present.
      *
-     * @return GraphCoverPhoto|null
+     * @return null|GraphCoverPhoto
      */
     public function getCover()
     {
@@ -63,7 +60,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `description` (Long-form description) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getDescription()
     {
@@ -73,7 +70,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `end_time` (End time, if one has been set) as DateTime if present.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getEndTime()
     {
@@ -83,7 +80,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `is_date_only` (Whether the event only has a date specified, but no time) as bool if present.
      *
-     * @return bool|null
+     * @return null|bool
      */
     public function getIsDateOnly()
     {
@@ -93,7 +90,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `name` (Event name) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getName()
     {
@@ -103,7 +100,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `owner` (The profile that created the event) as GraphNode if present.
      *
-     * @return GraphNode|null
+     * @return null|GraphNode
      */
     public function getOwner()
     {
@@ -113,7 +110,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `parent_group` (The group the event belongs to) as GraphGroup if present.
      *
-     * @return GraphGroup|null
+     * @return null|GraphGroup
      */
     public function getParentGroup()
     {
@@ -123,7 +120,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `place` (Event Place information) as GraphPage if present.
      *
-     * @return GraphPage|null
+     * @return null|GraphPage
      */
     public function getPlace()
     {
@@ -133,7 +130,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `privacy` (Who can see the event) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPrivacy()
     {
@@ -143,7 +140,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `start_time` (Start time) as DateTime if present.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getStartTime()
     {
@@ -153,7 +150,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `ticket_uri` (The link users can visit to buy a ticket to this event) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getTicketUri()
     {
@@ -163,7 +160,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `timezone` (Timezone) as string if present.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getTimezone()
     {
@@ -173,7 +170,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `updated_time` (Last update time) as DateTime if present.
      *
-     * @return \DateTime|null
+     * @return null|\DateTime
      */
     public function getUpdatedTime()
     {
@@ -183,7 +180,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `picture` (Event picture) as GraphPicture if present.
      *
-     * @return GraphPicture|null
+     * @return null|GraphPicture
      */
     public function getPicture()
     {
@@ -193,7 +190,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `attending_count` (Number of people attending the event) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getAttendingCount()
     {
@@ -203,7 +200,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `declined_count` (Number of people who declined the event) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getDeclinedCount()
     {
@@ -213,7 +210,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `maybe_count` (Number of people who maybe going to the event) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getMaybeCount()
     {
@@ -223,7 +220,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `noreply_count` (Number of people who did not reply to the event) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getNoreplyCount()
     {
@@ -233,7 +230,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `invited_count` (Number of people invited to the event) as int if present.
      *
-     * @return int|null
+     * @return null|int
      */
     public function getInvitedCount()
     {

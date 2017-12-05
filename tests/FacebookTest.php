@@ -19,30 +19,29 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- *
  */
 namespace Facebook\Tests;
 
 use Facebook\Facebook;
-use Facebook\FacebookClient;
-use Facebook\FacebookRequest;
+use Facebook\Client;
+use Facebook\Request;
 use Facebook\Authentication\AccessToken;
 use Facebook\GraphNode\GraphEdge;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookStreamHttpClient;
-use Facebook\HttpClients\FacebookGuzzleHttpClient;
-use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
-use Facebook\Url\FacebookUrlDetectionHandler;
-use Facebook\FacebookResponse;
+use Facebook\HttpClients\CurlHttpClient;
+use Facebook\HttpClients\StreamHttpClient;
+use Facebook\HttpClients\GuzzleHttpClient;
+use Facebook\PersistentData\InMemoryPersistentDataHandler;
+use Facebook\Url\UrlDetectionHandler;
+use Facebook\Response;
 use Facebook\GraphNode\GraphUser;
 use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
 
-class FacebookTest extends TestCase
+class Test extends TestCase
 {
     protected $config = [
         'app_id' => '1337',
@@ -51,7 +50,7 @@ class FacebookTest extends TestCase
     ];
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInstantiatingWithoutAppIdThrows()
     {
@@ -65,7 +64,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookSDKException
+     * @expectedException \Facebook\Exception\SDKException
      */
     public function testInstantiatingWithoutAppSecretThrows()
     {
@@ -129,7 +128,7 @@ class FacebookTest extends TestCase
         ]);
         $fb = new Facebook($config);
         $this->assertInstanceOf(
-            FacebookMemoryPersistentDataHandler::class,
+            InMemoryPersistentDataHandler::class,
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
         );
     }
@@ -145,10 +144,10 @@ class FacebookTest extends TestCase
         new Facebook($config);
     }
 
-    public function testTheUrlHandlerWillDefaultToTheFacebookImplementation()
+    public function testTheUrlHandlerWillDefaultToTheImplementation()
     {
         $fb = new Facebook($this->config);
-        $this->assertInstanceOf(FacebookUrlDetectionHandler::class, $fb->getUrlDetectionHandler());
+        $this->assertInstanceOf(UrlDetectionHandler::class, $fb->getUrlDetectionHandler());
     }
 
     public function testAnAccessTokenCanBeSetAsAString()
@@ -192,12 +191,12 @@ class FacebookTest extends TestCase
         $fb = new Facebook($config);
 
         $request = $fb->request('FOO_VERB', '/foo');
-        $this->assertEquals('1337', $request->getApp()->getId());
-        $this->assertEquals('foo_secret', $request->getApp()->getSecret());
+        $this->assertEquals('1337', $request->getApplication()->getId());
+        $this->assertEquals('foo_secret', $request->getApplication()->getSecret());
         $this->assertEquals('foo_token', (string)$request->getAccessToken());
         $this->assertEquals('v1337', $request->getGraphVersion());
         $this->assertEquals(
-            FacebookClient::BASE_GRAPH_URL_BETA,
+            Client::BASE_GRAPH_URL_BETA,
             $fb->getClient()->getBaseGraphUrl()
         );
     }
@@ -212,15 +211,15 @@ class FacebookTest extends TestCase
         $fb = new Facebook($config);
 
         $batchRequest = $fb->newBatchRequest();
-        $this->assertEquals('1337', $batchRequest->getApp()->getId());
-        $this->assertEquals('foo_secret', $batchRequest->getApp()->getSecret());
+        $this->assertEquals('1337', $batchRequest->getApplication()->getId());
+        $this->assertEquals('foo_secret', $batchRequest->getApplication()->getSecret());
         $this->assertEquals('foo_token', (string)$batchRequest->getAccessToken());
         $this->assertEquals('v1337', $batchRequest->getGraphVersion());
         $this->assertEquals(
-            FacebookClient::BASE_GRAPH_URL_BETA,
+            Client::BASE_GRAPH_URL_BETA,
             $fb->getClient()->getBaseGraphUrl()
         );
-        $this->assertInstanceOf('Facebook\FacebookBatchRequest', $batchRequest);
+        $this->assertInstanceOf('Facebook\BatchRequest', $batchRequest);
         $this->assertEquals(0, count($batchRequest->getRequests()));
     }
 
@@ -254,7 +253,7 @@ class FacebookTest extends TestCase
         ]);
         $fb = new Facebook($config);
 
-        $request = new FacebookRequest($fb->getApp(), 'foo_token', 'GET');
+        $request = new Request($fb->getApplication(), 'foo_token', 'GET');
         $graphEdge = new GraphEdge(
             $request,
             [],
@@ -278,7 +277,7 @@ class FacebookTest extends TestCase
         $this->assertEquals('Foo', $nextPage[0]['name']);
 
         $lastResponse = $fb->getLastResponse();
-        $this->assertInstanceOf(FacebookResponse::class, $lastResponse);
+        $this->assertInstanceOf(Response::class, $lastResponse);
         $this->assertEquals(1337, $lastResponse->getHttpStatusCode());
     }
 
@@ -296,7 +295,7 @@ class FacebookTest extends TestCase
     }
 
     /**
-     * @expectedException \Facebook\Exception\FacebookResponseException
+     * @expectedException \Facebook\Exception\ResponseException
      */
     public function testMaxingOutRetriesWillThrow()
     {
