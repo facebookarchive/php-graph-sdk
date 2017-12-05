@@ -66,29 +66,38 @@ class GraphNodeTest extends TestCase
         yield ['publish_time'];
     }
 
-    public function testDatesThatShouldBeCastAsDateTimeObjectsAreDetected()
+    /**
+     * @dataProvider provideValidDateTimeFieldValues
+     */
+    public function testIsCastDateTimeFieldValueToDateTime($value, $message)
     {
-        $graphNode = new GraphNode();
+        $graphNode = new GraphNode(['created_time' => $value]);
 
-        // Should pass
-        $shouldPass = $graphNode->isIso8601DateString('1985-10-26T01:21:00+0000');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.');
+        $this->assertInstanceOf(\DateTime::class, $graphNode->getField('created_time'), $message);
+    }
 
-        $shouldPass = $graphNode->isIso8601DateString('1999-12-31');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.');
+    public static function provideValidDateTimeFieldValues()
+    {
+        yield ['1985-10-26T01:21:00+0000', 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.'];
+        yield ['1999-12-31', 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.'];
+        yield ['2009-05-19T14:39Z', 'Expected the valid ISO 8601 formatted date to pass.'];
+        yield ['2014-W36', 'Expected the valid ISO 8601 formatted date to pass.'];
+    }
 
-        $shouldPass = $graphNode->isIso8601DateString('2009-05-19T14:39Z');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
+    /**
+     * @dataProvider provideInvalidDateTimeFieldValues
+     */
+    public function testIsNotCastDateTimeFieldValueToDateTime($value, $message)
+    {
+        $graphNode = new GraphNode(['created_time' => $value]);
 
-        $shouldPass = $graphNode->isIso8601DateString('2014-W36');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
+        $this->assertNotInstanceOf(\DateTime::class, $graphNode->getField('created_time'), $message);
+    }
 
-        // Should fail
-        $shouldFail = $graphNode->isIso8601DateString('2009-05-19T14a39r');
-        $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
-
-        $shouldFail = $graphNode->isIso8601DateString('foo_time');
-        $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
+    public static function provideInvalidDateTimeFieldValues()
+    {
+        yield ['2009-05-19T14a39r', 'Expected the invalid ISO 8601 format to fail.'];
+        yield ['foo_time', 'Expected the invalid ISO 8601 format to fail.'];
     }
 
     public function testATimeStampCanBeConvertedToADateTimeObject()
