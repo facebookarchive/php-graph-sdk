@@ -33,11 +33,11 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     protected static $graphNodeMap = [];
 
     /**
-     * The items contained in the collection.
+     * The fields contained in the node.
      *
      * @var array
      */
-    protected $items = [];
+    protected $fields = [];
 
     /**
      * Init this Graph object.
@@ -46,7 +46,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function __construct(array $data = [])
     {
-        $this->items = $this->castItems($data);
+        $this->fields = $this->castFields($data);
     }
 
     /**
@@ -59,8 +59,8 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function getField($name, $default = null)
     {
-        if (isset($this->items[$name])) {
-            return $this->items[$name];
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name];
         }
 
         return $default;
@@ -73,21 +73,21 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function getFieldNames()
     {
-        return array_keys($this->items);
+        return array_keys($this->fields);
     }
 
     /**
-     * Get all of the items in the collection.
+     * Get all of the fields in the node.
      *
      * @return array
      */
     public function all()
     {
-        return $this->items;
+        return $this->fields;
     }
 
     /**
-     * Get the collection of items as a plain array.
+     * Get all fields as a plain array.
      *
      * @return array
      */
@@ -99,11 +99,11 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
             }
 
             return $value;
-        }, $this->items);
+        }, $this->fields);
     }
 
     /**
-     * Run a map over each of the items.
+     * Run a map over each field.
      *
      * @param \Closure $callback
      *
@@ -111,11 +111,11 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function map(\Closure $callback)
     {
-        return new static(array_map($callback, $this->items, array_keys($this->items)));
+        return new static(array_map($callback, $this->fields, array_keys($this->fields)));
     }
 
     /**
-     * Get the collection of items as JSON.
+     * Get all fields as JSON.
      *
      * @param int $options
      *
@@ -123,27 +123,27 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function asJson($options = 0)
     {
-        return json_encode($this->uncastItems(), $options);
+        return json_encode($this->uncastFields(), $options);
     }
 
     /**
-     * Count the number of items in the collection.
+     * Count the number of fields in the collection.
      *
      * @return int
      */
     public function count()
     {
-        return count($this->items);
+        return count($this->fields);
     }
 
     /**
-     * Get an iterator for the items.
+     * Get an iterator for the fields.
      *
      * @return \ArrayIterator
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new \ArrayIterator($this->fields);
     }
 
     /**
@@ -155,7 +155,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetExists($key)
     {
-        return array_key_exists($key, $this->items);
+        return array_key_exists($key, $this->fields);
     }
 
     /**
@@ -167,7 +167,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetGet($key)
     {
-        return $this->items[$key];
+        return $this->fields[$key];
     }
 
     /**
@@ -181,9 +181,9 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     public function offsetSet($key, $value)
     {
         if (is_null($key)) {
-            $this->items[] = $value;
+            $this->fields[] = $value;
         } else {
-            $this->items[$key] = $value;
+            $this->fields[$key] = $value;
         }
     }
 
@@ -196,7 +196,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetUnset($key)
     {
-        unset($this->items[$key]);
+        unset($this->fields[$key]);
     }
 
     /**
@@ -211,7 +211,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Iterates over an array and detects the types each node
-     * should be cast to and returns all the items as an array.
+     * should be cast to and returns all the fields as an array.
      *
      * @TODO Add auto-casting to AccessToken entities.
      *
@@ -219,35 +219,35 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return array
      */
-    public function castItems(array $data)
+    public function castFields(array $data)
     {
-        $items = [];
+        $fields = [];
 
         foreach ($data as $k => $v) {
             if ($this->shouldCastAsDateTime($k)
                 && (is_numeric($v)
                     || $this->isIso8601DateString($v))
             ) {
-                $items[$k] = $this->castToDateTime($v);
+                $fields[$k] = $this->castToDateTime($v);
             } elseif ($k === 'birthday') {
-                $items[$k] = $this->castToBirthday($v);
+                $fields[$k] = $this->castToBirthday($v);
             } else {
-                $items[$k] = $v;
+                $fields[$k] = $v;
             }
         }
 
-        return $items;
+        return $fields;
     }
 
     /**
      * Uncasts any auto-casted datatypes.
-     * Basically the reverse of castItems().
+     * Basically the reverse of castFields().
      *
      * @return array
      */
-    public function uncastItems()
+    public function uncastFields()
     {
-        $items = $this->asArray();
+        $fields = $this->asArray();
 
         return array_map(function ($v) {
             if ($v instanceof \DateTime) {
@@ -255,7 +255,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
             }
 
             return $v;
-        }, $items);
+        }, $fields);
     }
 
     /**
