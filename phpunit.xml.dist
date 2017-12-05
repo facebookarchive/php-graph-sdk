@@ -14,7 +14,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/Facebook</directory>
+            <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
 </phpunit>

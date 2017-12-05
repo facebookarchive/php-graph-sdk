@@ -1,9 +1,14 @@
+tools:
+    php_code_sniffer:
+        config:
+            standard: PSR2
+    external_code_coverage:
+        timeout: 3600
+
 filter:
     paths:
         - 'src/*'
         - 'tests/*'
 
-tools:
-    php_code_sniffer:
-        config:
-            standard: PSR2
+build_failure_conditions:
+    - 'issues.label("coding-style").exists'
