@@ -200,25 +200,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Uncasts any auto-casted datatypes.
-     * Basically the reverse of castFields().
-     *
-     * @return array
-     */
-    public function uncastFields()
-    {
-        $fields = $this->asArray();
-
-        return array_map(function ($v) {
-            if ($v instanceof \DateTime) {
-                return $v->format(\DateTime::ISO8601);
-            }
-
-            return $v;
-        }, $fields);
-    }
-
-    /**
      * Casts a date value from Graph to DateTime.
      *
      * @param int|string $value
@@ -287,6 +268,25 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
         }
 
         return $fields;
+    }
+
+    /**
+     * Uncasts any auto-casted datatypes.
+     * Basically the reverse of castFields().
+     *
+     * @return array
+     */
+    private function uncastFields()
+    {
+        $fields = $this->asArray();
+
+        return array_map(function ($v) {
+            if ($v instanceof \DateTime) {
+                return $v->format(\DateTime::ISO8601);
+            }
+
+            return $v;
+        }, $fields);
     }
 
     /**

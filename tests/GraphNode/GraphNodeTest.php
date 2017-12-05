@@ -126,46 +126,28 @@ class GraphNodeTest extends TestCase
         $this->assertEquals(1405395893, $timeStamp);
     }
 
-    public function testUncastingAGraphNodeWillUncastTheDateTimeObject()
-    {
-        $graphNodeOne = new GraphNode(['foo', 'bar']);
-        $graphNodeTwo = new GraphNode([
-            'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
-            'some_collection' => $graphNodeOne,
-        ]);
-
-        $uncastArray = $graphNodeTwo->uncastFields();
-
-        $this->assertEquals([
-            'id' => '123',
-            'date' => '2014-07-15T03:44:53+0000',
-            'some_collection' => ['foo', 'bar'],
-        ], $uncastArray);
-    }
-
     public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
     {
         $graphNode = new GraphNode([
             'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+            'created_time' => '2014-07-15T03:44:53+0000',
         ]);
 
         $graphNodeAsArray = $graphNode->asArray();
 
-        $this->assertInstanceOf(\DateTime::class, $graphNodeAsArray['date']);
+        $this->assertInstanceOf(\DateTime::class, $graphNodeAsArray['created_time']);
     }
 
-    public function testReturningACollectionAsJasonWillSafelyRepresentDateTimes()
+    public function testGettingAGraphNodeAsJSONWillSafelyRepresentDateTimes()
     {
         $graphNode = new GraphNode([
             'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+            'created_time' => '2014-07-15T03:44:53+0000',
         ]);
 
         $graphNodeAsString = $graphNode->asJson();
 
-        $this->assertEquals('{"id":"123","date":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
+        $this->assertEquals('{"id":"123","created_time":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
     }
 
     public function testAnExistingPropertyCanBeAccessed()
