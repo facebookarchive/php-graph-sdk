@@ -96,14 +96,14 @@ class GraphNodeTest extends TestCase
 
     public function testUncastingAGraphNodeWillUncastTheDateTimeObject()
     {
-        $collectionOne = new GraphNode(['foo', 'bar']);
-        $collectionTwo = new GraphNode([
+        $graphNodeOne = new GraphNode(['foo', 'bar']);
+        $graphNodeTwo = new GraphNode([
             'id' => '123',
             'date' => new \DateTime('2014-07-15T03:44:53+0000'),
-            'some_collection' => $collectionOne,
+            'some_collection' => $graphNodeOne,
         ]);
 
-        $uncastArray = $collectionTwo->uncastItems();
+        $uncastArray = $graphNodeTwo->uncastItems();
 
         $this->assertEquals([
             'id' => '123',
@@ -114,25 +114,122 @@ class GraphNodeTest extends TestCase
 
     public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
     {
-        $collection = new GraphNode([
+        $graphNode = new GraphNode([
             'id' => '123',
             'date' => new \DateTime('2014-07-15T03:44:53+0000'),
         ]);
 
-        $collectionAsArray = $collection->asArray();
+        $graphNodeAsArray = $graphNode->asArray();
 
-        $this->assertInstanceOf(\DateTime::class, $collectionAsArray['date']);
+        $this->assertInstanceOf(\DateTime::class, $graphNodeAsArray['date']);
     }
 
     public function testReturningACollectionAsJasonWillSafelyRepresentDateTimes()
     {
-        $collection = new GraphNode([
+        $graphNode = new GraphNode([
             'id' => '123',
             'date' => new \DateTime('2014-07-15T03:44:53+0000'),
         ]);
 
-        $collectionAsString = $collection->asJson();
+        $graphNodeAsString = $graphNode->asJson();
 
-        $this->assertEquals('{"id":"123","date":"2014-07-15T03:44:53+0000"}', $collectionAsString);
+        $this->assertEquals('{"id":"123","date":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
+    }
+
+    public function testAnExistingPropertyCanBeAccessed()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('foo');
+        $this->assertEquals('bar', $field);
+    }
+
+    public function testAMissingPropertyWillReturnNull()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+        $field = $graphNode->getField('baz');
+
+        $this->assertNull($field, 'Expected the property to return null.');
+    }
+
+    public function testAMissingPropertyWillReturnTheDefault()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('baz', 'faz');
+        $this->assertEquals('faz', $field);
+    }
+
+    public function testFalseDefaultsWillReturnSameType()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('baz', '');
+        $this->assertSame('', $field);
+
+        $field = $graphNode->getField('baz', 0);
+        $this->assertSame(0, $field);
+
+        $field = $graphNode->getField('baz', false);
+        $this->assertFalse($field);
+    }
+
+    public function testTheKeysFromTheCollectionCanBeReturned()
+    {
+        $graphNode = new GraphNode([
+            'key1' => 'foo',
+            'key2' => 'bar',
+            'key3' => 'baz',
+        ]);
+
+        $fieldNames = $graphNode->getFieldNames();
+        $this->assertEquals(['key1', 'key2', 'key3'], $fieldNames);
+    }
+
+    public function testAnArrayCanBeInjectedViaTheConstructor()
+    {
+        $graphNode = new GraphNode(['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], $graphNode->asArray());
+    }
+
+    public function testACollectionCanBeConvertedToProperJson()
+    {
+        $graphNode = new GraphNode(['foo', 'bar', 123]);
+
+        $graphNodeAsString = $graphNode->asJson();
+
+        $this->assertEquals('["foo","bar",123]', $graphNodeAsString);
+    }
+
+    public function testACollectionCanBeCounted()
+    {
+        $graphNode = new GraphNode(['foo', 'bar', 'baz']);
+
+        $graphNodeCount = count($graphNode);
+
+        $this->assertEquals(3, $graphNodeCount);
+    }
+
+    public function testACollectionCanBeAccessedAsAnArray()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertEquals('bar', $graphNode['foo']);
+        $this->assertEquals('baz', $graphNode['faz']);
+    }
+
+    public function testACollectionCanBeIteratedOver()
+    {
+        $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertInstanceOf(\IteratorAggregate::class, $graphNode);
+
+        $newArray = [];
+
+        foreach ($graphNode as $k => $v) {
+            $newArray[$k] = $v;
+        }
+
+        $this->assertEquals(['foo' => 'bar', 'faz' => 'baz'], $newArray);
     }
 }
