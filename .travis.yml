@@ -35,7 +35,8 @@ install:
   - if [ "$deps" == low ]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest; fi;
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.clover --exclude-group integration
+  - if [[ "$TRAVIS_PHP_VERSION" == '7.1' && "$deps" != low ]]; then vendor/bin/phpunit --coverage-clover=coverage.clover --exclude-group integration; fi;
+  - if [[ "$TRAVIS_PHP_VERSION" != '7.1' || "$deps" == low ]]; then vendor/bin/phpunit --exclude-group integration; fi;
 
 after_script:
   - if [[ "$TRAVIS_PHP_VERSION" == '7.1' && "$deps" != low ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi;
