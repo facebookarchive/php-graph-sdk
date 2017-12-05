@@ -200,37 +200,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Casts a date value from Graph to DateTime.
-     *
-     * @param int|string $value
-     *
-     * @return \DateTime
-     */
-    public function castToDateTime($value)
-    {
-        if (is_int($value)) {
-            $dt = new \DateTime();
-            $dt->setTimestamp($value);
-        } else {
-            $dt = new \DateTime($value);
-        }
-
-        return $dt;
-    }
-
-    /**
-     * Casts a birthday value from Graph to Birthday.
-     *
-     * @param string $value
-     *
-     * @return Birthday
-     */
-    public function castToBirthday($value)
-    {
-        return new Birthday($value);
-    }
-
-    /**
      * Getter for $graphNodeMap.
      *
      * @return array
@@ -336,5 +305,36 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
             . '([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/';
 
         return preg_match($crazyInsaneRegexThatSomehowDetectsIso8601, $string) === 1;
+    }
+
+    /**
+     * Casts a date value from Graph to DateTime.
+     *
+     * @param int|string $value
+     *
+     * @return \DateTime
+     */
+    private function castToDateTime($value)
+    {
+        if (is_int($value)) {
+            $dt = new \DateTime();
+            $dt->setTimestamp($value);
+        } else {
+            $dt = new \DateTime($value);
+        }
+
+        return $dt;
+    }
+
+    /**
+     * Casts a birthday value from Graph to Birthday.
+     *
+     * @param string $value
+     *
+     * @return Birthday
+     */
+    private function castToBirthday($value)
+    {
+        return new Birthday($value);
     }
 }

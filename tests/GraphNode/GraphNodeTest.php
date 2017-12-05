@@ -69,19 +69,25 @@ class GraphNodeTest extends TestCase
     /**
      * @dataProvider provideValidDateTimeFieldValues
      */
-    public function testIsCastDateTimeFieldValueToDateTime($value, $message)
+    public function testIsCastDateTimeFieldValueToDateTime($value, $message, $prettyDate = null)
     {
         $graphNode = new GraphNode(['created_time' => $value]);
 
         $this->assertInstanceOf(\DateTime::class, $graphNode->getField('created_time'), $message);
+
+        if ($prettyDate !== null) {
+            $this->assertEquals($prettyDate, $graphNode->getField('created_time')->format(\DateTime::RFC1036));
+        }
     }
 
     public static function provideValidDateTimeFieldValues()
     {
         yield ['1985-10-26T01:21:00+0000', 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.'];
+        yield ['2014-07-15T03:44:53+0000', 'Expected the valid ISO 8601 formatted date to pass.', 'Tue, 15 Jul 14 03:44:53 +0000'];
         yield ['1999-12-31', 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.'];
         yield ['2009-05-19T14:39Z', 'Expected the valid ISO 8601 formatted date to pass.'];
         yield ['2014-W36', 'Expected the valid ISO 8601 formatted date to pass.'];
+        yield [1405547020, 'Expected the valid timestamp to pass.', 'Wed, 16 Jul 14 23:43:40 +0200'];
     }
 
     /**
@@ -98,32 +104,6 @@ class GraphNodeTest extends TestCase
     {
         yield ['2009-05-19T14a39r', 'Expected the invalid ISO 8601 format to fail.'];
         yield ['foo_time', 'Expected the invalid ISO 8601 format to fail.'];
-    }
-
-    public function testATimeStampCanBeConvertedToADateTimeObject()
-    {
-        $someTimeStampFromGraph = 1405547020;
-        $graphNode = new GraphNode();
-        $dateTime = $graphNode->castToDateTime($someTimeStampFromGraph);
-        $prettyDate = $dateTime->format(\DateTime::RFC1036);
-        $timeStamp = $dateTime->getTimestamp();
-
-        $this->assertInstanceOf(\DateTime::class, $dateTime);
-        $this->assertEquals('Wed, 16 Jul 14 23:43:40 +0200', $prettyDate);
-        $this->assertEquals(1405547020, $timeStamp);
-    }
-
-    public function testAGraphDateStringCanBeConvertedToADateTimeObject()
-    {
-        $someDateStringFromGraph = '2014-07-15T03:44:53+0000';
-        $graphNode = new GraphNode();
-        $dateTime = $graphNode->castToDateTime($someDateStringFromGraph);
-        $prettyDate = $dateTime->format(\DateTime::RFC1036);
-        $timeStamp = $dateTime->getTimestamp();
-
-        $this->assertInstanceOf(\DateTime::class, $dateTime);
-        $this->assertEquals('Tue, 15 Jul 14 03:44:53 +0000', $prettyDate);
-        $this->assertEquals(1405395893, $timeStamp);
     }
 
     public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
