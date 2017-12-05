@@ -44,7 +44,7 @@ class BatchRequestTest extends TestCase
     {
         $batchRequest = new BatchRequest($this->app, [], 'foo_token', 'v0.1337');
 
-        $this->assertSame($this->app, $batchRequest->getApp());
+        $this->assertSame($this->app, $batchRequest->getApplication());
         $this->assertEquals('foo_token', $batchRequest->getAccessToken());
         $this->assertEquals('POST', $batchRequest->getMethod());
         $this->assertEquals('', $batchRequest->getEndpoint());
@@ -379,7 +379,7 @@ class BatchRequestTest extends TestCase
 
     private function assertRequestContainsAppAndToken(Request $request, Application $expectedApp, $expectedToken)
     {
-        $app = $request->getApp();
+        $app = $request->getApplication();
         $token = $request->getAccessToken();
 
         $this->assertSame($expectedApp, $app);

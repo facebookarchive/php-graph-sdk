@@ -191,8 +191,8 @@ class Test extends TestCase
         $fb = new Facebook($config);
 
         $request = $fb->request('FOO_VERB', '/foo');
-        $this->assertEquals('1337', $request->getApp()->getId());
-        $this->assertEquals('foo_secret', $request->getApp()->getSecret());
+        $this->assertEquals('1337', $request->getApplication()->getId());
+        $this->assertEquals('foo_secret', $request->getApplication()->getSecret());
         $this->assertEquals('foo_token', (string)$request->getAccessToken());
         $this->assertEquals('v1337', $request->getGraphVersion());
         $this->assertEquals(
@@ -211,8 +211,8 @@ class Test extends TestCase
         $fb = new Facebook($config);
 
         $batchRequest = $fb->newBatchRequest();
-        $this->assertEquals('1337', $batchRequest->getApp()->getId());
-        $this->assertEquals('foo_secret', $batchRequest->getApp()->getSecret());
+        $this->assertEquals('1337', $batchRequest->getApplication()->getId());
+        $this->assertEquals('foo_secret', $batchRequest->getApplication()->getSecret());
         $this->assertEquals('foo_token', (string)$batchRequest->getAccessToken());
         $this->assertEquals('v1337', $batchRequest->getGraphVersion());
         $this->assertEquals(
@@ -253,7 +253,7 @@ class Test extends TestCase
         ]);
         $fb = new Facebook($config);
 
-        $request = new Request($fb->getApp(), 'foo_token', 'GET');
+        $request = new Request($fb->getApplication(), 'foo_token', 'GET');
         $graphEdge = new GraphEdge(
             $request,
             [],

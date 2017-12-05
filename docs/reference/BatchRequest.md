@@ -86,7 +86,7 @@ $requests = [
   'foo' => $fb->request('GET', '/me'),
   'bar' => $fb->request('POST', '/me/feed', [/* */]),
 ];
-$batchRequest = new Facebook\BatchRequest($fb->getApp(), $requests, '{access-token}');
+$batchRequest = new Facebook\BatchRequest($fb->getApplication(), $requests, '{access-token}');
 
 var_dump($batchRequest[0]);
 /*

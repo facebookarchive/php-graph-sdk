@@ -61,7 +61,7 @@ class Facebook
     const APP_SECRET_ENV_NAME = 'FACEBOOK_APP_SECRET';
 
     /**
-     * @var Application the App entity
+     * @var Application the Application entity
      */
     protected $app;
 
@@ -150,11 +150,11 @@ class Facebook
     }
 
     /**
-     * Returns the App entity.
+     * Returns the Application entity.
      *
      * @return Application
      */
-    public function getApp()
+    public function getApplication()
     {
         return $this->app;
     }
@@ -177,7 +177,7 @@ class Facebook
     public function getOAuth2Client()
     {
         if (!$this->oAuth2Client instanceof OAuth2Client) {
-            $app = $this->getApp();
+            $app = $this->getApplication();
             $client = $this->getClient();
             $this->oAuth2Client = new OAuth2Client($app, $client, $this->defaultGraphVersion);
         }

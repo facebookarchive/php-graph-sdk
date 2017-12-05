@@ -73,9 +73,9 @@ public setApp(Facebook\Application $app)
 ```
 Sets the [`Facebook\Application`](Application.md) entity used with this request.
 
-### getApp()
+### getApplication()
 ```php
-public Facebook\Application getApp()
+public Facebook\Application getApplication()
 ```
 Returns the [`Facebook\Application`](Application.md) entity used with this request.
 

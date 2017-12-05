@@ -90,13 +90,13 @@ class Response
     }
 
     /**
-     * Return the App entity used for this response.
+     * Return the Application entity used for this response.
      *
      * @return Application
      */
-    public function getApp()
+    public function getApplication()
     {
-        return $this->request->getApp();
+        return $this->request->getApplication();
     }
 
     /**

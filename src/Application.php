@@ -86,7 +86,7 @@ class Application implements \Serializable
     }
 
     /**
-     * Serializes the App entity as a string.
+     * Serializes the Application entity as a string.
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class Application implements \Serializable
     }
 
     /**
-     * Unserializes a string as a App entity.
+     * Unserializes a string as an Application entity.
      *
      * @param string $serialized
      */

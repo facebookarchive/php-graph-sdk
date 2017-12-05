@@ -41,7 +41,7 @@ class OAuth2Client
     const BASE_AUTHORIZATION_URL = 'https://www.facebook.com';
 
     /**
-     * The App entity.
+     * The Application entity.
      *
      * @var Application
      */

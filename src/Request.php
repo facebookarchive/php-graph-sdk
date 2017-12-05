@@ -164,7 +164,7 @@ class Request
     }
 
     /**
-     * Set the App entity used for this request.
+     * Set the Application entity used for this request.
      *
      * @param null|Application $app
      */
@@ -174,11 +174,11 @@ class Request
     }
 
     /**
-     * Return the App entity used for this request.
+     * Return the Application entity used for this request.
      *
      * @return Application
      */
-    public function getApp()
+    public function getApplication()
     {
         return $this->app;
     }

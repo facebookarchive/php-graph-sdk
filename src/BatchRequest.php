@@ -112,7 +112,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     }
 
     /**
-     * Ensures that the App and access token fall back when missing.
+     * Ensures that the Application and access token fall back when missing.
      *
      * @param Request $request
      *
@@ -120,10 +120,10 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      */
     public function addFallbackDefaults(Request $request)
     {
-        if (!$request->getApp()) {
-            $app = $this->getApp();
+        if (!$request->getApplication()) {
+            $app = $this->getApplication();
             if (!$app) {
-                throw new SDKException('Missing App on Request and no fallback detected on BatchRequest.');
+                throw new SDKException('Missing Application on Request and no fallback detected on BatchRequest.');
             }
             $request->setApp($app);
         }

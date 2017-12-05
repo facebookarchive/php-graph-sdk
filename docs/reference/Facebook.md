@@ -129,9 +129,9 @@ $fb = new Facebook\Facebook([
 
 # Instance Methods
 
-## getApp()
+## getApplication()
 ```php
-public Application getApp()
+public Application getApplication()
 ```
 Returns the instance of `Facebook\Application` for the instantiated service.
 

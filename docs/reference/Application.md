@@ -16,7 +16,7 @@ Alternatively you can obtain the `Facebook\Application` entity from the [`Facebo
 
 ```php
 $fb = new Facebook\Facebook([/* . . . */]);
-$fbApp = $fb->getApp();
+$fbApp = $fb->getApplication();
 ```
 
 You'll rarely be using the `Application` entity directly unless you're doing some extreme customizations of the SDK for PHP. But this entity plays an important role in the internal workings of the SDK for PHP.
