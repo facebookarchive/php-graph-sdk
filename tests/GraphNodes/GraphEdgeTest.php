@@ -27,8 +27,9 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\GraphNodes\GraphEdge;
 use Facebook\GraphNodes\GraphNode;
+use PHPUnit\Framework\TestCase;
 
-class GraphEdgeTest extends \PHPUnit_Framework_TestCase
+class GraphEdgeTest extends TestCase
 {
 
     /**

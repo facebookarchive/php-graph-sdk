@@ -28,8 +28,9 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
+use PHPUnit\Framework\TestCase;
 
-class FacebookRequestTest extends \PHPUnit_Framework_TestCase
+class FacebookRequestTest extends TestCase
 {
     public function testAnEmptyRequestEntityCanInstantiate()
     {

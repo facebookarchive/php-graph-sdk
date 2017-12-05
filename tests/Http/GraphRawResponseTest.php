@@ -24,8 +24,9 @@
 namespace Facebook\Tests\Http;
 
 use Facebook\Http\GraphRawResponse;
+use PHPUnit\Framework\TestCase;
 
-class GraphRawResponseTest extends \PHPUnit_Framework_TestCase
+class GraphRawResponseTest extends TestCase
 {
 
     protected $fakeRawProxyHeader = "HTTP/1.0 200 Connection established

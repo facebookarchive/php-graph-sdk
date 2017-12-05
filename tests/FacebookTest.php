@@ -33,8 +33,9 @@ use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
+use PHPUnit\Framework\TestCase;
 
-class FacebookTest extends \PHPUnit_Framework_TestCase
+class FacebookTest extends TestCase
 {
     protected $config = [
         'app_id' => '1337',

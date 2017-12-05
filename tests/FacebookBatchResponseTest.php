@@ -28,8 +28,9 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\FacebookBatchRequest;
 use Facebook\FacebookBatchResponse;
+use PHPUnit\Framework\TestCase;
 
-class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
+class FacebookBatchResponseTest extends TestCase
 {
     /**
      * @var \Facebook\FacebookApp

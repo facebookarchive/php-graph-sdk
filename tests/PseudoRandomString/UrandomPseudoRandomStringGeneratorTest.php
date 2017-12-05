@@ -24,8 +24,9 @@
 namespace Facebook\Tests\PseudoRandomString;
 
 use Facebook\PseudoRandomString\UrandomPseudoRandomStringGenerator;
+use PHPUnit\Framework\TestCase;
 
-class UrandomPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
+class UrandomPseudoRandomStringGeneratorTest extends TestCase
 {
     public function testCanGenerateRandomStringOfArbitraryLength()
     {

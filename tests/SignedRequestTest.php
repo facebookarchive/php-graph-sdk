@@ -25,8 +25,9 @@ namespace Facebook\Tests;
 
 use Facebook\FacebookApp;
 use Facebook\SignedRequest;
+use PHPUnit\Framework\TestCase;
 
-class SignedRequestTest extends \PHPUnit_Framework_TestCase
+class SignedRequestTest extends TestCase
 {
     /**
      * @var FacebookApp
