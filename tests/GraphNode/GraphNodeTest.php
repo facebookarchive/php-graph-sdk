@@ -118,14 +118,14 @@ class GraphNodeTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $graphNodeAsArray['created_time']);
     }
 
-    public function testGettingAGraphNodeAsJSONWillSafelyRepresentDateTimes()
+    public function testGettingAGraphNodeAsAStringWillSafelyRepresentDateTimes()
     {
         $graphNode = new GraphNode([
             'id' => '123',
             'created_time' => '2014-07-15T03:44:53+0000',
         ]);
 
-        $graphNodeAsString = $graphNode->asJson();
+        $graphNodeAsString = (string) $graphNode;
 
         $this->assertEquals('{"id":"123","created_time":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
     }
@@ -186,11 +186,11 @@ class GraphNodeTest extends TestCase
         $this->assertEquals(['foo', 'bar'], $graphNode->asArray());
     }
 
-    public function testACollectionCanBeConvertedToProperJson()
+    public function testAGraphNodeCanBeConvertedToAString()
     {
         $graphNode = new GraphNode(['foo', 'bar', 123]);
 
-        $graphNodeAsString = $graphNode->asJson();
+        $graphNodeAsString = (string) $graphNode;
 
         $this->assertEquals('["foo","bar",123]', $graphNodeAsString);
     }

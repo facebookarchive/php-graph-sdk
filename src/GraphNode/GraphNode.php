@@ -103,18 +103,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Get all fields as JSON.
-     *
-     * @param int $options
-     *
-     * @return string
-     */
-    public function asJson($options = 0)
-    {
-        return json_encode($this->uncastFields(), $options);
-    }
-
-    /**
      * Get an iterator for the fields.
      *
      * @return \ArrayIterator
@@ -184,7 +172,7 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
      */
     public function __toString()
     {
-        return $this->asJson();
+        return json_encode($this->uncastFields());
     }
 
     /**
