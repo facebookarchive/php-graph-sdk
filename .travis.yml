@@ -27,7 +27,7 @@ matrix:
   fast_finish: true
 
 before_install:
-  - if [[ $TRAVIS_PHP_VERSION = hhv* ]]; then echo hhvm.php7.all=1 >> /etc/hhvm/php.ini; fi
+  - if [[ $TRAVIS_PHP_VERSION = hhv* ]]; then echo hhvm.php7.all=1 >> /etc/hhvm/php.ini; fi;
   - travis_retry composer self-update
 
 install:
@@ -38,5 +38,5 @@ script:
   - vendor/bin/phpunit --coverage-clover=coverage.clover --exclude-group integration
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - if [[ "$TRAVIS_PHP_VERSION" == '7.1' && "$deps" != low ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi;
+  - if [[ "$TRAVIS_PHP_VERSION" == '7.1' && "$deps" != low ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;
