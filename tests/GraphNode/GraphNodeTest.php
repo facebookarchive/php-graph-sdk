@@ -201,15 +201,6 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('["foo","bar",123]', $graphNodeAsString);
     }
 
-    public function testACollectionCanBeCounted()
-    {
-        $graphNode = new GraphNode(['foo', 'bar', 'baz']);
-
-        $graphNodeCount = count($graphNode);
-
-        $this->assertEquals(3, $graphNodeCount);
-    }
-
     public function testACollectionCanBeAccessedAsAnArray()
     {
         $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);

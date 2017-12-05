@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
+class GraphNode implements \ArrayAccess, \IteratorAggregate
 {
     /**
      * @var array maps object key names to Graph object types
@@ -124,16 +124,6 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     public function asJson($options = 0)
     {
         return json_encode($this->uncastFields(), $options);
-    }
-
-    /**
-     * Count the number of fields in the collection.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->fields);
     }
 
     /**
