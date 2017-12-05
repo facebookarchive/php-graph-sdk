@@ -103,18 +103,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Run a map over each field.
-     *
-     * @param \Closure $callback
-     *
-     * @return static
-     */
-    public function map(\Closure $callback)
-    {
-        return new static(array_map($callback, $this->fields, array_keys($this->fields)));
-    }
-
-    /**
      * Get all fields as JSON.
      *
      * @param int $options
