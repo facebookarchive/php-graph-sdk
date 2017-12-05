@@ -37,7 +37,7 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
      *
      * @var array
      */
-    protected $fields = [];
+    private $fields = [];
 
     /**
      * Init this Graph object.
