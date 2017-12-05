@@ -43,6 +43,29 @@ class GraphNodeTest extends TestCase
         $this->assertEquals(['foo' => 'bar'], $backingData);
     }
 
+    /**
+     * @dataProvider provideDateTimeFieldNames
+     */
+    public function testIsCastDateTimeFieldsToDateTime($fieldName)
+    {
+        $graphNode = new GraphNode([$fieldName => '1989-11-02']);
+
+        $this->assertInstanceOf(\DateTime::class, $graphNode->getField($fieldName));
+    }
+
+    public static function provideDateTimeFieldNames()
+    {
+        yield ['created_time'];
+        yield ['updated_time'];
+        yield ['start_time'];
+        yield ['stop_time'];
+        yield ['end_time'];
+        yield ['backdated_time'];
+        yield ['issued_at'];
+        yield ['expires_at'];
+        yield ['publish_time'];
+    }
+
     public function testDatesThatShouldBeCastAsDateTimeObjectsAreDetected()
     {
         $graphNode = new GraphNode();

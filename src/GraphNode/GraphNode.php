@@ -276,28 +276,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Determines if a value from Graph should be cast to DateTime.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function shouldCastAsDateTime($key)
-    {
-        return in_array($key, [
-            'created_time',
-            'updated_time',
-            'start_time',
-            'stop_time',
-            'end_time',
-            'backdated_time',
-            'issued_at',
-            'expires_at',
-            'publish_time'
-        ], true);
-    }
-
-    /**
      * Casts a date value from Graph to DateTime.
      *
      * @param int|string $value
@@ -336,5 +314,27 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     public static function getNodeMap()
     {
         return static::$graphNodeMap;
+    }
+
+    /**
+     * Determines if a value from Graph should be cast to DateTime.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    private function shouldCastAsDateTime($key)
+    {
+        return in_array($key, [
+            'created_time',
+            'updated_time',
+            'start_time',
+            'stop_time',
+            'end_time',
+            'backdated_time',
+            'issued_at',
+            'expires_at',
+            'publish_time'
+        ], true);
     }
 }
