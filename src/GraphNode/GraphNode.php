@@ -200,36 +200,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * Iterates over an array and detects the types each node
-     * should be cast to and returns all the fields as an array.
-     *
-     * @TODO Add auto-casting to AccessToken entities.
-     *
-     * @param array $data the array to iterate over
-     *
-     * @return array
-     */
-    public function castFields(array $data)
-    {
-        $fields = [];
-
-        foreach ($data as $k => $v) {
-            if ($this->shouldCastAsDateTime($k)
-                && (is_numeric($v)
-                    || $this->isIso8601DateString($v))
-            ) {
-                $fields[$k] = $this->castToDateTime($v);
-            } elseif ($k === 'birthday') {
-                $fields[$k] = $this->castToBirthday($v);
-            } else {
-                $fields[$k] = $v;
-            }
-        }
-
-        return $fields;
-    }
-
-    /**
      * Uncasts any auto-casted datatypes.
      * Basically the reverse of castFields().
      *
@@ -287,6 +257,36 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     public static function getNodeMap()
     {
         return static::$graphNodeMap;
+    }
+
+    /**
+     * Iterates over an array and detects the types each node
+     * should be cast to and returns all the fields as an array.
+     *
+     * @TODO Add auto-casting to AccessToken entities.
+     *
+     * @param array $data the array to iterate over
+     *
+     * @return array
+     */
+    private function castFields(array $data)
+    {
+        $fields = [];
+
+        foreach ($data as $k => $v) {
+            if ($this->shouldCastAsDateTime($k)
+                && (is_numeric($v)
+                    || $this->isIso8601DateString($v))
+            ) {
+                $fields[$k] = $this->castToDateTime($v);
+            } elseif ($k === 'birthday') {
+                $fields[$k] = $this->castToBirthday($v);
+            } else {
+                $fields[$k] = $v;
+            }
+        }
+
+        return $fields;
     }
 
     /**
