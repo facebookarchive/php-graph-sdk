@@ -30,7 +30,7 @@ class GraphGroup extends GraphNode
     /**
      * @var array maps object key names to GraphNode types
      */
-    protected static $graphObjectMap = [
+    protected static $graphNodeMap = [
         'cover' => GraphCoverPhoto::class,
         'venue' => GraphLocation::class,
     ];

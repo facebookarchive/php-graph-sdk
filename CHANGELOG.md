@@ -20,6 +20,7 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
   - Removed functions `GraphNode::getPropertyNames`, `GraphEdge::getPropertyNames`
   - Removed functions `GraphNode::getPropertyNames`, `GraphEdge::getPropertyNames`
   - Removed functions `Response::getGraphObject`, `Response::getGraphList`
+  - Rename function `GraphNode::getObjectMap` to `GraphNode::getNodeMap`
 
 ## 5.x
 

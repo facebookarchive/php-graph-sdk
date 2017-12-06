@@ -30,7 +30,7 @@ class GraphNode extends Collection
     /**
      * @var array maps object key names to Graph object types
      */
-    protected static $graphObjectMap = [];
+    protected static $graphNodeMap = [];
 
     /**
      * Init this Graph object.
@@ -184,12 +184,12 @@ class GraphNode extends Collection
     }
 
     /**
-     * Getter for $graphObjectMap.
+     * Getter for $graphNodeMap.
      *
      * @return array
      */
-    public static function getObjectMap()
+    public static function getNodeMap()
     {
-        return static::$graphObjectMap;
+        return static::$graphNodeMap;
     }
 }

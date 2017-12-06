@@ -30,7 +30,7 @@ class GraphAchievement extends GraphNode
     /**
      * @var array maps object key names to Graph object types
      */
-    protected static $graphObjectMap = [
+    protected static $graphNodeMap = [
         'from' => GraphUser::class,
         'application' => GraphApplication::class,
     ];

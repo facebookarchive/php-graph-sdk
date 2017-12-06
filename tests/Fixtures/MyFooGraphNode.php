@@ -26,7 +26,7 @@ use Facebook\GraphNode\GraphNode;
 
 class MyFooGraphNode extends GraphNode
 {
-    protected static $graphObjectMap = [
+    protected static $graphNodeMap = [
         'foo_object' => MyFooSubClassGraphNode::class,
     ];
 }

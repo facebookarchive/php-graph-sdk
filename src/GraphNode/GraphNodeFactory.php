@@ -265,12 +265,12 @@ class GraphNodeFactory
         foreach ($data as $k => $v) {
             // Array means could be recurable
             if (is_array($v)) {
-                // Detect any smart-casting from the $graphObjectMap array.
+                // Detect any smart-casting from the $graphNodeMap array.
                 // This is always empty on the GraphNode collection, but subclasses can define
                 // their own array of smart-casting types.
-                $graphObjectMap = $subclassName::getObjectMap();
-                $objectSubClass = isset($graphObjectMap[$k])
-                    ? $graphObjectMap[$k]
+                $graphNodeMap = $subclassName::getNodeMap();
+                $objectSubClass = isset($graphNodeMap[$k])
+                    ? $graphNodeMap[$k]
                     : null;
 
                 // Could be a GraphEdge or GraphNode

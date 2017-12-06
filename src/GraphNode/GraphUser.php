@@ -30,7 +30,7 @@ class GraphUser extends GraphNode
     /**
      * @var array maps object key names to Graph object types
      */
-    protected static $graphObjectMap = [
+    protected static $graphNodeMap = [
         'hometown' => GraphPage::class,
         'location' => GraphPage::class,
         'significant_other' => GraphUser::class,
