@@ -22,6 +22,7 @@
  */
 namespace Facebook\Tests\GraphNode;
 
+use Facebook\GraphNode\Birthday;
 use Facebook\GraphNode\GraphNode;
 use PHPUnit\Framework\TestCase;
 
@@ -104,6 +105,13 @@ class GraphNodeTest extends TestCase
     {
         yield ['2009-05-19T14a39r', 'Expected the invalid ISO 8601 format to fail.'];
         yield ['foo_time', 'Expected the invalid ISO 8601 format to fail.'];
+    }
+
+    public function testCastBirthdayFieldValueToBirthday()
+    {
+        $graphNode = new GraphNode(['birthday' => '11/02/1989']);
+
+        $this->assertInstanceOf(Birthday::class, $graphNode->getField('birthday'));
     }
 
     public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
