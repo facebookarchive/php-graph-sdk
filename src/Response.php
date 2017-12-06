@@ -254,24 +254,6 @@ class Response
     }
 
     /**
-     * Instantiate a new GraphObject from response.
-     *
-     * @param null|string $subclassName the GraphNode subclass to cast to
-     *
-     * @throws SDKException
-     *
-     * @return \Facebook\GraphNode\GraphObject
-     *
-     * @deprecated 5.0.0 getGraphObject() has been renamed to getGraphNode()
-     *
-     * @todo v6: Remove this method
-     */
-    public function getGraphObject($subclassName = null)
-    {
-        return $this->getGraphNode($subclassName);
-    }
-
-    /**
      * Instantiate a new GraphNode from response.
      *
      * @param null|string $subclassName the GraphNode subclass to cast to
@@ -369,25 +351,6 @@ class Response
         $factory = new GraphNodeFactory($this);
 
         return $factory->makeGraphGroup();
-    }
-
-    /**
-     * Instantiate a new GraphList from response.
-     *
-     * @param null|string $subclassName the GraphNode subclass to cast list items to
-     * @param bool        $auto_prefix  toggle to auto-prefix the subclass name
-     *
-     * @throws SDKException
-     *
-     * @return \Facebook\GraphNode\GraphList
-     *
-     * @deprecated 5.0.0 getGraphList() has been renamed to getGraphEdge()
-     *
-     * @todo v6: Remove this method
-     */
-    public function getGraphList($subclassName = null, $auto_prefix = true)
-    {
-        return $this->getGraphEdge($subclassName, $auto_prefix);
     }
 
     /**
