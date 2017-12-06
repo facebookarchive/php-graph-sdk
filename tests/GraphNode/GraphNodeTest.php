@@ -46,7 +46,7 @@ class GraphNodeTest extends TestCase
     /**
      * @dataProvider provideDateTimeFieldNames
      */
-    public function testIsCastDateTimeFieldsToDateTime($fieldName)
+    public function testCastDateTimeFieldsToDateTime($fieldName)
     {
         $graphNode = new GraphNode([$fieldName => '1989-11-02']);
 
@@ -69,7 +69,7 @@ class GraphNodeTest extends TestCase
     /**
      * @dataProvider provideValidDateTimeFieldValues
      */
-    public function testIsCastDateTimeFieldValueToDateTime($value, $message, $prettyDate = null)
+    public function testCastDateTimeFieldValueToDateTime($value, $message, $prettyDate = null)
     {
         $graphNode = new GraphNode(['created_time' => $value]);
 
@@ -93,7 +93,7 @@ class GraphNodeTest extends TestCase
     /**
      * @dataProvider provideInvalidDateTimeFieldValues
      */
-    public function testIsNotCastDateTimeFieldValueToDateTime($value, $message)
+    public function testNotCastDateTimeFieldValueToDateTime($value, $message)
     {
         $graphNode = new GraphNode(['created_time' => $value]);
 
@@ -130,7 +130,7 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('{"id":"123","created_time":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
     }
 
-    public function testAnExistingPropertyCanBeAccessed()
+    public function testAnExistingFieldCanBeAccessed()
     {
         $graphNode = new GraphNode(['foo' => 'bar']);
 
@@ -138,7 +138,7 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('bar', $field);
     }
 
-    public function testAMissingPropertyWillReturnNull()
+    public function testAMissingFieldWillReturnNull()
     {
         $graphNode = new GraphNode(['foo' => 'bar']);
         $field = $graphNode->getField('baz');
@@ -146,7 +146,7 @@ class GraphNodeTest extends TestCase
         $this->assertNull($field, 'Expected the property to return null.');
     }
 
-    public function testAMissingPropertyWillReturnTheDefault()
+    public function testAMissingFieldWillReturnTheDefault()
     {
         $graphNode = new GraphNode(['foo' => 'bar']);
 
@@ -168,22 +168,16 @@ class GraphNodeTest extends TestCase
         $this->assertFalse($field);
     }
 
-    public function testTheKeysFromTheCollectionCanBeReturned()
+    public function testTheFieldsFromTheGraphNodeCanBeReturned()
     {
         $graphNode = new GraphNode([
-            'key1' => 'foo',
-            'key2' => 'bar',
-            'key3' => 'baz',
+            'field1' => 'foo',
+            'field2' => 'bar',
+            'field3' => 'baz',
         ]);
 
         $fieldNames = $graphNode->getFieldNames();
-        $this->assertEquals(['key1', 'key2', 'key3'], $fieldNames);
-    }
-
-    public function testAnArrayCanBeInjectedViaTheConstructor()
-    {
-        $graphNode = new GraphNode(['foo', 'bar']);
-        $this->assertEquals(['foo', 'bar'], $graphNode->asArray());
+        $this->assertEquals(['field1', 'field2', 'field3'], $fieldNames);
     }
 
     public function testAGraphNodeCanBeConvertedToAString()
@@ -195,7 +189,7 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('["foo","bar",123]', $graphNodeAsString);
     }
 
-    public function testACollectionCanBeAccessedAsAnArray()
+    public function testAGraphNodeCanBeAccessedAsAnArray()
     {
         $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
 
@@ -203,7 +197,7 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('baz', $graphNode['faz']);
     }
 
-    public function testACollectionCanBeIteratedOver()
+    public function testAGraphNodeCanBeIteratedOver()
     {
         $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
 
