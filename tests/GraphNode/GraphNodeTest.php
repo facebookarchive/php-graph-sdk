@@ -188,12 +188,4 @@ class GraphNodeTest extends TestCase
 
         $this->assertEquals('["foo","bar",123]', $graphNodeAsString);
     }
-
-    public function testAGraphNodeCanBeAccessedAsAnArray()
-    {
-        $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
-
-        $this->assertEquals('bar', $graphNode->getField('foo'));
-        $this->assertEquals('baz', $graphNode->getField('faz'));
-    }
 }
