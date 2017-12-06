@@ -274,7 +274,7 @@ class Test extends TestCase
         $nextPage = $fb->next($graphEdge);
         $this->assertInstanceOf(GraphEdge::class, $nextPage);
         $this->assertInstanceOf(GraphUser::class, $nextPage[0]);
-        $this->assertEquals('Foo', $nextPage[0]['name']);
+        $this->assertEquals('Foo', $nextPage[0]->getField('name'));
 
         $lastResponse = $fb->getLastResponse();
         $this->assertInstanceOf(Response::class, $lastResponse);

@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphNode implements \ArrayAccess, \IteratorAggregate
+class GraphNode implements \IteratorAggregate
 {
     /**
      * @var array maps object key names to Graph object types
@@ -110,59 +110,6 @@ class GraphNode implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->fields);
-    }
-
-    /**
-     * Determine if an item exists at an offset.
-     *
-     * @param mixed $key
-     *
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return array_key_exists($key, $this->fields);
-    }
-
-    /**
-     * Get an item at a given offset.
-     *
-     * @param mixed $key
-     *
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->fields[$key];
-    }
-
-    /**
-     * Set the item at a given offset.
-     *
-     * @param mixed $key
-     * @param mixed $value
-     *
-     * @return void
-     */
-    public function offsetSet($key, $value)
-    {
-        if (is_null($key)) {
-            $this->fields[] = $value;
-        } else {
-            $this->fields[$key] = $value;
-        }
-    }
-
-    /**
-     * Unset the item at a given offset.
-     *
-     * @param string $key
-     *
-     * @return void
-     */
-    public function offsetUnset($key)
-    {
-        unset($this->fields[$key]);
     }
 
     /**
