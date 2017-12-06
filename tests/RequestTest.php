@@ -182,7 +182,7 @@ class RequestTest extends TestCase
 
         $this->assertTrue($request->containsFileUploads());
         $this->assertFalse($request->containsVideoUploads());
-        $this->assertFalse(isset($actualParams['source']));
+        $this->assertArrayNotHasKey('source', $actualParams);
         $this->assertEquals('Foo Bar', $actualParams['name']);
     }
 
@@ -200,7 +200,7 @@ class RequestTest extends TestCase
 
         $this->assertTrue($request->containsFileUploads());
         $this->assertTrue($request->containsVideoUploads());
-        $this->assertFalse(isset($actualParams['source']));
+        $this->assertArrayNotHasKey('source', $actualParams);
         $this->assertEquals('Foo Bar', $actualParams['name']);
     }
 }

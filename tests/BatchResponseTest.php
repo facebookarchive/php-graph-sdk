@@ -107,7 +107,7 @@ class BatchResponseTest extends TestCase
         $this->assertInstanceOf(\IteratorAggregate::class, $batchResponse);
 
         foreach ($batchResponse as $key => $responseEntity) {
-            $this->assertTrue(in_array($key, ['req_one', 'req_two', 'req_three']));
+            $this->assertContains($key, ['req_one', 'req_two', 'req_three']);
             $this->assertInstanceOf(Response::class, $responseEntity);
         }
     }

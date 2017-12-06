@@ -108,9 +108,7 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection(['foo', 'bar', 'baz']);
 
-        $collectionCount = count($collection);
-
-        $this->assertEquals(3, $collectionCount);
+        $this->assertCount(3, $collection);
     }
 
     public function testACollectionCanBeAccessedAsAnArray()
