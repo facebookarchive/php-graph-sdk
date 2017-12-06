@@ -196,19 +196,4 @@ class GraphNodeTest extends TestCase
         $this->assertEquals('bar', $graphNode->getField('foo'));
         $this->assertEquals('baz', $graphNode->getField('faz'));
     }
-
-    public function testAGraphNodeCanBeIteratedOver()
-    {
-        $graphNode = new GraphNode(['foo' => 'bar', 'faz' => 'baz']);
-
-        $this->assertInstanceOf(\IteratorAggregate::class, $graphNode);
-
-        $newArray = [];
-
-        foreach ($graphNode as $k => $v) {
-            $newArray[$k] = $v;
-        }
-
-        $this->assertEquals(['foo' => 'bar', 'faz' => 'baz'], $newArray);
-    }
 }

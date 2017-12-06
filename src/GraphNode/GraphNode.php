@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphNode implements \IteratorAggregate
+class GraphNode
 {
     /**
      * @var array maps object key names to Graph object types
@@ -100,16 +100,6 @@ class GraphNode implements \IteratorAggregate
 
             return $value;
         }, $this->fields);
-    }
-
-    /**
-     * Get an iterator for the fields.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->fields);
     }
 
     /**
