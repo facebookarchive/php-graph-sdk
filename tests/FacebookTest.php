@@ -220,7 +220,7 @@ class Test extends TestCase
             $fb->getClient()->getBaseGraphUrl()
         );
         $this->assertInstanceOf('Facebook\BatchRequest', $batchRequest);
-        $this->assertEquals(0, count($batchRequest->getRequests()));
+        $this->assertCount(0, $batchRequest->getRequests());
     }
 
     public function testCanInjectCustomHandlers()
