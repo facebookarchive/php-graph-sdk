@@ -51,9 +51,9 @@ class GraphEventTest extends TestCase
 
         $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock->reveal());
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphEvent();
 
-        $cover = $graphObject->getCover();
+        $cover = $graphNode->getCover();
         $this->assertInstanceOf(GraphCoverPhoto::class, $cover);
     }
 
@@ -65,9 +65,9 @@ class GraphEventTest extends TestCase
 
         $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock->reveal());
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphEvent();
 
-        $place = $graphObject->getPlace();
+        $place = $graphNode->getPlace();
         $this->assertInstanceOf(GraphPage::class, $place);
     }
 
@@ -79,9 +79,9 @@ class GraphEventTest extends TestCase
 
         $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock->reveal());
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphEvent();
 
-        $picture = $graphObject->getPicture();
+        $picture = $graphNode->getPicture();
         $this->assertInstanceOf(GraphPicture::class, $picture);
     }
 
@@ -93,9 +93,9 @@ class GraphEventTest extends TestCase
 
         $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
         $factory = new GraphNodeFactory($this->responseMock->reveal());
-        $graphObject = $factory->makeGraphEvent();
+        $graphNode = $factory->makeGraphEvent();
 
-        $parentGroup = $graphObject->getParentGroup();
+        $parentGroup = $graphNode->getParentGroup();
         $this->assertInstanceOf(GraphGroup::class, $parentGroup);
     }
 }

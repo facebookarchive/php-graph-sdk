@@ -15,6 +15,12 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
   - Removed option `http_client_handler`
   - Added option `http_client` which should be an object implementing `\Http\Client\HttpClient`
   - Removed functions `FacebookClient::setHttpClientHandler()` and `FacebookClient::getHttpClientHandler()` in favor for `FacebookClient::getHttpClient()` and `FacebookClient::setHttpClient()`.
+  - Removed classes `GraphObject`, `GraphList` and `GraphObjectFactory`
+  - Removed functions `AccessTokenMetadata::getProperty`, `GraphNode::getProperty`, `GraphEdge::getProperty`
+  - Removed functions `GraphNode::getPropertyNames`, `GraphEdge::getPropertyNames`
+  - Removed functions `GraphNode::getPropertyNames`, `GraphEdge::getPropertyNames`
+  - Removed functions `Response::getGraphObject`, `Response::getGraphList`
+  - Rename function `GraphNode::getObjectMap` to `GraphNode::getNodeMap`
 
 ## 5.x
 

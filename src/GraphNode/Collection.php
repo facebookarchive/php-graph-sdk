@@ -70,23 +70,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * Gets the value of the named property for this graph object.
-     *
-     * @param string $name    the property to retrieve
-     * @param mixed  $default the default to return if the property doesn't exist
-     *
-     * @return mixed
-     *
-     * @deprecated 5.0.0 getProperty() has been renamed to getField()
-     *
-     * @todo v6: Remove this method
-     */
-    public function getProperty($name, $default = null)
-    {
-        return $this->getField($name, $default);
-    }
-
-    /**
      * Returns a list of all fields set on the object.
      *
      * @return array
@@ -94,20 +77,6 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function getFieldNames()
     {
         return array_keys($this->items);
-    }
-
-    /**
-     * Returns a list of all properties set on the object.
-     *
-     * @return array
-     *
-     * @deprecated 5.0.0 getPropertyNames() has been renamed to getFieldNames()
-     *
-     * @todo v6: Remove this method
-     */
-    public function getPropertyNames()
-    {
-        return $this->getFieldNames();
     }
 
     /**
