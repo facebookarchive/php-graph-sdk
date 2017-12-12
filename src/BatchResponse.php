@@ -94,11 +94,11 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      */
     public function addResponse($key, $response)
     {
-        $originalRequestName = isset($this->batchRequest[$key]['name']) ? $this->batchRequest[$key]['name'] : $key;
-        $originalRequest = isset($this->batchRequest[$key]['request']) ? $this->batchRequest[$key]['request'] : null;
+        $originalRequestName = $this->batchRequest[$key]['name'] ?? $key;
+        $originalRequest = $this->batchRequest[$key]['request'] ?? null;
 
-        $httpResponseBody = isset($response['body']) ? $response['body'] : null;
-        $httpResponseCode = isset($response['code']) ? $response['code'] : null;
+        $httpResponseBody = $response['body'] ?? null;
+        $httpResponseCode = $response['code'] ?? null;
         // @TODO With PHP 5.5 support, this becomes array_column($response['headers'], 'value', 'name')
         $httpResponseHeaders = isset($response['headers']) ? $this->normalizeBatchHeaders($response['headers']) : [];
 
@@ -147,7 +147,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->responses[$offset]) ? $this->responses[$offset] : null;
+        return $this->responses[$offset] ?? null;
     }
 
     /**

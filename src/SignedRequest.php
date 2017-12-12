@@ -129,8 +129,8 @@ class SignedRequest
      */
     public function make(array $payload)
     {
-        $payload['algorithm'] = isset($payload['algorithm']) ? $payload['algorithm'] : 'HMAC-SHA256';
-        $payload['issued_at'] = isset($payload['issued_at']) ? $payload['issued_at'] : time();
+        $payload['algorithm'] = $payload['algorithm'] ?? 'HMAC-SHA256';
+        $payload['issued_at'] = $payload['issued_at'] ?? time();
         $encodedPayload = $this->base64UrlEncode(json_encode($payload));
 
         $hashedSig = $this->hashSignature($encodedPayload);

@@ -166,7 +166,7 @@ class Response
      */
     public function getETag()
     {
-        return isset($this->headers['ETag']) ? $this->headers['ETag'] : null;
+        return $this->headers['ETag'] ?? null;
     }
 
     /**
@@ -176,7 +176,7 @@ class Response
      */
     public function getGraphVersion()
     {
-        return isset($this->headers['Facebook-API-Version']) ? $this->headers['Facebook-API-Version'] : null;
+        return $this->headers['Facebook-API-Version'] ?? null;
     }
 
     /**
