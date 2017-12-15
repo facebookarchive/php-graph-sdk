@@ -55,9 +55,9 @@ class UrlManipulator
         }
 
         $scheme = isset($parts['scheme']) ? $parts['scheme'] . '://' : '';
-        $host = isset($parts['host']) ? $parts['host'] : '';
+        $host = $parts['host'] ?? '';
         $port = isset($parts['port']) ? ':' . $parts['port'] : '';
-        $path = isset($parts['path']) ? $parts['path'] : '';
+        $path = $parts['path'] ?? '';
         $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
 
         return $scheme . $host . $port . $path . $query . $fragment;
