@@ -25,12 +25,19 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphNode extends Collection
+class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @var array maps object key names to Graph object types
      */
     protected static $graphNodeMap = [];
+
+    /**
+     * The fields contained in the node.
+     *
+     * @var array
+     */
+    protected $fields = [];
 
     /**
      * Init this Graph object.
@@ -39,60 +46,76 @@ class GraphNode extends Collection
      */
     public function __construct(array $data = [])
     {
-        parent::__construct($this->castItems($data));
+        $this->fields = $this->castFields($data);
     }
 
     /**
-     * Iterates over an array and detects the types each node
-     * should be cast to and returns all the items as an array.
+     * Gets the value of a field from the Graph node.
      *
-     * @TODO Add auto-casting to AccessToken entities.
+     * @param string $name    the field to retrieve
+     * @param mixed  $default the default to return if the field doesn't exist
      *
-     * @param array $data the array to iterate over
-     *
-     * @return array
+     * @return mixed
      */
-    public function castItems(array $data)
+    public function getField($name, $default = null)
     {
-        $items = [];
-
-        foreach ($data as $k => $v) {
-            if ($this->shouldCastAsDateTime($k)
-                && (is_numeric($v)
-                    || $this->isIso8601DateString($v))
-            ) {
-                $items[$k] = $this->castToDateTime($v);
-            } elseif ($k === 'birthday') {
-                $items[$k] = $this->castToBirthday($v);
-            } else {
-                $items[$k] = $v;
-            }
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name];
         }
 
-        return $items;
+        return $default;
     }
 
     /**
-     * Uncasts any auto-casted datatypes.
-     * Basically the reverse of castItems().
+     * Returns a list of all fields set on the object.
      *
      * @return array
      */
-    public function uncastItems()
+    public function getFieldNames()
     {
-        $items = $this->asArray();
-
-        return array_map(function ($v) {
-            if ($v instanceof \DateTime) {
-                return $v->format(\DateTime::ISO8601);
-            }
-
-            return $v;
-        }, $items);
+        return array_keys($this->fields);
     }
 
     /**
-     * Get the collection of items as JSON.
+     * Get all of the fields in the node.
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Get all fields as a plain array.
+     *
+     * @return array
+     */
+    public function asArray()
+    {
+        return array_map(function ($value) {
+            if ($value instanceof GraphNode || $value instanceof GraphEdge) {
+                return $value->asArray();
+            }
+
+            return $value;
+        }, $this->fields);
+    }
+
+    /**
+     * Run a map over each field.
+     *
+     * @param \Closure $callback
+     *
+     * @return static
+     */
+    public function map(\Closure $callback)
+    {
+        return new static(array_map($callback, $this->fields, array_keys($this->fields)));
+    }
+
+    /**
+     * Get all fields as JSON.
      *
      * @param int $options
      *
@@ -100,7 +123,139 @@ class GraphNode extends Collection
      */
     public function asJson($options = 0)
     {
-        return json_encode($this->uncastItems(), $options);
+        return json_encode($this->uncastFields(), $options);
+    }
+
+    /**
+     * Count the number of fields in the collection.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->fields);
+    }
+
+    /**
+     * Get an iterator for the fields.
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->fields);
+    }
+
+    /**
+     * Determine if an item exists at an offset.
+     *
+     * @param mixed $key
+     *
+     * @return bool
+     */
+    public function offsetExists($key)
+    {
+        return array_key_exists($key, $this->fields);
+    }
+
+    /**
+     * Get an item at a given offset.
+     *
+     * @param mixed $key
+     *
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->fields[$key];
+    }
+
+    /**
+     * Set the item at a given offset.
+     *
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        if (is_null($key)) {
+            $this->fields[] = $value;
+        } else {
+            $this->fields[$key] = $value;
+        }
+    }
+
+    /**
+     * Unset the item at a given offset.
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->fields[$key]);
+    }
+
+    /**
+     * Convert the collection to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->asJson();
+    }
+
+    /**
+     * Iterates over an array and detects the types each node
+     * should be cast to and returns all the fields as an array.
+     *
+     * @TODO Add auto-casting to AccessToken entities.
+     *
+     * @param array $data the array to iterate over
+     *
+     * @return array
+     */
+    public function castFields(array $data)
+    {
+        $fields = [];
+
+        foreach ($data as $k => $v) {
+            if ($this->shouldCastAsDateTime($k)
+                && (is_numeric($v)
+                    || $this->isIso8601DateString($v))
+            ) {
+                $fields[$k] = $this->castToDateTime($v);
+            } elseif ($k === 'birthday') {
+                $fields[$k] = $this->castToBirthday($v);
+            } else {
+                $fields[$k] = $v;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Uncasts any auto-casted datatypes.
+     * Basically the reverse of castFields().
+     *
+     * @return array
+     */
+    public function uncastFields()
+    {
+        $fields = $this->asArray();
+
+        return array_map(function ($v) {
+            if ($v instanceof \DateTime) {
+                return $v->format(\DateTime::ISO8601);
+            }
+
+            return $v;
+        }, $fields);
     }
 
     /**

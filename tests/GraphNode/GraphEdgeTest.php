@@ -127,4 +127,103 @@ class GraphEdgeTest extends TestCase
 
         $this->assertEquals($graphEdgeToCompare, $graphEdge);
     }
+
+    public function testAnExistingPropertyCanBeAccessed()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar']);
+
+        $field = $graphEdge->getField('foo');
+        $this->assertEquals('bar', $field);
+    }
+
+    public function testAMissingPropertyWillReturnNull()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar']);
+        $field = $graphEdge->getField('baz');
+
+        $this->assertNull($field, 'Expected the property to return null.');
+    }
+
+    public function testAMissingPropertyWillReturnTheDefault()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar']);
+
+        $field = $graphEdge->getField('baz', 'faz');
+        $this->assertEquals('faz', $field);
+    }
+
+    public function testFalseDefaultsWillReturnSameType()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar']);
+
+        $field = $graphEdge->getField('baz', '');
+        $this->assertSame('', $field);
+
+        $field = $graphEdge->getField('baz', 0);
+        $this->assertSame(0, $field);
+
+        $field = $graphEdge->getField('baz', false);
+        $this->assertFalse($field);
+    }
+
+    public function testTheKeysFromTheCollectionCanBeReturned()
+    {
+        $graphEdge = new GraphEdge(
+            $this->request, [
+                'key1' => 'foo',
+                'key2' => 'bar',
+                'key3' => 'baz',
+            ]
+        );
+
+        $fieldNames = $graphEdge->getFieldNames();
+        $this->assertEquals(['key1', 'key2', 'key3'], $fieldNames);
+    }
+
+    public function testAnArrayCanBeInjectedViaTheConstructor()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], $graphEdge->asArray());
+    }
+
+    public function testACollectionCanBeConvertedToProperJson()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo', 'bar', 123]);
+
+        $graphEdgeAsString = $graphEdge->asJson();
+
+        $this->assertEquals('["foo","bar",123]', $graphEdgeAsString);
+    }
+
+    public function testACollectionCanBeCounted()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo', 'bar', 'baz']);
+
+        $graphEdgeCount = count($graphEdge);
+
+        $this->assertEquals(3, $graphEdgeCount);
+    }
+
+    public function testACollectionCanBeAccessedAsAnArray()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertEquals('bar', $graphEdge['foo']);
+        $this->assertEquals('baz', $graphEdge['faz']);
+    }
+
+    public function testACollectionCanBeIteratedOver()
+    {
+        $graphEdge = new GraphEdge($this->request, ['foo' => 'bar', 'faz' => 'baz']);
+
+        $this->assertInstanceOf(\IteratorAggregate::class, $graphEdge);
+
+        $newArray = [];
+
+        foreach ($graphEdge as $k => $v) {
+            $newArray[$k] = $v;
+        }
+
+        $this->assertEquals(['foo' => 'bar', 'faz' => 'baz'], $newArray);
+    }
 }
