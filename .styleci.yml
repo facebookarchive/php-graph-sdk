@@ -1,0 +1,6 @@
+preset: recommended
+
+finder:
+    path:
+        - "src"
+        - "tests"
