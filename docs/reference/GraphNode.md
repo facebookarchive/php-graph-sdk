@@ -63,16 +63,13 @@ $total = count($graphNode);
 
 ## GraphNode Instance Methods
 
-
 ### asArray
 `asArray()`
 Returns the raw representation (associative arrays, nested) of the node's underlying data.
 
-
 ### asJson
 `asJson()`
 Returns the data as a JSON string.
-
 
 ### getField
 `getField(string $name, string $default = 'foo')`
@@ -80,11 +77,9 @@ Gets the value from the field of a Graph node.  If the value is a scalar (string
 
 The second argument lets you define a default value to return if the field doesn't exist.
 
-
 ### getFieldNames
 `getFieldNames()`
 Returns an array with the names of all fields present on the graph node.
-
 
 ### map
 `map(Closure $callback)`
@@ -179,7 +174,6 @@ The following properties on the `GraphPage` collection will get automatically ca
 | `best_page` | [`Facebook\GraphNodes\GraphPage`](#graphpage-instance-methods)  |
 | `global_brand_parent_page`  | [`Facebook\GraphNodes\GraphPage`](graph#page-instance-methods) |
 | `location`  | [`Facebook\GraphNodes\GraphLocation`](#graphlocation-instance-methods)  |
-
 
 All getter methods return `null` if the property does not exist on the node.
 
@@ -393,7 +387,6 @@ Returns the `id` property for the achievement as a string if present.
 ## GraphEvent Instance Methods
 
 All getter methods return `null` if the property does not exist on the node.
-
 
 ### getId()
 ```php

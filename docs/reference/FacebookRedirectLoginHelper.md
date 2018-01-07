@@ -6,7 +6,6 @@ The most commonly used helper is the `FacebookRedirectLoginHelper` which allows 
 
 Facebook Login is achieved via OAuth 2.0. But you don't really have to know much about OAuth 2.0 since the SDK for PHP does all the heavy lifting for you.
 
-
 ### Obtaining an instance of FacebookRedirectLoginHelper
 
 You can obtain an instance of the `FacebookRedirectLoginHelper` from the `getRedirectLoginHelper()` method on the `Facebook\Facebook` service.
@@ -116,18 +115,15 @@ If no authorization code could be found from the `code` param in the URL, this m
 
 The `FacebookRedirectLoginHelper` has to orchestrate a number of components from the hosting environment to make the OAuth 2.0 authorization process as easy as possible to integrate. Out of the box it auto-detects all the things it needs, but sometimes you'll want to control these components.
 
-
 ### Sessions (persistent data)
 
 In order to prevent [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery)'s, a unique value is generated with each login link and stored in a session.
 
 Most modern web frameworks have custom session handlers that allow you to manage your sessions with something other than the default flat-file storage. You can integrate your framework's custom session handling by coding to the [`PersistentDataInterface`](PersistentDataInterface.md).
 
-
 ### CSPRNG
 
 The CSRF value that the `getLoginUrl()`, `getReRequestUrl()`, and `getReAuthenticationUrl()` methods generate are all _cryptographically secure_ random strings. PHP's native support of CSPRNG's is spotty at best. The PHP SDK goes to great lengths to to detect a suitable CSPRNG but in rare cases, it might not find a suitable one. The [`PseudoRandomStringGeneratorInterface`](PseudoRandomStringGeneratorInterface.md) allows you to inject your own custom CSPRNG.
-
 
 ### URL detection
 

@@ -34,7 +34,6 @@ These classes are used in a Graph API request/response cycle.
 | [`Facebook\FacebookBatchResponse`](reference/FacebookBatchResponse.md)  | An entity that represents an HTTP response from Graph after sending a batch request.  |
 | [`Facebook\FacebookClient`](reference/FacebookClient.md)  | A service object that sends HTTP requests and receives HTTP responses to and from the Graph API.  |
 
-
 # Signed Requests
 
 Classes to help obtain and manage signed requests.
@@ -55,7 +54,6 @@ These are the core exceptions that the SDK will throw when an error occurs.
 | [`Facebook\Exceptions\FacebookSDKException`](reference/FacebookSDKException.md) | The base exception to all exceptions thrown by the SDK. Thrown when there is a non-Graph-response-related error.  |
 | [`Facebook\Exceptions\FacebookResponseException`](reference/FacebookResponseException.md)  | The base exception to all Graph error responses. This exception is never thrown directly.  |
 
-
 # Graph Nodes and Edges
 
 Graph nodes are collections that represent nodes returned by the Graph API. And Graph edges are a collection of nodes returned from an edge on the Graph API.
@@ -70,7 +68,6 @@ Graph nodes are collections that represent nodes returned by the Graph API. And 
 | [`Facebook\GraphNodes\GraphPage`](reference/GraphNode.md#graphpage-instance-methods)  | A collection that represents a Page node. |
 | [`Facebook\GraphNodes\GraphPicture`](reference/GraphNode.md#graphpicture-instance-methods)  | A collection that represents a Picture node. |
 | [`Facebook\GraphNodes\GraphUser`](reference/GraphNode.md#graphuser-instance-methods)  | A collection that represents a User node. |
-
 
 # File Uploads
 
