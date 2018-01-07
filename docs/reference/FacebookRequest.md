@@ -9,7 +9,7 @@ You can instantiate a new `FacebookRequest` entity directly by sending the argum
 ```php
 use Facebook\FacebookRequest;
 
-$request = new FacebookRequest(  
+$request = new FacebookRequest(
   Facebook\FacebookApp $app,
   string $accessToken,
   string $method,

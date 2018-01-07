@@ -65,7 +65,7 @@ $total = count($graphNode);
 
 
 ### asArray
-`asArray()`  
+`asArray()`
 Returns the raw representation (associative arrays, nested) of the node's underlying data.
 
 
