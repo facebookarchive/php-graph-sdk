@@ -102,7 +102,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
         $accessToken = $this->redirectLoginHelper->getAccessToken($fullUrl);
 
         // code and state should be stripped from the URL
-        $expectedUrl = $fullUrl = self::REDIRECT_URL . '?some_param=blah';
+        $expectedUrl = self::REDIRECT_URL . '?some_param=blah';
 
         $this->assertEquals('foo_token_from_code|foo_code|' . $expectedUrl, $accessToken->getValue());
     }
