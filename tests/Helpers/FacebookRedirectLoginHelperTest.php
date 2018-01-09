@@ -97,9 +97,14 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
         $_GET['state'] = 'foo_state';
         $_GET['code'] = 'foo_code';
 
-        $accessToken = $this->redirectLoginHelper->getAccessToken(self::REDIRECT_URL);
+        $fullUrl = self::REDIRECT_URL . '?state=foo_state&code=foo_code&some_param=blah';
 
-        $this->assertEquals('foo_token_from_code|foo_code|' . self::REDIRECT_URL, (string)$accessToken);
+        $accessToken = $this->redirectLoginHelper->getAccessToken($fullUrl);
+
+        // code and state should be stripped from the URL
+        $expectedUrl = $fullUrl = self::REDIRECT_URL . '?some_param=blah';
+
+        $this->assertEquals('foo_token_from_code|foo_code|' . $expectedUrl, $accessToken->getValue());
     }
 
     public function testACustomCsprsgCanBeInjected()
