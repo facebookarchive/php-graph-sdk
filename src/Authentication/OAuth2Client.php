@@ -129,12 +129,12 @@ class OAuth2Client
      *
      * @return string
      */
-    public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&')
+    public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&', $response_type = 'code')
     {
         $params += [
             'client_id' => $this->app->getId(),
             'state' => $state,
-            'response_type' => 'code',
+            'response_type' => $response_type,
             'sdk' => 'php-sdk-' . Facebook::VERSION,
             'redirect_uri' => $redirectUrl,
             'scope' => implode(',', $scope)
