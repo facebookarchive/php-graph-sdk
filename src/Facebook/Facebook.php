@@ -141,6 +141,9 @@ class Facebook
         if (!$config['app_secret']) {
             throw new FacebookSDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
         }
+        if (!$config['default_graph_version']) {
+            throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config and could not find fallback environment variable "' . static::DEFAULT_GRAPH_VERSION . '"');
+        }
 
         $this->app = new FacebookApp($config['app_id'], $config['app_secret']);
         $this->client = new FacebookClient(
@@ -159,7 +162,6 @@ class Facebook
             $this->setDefaultAccessToken($config['default_access_token']);
         }
 
-        // @todo v6: Throw an InvalidArgumentException if "default_graph_version" is not set
         $this->defaultGraphVersion = $config['default_graph_version'];
     }
 
