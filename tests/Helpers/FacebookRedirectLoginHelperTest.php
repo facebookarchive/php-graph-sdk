@@ -44,6 +44,9 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     protected $redirectLoginHelper;
 
     const REDIRECT_URL = 'http://invalid.zzz';
+    const FOO_CODE = "foo_code";
+    const FOO_STATE = "foo_state";
+    const FOO_PARAM = "some_param=blah";
 
     protected function setUp()
     {
@@ -94,10 +97,10 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     public function testAnAccessTokenCanBeObtainedFromRedirect()
     {
         $this->persistentDataHandler->set('state', 'foo_state');
-        $_GET['state'] = 'foo_state';
-        $_GET['code'] = 'foo_code';
+        $_GET['state'] = static::FOO_STATE;
+        $_GET['code'] = static::FOO_CODE;
 
-        $fullUrl = self::REDIRECT_URL . '?state=foo_state&code=foo_code&some_param=blah';
+        $fullUrl = self::REDIRECT_URL . '?state=' . static::FOO_STATE . '&code=' . static::FOO_CODE . '&' . static::FOO_PARAM;
 
         $accessToken = $this->redirectLoginHelper->getAccessToken($fullUrl);
 
