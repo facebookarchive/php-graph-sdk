@@ -106,8 +106,9 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
         // code and state should be stripped from the URL
         $expectedUrl = self::REDIRECT_URL . '?' . static::FOO_PARAM;
+        $expectedString = 'foo_token_from_code|' . static::FOO_CODE . '|' . $expectedUrl;
 
-        $this->assertEquals('foo_token_from_code|' . static::FOO_CODE . '|' . $expectedUrl, $accessToken->getValue());
+        $this->assertEquals($expectedString, $accessToken->getValue());
     }
 
     public function testACustomCsprsgCanBeInjected()
