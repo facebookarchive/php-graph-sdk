@@ -159,8 +159,11 @@ class Facebook
             $this->setDefaultAccessToken($config['default_access_token']);
         }
 
-        // @todo v6: Throw an InvalidArgumentException if "default_graph_version" is not set
-        $this->defaultGraphVersion = $config['default_graph_version'];
+        if ( !isset($config['default_graph_version'])) {
+            throw new InvalidArgumentException('Default graph API version is not set and must be provided.');
+        } else {
+            $this->defaultGraphVersion = $config['default_graph_version'];
+        }
     }
 
     /**
