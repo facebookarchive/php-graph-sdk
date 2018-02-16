@@ -25,6 +25,7 @@ namespace Facebook\Helpers;
 
 use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
+use Facebook\Exceptions\FacebookLoginUnknownDisplayTypeException;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataInterface;
@@ -134,12 +135,19 @@ class FacebookRedirectLoginHelper
      * @param string $redirectUrl The URL Facebook should redirect users to after login.
      * @param array  $scope       List of permissions to request during login.
      * @param string $separator   The separator to use in http_build_query().
+     * @param string $displayType Login page display type
      *
      * @return string
+     *
+     * @throws FacebookLoginUnknownDisplayTypeException
      */
-    public function getLoginUrl($redirectUrl, array $scope = [], $separator = '&')
+    public function getLoginUrl($redirectUrl, array $scope = [], $separator = '&', $displayType = FacebookDisplayTypeHelper::DISPLAY_TYPE_PAGE)
     {
-        return $this->makeUrl($redirectUrl, $scope, [], $separator);
+        if (!FacebookDisplayTypeHelper::isValidDisplayType($displayType)) {
+            throw new FacebookLoginUnknownDisplayTypeException($displayType);
+        }
+
+        return $this->makeUrl($redirectUrl, $scope, ['display' => $displayType], $separator);
     }
 
     /**
