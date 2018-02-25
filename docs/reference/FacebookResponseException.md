@@ -33,15 +33,15 @@ These exceptions are derived from the [error responses from the Graph API](https
 `FacebookResponseException` extends from the base `\Exception` class, so `getCode()` and `getMessage()` are available by default.
 
 ### getHttpStatusCode
-`getHttpStatusCode()`  
+`getHttpStatusCode()`
 Returns the HTTP status code returned with this exception.
 
 ### getSubErrorCode
-`getSubErrorCode()`  
+`getSubErrorCode()`
 Returns the numeric sub-error code returned from the Graph API.
 
 ### getErrorType
-`getErrorType()`  
+`getErrorType()`
 Returns the type of error as a string.
 
 ### getResponseData
@@ -49,7 +49,7 @@ Returns the type of error as a string.
 Returns the decoded response body used to create the exception as an array.
 
 ### getRawResponse
-`getRawResponse()`  
+`getRawResponse()`
 Returns the raw response body used to create the exception as a string.
 
 ### getResponse
