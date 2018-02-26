@@ -23,14 +23,14 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\GraphNodes\Collection;
+use Facebook\GraphNodes\GraphCollection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testAnExistingPropertyCanBeAccessed()
     {
-        $graphNode = new Collection(['foo' => 'bar']);
+        $graphNode = new GraphCollection(['foo' => 'bar']);
 
         $field = $graphNode->getField('foo');
         $this->assertEquals('bar', $field);
@@ -42,7 +42,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAMissingPropertyWillReturnNull()
     {
-        $graphNode = new Collection(['foo' => 'bar']);
+        $graphNode = new GraphCollection(['foo' => 'bar']);
         $field = $graphNode->getField('baz');
 
         $this->assertNull($field, 'Expected the property to return null.');
@@ -50,7 +50,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAMissingPropertyWillReturnTheDefault()
     {
-        $graphNode = new Collection(['foo' => 'bar']);
+        $graphNode = new GraphCollection(['foo' => 'bar']);
 
         $field = $graphNode->getField('baz', 'faz');
         $this->assertEquals('faz', $field);
@@ -62,7 +62,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseDefaultsWillReturnSameType()
     {
-        $graphNode = new Collection(['foo' => 'bar']);
+        $graphNode = new GraphCollection(['foo' => 'bar']);
 
         $field = $graphNode->getField('baz', '');
         $this->assertSame('', $field);
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTheKeysFromTheCollectionCanBeReturned()
     {
-        $graphNode = new Collection([
+        $graphNode = new GraphCollection([
             'key1' => 'foo',
             'key2' => 'bar',
             'key3' => 'baz',
@@ -92,13 +92,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAnArrayCanBeInjectedViaTheConstructor()
     {
-        $collection = new Collection(['foo', 'bar']);
+        $collection = new GraphCollection(['foo', 'bar']);
         $this->assertEquals(['foo', 'bar'], $collection->asArray());
     }
 
     public function testACollectionCanBeConvertedToProperJson()
     {
-        $collection = new Collection(['foo', 'bar', 123]);
+        $collection = new GraphCollection(['foo', 'bar', 123]);
 
         $collectionAsString = $collection->asJson();
 
@@ -107,7 +107,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testACollectionCanBeCounted()
     {
-        $collection = new Collection(['foo', 'bar', 'baz']);
+        $collection = new GraphCollection(['foo', 'bar', 'baz']);
 
         $collectionCount = count($collection);
 
@@ -116,7 +116,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testACollectionCanBeAccessedAsAnArray()
     {
-        $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
+        $collection = new GraphCollection(['foo' => 'bar', 'faz' => 'baz']);
 
         $this->assertEquals('bar', $collection['foo']);
         $this->assertEquals('baz', $collection['faz']);
@@ -124,7 +124,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testACollectionCanBeIteratedOver()
     {
-        $collection = new Collection(['foo' => 'bar', 'faz' => 'baz']);
+        $collection = new GraphCollection(['foo' => 'bar', 'faz' => 'baz']);
 
         $this->assertInstanceOf('IteratorAggregate', $collection);
 

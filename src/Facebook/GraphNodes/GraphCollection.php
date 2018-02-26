@@ -36,7 +36,7 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 
-class Collection implements ArrayAccess, Countable, IteratorAggregate
+class GraphCollection implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * The items contained in the collection.
@@ -129,7 +129,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     public function asArray()
     {
         return array_map(function ($value) {
-            return $value instanceof Collection ? $value->asArray() : $value;
+            return $value instanceof GraphCollection ? $value->asArray() : $value;
         }, $this->items);
     }
 
