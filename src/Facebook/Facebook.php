@@ -248,15 +248,13 @@ class Facebook
      */
     public function setDefaultAccessToken($accessToken)
     {
-        if (is_string($accessToken)) {
-            $this->defaultAccessToken = new AccessToken($accessToken);
-
-            return;
-        }
-
-        if ($accessToken instanceof AccessToken) {
-            $this->defaultAccessToken = $accessToken;
-
+        if (is_string($accessToken)||$accessToken instanceof AccessToken) {
+            if (is_string($accessToken) {
+                $this->defaultAccessToken = new AccessToken($accessToken);
+            } elseif($accessToken instanceof AccessToken) {
+                $this->defaultAccessToken = $accessToken;
+            }
+      
             return;
         }
 
