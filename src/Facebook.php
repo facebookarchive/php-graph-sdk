@@ -353,6 +353,31 @@ class Facebook
     }
 
     /**
+     * Sends a POST request to Graph with json-encoded parameters and returns the result.
+     *
+     * @param string                  $endpoint
+     * @param array                   $params
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
+     *
+     * @throws SDKException
+     *
+     * @return Response
+     */
+    public function postJson($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
+    {
+        return $this->sendJsonRequest(
+            'POST',
+            $endpoint,
+            $params,
+            $accessToken,
+            $eTag,
+            $graphVersion
+        );
+    }
+
+    /**
      * Sends a DELETE request to Graph and returns the result.
      *
      * @param string                  $endpoint
@@ -453,6 +478,31 @@ class Facebook
 
         return $this->lastResponse = $this->client->sendRequest($request);
     }
+
+
+    /**
+     * Sends a request to Graph with json-encoded parameters and returns the result.
+     *
+     * @param string                  $method
+     * @param string                  $endpoint
+     * @param array                   $params
+     * @param null|AccessToken|string $accessToken
+     * @param null|string             $eTag
+     * @param null|string             $graphVersion
+     *
+     * @throws SDKException
+     *
+     * @return Response
+     */
+    public function sendJsonRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
+    {
+        $accessToken = $accessToken ?: $this->defaultAccessToken;
+        $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
+        $request = $this->request($method, $endpoint, $params, $accessToken, $eTag, $graphVersion);
+        $request.useJson(true);
+        return $this->lastResponse = $this->client->sendRequest($request);
+    }
+
 
     /**
      * Sends a batched request to Graph and returns the result.

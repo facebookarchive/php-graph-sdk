@@ -134,6 +134,12 @@ class RequestTest extends TestCase
         $expectedUrl = '/v0.0/bar';
 
         $this->assertEquals($expectedUrl, $postUrl);
+
+        $jsonRequest = new Request($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar'], null, 'v0.0');
+        $jsonRequest->useJson(true);
+        $jsonUrl = $jsonRequest->getUrl();
+        $expectedUrl = '/v0.0/bar?access_token=foo_token&appsecret_proof=df4256903ba4e23636cc142117aa632133d75c642bd2a68955be1443bd14deb9';
+        $this->assertEquals($expectedUrl, $jsonUrl);
     }
 
     public function testAuthenticationParamsAreStrippedAndReapplied()

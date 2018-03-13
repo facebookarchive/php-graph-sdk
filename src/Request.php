@@ -28,6 +28,7 @@ use Facebook\FileUpload\File;
 use Facebook\FileUpload\Video;
 use Facebook\Http\RequestBodyMultipart;
 use Facebook\Http\RequestBodyUrlEncoded;
+use Facebook\Http\RequestBodyJsonEncoded;
 use Facebook\Exception\SDKException;
 
 /**
@@ -81,6 +82,11 @@ class Request
      * @var string graph version to use for this request
      */
     protected $graphVersion;
+
+    /**
+     * @var bool use json-encoded body for this request
+     */
+    protected $useJson;
 
     /**
      * Creates a new Request entity.
@@ -320,6 +326,16 @@ class Request
     }
 
     /**
+     * Toggle json encodeing.
+     *
+     * @param bool $betaMode
+     */
+    public function useJson($useJson = true)
+    {
+        $this->useJson = $useJson;
+    }
+
+    /**
      * Set the params for this request.
      *
      * @param array $params
@@ -458,6 +474,14 @@ class Request
     }
 
     /**
+     * Returns the body of the request as JSON-encoded.
+     */
+    public function getJsonEncodedBody()
+    {
+        return new RequestBodyJsonEncoded($this->params);
+    }
+
+    /**
      * Generate and return the params for this request.
      *
      * @return array
@@ -500,6 +524,13 @@ class Request
     }
 
     /**
+     * Returns if the request body is encoded as json. 
+     */
+    public function isJson() {
+        return $this->useJson;
+    }
+
+    /**
      * Generate and return the URL for this request.
      *
      * @return string
@@ -516,6 +547,15 @@ class Request
         if ($this->getMethod() !== 'POST') {
             $params = $this->getParams();
             $url = UrlManipulator::appendParamsToUrl($url, $params);
+        }else if($this->isJson()) {
+            // access token should be embedded into URL instead of request body for json requests.
+            $accessToken = $this->getAccessToken();
+            if ($accessToken) {
+                $url = UrlManipulator::appendParamsToUrl($url, [
+                    'access_token' => $accessToken,
+                    'appsecret_proof' => $this->getAppSecretProof(),
+                ]);
+            }
         }
 
         return $url;
