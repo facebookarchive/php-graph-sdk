@@ -176,9 +176,28 @@ class ClientTest extends TestCase
         $fbRequest = new Request($this->fbApp, 'token', 'POST', '/foo', ['foo' => 'bar']);
         $response = $this->fbClient->sendRequest($fbRequest);
 
-        $headersSent = $response->getRequest()->getHeaders();
+        $request = $response->getRequest();
+        $headersSent = $request->getHeaders();
+        $body = $request->getUrlEncodedBody()->getBody();
 
         $this->assertEquals('application/x-www-form-urlencoded', $headersSent['Content-Type']);
+        $this->assertContains('foo=bar', $body);
+        $this->assertContains('access_token=token', $body);
+    }
+
+    public function testARequestWithJSONWillJSONEncoded()
+    {
+        $fbRequest = new Request($this->fbApp, 'token', 'POST', '/foo', ['foo' => 'bar']);
+        $fbRequest->useJson(true);
+        $response = $this->fbClient->sendRequest($fbRequest);        
+
+        $request = $response->getRequest();
+        $headersSent = $request->getHeaders();
+        $body = $request->getJsonEncodedBody()->getBody();
+        
+        $this->assertEquals('application/json', $headersSent['Content-Type']);        
+        $this->assertContains('"foo":"bar"', $body);
+        $this->assertNotContains('"access_token": "token"', $body);
     }
 
     public function testARequestWithFilesWillBeMultipart()

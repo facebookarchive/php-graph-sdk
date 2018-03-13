@@ -159,10 +159,17 @@ class Client
                 'Content-Type' => 'multipart/form-data; boundary=' . $requestBody->getBoundary(),
             ]);
         } else {
-            $requestBody = $request->getUrlEncodedBody();
-            $request->setHeaders([
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ]);
+            if($request->isJson()) {
+                $requestBody = $request->getJsonEncodedBody();
+                $request->setHeaders([
+                    'Content-Type' => 'application/json',
+                ]);
+            }else{
+                $requestBody = $request->getUrlEncodedBody();
+                $request->setHeaders([
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ]);
+            }
         }
 
         return [
