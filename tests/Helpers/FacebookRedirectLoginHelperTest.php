@@ -44,6 +44,9 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     protected $redirectLoginHelper;
 
     const REDIRECT_URL = 'http://invalid.zzz';
+    const FOO_CODE = "foo_code";
+    const FOO_STATE = "foo_state";
+    const FOO_PARAM = "some_param=blah";
 
     protected function setUp()
     {
@@ -94,12 +97,18 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
     public function testAnAccessTokenCanBeObtainedFromRedirect()
     {
         $this->persistentDataHandler->set('state', 'foo_state');
-        $_GET['state'] = 'foo_state';
-        $_GET['code'] = 'foo_code';
+        $_GET['state'] = static::FOO_STATE;
+        $_GET['code'] = static::FOO_CODE;
 
-        $accessToken = $this->redirectLoginHelper->getAccessToken(self::REDIRECT_URL);
+        $fullUrl = self::REDIRECT_URL . '?state=' . static::FOO_STATE . '&code=' . static::FOO_CODE . '&' . static::FOO_PARAM;
 
-        $this->assertEquals('foo_token_from_code|foo_code|' . self::REDIRECT_URL, (string)$accessToken);
+        $accessToken = $this->redirectLoginHelper->getAccessToken($fullUrl);
+
+        // code and state should be stripped from the URL
+        $expectedUrl = self::REDIRECT_URL . '?' . static::FOO_PARAM;
+        $expectedString = 'foo_token_from_code|' . static::FOO_CODE . '|' . $expectedUrl;
+
+        $this->assertEquals($expectedString, $accessToken->getValue());
     }
 
     public function testACustomCsprsgCanBeInjected()

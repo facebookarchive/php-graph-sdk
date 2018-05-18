@@ -27,7 +27,6 @@ composer require facebook/graph-sdk
 
 > The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.
 
-
 Once you do this, composer will edit your `composer.json` file and download the latest version of the SDK and put it in the `/vendor/` directory.
 
 Make sure to include the Composer autoloader at the top of your script.
@@ -49,7 +48,6 @@ require_once __DIR__ . '/path/to/php-graph-sdk/src/Facebook/autoload.php';
 ```
 
 The autoloader should be able to auto-detect the proper location of the source code.
-
 
 ### Keeping things tidy
 
@@ -86,7 +84,7 @@ Before we can send requests to the Graph API, we need to load our app configurat
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.9',
+  'default_graph_version' => 'v2.10',
   ]);
 ```
 
@@ -101,7 +99,6 @@ The `Facebook\Facebook` service ties all the components of the SDK for PHP toget
 The SDK can be used to support logging a Facebook user into your site using Facebook Login which is based on OAuth 2.0.
 
 Most all request made to the Graph API require an access token. We can obtain user access tokens with the SDK using the [helper classes](reference.md).
-
 
 ### Obtaining an access token from redirect
 
@@ -148,7 +145,6 @@ if (isset($accessToken)) {
 }
 ```
 
-
 ### Obtaining an access token from a Facebook Canvas context
 
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
@@ -179,7 +175,6 @@ if (isset($accessToken)) {
 
 > If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)
 
-
 ### Obtaining an access token from the SDK for JavaScript
 
 If you're already using the Facebook SDK for JavaScript to authenticate users, you can obtain the access token with PHP by using the [FacebookJavaScriptHelper](reference/FacebookJavaScriptHelper.md). The `getAccessToken()` method will return an [`AccessToken`](reference/AccessToken.md) entity.
@@ -206,7 +201,7 @@ if (isset($accessToken)) {
 }
 ```
 
-> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.9). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
+> **Warning:** Make sure you set the `{cookie:true}` option when you [initialize the SDK for JavaScript](https://developers.facebook.com/docs/javascript/reference/FB.init/v2.10). This will make the SDK for JavaScript set a cookie on your domain containing information about the user in the form of a signed request.
 
 ## Extending the access token
 

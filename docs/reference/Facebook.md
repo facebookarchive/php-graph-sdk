@@ -10,7 +10,7 @@ To instantiate a new `Facebook\Facebook` service, pass an array of configuration
 $fb = new Facebook\Facebook([
   'app_id' => '{app-id}',
   'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.9',
+  'default_graph_version' => 'v2.10',
   // . . .
   ]);
 ```
@@ -48,7 +48,7 @@ $fb = new Facebook\Facebook([
   'app_secret' => '{app-secret}',
   'default_access_token' => '{access-token}',
   'enable_beta_mode' => true,
-  'default_graph_version' => 'v2.9',
+  'default_graph_version' => 'v2.10',
   'http_client_handler' => 'guzzle',
   'persistent_data_handler' => 'memory',
   'url_detection_handler' => new MyUrlDetectionHandler(),
@@ -69,7 +69,7 @@ The default fallback access token to use if one is not explicitly provided. The 
 Enable [beta mode](https://developers.facebook.com/docs/apps/beta-tier) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
 
 ### `default_graph_version`
-Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.9`. Defaults to the [latest version of Graph](https://developers.facebook.com/docs/apps/changelog).
+Allows you to overwrite the default Graph version number set in `Facebook\Facebook::DEFAULT_GRAPH_VERSION`. Set this as a string as it would appear in the Graph url, e.g. `v2.10`. Defaults to the [latest version of Graph](https://developers.facebook.com/docs/apps/changelog).
 
 ### `http_client_handler`
 Allows you to overwrite the default HTTP client.
@@ -317,7 +317,7 @@ public Facebook\FacebookResponse sendRequest(
 Sends a request to the Graph API.
 
 ```php
-$response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.9');
+$response = $fb->sendRequest('GET', '/me', [], '{access-token}', 'eTag', 'v2.10');
 ```
 
 ## sendBatchRequest()

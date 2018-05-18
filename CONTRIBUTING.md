@@ -3,8 +3,16 @@ Contributing
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/facebook/facebook-php-sdk-v4).
+We accept contributions via Pull Requests on [Github](https://github.com/facebook/php-graph-sdk/pull/new).
 
+The current stable major version is v5. The v6 is under active development.
+
+This means any new feature MUST target v6 (`master` branch).
+
+The v5 (`5.x` branch) is maintained only for bug fixes, node/edge updates or documentation improvements.
+
+## Code of Conduct
+The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
 ## Pull Requests
 
@@ -29,13 +37,11 @@ We accept contributions via Pull Requests on [Github](https://github.com/faceboo
 
 - **Ensure no coding standards violations** - Please [run PHP Code Sniffer](#running-php-code-sniffer) using the PSR-2 standard before submitting your pull request. A violation will cause the build to fail, so please make sure there are no violations. We can't accept a patch if the build fails.
 
-
 ## Running Tests
 
 ``` bash
 $ ./vendor/bin/phpunit
 ```
-
 
 ## Running PHP Code Sniffer
 

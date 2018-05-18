@@ -113,7 +113,9 @@ class FacebookResponseException extends FacebookSDKException
             // API Throttling
             case 4:
             case 17:
+            case 32:
             case 341:
+            case 613:
                 return new static($response, new FacebookThrottleException($message, $code));
 
             // Duplicate Post
