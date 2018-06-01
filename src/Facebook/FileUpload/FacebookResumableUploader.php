@@ -121,6 +121,16 @@ class FacebookResumableUploader
                 throw $e;
             }
 
+            if ($e->getSubErrorCode() === 1363037) {
+                return new FacebookTransferChunk(
+                    $chunk->getFile(),
+                    $chunk->getUploadSessionId(),
+                    $chunk->getVideoId(),
+                    $e->getResponseData()['error']['error_data']['start_offset'],
+                    $e->getResponseData()['error']['error_data']['end_offset']
+                );
+            }
+
             // Return the same chunk entity so it can be retried.
             return $chunk;
         }
