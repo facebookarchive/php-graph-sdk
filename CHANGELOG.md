@@ -6,6 +6,8 @@ Starting with version 5, the Facebook PHP SDK follows [SemVer](http://semver.org
 
 Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes loaded with lots of new features and a friendlier API.
 
+- 5.6.3 (2018-07-01)
+  - Add fix for countable error in PHP 7.2 (originally #969 by @andreybolonin)
 - 5.6.2 (2018-02-15)
   - Strip 'code' param (#913)
 - 5.6.1 (2017-08-16)
