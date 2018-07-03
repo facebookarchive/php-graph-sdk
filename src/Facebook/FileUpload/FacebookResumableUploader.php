@@ -121,13 +121,13 @@ class FacebookResumableUploader
                 throw $e;
             }
 
-            if ($e->getSubErrorCode() === 1363037) {
+            if (!is_null($preException->getStartOffset()) && !is_null($preException->getEndOffset())) {
                 return new FacebookTransferChunk(
                     $chunk->getFile(),
                     $chunk->getUploadSessionId(),
                     $chunk->getVideoId(),
-                    $e->getResponseData()['error']['error_data']['start_offset'],
-                    $e->getResponseData()['error']['error_data']['end_offset']
+                    $preException->getStartOffset(),
+                    $preException->getEndOffset()
                 );
             }
 

@@ -30,4 +30,39 @@ namespace Facebook\Exceptions;
  */
 class FacebookResumableUploadException extends FacebookSDKException
 {
+    protected $startOffset;
+
+    protected $endOffset;
+
+    /**
+     * @return int
+     */
+    public function getStartOffset()
+    {
+        return $this->startOffset;
+    }
+
+    /**
+     * @param int $startOffset
+     */
+    public function setStartOffset($startOffset)
+    {
+        $this->startOffset = $startOffset;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEndOffset()
+    {
+        return $this->endOffset;
+    }
+
+    /**
+     * @param int $endOffset
+     */
+    public function setEndOffset($endOffset)
+    {
+        $this->endOffset = $endOffset;
+    }
 }
