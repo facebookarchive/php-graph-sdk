@@ -269,22 +269,22 @@ class GraphNodeFactoryTest extends TestCase
                 [
                     'id' => '1',
                     'name' => 'Sammy Kaye Powers',
-                    'is_sexy' => true,
+                    'is_friendly' => true,
                 ],
                 [
                     'id' => '2',
                     'name' => 'Yassine Guedidi',
-                    'is_sexy' => true,
+                    'is_friendly' => true,
                 ],
                 [
                     'id' => '3',
                     'name' => 'Fosco Marotto',
-                    'is_sexy' => true,
+                    'is_friendly' => true,
                 ],
                 [
                     'id' => '4',
-                    'name' => 'Foo McUgly',
-                    'is_sexy' => false,
+                    'name' => 'Foo McUnfriendly',
+                    'is_friendly' => false,
                 ],
             ],
             'paging' => [
