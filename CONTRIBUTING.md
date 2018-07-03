@@ -14,7 +14,6 @@ The v5 (`5.x` branch) is maintained only for bug fixes, node/edge updates or doc
 ## Code of Conduct
 The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
-
 ## Pull Requests
 
 - **Sign the CLA** - For us to accept contributions you will have to first have signed the
@@ -38,13 +37,11 @@ The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
 - **Ensure no coding standards violations** - Please [run PHP Code Sniffer](#running-php-code-sniffer) using the PSR-2 standard before submitting your pull request. A violation will cause the build to fail, so please make sure there are no violations. We can't accept a patch if the build fails.
 
-
 ## Running Tests
 
 ``` bash
 $ ./vendor/bin/phpunit
 ```
-
 
 ## Running PHP Code Sniffer
 

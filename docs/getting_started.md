@@ -27,7 +27,6 @@ composer require facebook/graph-sdk
 
 > The Facebook SDK starting adhering to [SemVer](http://semver.org/) with version 5. Previous to version 5, the SDK did not follow SemVer.
 
-
 Once you do this, composer will edit your `composer.json` file and download the latest version of the SDK and put it in the `/vendor/` directory.
 
 Make sure to include the Composer autoloader at the top of your script.
@@ -49,7 +48,6 @@ require_once __DIR__ . '/path/to/php-graph-sdk/src/Facebook/autoload.php';
 ```
 
 The autoloader should be able to auto-detect the proper location of the source code.
-
 
 ### Keeping things tidy
 
@@ -102,7 +100,6 @@ The SDK can be used to support logging a Facebook user into your site using Face
 
 Most all request made to the Graph API require an access token. We can obtain user access tokens with the SDK using the [helper classes](reference.md).
 
-
 ### Obtaining an access token from redirect
 
 For most websites, you'll use the [`Facebook\Helpers\FacebookRedirectLoginHelper`](reference/FacebookRedirectLoginHelper.md) to generate a login URL with the `getLoginUrl()` method. The link will take the user to an app authorization screen and upon approval, will redirect them back to a URL that you specified. On the redirect callback page we can obtain the user access token as an [`AccessToken`](reference/AccessToken.md) entity.
@@ -148,7 +145,6 @@ if (isset($accessToken)) {
 }
 ```
 
-
 ### Obtaining an access token from a Facebook Canvas context
 
 If your app is on Facebook Canvas, use the `getAccessToken()` method on [`Facebook\Helpers\FacebookCanvasHelper`](reference/FacebookCanvasHelper.md) to get an [`AccessToken`](reference/AccessToken.md) entity for the user.
@@ -178,7 +174,6 @@ if (isset($accessToken)) {
 ```
 
 > If your app exists within the context of a Page tab, you can obtain an access token using the example above since a Page tab is very similar to a Facebook Canvas app. But if you'd like to use a Page-tab-specific helper, you can use the [`Facebook\Helpers\FacebookPageTabHelper`](reference/FacebookPageTabHelper.md)
-
 
 ### Obtaining an access token from the SDK for JavaScript
 
