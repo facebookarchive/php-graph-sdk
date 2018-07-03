@@ -103,29 +103,20 @@ class GraphEdgeTest extends TestCase
         $graphEdge = new GraphEdge(
             $this->request,
             [
-                new GraphNode(['name' => 'dummy']),
-                new GraphNode(['name' => 'dummy']),
+                new GraphNode(['name' => 'dummy1']),
+                new GraphNode(['name' => 'dummy2']),
             ],
             ['paging' => $this->pagination],
             '/1234567890/likes'
         );
 
-        $graphEdge = $graphEdge->map(function (GraphNode $node) {
-            $node['name'] = str_replace('dummy', 'foo', $node['name']);
-            return $node;
+        $output = '';
+
+        $graphEdge->map(function (GraphNode $node) use (&$output) {
+            $output .= $node->getField('name');
         });
 
-        $graphEdgeToCompare = new GraphEdge(
-            $this->request,
-            [
-                new GraphNode(['name' => 'foo']),
-                new GraphNode(['name' => 'foo'])
-            ],
-            ['paging' => $this->pagination],
-            '/1234567890/likes'
-        );
-
-        $this->assertEquals($graphEdgeToCompare, $graphEdge);
+        $this->assertEquals('dummy1dummy2', $output);
     }
 
     public function testAnExistingPropertyCanBeAccessed()

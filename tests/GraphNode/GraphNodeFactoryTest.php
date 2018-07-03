@@ -348,19 +348,19 @@ class GraphNodeFactoryTest extends TestCase
 
         // Story
         $storyObject = $graphNode[0];
-        $this->assertInstanceOf(GraphNode::class, $storyObject['from']);
-        $this->assertInstanceOf(GraphEdge::class, $storyObject['likes']);
-        $this->assertInstanceOf(GraphEdge::class, $storyObject['comments']);
+        $this->assertInstanceOf(GraphNode::class, $storyObject->getField('from'));
+        $this->assertInstanceOf(GraphEdge::class, $storyObject->getField('likes'));
+        $this->assertInstanceOf(GraphEdge::class, $storyObject->getField('comments'));
 
         // Story Comments
-        $storyComments = $storyObject['comments'];
+        $storyComments = $storyObject->getField('comments');
         $firstStoryComment = $storyComments[0];
-        $this->assertInstanceOf(GraphNode::class, $firstStoryComment['from']);
+        $this->assertInstanceOf(GraphNode::class, $firstStoryComment->getField('from'));
 
         // Message
         $messageObject = $graphNode[1];
-        $this->assertInstanceOf(GraphEdge::class, $messageObject['to']);
-        $toUsers = $messageObject['to'];
+        $this->assertInstanceOf(GraphEdge::class, $messageObject->getField('to'));
+        $toUsers = $messageObject->getField('to');
         $this->assertInstanceOf(GraphNode::class, $toUsers[0]);
     }
 
@@ -422,10 +422,10 @@ class GraphNodeFactoryTest extends TestCase
         $factory = new GraphNodeFactory($res);
         $graphEdge = $factory->makeGraphEdge();
         $topGraphEdge = $graphEdge->getParentGraphEdge();
-        $childGraphEdgeOne = $graphEdge[0]['likes']->getParentGraphEdge();
-        $childGraphEdgeTwo = $graphEdge[1]['likes']->getParentGraphEdge();
-        $childGraphEdgeThree = $graphEdge[1]['photos']->getParentGraphEdge();
-        $childGraphEdgeFour = $graphEdge[1]['photos'][0]['likes']->getParentGraphEdge();
+        $childGraphEdgeOne = $graphEdge[0]->getField('likes')->getParentGraphEdge();
+        $childGraphEdgeTwo = $graphEdge[1]->getField('likes')->getParentGraphEdge();
+        $childGraphEdgeThree = $graphEdge[1]->getField('photos')->getParentGraphEdge();
+        $childGraphEdgeFour = $graphEdge[1]->getField('photos')[0]->getField('likes')->getParentGraphEdge();
 
         $this->assertNull($topGraphEdge);
         $this->assertEquals('/111/likes', $childGraphEdgeOne);

@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
+class GraphNode
 {
     /**
      * @var array maps object key names to Graph object types
@@ -37,7 +37,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @var array
      */
-    protected $fields = [];
+    private $fields = [];
 
     /**
      * Init this Graph object.
@@ -81,7 +81,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return array
      */
-    public function all()
+    public function getFields()
     {
         return $this->fields;
     }
@@ -103,110 +103,23 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Run a map over each field.
-     *
-     * @param \Closure $callback
-     *
-     * @return static
-     */
-    public function map(\Closure $callback)
-    {
-        return new static(array_map($callback, $this->fields, array_keys($this->fields)));
-    }
-
-    /**
-     * Get all fields as JSON.
-     *
-     * @param int $options
-     *
-     * @return string
-     */
-    public function asJson($options = 0)
-    {
-        return json_encode($this->uncastFields(), $options);
-    }
-
-    /**
-     * Count the number of fields in the collection.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->fields);
-    }
-
-    /**
-     * Get an iterator for the fields.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->fields);
-    }
-
-    /**
-     * Determine if an item exists at an offset.
-     *
-     * @param mixed $key
-     *
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return array_key_exists($key, $this->fields);
-    }
-
-    /**
-     * Get an item at a given offset.
-     *
-     * @param mixed $key
-     *
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->fields[$key];
-    }
-
-    /**
-     * Set the item at a given offset.
-     *
-     * @param mixed $key
-     * @param mixed $value
-     *
-     * @return void
-     */
-    public function offsetSet($key, $value)
-    {
-        if (is_null($key)) {
-            $this->fields[] = $value;
-        } else {
-            $this->fields[$key] = $value;
-        }
-    }
-
-    /**
-     * Unset the item at a given offset.
-     *
-     * @param string $key
-     *
-     * @return void
-     */
-    public function offsetUnset($key)
-    {
-        unset($this->fields[$key]);
-    }
-
-    /**
      * Convert the collection to its string representation.
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->asJson();
+        return json_encode($this->uncastFields());
+    }
+
+    /**
+     * Getter for $graphNodeMap.
+     *
+     * @return array
+     */
+    public static function getNodeMap()
+    {
+        return static::$graphNodeMap;
     }
 
     /**
@@ -219,7 +132,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return array
      */
-    public function castFields(array $data)
+    private function castFields(array $data)
     {
         $fields = [];
 
@@ -245,7 +158,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return array
      */
-    public function uncastFields()
+    private function uncastFields()
     {
         $fields = $this->asArray();
 
@@ -259,6 +172,28 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
+     * Determines if a value from Graph should be cast to DateTime.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    private function shouldCastAsDateTime($key)
+    {
+        return in_array($key, [
+            'created_time',
+            'updated_time',
+            'start_time',
+            'stop_time',
+            'end_time',
+            'backdated_time',
+            'issued_at',
+            'expires_at',
+            'publish_time'
+        ], true);
+    }
+
+    /**
      * Detects an ISO 8601 formatted string.
      *
      * @param string $string
@@ -269,7 +204,7 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
      * @see http://en.wikipedia.org/wiki/ISO_8601
      */
-    public function isIso8601DateString($string)
+    private function isIso8601DateString($string)
     {
         // This insane regex was yoinked from here:
         // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -286,35 +221,13 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Determines if a value from Graph should be cast to DateTime.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    public function shouldCastAsDateTime($key)
-    {
-        return in_array($key, [
-            'created_time',
-            'updated_time',
-            'start_time',
-            'stop_time',
-            'end_time',
-            'backdated_time',
-            'issued_at',
-            'expires_at',
-            'publish_time'
-        ], true);
-    }
-
-    /**
      * Casts a date value from Graph to DateTime.
      *
      * @param int|string $value
      *
      * @return \DateTime
      */
-    public function castToDateTime($value)
+    private function castToDateTime($value)
     {
         if (is_int($value)) {
             $dt = new \DateTime();
@@ -333,18 +246,8 @@ class GraphNode implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return Birthday
      */
-    public function castToBirthday($value)
+    private function castToBirthday($value)
     {
         return new Birthday($value);
-    }
-
-    /**
-     * Getter for $graphNodeMap.
-     *
-     * @return array
-     */
-    public static function getNodeMap()
-    {
-        return static::$graphNodeMap;
     }
 }
