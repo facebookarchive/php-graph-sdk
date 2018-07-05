@@ -34,6 +34,9 @@
             "Facebook\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "optimize-autoloader": true
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "5.x-dev"
