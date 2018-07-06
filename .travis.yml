@@ -18,6 +18,8 @@ matrix:
   include:
     - php: hhvm
       dist: trusty
+  allow_failures:
+    - php: hhvm
 
 before_install:
   - travis_retry composer self-update
