@@ -138,7 +138,7 @@ class GraphPage extends GraphNode
      *
      * Only available in the `/me/accounts` context.
      *
-     * @return array|null
+     * @return GraphNode|null
      */
     public function getPerms()
     {
