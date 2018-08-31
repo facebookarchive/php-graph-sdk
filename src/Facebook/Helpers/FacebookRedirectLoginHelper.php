@@ -223,7 +223,7 @@ class FacebookRedirectLoginHelper
 
         $redirectUrl = $redirectUrl ?: $this->urlDetectionHandler->getCurrentUrl();
         // At minimum we need to remove the 'state' and 'code' params
-        $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, ['code', 'state']);
+        $redirectUrl = FacebookUrlManipulator::removeParamsFromUrl($redirectUrl, ['code', 'state', 'enforce_https']);
 
         return $this->oAuth2Client->getAccessTokenFromCode($code, $redirectUrl);
     }
