@@ -117,7 +117,6 @@ class GraphRawResponse
     {
         // Normalize line breaks
         $rawHeaders = str_replace("\r\n", "\n", $rawHeaders);
-
         // There will be multiple headers if a 301 was followed
         // or a proxy was followed, etc
         $headerCollection = explode("\n\n", trim($rawHeaders));
