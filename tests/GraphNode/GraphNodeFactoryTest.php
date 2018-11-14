@@ -258,6 +258,27 @@ class GraphNodeFactoryTest extends TestCase
         ], $graphData);
     }
 
+    public function testAGraphNodeWithARootDataKeyWillConserveId()
+    {
+        $data = json_encode([
+            'id' => '123',
+            'data' => [
+                'name' => 'Foo McBar',
+                'link' => 'http://facebook/foo',
+            ],
+        ]);
+        $res = new Response($this->request, $data);
+        $factory = new GraphNodeFactory($res);
+        $graphNode = $factory->makeGraphNode();
+        $graphData = $graphNode->asArray();
+        $this->assertInstanceOf(GraphNode::class, $graphNode);
+        $this->assertEquals([
+            'id' => '123',
+            'name' => 'Foo McBar',
+            'link' => 'http://facebook/foo',
+        ], $graphData);
+    }
+
     public function testAGraphEdgeWillBeCastRecursively()
     {
         $someUser = [
