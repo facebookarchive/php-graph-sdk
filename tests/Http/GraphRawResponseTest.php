@@ -90,4 +90,21 @@ HEADER;
 
         $this->assertEquals($this->jsonFakeHeaderAsArray['x-fb-ads-insights-throttle'], $headers['x-fb-ads-insights-throttle']);
     }
+    
+    public function testHttpResponseCode()
+    {
+        // HTTP/1.0
+        $headers = str_replace('HTTP/1.1', 'HTTP/1.0', $this->fakeRawHeader);
+        $response = new GraphRawResponse($headers, '');
+        $this->assertEquals(200, $response->getHttpResponseCode());
+        
+        // HTTP/1.1
+        $response = new GraphRawResponse($this->fakeRawHeader, '');
+        $this->assertEquals(200, $response->getHttpResponseCode());
+        
+        // HTTP/2
+        $headers = str_replace('HTTP/1.1', 'HTTP/2', $this->fakeRawHeader);
+        $response = new GraphRawResponse($headers, '');
+        $this->assertEquals(200, $response->getHttpResponseCode());
+    }
 }
