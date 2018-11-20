@@ -97,12 +97,10 @@ class FacebookResponseException extends FacebookSDKException
                 case 1363037:
                     $previousException = new FacebookResumableUploadException($message, $code);
 
-                    $startOffset = isset($data['error']['error_data']['start_offset']) ?
-                        $data['error']['error_data']['start_offset'] : null;
+                    $startOffset = isset($data['error']['error_data']['start_offset']) ? (int) $data['error']['error_data']['start_offset'] : null;
                     $previousException->setStartOffset($startOffset);
 
-                    $endOffset = isset($data['error']['error_data']['end_offset']) ?
-                        $data['error']['error_data']['end_offset'] : null;
+                    $endOffset = isset($data['error']['error_data']['end_offset']) ? (int) $data['error']['error_data']['end_offset'] : null;
                     $previousException->setEndOffset($endOffset);
 
                     return new static($response, $previousException);

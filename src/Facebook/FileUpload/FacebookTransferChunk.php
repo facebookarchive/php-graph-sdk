@@ -122,6 +122,14 @@ class FacebookTransferChunk
     }
 
     /**
+     * @return int
+     */
+    public function getEndOffset()
+    {
+        return $this->endOffset;
+    }
+
+    /**
      * Get uploaded video Id
      *
      * @return int

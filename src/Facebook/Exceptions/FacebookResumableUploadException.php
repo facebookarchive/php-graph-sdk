@@ -35,7 +35,7 @@ class FacebookResumableUploadException extends FacebookSDKException
     protected $endOffset;
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getStartOffset()
     {
@@ -43,7 +43,7 @@ class FacebookResumableUploadException extends FacebookSDKException
     }
 
     /**
-     * @param int $startOffset
+     * @param int|null $startOffset
      */
     public function setStartOffset($startOffset)
     {
@@ -51,7 +51,7 @@ class FacebookResumableUploadException extends FacebookSDKException
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getEndOffset()
     {
@@ -59,7 +59,7 @@ class FacebookResumableUploadException extends FacebookSDKException
     }
 
     /**
-     * @param int $endOffset
+     * @param int|null $endOffset
      */
     public function setEndOffset($endOffset)
     {
