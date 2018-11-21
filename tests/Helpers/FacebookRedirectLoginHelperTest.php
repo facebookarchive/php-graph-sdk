@@ -45,6 +45,7 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
     const REDIRECT_URL = 'http://invalid.zzz';
     const FOO_CODE = "foo_code";
+    const FOO_ENFORCE_HTTPS = "foo_enforce_https";
     const FOO_STATE = "foo_state";
     const FOO_PARAM = "some_param=blah";
 
@@ -96,15 +97,17 @@ class FacebookRedirectLoginHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testAnAccessTokenCanBeObtainedFromRedirect()
     {
-        $this->persistentDataHandler->set('state', 'foo_state');
-        $_GET['state'] = static::FOO_STATE;
-        $_GET['code'] = static::FOO_CODE;
+        $this->persistentDataHandler->set('state', static::FOO_STATE);
 
-        $fullUrl = self::REDIRECT_URL . '?state=' . static::FOO_STATE . '&code=' . static::FOO_CODE . '&' . static::FOO_PARAM;
+        $_GET['code'] = static::FOO_CODE;
+        $_GET['enforce_https'] = static::FOO_ENFORCE_HTTPS;
+        $_GET['state'] = static::FOO_STATE;
+
+        $fullUrl = self::REDIRECT_URL . '?state=' . static::FOO_STATE . '&enforce_https=' . static::FOO_ENFORCE_HTTPS . '&code=' . static::FOO_CODE . '&' . static::FOO_PARAM;
 
         $accessToken = $this->redirectLoginHelper->getAccessToken($fullUrl);
 
-        // code and state should be stripped from the URL
+        // 'code', 'enforce_https' and 'state' should be stripped from the URL
         $expectedUrl = self::REDIRECT_URL . '?' . static::FOO_PARAM;
         $expectedString = 'foo_token_from_code|' . static::FOO_CODE . '|' . $expectedUrl;
 
