@@ -10,6 +10,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
   - Add `joined` to list of fields to be cast to `\DateTime` (#950)
   - Add `GraphPage::getFanCount()` to get the number of people who like the page (#815)
   - Fixed HTTP/2 support (#1079)
+  - Fixed resumable upload error (#1001)
 - 5.6.3 (2018-07-01)
   - Add fix for countable error in PHP 7.2 (originally #969 by @andreybolonin)
 - 5.6.2 (2018-02-15)

@@ -42,6 +42,11 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
         $this->respondWith = 'FAIL_ON_TRANSFER';
     }
 
+    public function failOnTransferAndUploadNewChunk()
+    {
+        $this->respondWith = 'FAIL_ON_TRANSFER_AND_UPLOAD_NEW_CHUNK';
+    }
+
     public function send($url, $method, $body, array $headers, $timeOut)
     {
         // Could be start, transfer or finish
@@ -78,6 +83,15 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
                 "HTTP/1.1 500 OK\r\nFoo: Bar",
                 '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
                 '"type":"FacebookApiException","code":6000,"error_subcode":1363019}}'
+            );
+        }
+
+        if ($this->respondWith == 'FAIL_ON_TRANSFER_AND_UPLOAD_NEW_CHUNK') {
+            return new GraphRawResponse(
+                "HTTP/1.1 500 OK\r\nFoo: Bar",
+                '{"error":{"message":"There was a problem uploading your video. Please try uploading it again.",' .
+                '"type":"OAuthException","code":6001,"error_subcode":1363037,' .
+                '"error_data":{"start_offset":40,"end_offset":50}}}'
             );
         }
 

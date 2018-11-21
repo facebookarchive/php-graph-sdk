@@ -90,11 +90,20 @@ class FacebookResponseException extends FacebookSDKException
                 // Video upload resumable error
                 case 1363030:
                 case 1363019:
-                case 1363037:
                 case 1363033:
                 case 1363021:
                 case 1363041:
                     return new static($response, new FacebookResumableUploadException($message, $code));
+                case 1363037:
+                    $previousException = new FacebookResumableUploadException($message, $code);
+
+                    $startOffset = isset($data['error']['error_data']['start_offset']) ? (int) $data['error']['error_data']['start_offset'] : null;
+                    $previousException->setStartOffset($startOffset);
+
+                    $endOffset = isset($data['error']['error_data']['end_offset']) ? (int) $data['error']['error_data']['end_offset'] : null;
+                    $previousException->setEndOffset($endOffset);
+
+                    return new static($response, $previousException);
             }
         }
 
