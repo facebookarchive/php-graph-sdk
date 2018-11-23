@@ -247,6 +247,33 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         ], $graphData);
     }
 
+    public function testAGraphNodeWithARootDataKeyWillConserveRootKeys()
+    {
+        $data = json_encode([
+            'id' => '123',
+            'foo' => 'bar',
+            'data' => [
+                'name' => 'Foo McBar',
+                'link' => 'http://facebook/foo',
+            ],
+        ]);
+
+        $res = new FacebookResponse($this->request, $data);
+        $factory = new GraphNodeFactory($res);
+        $graphNode = $factory->makeGraphNode();
+
+        $this->assertInstanceOf('\Facebook\GraphNodes\GraphNode', $graphNode);
+
+        $graphData = $graphNode->asArray();
+
+        $this->assertEquals([
+            'id' => '123',
+            'foo' => 'bar',
+            'name' => 'Foo McBar',
+            'link' => 'http://facebook/foo',
+        ], $graphData);
+    }
+
     public function testAGraphEdgeWillBeCastRecursively()
     {
         $someUser = [
