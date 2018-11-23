@@ -12,6 +12,7 @@ Version 5 of the Facebook PHP SDK is a complete refactor of version 4. It comes 
   - Fixed HTTP/2 support (#1079)
   - Fixed resumable upload error (#1001)
   - Strip 'enforce_https' param (#1084)
+  - Conserve id when next to data key, resolves #700 (#1034)
 - 5.6.3 (2018-07-01)
   - Add fix for countable error in PHP 7.2 (originally #969 by @andreybolonin)
 - 5.6.2 (2018-02-15)
