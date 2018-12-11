@@ -39,7 +39,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 First, download the source code and unzip it wherever you like in your project.
 
-[Download the SDK for PHP v5](https://github.com/facebook/php-graph-sdk/archive/5.4.zip)
+[Download the SDK for PHP v5](https://github.com/facebook/php-graph-sdk/archive/5.7.zip)
 
 Then include the autoloader provided in the SDK at the top of your script.
 

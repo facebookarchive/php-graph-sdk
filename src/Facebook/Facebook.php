@@ -53,7 +53,7 @@ class Facebook
     /**
      * @const string Version number of the Facebook PHP SDK.
      */
-    const VERSION = '5.6.3';
+    const VERSION = '5.7.0';
 
     /**
      * @const string Default Graph API version for requests.

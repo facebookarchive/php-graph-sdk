@@ -23,7 +23,7 @@ The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
 - **Add tests!** - Your patch won't be accepted if it doesn't have tests.
 
-- **Document any change in behaviour** - Make sure the README and the [documentation](https://github.com/facebook/facebook-php-sdk-v4/tree/master/docs) are kept up-to-date.
+- **Document any change in behaviour** - Make sure the README and the [documentation](https://github.com/facebook/php-graph-sdk/tree/master/docs) are kept up-to-date.
 
 - **Consider our release cycle** - As of version 5.0.0, we try to follow [SemVer](http://semver.org/). Randomly breaking public APIs is not an option.
 
