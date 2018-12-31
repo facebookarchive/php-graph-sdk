@@ -151,7 +151,12 @@ class GraphNode extends Collection
             'issued_at',
             'expires_at',
             'publish_time',
-            'joined'
+            'joined',
+            'left_time',
+            'seen_time',
+            'start_date',
+            'account_invite_time',
+            'account_claim_time'
         ], true);
     }
 
