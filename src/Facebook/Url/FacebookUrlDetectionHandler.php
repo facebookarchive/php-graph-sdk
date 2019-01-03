@@ -35,7 +35,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
      */
     public function getCurrentUrl()
     {
-        return $this->getHttpScheme() . '://' . $this->getHostName() . $this->getServerVar('REQUEST_URI');
+        return $this->getHttpScheme() . '://' . $this->getHostName() . '/' . $this->getServerVar('REQUEST_URI');
     }
 
     /**
