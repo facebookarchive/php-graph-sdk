@@ -210,7 +210,10 @@ class AccessTokenMetadata
     /**
      * DateTime when this access token expires.
      *
-     * @return \DateTime|null
+     * Note that a zero int value indicates the
+     * access token never expires.
+     *
+     * @return \DateTime|int|null
      */
     public function getExpiresAt()
     {
