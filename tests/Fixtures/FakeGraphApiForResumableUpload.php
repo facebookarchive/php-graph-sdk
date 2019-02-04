@@ -24,6 +24,7 @@
 
 namespace Facebook\Tests\Fixtures;
 
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Http\GraphRawResponse;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 
@@ -40,6 +41,11 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
     public function failOnTransfer()
     {
         $this->respondWith = 'FAIL_ON_TRANSFER';
+    }
+
+    public function failOnClientRequest()
+    {
+        $this->respondWith = 'FAIL_ON_CLIENT_REQUEST';
     }
 
     public function failOnTransferAndUploadNewChunk()
@@ -93,6 +99,10 @@ class FakeGraphApiForResumableUpload implements FacebookHttpClientInterface
                 '"type":"OAuthException","code":6001,"error_subcode":1363037,' .
                 '"error_data":{"start_offset":40,"end_offset":50}}}'
             );
+        }
+
+        if ($this->respondWith == 'FAIL_ON_CLIENT_REQUEST') {
+            throw new FacebookSDKException("SSL_write() returned SYSCALL, errno = 104", 55);
         }
 
         switch ($this->transferCount) {

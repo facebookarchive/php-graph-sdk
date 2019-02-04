@@ -103,6 +103,7 @@ class FacebookResumableUploader
      * @return FacebookTransferChunk
      *
      * @throws FacebookResponseException
+     * @throws FacebookSDKException
      */
     public function transfer($endpoint, FacebookTransferChunk $chunk, $allowToThrow = false)
     {
@@ -132,6 +133,12 @@ class FacebookResumableUploader
             }
 
             // Return the same chunk entity so it can be retried.
+            return $chunk;
+        } catch (FacebookSDKException $e) {
+            if ($allowToThrow) {
+                throw $e;
+            }
+
             return $chunk;
         }
 
@@ -167,6 +174,8 @@ class FacebookResumableUploader
      * @param array $params The params to send with the request.
      *
      * @return array
+     * @throws FacebookResponseException
+     * @throws FacebookSDKException
      */
     private function sendUploadRequest($endpoint, $params = [])
     {

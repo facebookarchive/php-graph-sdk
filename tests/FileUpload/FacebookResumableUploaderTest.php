@@ -109,4 +109,14 @@ class FacebookResumableUploaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(40, $newChunk->getStartOffset());
         $this->assertEquals(50, $newChunk->getEndOffset());
     }
+
+    public function testFailedClientRequestWillNotThrowAndReturnSameChunk()
+    {
+        $this->graphApi->failOnClientRequest();
+        $uploader = new FacebookResumableUploader($this->fbApp, $this->client, 'access_token', 'v2.4');
+
+        $chunk = new FacebookTransferChunk($this->file, '1', '2', '3', '4');
+        $newChunk = $uploader->transfer('/me/videos', $chunk);
+        $this->assertSame($newChunk, $chunk);
+    }
 }
