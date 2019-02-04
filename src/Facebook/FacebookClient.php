@@ -23,6 +23,7 @@
  */
 namespace Facebook;
 
+use Facebook\Exceptions\FacebookResponseException;
 use Facebook\HttpClients\FacebookHttpClientInterface;
 use Facebook\HttpClients\FacebookCurlHttpClient;
 use Facebook\HttpClients\FacebookStreamHttpClient;
@@ -192,7 +193,7 @@ class FacebookClient
      * @param FacebookRequest $request
      *
      * @return FacebookResponse
-     *
+     * @throws FacebookResponseException
      * @throws FacebookSDKException
      */
     public function sendRequest(FacebookRequest $request)
