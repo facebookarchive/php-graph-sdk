@@ -330,7 +330,7 @@ class Facebook
      *
      * @throws FacebookSDKException
      */
-    public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
+    public function get($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
     {
         return $this->sendRequest(
             'GET',
