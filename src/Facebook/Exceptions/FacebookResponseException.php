@@ -124,11 +124,14 @@ class FacebookResponseException extends FacebookSDKException
             case 17:
             case 32:
             case 341:
+            case 368:
             case 613:
                 return new static($response, new FacebookThrottleException($message, $code));
 
             // Duplicate Post
             case 506:
+            // Invalid URL
+            case 1500:
                 return new static($response, new FacebookClientException($message, $code));
         }
 
