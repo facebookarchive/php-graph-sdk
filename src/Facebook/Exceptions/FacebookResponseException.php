@@ -130,6 +130,8 @@ class FacebookResponseException extends FacebookSDKException
 
             // Duplicate Post
             case 506:
+            // Invalid URL
+            case 1500:
                 return new static($response, new FacebookClientException($message, $code));
         }
 
