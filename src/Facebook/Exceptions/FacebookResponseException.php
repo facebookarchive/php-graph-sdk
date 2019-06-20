@@ -124,6 +124,7 @@ class FacebookResponseException extends FacebookSDKException
             case 17:
             case 32:
             case 341:
+            case 368:
             case 613:
                 return new static($response, new FacebookThrottleException($message, $code));
 
