@@ -60,8 +60,10 @@ class ClientTest extends TestCase
      */
     public static $testClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->fbApp = new Application('id', 'shhhh!');
         $this->fbClient = new Client(new MyFooHttpClient());
     }

@@ -29,8 +29,9 @@ class FileTest extends TestCase
 {
     protected $testFile = '';
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->testFile = __DIR__ . '/../foo.txt';
     }
 

@@ -41,8 +41,10 @@ class GraphEdgeTest extends TestCase
         'previous' => 'https://graph.facebook.com/v7.12/998899/photos?pretty=0&limit=25&before=foo_before_cursor',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $app = new Application('123', 'foo_app_secret');
         $this->request = new Request(
             $app,

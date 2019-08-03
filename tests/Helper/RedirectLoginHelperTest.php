@@ -44,8 +44,10 @@ class RedirectLoginHelperTest extends TestCase
 
     const REDIRECT_URL = 'http://invalid.zzz';
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->persistentDataHandler = new InMemoryPersistentDataHandler();
 
         $app = new Application('123', 'foo_app_secret');
