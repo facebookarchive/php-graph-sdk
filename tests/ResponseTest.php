@@ -36,8 +36,10 @@ class ResponseTest extends TestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $app = new Application('123', 'foo_secret');
         $this->request = new Request(
             $app,

@@ -39,8 +39,10 @@ class SignedRequestFromInputHelperTest extends TestCase
     public $rawSignedRequestAuthorizedWithCode = 'oBtmZlsFguNQvGRETDYQQu1-PhwcArgbBBEK4urbpRA=.eyJjb2RlIjoiZm9vX2NvZGUiLCJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwNjMxMDc1MiwidXNlcl9pZCI6IjEyMyJ9';
     public $rawSignedRequestUnauthorized = 'KPlyhz-whtYAhHWr15N5TkbS_avz-2rUJFpFkfXKC88=.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImlzc3VlZF9hdCI6MTQwMjU1MTA4Nn0=';
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $app = new Application('123', 'foo_app_secret');
         $this->helper = new FooSignedRequestHelper($app, new FooSignedRequestHelperClient(), 'v0.0');
     }

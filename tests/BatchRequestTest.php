@@ -35,8 +35,10 @@ class BatchRequestTest extends TestCase
      */
     private $app;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->app = new Application('123', 'foo_secret');
     }
 

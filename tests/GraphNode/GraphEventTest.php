@@ -38,8 +38,10 @@ class GraphEventTest extends TestCase
      */
     protected $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->responseMock = $this->prophesize(Response::class);
     }
 
