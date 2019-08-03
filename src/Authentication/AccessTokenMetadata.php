@@ -71,7 +71,7 @@ class AccessTokenMetadata
      *
      * @return mixed
      */
-    public function getField($field, $default = null)
+    public function getField(string $field, $default = null)
     {
         if (isset($this->metadata[$field])) {
             return $this->metadata[$field];
@@ -89,7 +89,7 @@ class AccessTokenMetadata
      *
      * @return mixed
      */
-    public function getChildProperty($parentField, $field, $default = null)
+    public function getChildProperty(string $parentField, string $field, $default = null)
     {
         if (!isset($this->metadata[$parentField])) {
             return $default;
@@ -110,7 +110,7 @@ class AccessTokenMetadata
      *
      * @return mixed
      */
-    public function getErrorProperty($field, $default = null)
+    public function getErrorProperty(string $field, $default = null)
     {
         return $this->getChildProperty('error', $field, $default);
     }
@@ -123,7 +123,7 @@ class AccessTokenMetadata
      *
      * @return mixed
      */
-    public function getMetadataProperty($field, $default = null)
+    public function getMetadataProperty(string $field, $default = null)
     {
         return $this->getChildProperty('metadata', $field, $default);
     }
@@ -133,7 +133,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getAppId()
+    public function getAppId(): ?string
     {
         return $this->getField('app_id');
     }
@@ -143,7 +143,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getApplication()
+    public function getApplication(): ?string
     {
         return $this->getField('application');
     }
@@ -154,7 +154,7 @@ class AccessTokenMetadata
      *
      * @return null|bool
      */
-    public function isError()
+    public function isError(): ?bool
     {
         return $this->getField('error') !== null;
     }
@@ -164,7 +164,7 @@ class AccessTokenMetadata
      *
      * @return null|int
      */
-    public function getErrorCode()
+    public function getErrorCode(): ?int
     {
         return $this->getErrorProperty('code');
     }
@@ -174,7 +174,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): ?string
     {
         return $this->getErrorProperty('message');
     }
@@ -184,7 +184,7 @@ class AccessTokenMetadata
      *
      * @return null|int
      */
-    public function getErrorSubcode()
+    public function getErrorSubcode(): ?int
     {
         return $this->getErrorProperty('subcode');
     }
@@ -194,7 +194,7 @@ class AccessTokenMetadata
      *
      * @return null|\DateTime
      */
-    public function getExpiresAt()
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->getField('expires_at');
     }
@@ -204,7 +204,7 @@ class AccessTokenMetadata
      *
      * @return null|bool
      */
-    public function getIsValid()
+    public function getIsValid(): ?bool
     {
         return $this->getField('is_valid');
     }
@@ -219,7 +219,7 @@ class AccessTokenMetadata
      *
      * @return null|\DateTime
      */
-    public function getIssuedAt()
+    public function getIssuedAt(): ?\DateTime
     {
         return $this->getField('issued_at');
     }
@@ -230,7 +230,7 @@ class AccessTokenMetadata
      *
      * @return null|array
      */
-    public function getMetadata()
+    public function getMetadata(): ?array
     {
         return $this->getField('metadata');
     }
@@ -240,7 +240,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getSso()
+    public function getSso(): ?string
     {
         return $this->getMetadataProperty('sso');
     }
@@ -250,7 +250,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getAuthType()
+    public function getAuthType(): ?string
     {
         return $this->getMetadataProperty('auth_type');
     }
@@ -260,7 +260,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getAuthNonce()
+    public function getAuthNonce(): ?string
     {
         return $this->getMetadataProperty('auth_nonce');
     }
@@ -271,7 +271,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getProfileId()
+    public function getProfileId(): ?string
     {
         return $this->getField('profile_id');
     }
@@ -282,7 +282,7 @@ class AccessTokenMetadata
      *
      * @return array
      */
-    public function getScopes()
+    public function getScopes(): array
     {
         return $this->getField('scopes');
     }
@@ -292,7 +292,7 @@ class AccessTokenMetadata
      *
      * @return null|string
      */
-    public function getUserId()
+    public function getUserId(): ?string
     {
         return $this->getField('user_id');
     }
@@ -305,7 +305,7 @@ class AccessTokenMetadata
      *
      * @throws SDKException
      */
-    public function validateAppId($appId)
+    public function validateAppId(string $appId): void
     {
         if ($this->getAppId() !== $appId) {
             throw new SDKException('Access token metadata contains unexpected app ID.', 401);
@@ -320,7 +320,7 @@ class AccessTokenMetadata
      *
      * @throws SDKException
      */
-    public function validateUserId($userId)
+    public function validateUserId(string $userId): void
     {
         if ($this->getUserId() !== $userId) {
             throw new SDKException('Access token metadata contains unexpected user ID.', 401);
@@ -332,7 +332,7 @@ class AccessTokenMetadata
      *
      * @throws SDKException
      */
-    public function validateExpiration()
+    public function validateExpiration(): void
     {
         if (!$this->getExpiresAt() instanceof \DateTime) {
             return;
@@ -350,7 +350,7 @@ class AccessTokenMetadata
      *
      * @return \DateTime
      */
-    private function convertTimestampToDateTime($timestamp)
+    private function convertTimestampToDateTime(int $timestamp): \DateTime
     {
         $dt = new \DateTime();
         $dt->setTimestamp($timestamp);
@@ -361,7 +361,7 @@ class AccessTokenMetadata
     /**
      * Casts the unix timestamps as DateTime entities.
      */
-    private function castTimestampsToDateTime()
+    private function castTimestampsToDateTime(): void
     {
         foreach (static::$dateProperties as $key) {
             if (isset($this->metadata[$key]) && $this->metadata[$key] !== 0) {

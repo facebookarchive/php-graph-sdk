@@ -45,7 +45,7 @@ class FooClientForOAuth2Test extends Client
         $this->response = '{"code":"my_neat_code"}';
     }
 
-    public function sendRequest(Request $request)
+    public function sendRequest(Request $request): Response
     {
         return new Response(
             $request,

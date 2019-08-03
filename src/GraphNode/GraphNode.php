@@ -57,7 +57,7 @@ class GraphNode
      *
      * @return mixed
      */
-    public function getField($name, $default = null)
+    public function getField(string $name, $default = null)
     {
         if (isset($this->fields[$name])) {
             return $this->fields[$name];
@@ -71,7 +71,7 @@ class GraphNode
      *
      * @return array
      */
-    public function getFieldNames()
+    public function getFieldNames(): array
     {
         return array_keys($this->fields);
     }
@@ -81,7 +81,7 @@ class GraphNode
      *
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -91,7 +91,7 @@ class GraphNode
      *
      * @return array
      */
-    public function asArray()
+    public function asArray(): array
     {
         return array_map(function ($value) {
             if ($value instanceof GraphNode || $value instanceof GraphEdge) {
@@ -107,7 +107,7 @@ class GraphNode
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode($this->uncastFields());
     }
@@ -117,7 +117,7 @@ class GraphNode
      *
      * @return array
      */
-    public static function getNodeMap()
+    public static function getNodeMap(): array
     {
         return static::$graphNodeMap;
     }
@@ -132,7 +132,7 @@ class GraphNode
      *
      * @return array
      */
-    private function castFields(array $data)
+    private function castFields(array $data): array
     {
         $fields = [];
 
@@ -158,7 +158,7 @@ class GraphNode
      *
      * @return array
      */
-    private function uncastFields()
+    private function uncastFields(): array
     {
         $fields = $this->asArray();
 
@@ -178,7 +178,7 @@ class GraphNode
      *
      * @return bool
      */
-    private function shouldCastAsDateTime($key)
+    private function shouldCastAsDateTime(string $key): bool
     {
         return in_array($key, [
             'created_time',
@@ -204,7 +204,7 @@ class GraphNode
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
      * @see http://en.wikipedia.org/wiki/ISO_8601
      */
-    private function isIso8601DateString($string)
+    private function isIso8601DateString(string $string): bool
     {
         // This insane regex was yoinked from here:
         // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -227,7 +227,7 @@ class GraphNode
      *
      * @return \DateTime
      */
-    private function castToDateTime($value)
+    private function castToDateTime($value): \DateTime
     {
         if (is_int($value)) {
             $dt = new \DateTime();
@@ -246,7 +246,7 @@ class GraphNode
      *
      * @return Birthday
      */
-    private function castToBirthday($value)
+    private function castToBirthday(string $value): Birthday
     {
         return new Birthday($value);
     }

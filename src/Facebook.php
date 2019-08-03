@@ -154,7 +154,7 @@ class Facebook
      *
      * @return Application
      */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->app;
     }
@@ -164,7 +164,7 @@ class Facebook
      *
      * @return Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -174,7 +174,7 @@ class Facebook
      *
      * @return OAuth2Client
      */
-    public function getOAuth2Client()
+    public function getOAuth2Client(): OAuth2Client
     {
         if (!$this->oAuth2Client instanceof OAuth2Client) {
             $app = $this->getApplication();
@@ -200,7 +200,7 @@ class Facebook
      *
      * @return UrlDetectionInterface
      */
-    public function getUrlDetectionHandler()
+    public function getUrlDetectionHandler(): UrlDetectionInterface
     {
         return $this->urlDetectionHandler;
     }
@@ -210,7 +210,7 @@ class Facebook
      *
      * @param UrlDetectionInterface $urlDetectionHandler
      */
-    private function setUrlDetectionHandler(UrlDetectionInterface $urlDetectionHandler)
+    private function setUrlDetectionHandler(UrlDetectionInterface $urlDetectionHandler): void
     {
         $this->urlDetectionHandler = $urlDetectionHandler;
     }
@@ -220,7 +220,7 @@ class Facebook
      *
      * @return null|AccessToken
      */
-    public function getDefaultAccessToken()
+    public function getDefaultAccessToken(): ?AccessToken
     {
         return $this->defaultAccessToken;
     }
@@ -232,7 +232,7 @@ class Facebook
      *
      * @throws \InvalidArgumentException
      */
-    public function setDefaultAccessToken($accessToken)
+    public function setDefaultAccessToken($accessToken): void
     {
         if (is_string($accessToken)) {
             $this->defaultAccessToken = new AccessToken($accessToken);
@@ -254,7 +254,7 @@ class Facebook
      *
      * @return string
      */
-    public function getDefaultGraphVersion()
+    public function getDefaultGraphVersion(): string
     {
         return $this->defaultGraphVersion;
     }
@@ -264,7 +264,7 @@ class Facebook
      *
      * @return RedirectLoginHelper
      */
-    public function getRedirectLoginHelper()
+    public function getRedirectLoginHelper(): RedirectLoginHelper
     {
         return new RedirectLoginHelper(
             $this->getOAuth2Client(),
@@ -278,7 +278,7 @@ class Facebook
      *
      * @return JavaScriptHelper
      */
-    public function getJavaScriptHelper()
+    public function getJavaScriptHelper(): JavaScriptHelper
     {
         return new JavaScriptHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
@@ -288,7 +288,7 @@ class Facebook
      *
      * @return CanvasHelper
      */
-    public function getCanvasHelper()
+    public function getCanvasHelper(): CanvasHelper
     {
         return new CanvasHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
@@ -298,7 +298,7 @@ class Facebook
      *
      * @return PageTabHelper
      */
-    public function getPageTabHelper()
+    public function getPageTabHelper(): PageTabHelper
     {
         return new PageTabHelper($this->app, $this->client, $this->defaultGraphVersion);
     }
@@ -315,8 +315,12 @@ class Facebook
      *
      * @return Response
      */
-    public function get($endpoint, $accessToken = null, $eTag = null, $graphVersion = null)
-    {
+    public function get(
+        string $endpoint,
+        $accessToken = null,
+        ?string $eTag = null,
+        ?string $graphVersion = null
+    ): Response {
         return $this->sendRequest(
             'GET',
             $endpoint,
@@ -340,8 +344,13 @@ class Facebook
      *
      * @return Response
      */
-    public function post($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-    {
+    public function post(
+        string $endpoint,
+        array $params = [],
+        $accessToken = null,
+        ?string $eTag = null,
+        ?string $graphVersion = null
+    ): Response {
         return $this->sendRequest(
             'POST',
             $endpoint,
@@ -365,8 +374,13 @@ class Facebook
      *
      * @return Response
      */
-    public function delete($endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-    {
+    public function delete(
+        string $endpoint,
+        array $params = [],
+        $accessToken = null,
+        ?string $eTag = null,
+        ?string $graphVersion = null
+    ): Response {
         return $this->sendRequest(
             'DELETE',
             $endpoint,
@@ -386,7 +400,7 @@ class Facebook
      *
      * @return null|GraphEdge
      */
-    public function next(GraphEdge $graphEdge)
+    public function next(GraphEdge $graphEdge): ?GraphEdge
     {
         return $this->getPaginationResults($graphEdge, 'next');
     }
@@ -400,7 +414,7 @@ class Facebook
      *
      * @return null|GraphEdge
      */
-    public function previous(GraphEdge $graphEdge)
+    public function previous(GraphEdge $graphEdge): ?GraphEdge
     {
         return $this->getPaginationResults($graphEdge, 'previous');
     }
@@ -415,7 +429,7 @@ class Facebook
      *
      * @return null|GraphEdge
      */
-    public function getPaginationResults(GraphEdge $graphEdge, $direction)
+    public function getPaginationResults(GraphEdge $graphEdge, string $direction): ?GraphEdge
     {
         $paginationRequest = $graphEdge->getPaginationRequest($direction);
         if (!$paginationRequest) {
@@ -445,8 +459,14 @@ class Facebook
      *
      * @return Response
      */
-    public function sendRequest($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-    {
+    public function sendRequest(
+        string $method,
+        string $endpoint,
+        array $params = [],
+        $accessToken = null,
+        ?string $eTag = null,
+        ?string $graphVersion = null
+    ): Response {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
         $request = $this->request($method, $endpoint, $params, $accessToken, $eTag, $graphVersion);
@@ -465,7 +485,7 @@ class Facebook
      *
      * @return BatchResponse
      */
-    public function sendBatchRequest(array $requests, $accessToken = null, $graphVersion = null)
+    public function sendBatchRequest(array $requests, $accessToken = null, ?string $graphVersion = null): BatchResponse
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
@@ -488,7 +508,7 @@ class Facebook
      *
      * @return BatchRequest
      */
-    public function newBatchRequest($accessToken = null, $graphVersion = null)
+    public function newBatchRequest($accessToken = null, ?string $graphVersion = null): BatchRequest
     {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
@@ -515,8 +535,14 @@ class Facebook
      *
      * @return Request
      */
-    public function request($method, $endpoint, array $params = [], $accessToken = null, $eTag = null, $graphVersion = null)
-    {
+    public function request(
+        string $method,
+        string $endpoint,
+        array $params = [],
+        $accessToken = null,
+        string $eTag = '',
+        ?string $graphVersion = null
+    ): Request {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
@@ -540,7 +566,7 @@ class Facebook
      *
      * @return File
      */
-    public function fileToUpload($pathToFile)
+    public function fileToUpload(string $pathToFile): File
     {
         return new File($pathToFile);
     }
@@ -554,7 +580,7 @@ class Facebook
      *
      * @return Video
      */
-    public function videoToUpload($pathToFile)
+    public function videoToUpload(string $pathToFile): Video
     {
         return new Video($pathToFile);
     }
@@ -573,8 +599,14 @@ class Facebook
      *
      * @return array
      */
-    public function uploadVideo($target, $pathToFile, $metadata = [], $accessToken = null, $maxTransferTries = 5, $graphVersion = null)
-    {
+    public function uploadVideo(
+        int $target,
+        string $pathToFile,
+        array $metadata = [],
+        $accessToken = null,
+        int $maxTransferTries = 5,
+        ?string $graphVersion = null
+    ): array {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
         $graphVersion = $graphVersion ?: $this->defaultGraphVersion;
 
@@ -605,8 +637,12 @@ class Facebook
      *
      * @return TransferChunk
      */
-    private function maxTriesTransfer(ResumableUploader $uploader, $endpoint, TransferChunk $chunk, $retryCountdown)
-    {
+    private function maxTriesTransfer(
+        ResumableUploader $uploader,
+        string $endpoint,
+        TransferChunk $chunk,
+        int $retryCountdown
+    ): TransferChunk {
         $newChunk = $uploader->transfer($endpoint, $chunk, $retryCountdown < 1);
 
         if ($newChunk !== $chunk) {

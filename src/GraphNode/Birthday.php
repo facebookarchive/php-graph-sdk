@@ -52,7 +52,7 @@ class Birthday extends DateTime
      *
      * @param string $date
      */
-    public function __construct($date)
+    public function __construct(string $date)
     {
         $parts = explode('/', $date);
 
@@ -67,7 +67,7 @@ class Birthday extends DateTime
      *
      * @return bool
      */
-    public function hasDate()
+    public function hasDate(): bool
     {
         return $this->hasDate;
     }
@@ -77,7 +77,7 @@ class Birthday extends DateTime
      *
      * @return bool
      */
-    public function hasYear()
+    public function hasYear(): bool
     {
         return $this->hasYear;
     }

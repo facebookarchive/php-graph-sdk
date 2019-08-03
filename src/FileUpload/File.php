@@ -58,7 +58,7 @@ class File
      *
      * @throws SDKException
      */
-    public function __construct($filePath, $maxLength = -1, $offset = -1)
+    public function __construct(string $filePath, int $maxLength = -1, int $offset = -1)
     {
         $this->path = $filePath;
         $this->maxLength = $maxLength;
@@ -79,7 +79,7 @@ class File
      *
      * @throws SDKException
      */
-    public function open()
+    public function open(): void
     {
         if (!$this->isRemoteFile($this->path) && !is_readable($this->path)) {
             throw new SDKException('Failed to create File entity. Unable to read resource: ' . $this->path . '.');
@@ -95,7 +95,7 @@ class File
     /**
      * Stops the file stream.
      */
-    public function close()
+    public function close(): void
     {
         if (is_resource($this->stream)) {
             fclose($this->stream);
@@ -107,7 +107,7 @@ class File
      *
      * @return string
      */
-    public function getContents()
+    public function getContents(): string
     {
         return stream_get_contents($this->stream, $this->maxLength, $this->offset);
     }
@@ -117,7 +117,7 @@ class File
      *
      * @return string
      */
-    public function getFileName()
+    public function getFileName(): string
     {
         return basename($this->path);
     }
@@ -127,7 +127,7 @@ class File
      *
      * @return string
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->path;
     }
@@ -137,7 +137,7 @@ class File
      *
      * @return int
      */
-    public function getSize()
+    public function getSize(): int
     {
         return filesize($this->path);
     }
@@ -147,7 +147,7 @@ class File
      *
      * @return string
      */
-    public function getMimetype()
+    public function getMimetype(): string
     {
         return Mimetypes::getInstance()->fromFilename($this->path) ?: 'text/plain';
     }
@@ -159,7 +159,7 @@ class File
      *
      * @return bool
      */
-    protected function isRemoteFile($pathToFile)
+    protected function isRemoteFile(string $pathToFile): bool
     {
         return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
     }

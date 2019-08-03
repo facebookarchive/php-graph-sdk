@@ -40,7 +40,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getField('id');
     }
@@ -50,7 +50,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|GraphUser
      */
-    public function getFrom()
+    public function getFrom(): ?GraphUser
     {
         return $this->getField('from');
     }
@@ -60,7 +60,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|\DateTime
      */
-    public function getPublishTime()
+    public function getPublishTime(): ?\DateTime
     {
         return $this->getField('publish_time');
     }
@@ -70,7 +70,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|GraphApplication
      */
-    public function getApplication()
+    public function getApplication(): ?GraphApplication
     {
         return $this->getField('application');
     }
@@ -80,7 +80,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|array
      */
-    public function getData()
+    public function getData(): ?array
     {
         return $this->getField('data');
     }
@@ -92,7 +92,7 @@ class GraphAchievement extends GraphNode
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return 'game.achievement';
     }
@@ -102,7 +102,7 @@ class GraphAchievement extends GraphNode
      *
      * @return null|bool
      */
-    public function isNoFeedStory()
+    public function isNoFeedStory(): ?bool
     {
         return $this->getField('no_feed_story');
     }

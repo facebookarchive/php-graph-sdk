@@ -287,7 +287,7 @@ class Test extends TestCase
           'http_client' => new FakeGraphApiForResumableUpload(),
         ]);
         $fb = new Facebook($config);
-        $response = $fb->uploadVideo('me', __DIR__.'/foo.txt', [], 'foo-token', 3);
+        $response = $fb->uploadVideo(1337, __DIR__.'/foo.txt', [], 'foo-token', 3);
         $this->assertEquals([
           'video_id' => '1337',
           'success' => true,

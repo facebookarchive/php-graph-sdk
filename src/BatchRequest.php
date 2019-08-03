@@ -51,9 +51,13 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      * @param null|AccessToken|string $accessToken
      * @param null|string             $graphVersion
      */
-    public function __construct(Application $app = null, array $requests = [], $accessToken = null, $graphVersion = null)
-    {
-        parent::__construct($app, $accessToken, 'POST', '', [], null, $graphVersion);
+    public function __construct(
+        ?Application $app = null,
+        array $requests = [],
+        ?string $accessToken = null,
+        ?string $graphVersion = null
+    ) {
+        parent::__construct($app, $accessToken, 'POST', '', [], '', $graphVersion);
 
         $this->add($requests);
     }
@@ -68,9 +72,8 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      * @throws \InvalidArgumentException
      *
      * @return BatchRequest
-     * @return BatchRequest
      */
-    public function add($request, $options = null)
+    public function add($request, $options = null): BatchRequest
     {
         if (is_array($request)) {
             foreach ($request as $key => $req) {
@@ -118,7 +121,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @throws SDKException
      */
-    public function addFallbackDefaults(Request $request)
+    public function addFallbackDefaults(Request $request): void
     {
         if (!$request->getApplication()) {
             $app = $this->getApplication();
@@ -146,7 +149,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @return null|string
      */
-    public function extractFileAttachments(Request $request)
+    public function extractFileAttachments(Request $request): ?string
     {
         if (!$request->containsFileUploads()) {
             return null;
@@ -171,7 +174,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @return array
      */
-    public function getRequests()
+    public function getRequests(): array
     {
         return $this->requests;
     }
@@ -179,7 +182,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * Prepares the requests to be sent as a batch request.
      */
-    public function prepareRequestsForBatch()
+    public function prepareRequestsForBatch(): void
     {
         $this->validateBatchRequestCount();
 
@@ -195,7 +198,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @return string
      */
-    public function convertRequestsToJson()
+    public function convertRequestsToJson(): string
     {
         $requests = [];
         foreach ($this->requests as $request) {
@@ -218,7 +221,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @throws SDKException
      */
-    public function validateBatchRequestCount()
+    public function validateBatchRequestCount(): void
     {
         $batchCount = count($this->requests);
         if ($batchCount === 0) {
@@ -239,7 +242,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @return array
      */
-    public function requestEntityToBatchArray(Request $request, $options = null, $attachedFiles = null)
+    public function requestEntityToBatchArray(Request $request, $options = null, ?string $attachedFiles = null): array
     {
 
         if (null === $options) {
@@ -281,7 +284,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
      *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->requests);
     }
@@ -289,7 +292,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->add($value, $offset);
     }
@@ -297,7 +300,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->requests[$offset]);
     }
@@ -305,7 +308,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->requests[$offset]);
     }

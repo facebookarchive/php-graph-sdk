@@ -42,7 +42,7 @@ class PageTabHelper extends CanvasHelper
      * @param Client      $client       the client to make HTTP requests
      * @param string      $graphVersion the version of Graph to use
      */
-    public function __construct(Application $app, Client $client, $graphVersion)
+    public function __construct(Application $app, Client $client, string $graphVersion)
     {
         parent::__construct($app, $client, $graphVersion);
 
@@ -61,7 +61,7 @@ class PageTabHelper extends CanvasHelper
      *
      * @return null|mixed
      */
-    public function getPageData($key, $default = null)
+    public function getPageData(string $key, $default = null)
     {
         if (isset($this->pageData[$key])) {
             return $this->pageData[$key];
@@ -75,7 +75,7 @@ class PageTabHelper extends CanvasHelper
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->getPageData('admin') === true;
     }
@@ -85,7 +85,7 @@ class PageTabHelper extends CanvasHelper
      *
      * @return null|string
      */
-    public function getPageId()
+    public function getPageId(): ?string
     {
         return $this->getPageData('id');
     }

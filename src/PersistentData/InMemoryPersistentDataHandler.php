@@ -35,7 +35,7 @@ class InMemoryPersistentDataHandler implements PersistentDataInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         return $this->sessionData[$key] ?? null;
     }
@@ -43,7 +43,7 @@ class InMemoryPersistentDataHandler implements PersistentDataInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value): void
     {
         $this->sessionData[$key] = $value;
     }

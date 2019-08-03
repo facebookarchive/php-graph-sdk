@@ -32,7 +32,7 @@ class GraphCoverPhoto extends GraphNode
      *
      * @return null|int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->getField('id');
     }
@@ -42,7 +42,7 @@ class GraphCoverPhoto extends GraphNode
      *
      * @return null|string
      */
-    public function getSource()
+    public function getSource(): ?string
     {
         return $this->getField('source');
     }
@@ -52,7 +52,7 @@ class GraphCoverPhoto extends GraphNode
      *
      * @return null|int
      */
-    public function getOffsetX()
+    public function getOffsetX(): ?int
     {
         return $this->getField('offset_x');
     }
@@ -62,7 +62,7 @@ class GraphCoverPhoto extends GraphNode
      *
      * @return null|int
      */
-    public function getOffsetY()
+    public function getOffsetY(): ?int
     {
         return $this->getField('offset_y');
     }

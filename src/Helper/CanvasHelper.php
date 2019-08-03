@@ -42,7 +42,7 @@ class CanvasHelper extends SignedRequestFromInputHelper
      *
      * @return null|string
      */
-    public function getRawSignedRequest()
+    public function getRawSignedRequest(): ?string
     {
         return $this->getRawSignedRequestFromPost() ?: null;
     }

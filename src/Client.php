@@ -88,7 +88,7 @@ class Client
      * @param null|HttpClient $httpClient
      * @param bool            $enableBeta
      */
-    public function __construct(HttpClient $httpClient = null, $enableBeta = false)
+    public function __construct(?HttpClient $httpClient = null, bool $enableBeta = false)
     {
         $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
         $this->enableBetaMode = $enableBeta;
@@ -99,7 +99,7 @@ class Client
      *
      * @param HttpClient $httpClient
      */
-    public function setHttpClient(HttpClient $httpClient)
+    public function setHttpClient(HttpClient $httpClient): void
     {
         $this->httpClient = $httpClient;
     }
@@ -109,7 +109,7 @@ class Client
      *
      * @return HttpClient
      */
-    public function getHttpClient()
+    public function getHttpClient(): HttpClient
     {
         return $this->httpClient;
     }
@@ -119,7 +119,7 @@ class Client
      *
      * @param bool $betaMode
      */
-    public function enableBetaMode($betaMode = true)
+    public function enableBetaMode(bool $betaMode = true): void
     {
         $this->enableBetaMode = $betaMode;
     }
@@ -131,7 +131,7 @@ class Client
      *
      * @return string
      */
-    public function getBaseGraphUrl($postToVideoUrl = false)
+    public function getBaseGraphUrl(bool $postToVideoUrl = false): string
     {
         if ($postToVideoUrl) {
             return $this->enableBetaMode ? static::BASE_GRAPH_VIDEO_URL_BETA : static::BASE_GRAPH_VIDEO_URL;
@@ -147,7 +147,7 @@ class Client
      *
      * @return array
      */
-    public function prepareRequestMessage(Request $request)
+    public function prepareRequestMessage(Request $request): array
     {
         $postToVideoUrl = $request->containsVideoUploads();
         $url = $this->getBaseGraphUrl($postToVideoUrl) . $request->getUrl();
@@ -182,7 +182,7 @@ class Client
      *
      * @return Response
      */
-    public function sendRequest(Request $request)
+    public function sendRequest(Request $request): Response
     {
         if (get_class($request) === 'Facebook\Request') {
             $request->validateAccessToken();
@@ -225,7 +225,7 @@ class Client
      *
      * @return BatchResponse
      */
-    public function sendBatchRequest(BatchRequest $request)
+    public function sendBatchRequest(BatchRequest $request): BatchResponse
     {
         $request->prepareRequestsForBatch();
         $Response = $this->sendRequest($request);

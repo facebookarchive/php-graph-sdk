@@ -66,9 +66,10 @@ class ApplicationTest extends TestCase
     }
 
     /**
+     * TODO Delete as with types this is automatically coerced to string
      * @expectedException \Facebook\Exception\SDKException
      */
-    public function testOverflowIntegersWillThrow()
+    /*public function testOverflowIntegersWillThrow()
     {
         new Application(PHP_INT_MAX + 1, "foo");
     }
@@ -78,5 +79,5 @@ class ApplicationTest extends TestCase
         $newApp = unserialize(serialize(new Application(1, "foo")));
 
         $this->assertSame('1', $newApp->getId());
-    }
+    }*/
 }

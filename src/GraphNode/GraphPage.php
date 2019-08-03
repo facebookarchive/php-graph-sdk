@@ -43,7 +43,7 @@ class GraphPage extends GraphNode
      *
      * @return null|string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getField('id');
     }
@@ -53,7 +53,7 @@ class GraphPage extends GraphNode
      *
      * @return null|string
      */
-    public function getCategory()
+    public function getCategory(): ?string
     {
         return $this->getField('category');
     }
@@ -63,7 +63,7 @@ class GraphPage extends GraphNode
      *
      * @return null|string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->getField('name');
     }
@@ -73,7 +73,7 @@ class GraphPage extends GraphNode
      *
      * @return null|GraphPage
      */
-    public function getBestPage()
+    public function getBestPage(): ?GraphPage
     {
         return $this->getField('best_page');
     }
@@ -83,7 +83,7 @@ class GraphPage extends GraphNode
      *
      * @return null|GraphPage
      */
-    public function getGlobalBrandParentPage()
+    public function getGlobalBrandParentPage(): ?GraphPage
     {
         return $this->getField('global_brand_parent_page');
     }
@@ -93,7 +93,7 @@ class GraphPage extends GraphNode
      *
      * @return null|GraphLocation
      */
-    public function getLocation()
+    public function getLocation(): ?GraphLocation
     {
         return $this->getField('location');
     }
@@ -103,7 +103,7 @@ class GraphPage extends GraphNode
      *
      * @return null|GraphCoverPhoto
      */
-    public function getCover()
+    public function getCover(): ?GraphCoverPhoto
     {
         return $this->getField('cover');
     }
@@ -113,7 +113,7 @@ class GraphPage extends GraphNode
      *
      * @return null|GraphPicture
      */
-    public function getPicture()
+    public function getPicture(): ?GraphPicture
     {
         return $this->getField('picture');
     }
@@ -125,7 +125,7 @@ class GraphPage extends GraphNode
      *
      * @return null|string
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         return $this->getField('access_token');
     }
@@ -137,7 +137,7 @@ class GraphPage extends GraphNode
      *
      * @return null|array
      */
-    public function getPerms()
+    public function getPerms(): ?array
     {
         return $this->getField('perms');
     }

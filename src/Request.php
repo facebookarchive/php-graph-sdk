@@ -87,14 +87,21 @@ class Request
      *
      * @param null|Application        $app
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $method
-     * @param null|string             $endpoint
-     * @param null|array              $params
-     * @param null|string             $eTag
+     * @param string             $method
+     * @param string             $endpoint
+     * @param array              $params
+     * @param string             $eTag
      * @param null|string             $graphVersion
      */
-    public function __construct(Application $app = null, $accessToken = null, $method = null, $endpoint = null, array $params = [], $eTag = null, $graphVersion = null)
-    {
+    public function __construct(
+        Application $app = null,
+        $accessToken = null,
+        string $method = "",
+        string $endpoint = "",
+        array $params = [],
+        string $eTag = "",
+        ?string $graphVersion = null
+    ) {
         $this->setApp($app);
         $this->setAccessToken($accessToken);
         $this->setMethod($method);
@@ -107,12 +114,11 @@ class Request
     /**
      * Set the access token for this request.
      *
-     * @param null|AccessToken|string
-     * @param mixed $accessToken
+     * @param null|AccessToken|string $accessToken
      *
      * @return Request
      */
-    public function setAccessToken($accessToken)
+    public function setAccessToken($accessToken): Request
     {
         $this->accessToken = $accessToken;
         if ($accessToken instanceof AccessToken) {
@@ -131,7 +137,7 @@ class Request
      *
      * @return Request
      */
-    public function setAccessTokenFromParams($accessToken)
+    public function setAccessTokenFromParams($accessToken): Request
     {
         $existingAccessToken = $this->getAccessToken();
         if (!$existingAccessToken) {
@@ -148,7 +154,7 @@ class Request
      *
      * @return null|string
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
@@ -158,7 +164,7 @@ class Request
      *
      * @return null|AccessToken
      */
-    public function getAccessTokenEntity()
+    public function getAccessTokenEntity(): ?AccessToken
     {
         return $this->accessToken ? new AccessToken($this->accessToken) : null;
     }
@@ -168,7 +174,7 @@ class Request
      *
      * @param null|Application $app
      */
-    public function setApp(Application $app = null)
+    public function setApp(?Application $app = null): void
     {
         $this->app = $app;
     }
@@ -176,9 +182,9 @@ class Request
     /**
      * Return the Application entity used for this request.
      *
-     * @return Application
+     * @return null|Application
      */
-    public function getApplication()
+    public function getApplication(): ?Application
     {
         return $this->app;
     }
@@ -188,7 +194,7 @@ class Request
      *
      * @return null|string
      */
-    public function getAppSecretProof()
+    public function getAppSecretProof(): ?string
     {
         if (!$accessTokenEntity = $this->getAccessTokenEntity()) {
             return null;
@@ -202,7 +208,7 @@ class Request
      *
      * @throws SDKException
      */
-    public function validateAccessToken()
+    public function validateAccessToken(): void
     {
         $accessToken = $this->getAccessToken();
         if (!$accessToken) {
@@ -213,10 +219,9 @@ class Request
     /**
      * Set the HTTP method for this request.
      *
-     * @param string
-     * @param mixed $method
+     * @param string $method
      */
-    public function setMethod($method)
+    public function setMethod(string $method): void
     {
         $this->method = strtoupper($method);
     }
@@ -226,7 +231,7 @@ class Request
      *
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -236,7 +241,7 @@ class Request
      *
      * @throws SDKException
      */
-    public function validateMethod()
+    public function validateMethod(): void
     {
         if (!$this->method) {
             throw new SDKException('HTTP method not specified.');
@@ -250,14 +255,13 @@ class Request
     /**
      * Set the endpoint for this request.
      *
-     * @param string
-     * @param mixed $endpoint
+     * @param string $endpoint
      *
      * @throws SDKException
      *
      * @return Request
      */
-    public function setEndpoint($endpoint)
+    public function setEndpoint(string $endpoint): Request
     {
         // Harvest the access token from the endpoint to keep things in sync
         $params = UrlManipulator::getParamsAsArray($endpoint);
@@ -277,7 +281,7 @@ class Request
      *
      * @return string
      */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
         // For batch requests, this will be empty
         return $this->endpoint;
@@ -288,7 +292,7 @@ class Request
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         $headers = static::getDefaultHeaders();
 
@@ -304,7 +308,7 @@ class Request
      *
      * @param array $headers
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         $this->headers = array_merge($this->headers, $headers);
     }
@@ -314,7 +318,7 @@ class Request
      *
      * @param string $eTag
      */
-    public function setETag($eTag)
+    public function setETag(string $eTag): void
     {
         $this->eTag = $eTag;
     }
@@ -328,7 +332,7 @@ class Request
      *
      * @return Request
      */
-    public function setParams(array $params = [])
+    public function setParams(array $params = []): Request
     {
         if (isset($params['access_token'])) {
             $this->setAccessTokenFromParams($params['access_token']);
@@ -352,7 +356,7 @@ class Request
      *
      * @return Request
      */
-    public function dangerouslySetParams(array $params = [])
+    public function dangerouslySetParams(array $params = []): Request
     {
         $this->params = array_merge($this->params, $params);
 
@@ -366,7 +370,7 @@ class Request
      *
      * @return array
      */
-    public function sanitizeFileParams(array $params)
+    public function sanitizeFileParams(array $params): array
     {
         foreach ($params as $key => $value) {
             if ($value instanceof File) {
@@ -384,7 +388,7 @@ class Request
      * @param string $key
      * @param File   $file
      */
-    public function addFile($key, File $file)
+    public function addFile(string $key, File $file): void
     {
         $this->files[$key] = $file;
     }
@@ -392,7 +396,7 @@ class Request
     /**
      * Removes all the files from the upload queue.
      */
-    public function resetFiles()
+    public function resetFiles(): void
     {
         $this->files = [];
     }
@@ -402,7 +406,7 @@ class Request
      *
      * @return array
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         return $this->files;
     }
@@ -412,7 +416,7 @@ class Request
      *
      * @return bool
      */
-    public function containsFileUploads()
+    public function containsFileUploads(): bool
     {
         return !empty($this->files);
     }
@@ -422,7 +426,7 @@ class Request
      *
      * @return bool
      */
-    public function containsVideoUploads()
+    public function containsVideoUploads(): bool
     {
         foreach ($this->files as $file) {
             if ($file instanceof Video) {
@@ -438,7 +442,7 @@ class Request
      *
      * @return RequestBodyMultipart
      */
-    public function getMultipartBody()
+    public function getMultipartBody(): RequestBodyMultipart
     {
         $params = $this->getPostParams();
 
@@ -450,7 +454,7 @@ class Request
      *
      * @return RequestBodyUrlEncoded
      */
-    public function getUrlEncodedBody()
+    public function getUrlEncodedBody(): RequestBodyUrlEncoded
     {
         $params = $this->getPostParams();
 
@@ -462,7 +466,7 @@ class Request
      *
      * @return array
      */
-    public function getParams()
+    public function getParams(): array
     {
         $params = $this->params;
 
@@ -480,7 +484,7 @@ class Request
      *
      * @return array
      */
-    public function getPostParams()
+    public function getPostParams(): array
     {
         if ($this->getMethod() === 'POST') {
             return $this->getParams();
@@ -494,7 +498,7 @@ class Request
      *
      * @return null|string
      */
-    public function getGraphVersion()
+    public function getGraphVersion(): ?string
     {
         return $this->graphVersion;
     }
@@ -504,7 +508,7 @@ class Request
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         $this->validateMethod();
 
@@ -526,7 +530,7 @@ class Request
      *
      * @return array
      */
-    public static function getDefaultHeaders()
+    public static function getDefaultHeaders(): array
     {
         return [
             'User-Agent' => 'fb-php-' . Facebook::VERSION,

@@ -61,7 +61,7 @@ class ResumableUploader
      * @param null|AccessToken|string $accessToken
      * @param string                  $graphVersion
      */
-    public function __construct(Application $app, Client $client, $accessToken, $graphVersion)
+    public function __construct(Application $app, Client $client, $accessToken, string $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -79,7 +79,7 @@ class ResumableUploader
      *
      * @return TransferChunk
      */
-    public function start($endpoint, File $file)
+    public function start(string $endpoint, File $file): TransferChunk
     {
         $params = [
             'upload_phase' => 'start',
@@ -101,7 +101,7 @@ class ResumableUploader
      *
      * @return TransferChunk
      */
-    public function transfer($endpoint, TransferChunk $chunk, $allowToThrow = false)
+    public function transfer(string $endpoint, TransferChunk $chunk, bool $allowToThrow = false): TransferChunk
     {
         $params = [
             'upload_phase' => 'transfer',
@@ -136,7 +136,7 @@ class ResumableUploader
      *
      * @return bool
      */
-    public function finish($endpoint, $uploadSessionId, $metadata = [])
+    public function finish(string $endpoint, string $uploadSessionId, array $metadata = []): bool
     {
         $params = array_merge($metadata, [
             'upload_phase' => 'finish',
@@ -155,9 +155,9 @@ class ResumableUploader
      *
      * @return array
      */
-    private function sendUploadRequest($endpoint, $params = [])
+    private function sendUploadRequest(string $endpoint, array $params = []): array
     {
-        $request = new Request($this->app, $this->accessToken, 'POST', $endpoint, $params, null, $this->graphVersion);
+        $request = new Request($this->app, $this->accessToken, 'POST', $endpoint, $params, '', $this->graphVersion);
 
         return $this->client->sendRequest($request)->getDecodedBody();
     }

@@ -32,7 +32,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return null|string
      */
-    public function getAppId()
+    public function getAppId(): ?string
     {
         return $this->getField('app_id');
     }
@@ -42,7 +42,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return null|string
      */
-    public function getApplication()
+    public function getApplication(): ?string
     {
         return $this->getField('application');
     }
@@ -52,7 +52,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return null|\DateTime
      */
-    public function getExpiresAt()
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->getField('expires_at');
     }
@@ -62,7 +62,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return bool
      */
-    public function getIsValid()
+    public function getIsValid(): bool
     {
         return $this->getField('is_valid');
     }
@@ -72,7 +72,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return null|\DateTime
      */
-    public function getIssuedAt()
+    public function getIssuedAt(): ?\DateTime
     {
         return $this->getField('issued_at');
     }
@@ -82,7 +82,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return array
      */
-    public function getScopes()
+    public function getScopes(): array
     {
         return $this->getField('scopes');
     }
@@ -92,7 +92,7 @@ class GraphSessionInfo extends GraphNode
      *
      * @return null|string
      */
-    public function getUserId()
+    public function getUserId(): ?string
     {
         return $this->getField('user_id');
     }
