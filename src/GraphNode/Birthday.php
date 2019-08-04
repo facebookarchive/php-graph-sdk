@@ -22,14 +22,15 @@
  */
 namespace Facebook\GraphNode;
 
-use DateTime;
+use DateTimeImmutable;
+use Exception;
 
 /**
  * Birthday object to handle various Graph return formats.
  *
  * @package Facebook
  */
-class Birthday extends DateTime
+class Birthday extends DateTimeImmutable
 {
     /**
      * @var bool
@@ -51,6 +52,7 @@ class Birthday extends DateTime
      * @link https://developers.facebook.com/docs/graph-api/reference/user
      *
      * @param string $date
+     * @throws Exception
      */
     public function __construct($date)
     {

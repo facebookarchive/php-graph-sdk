@@ -1,6 +1,6 @@
 # Birthday for the Facebook SDK for PHP
 
-Extends `\DateTime` and represents a user's birthday returned from the Graph API which can be returned omitting certain information.
+Extends `\DateTimeImmutable` and represents a user's birthday returned from the Graph API which can be returned omitting certain information.
 
 Users may opt not to share birth day or month, or may not share birth year. Possible returns:
 

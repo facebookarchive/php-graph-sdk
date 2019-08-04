@@ -70,7 +70,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `end_time` (End time, if one has been set) as DateTime if present.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getEndTime()
     {
@@ -140,7 +140,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `start_time` (Start time) as DateTime if present.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getStartTime()
     {
@@ -170,7 +170,7 @@ class GraphEvent extends GraphNode
     /**
      * Returns the `updated_time` (Last update time) as DateTime if present.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getUpdatedTime()
     {

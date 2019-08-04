@@ -22,6 +22,8 @@
  */
 namespace Facebook\Authentication;
 
+use Exception;
+
 /**
  * @package Facebook
  */
@@ -143,10 +145,11 @@ class AccessToken
      * Setter for expires_at.
      *
      * @param int $timeStamp
+     * @throws Exception
      */
     protected function setExpiresAtFromTimeStamp($timeStamp)
     {
-        $dt = new \DateTime();
+        $dt = new \DateTimeImmutable();
         $dt->setTimestamp($timeStamp);
         $this->expiresAt = $dt;
     }

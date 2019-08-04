@@ -79,7 +79,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the time the album was initially created.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getCreatedTime()
     {
@@ -89,7 +89,7 @@ class GraphAlbum extends GraphNode
     /**
      * Returns the time the album was updated.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getUpdatedTime()
     {

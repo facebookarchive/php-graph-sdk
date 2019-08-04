@@ -50,7 +50,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the date & time that the token expires.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getExpiresAt()
     {
@@ -70,7 +70,7 @@ class GraphSessionInfo extends GraphNode
     /**
      * Returns the date & time the token was issued at.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getIssuedAt()
     {

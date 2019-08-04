@@ -22,6 +22,10 @@
  */
 namespace Facebook\GraphNode;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Exception;
+
 /**
  * @package Facebook
  */
@@ -137,11 +141,11 @@ class GraphNode
         $fields = [];
 
         foreach ($data as $k => $v) {
-            if ($this->shouldCastAsDateTime($k)
+            if ($this->shouldCastAsDateTimeImmutable($k)
                 && (is_numeric($v)
                     || $this->isIso8601DateString($v))
             ) {
-                $fields[$k] = $this->castToDateTime($v);
+                $fields[$k] = $this->castToDateTimeImmutable($v);
             } elseif ($k === 'birthday') {
                 $fields[$k] = $this->castToBirthday($v);
             } else {
@@ -172,13 +176,13 @@ class GraphNode
     }
 
     /**
-     * Determines if a value from Graph should be cast to DateTime.
+     * Determines if a value from Graph should be cast to DateTimeImmutable.
      *
      * @param string $key
      *
      * @return bool
      */
-    private function shouldCastAsDateTime($key)
+    private function shouldCastAsDateTimeImmutable($key)
     {
         return in_array($key, [
             'created_time',
@@ -225,15 +229,16 @@ class GraphNode
      *
      * @param int|string $value
      *
-     * @return \DateTime
+     * @return DateTimeInterface
+     * @throws Exception
      */
-    private function castToDateTime($value)
+    private function castToDateTimeImmutable($value)
     {
         if (is_int($value)) {
-            $dt = new \DateTime();
+            $dt = new DateTimeImmutable();
             $dt->setTimestamp($value);
         } else {
-            $dt = new \DateTime($value);
+            $dt = new DateTimeImmutable($value);
         }
 
         return $dt;
@@ -245,6 +250,7 @@ class GraphNode
      * @param string $value
      *
      * @return Birthday
+     * @throws Exception
      */
     private function castToBirthday($value)
     {
