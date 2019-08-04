@@ -255,6 +255,7 @@ class Client
     }
 
     /**
+     * @TODO Move this to the Facebook\Request class
      * Create and prepares a PSR-7 object from a Facebook\Request object to be used with a PSR-18 Client
      * @param Request $facebookRequest
      * @return RequestInterface
