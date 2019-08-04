@@ -15,7 +15,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.1 || ^8.0",
         "psr/http-message": "^1.0",
         "php-http/client-implementation": "^1.0",
         "php-http/httplug": "^1.0",

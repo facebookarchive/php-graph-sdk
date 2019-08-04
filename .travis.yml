@@ -18,6 +18,14 @@ matrix:
     - php: 7.2
       env:
         - deps=low
+    - php: 7.3
+    - php: 7.3
+      env:
+        - deps=low
+    - php: 7.4
+    - php: 7.4
+      env:
+        - deps=low
     - php: nightly
     - php: nightly
       env:
@@ -26,6 +34,8 @@ matrix:
     - php: hhvm-nightly
   # Allow failures until Travis build includes HHVM 3.20.2 which fix the issue with composer (see http://hhvm.com/blog/2017/06/07/hhvm-3-20.html)
   allow_failures:
+    - php: 7.4
+    - php: nightly
     - php: hhvm
     - php: hhvm-nightly
   fast_finish: true
