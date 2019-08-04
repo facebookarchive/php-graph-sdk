@@ -278,15 +278,15 @@ Returns the `cover_photo` property for the album as a string if present.
 
 ### getCreatedTime()
 ```php
-public \DateTime|null getCreatedTime()
+public \DateTimeInterface|null getCreatedTime()
 ```
-Returns the `created_time` property for the album as a `\DateTime` if present.
+Returns the `created_time` property for the album as a `\DateTimeInterface` if present.
 
 ### getUpdatedTime()
 ```php
-public \DateTime|null getUpdatedTime()
+public \DateTimeInterface|null getUpdatedTime()
 ```
-Returns the `updated_time` property for the album as a `\DateTime` if present.
+Returns the `updated_time` property for the album as a `\DateTimeInterface` if present.
 
 ### getDescription()
 ```php
@@ -415,9 +415,9 @@ Returns the `description` property (Long-form description) for the event as a st
 
 ### getEndTime()
 ```php
-public DateTime|null getEndTime()
+public DateTimeInterface|null getEndTime()
 ```
-Returns the `end_time` property (End time, if one has been set) for the event as a DateTime if present.
+Returns the `end_time` property (End time, if one has been set) for the event as a DateTimeInterface if present.
 
 ### getIsDateOnly()
 ```php
@@ -457,9 +457,9 @@ Returns the `privacy` property (Who can see the event) for the event as a string
 
 ### getStartTime()
 ```php
-public DateTime|null getStartTime()
+public DateTimeInterface|null getStartTime()
 ```
-Returns the `start_time` property (Start time) for the event as a DateTime if present.
+Returns the `start_time` property (Start time) for the event as a DateTimeInterface if present.
 
 ### getTicketUri()
 ```php
@@ -475,9 +475,9 @@ Returns the `timezone` property (Timezone) for the event as a string if present.
 
 ### getUpdatedTime()
 ```php
-public DateTime|null getUpdatedTime()
+public DateTimeInterface|null getUpdatedTime()
 ```
-Returns the `updated_time` property (Last update time) for the event as a DateTime if present.
+Returns the `updated_time` property (Last update time) for the event as a DateTimeInterface if present.
 
 ### getPicture()
 ```php
@@ -587,9 +587,9 @@ Returns the `privacy` field (The privacy setting of the Group) for the group as 
 
 ### getUpdatedTime()
 ```php
-public DateTime|null getUpdatedTime()
+public DateTimeInterface|null getUpdatedTime()
 ```
-Returns the `updated_time` field (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) for the group as a DateTime if present.
+Returns the `updated_time` field (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) for the group as a DateTimeInterface if present.
 
 ### getVenue()
 ```php

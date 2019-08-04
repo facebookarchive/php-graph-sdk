@@ -58,7 +58,7 @@ class GraphAchievement extends GraphNode
     /**
      * Returns the time at which this was achieved.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getPublishTime()
     {

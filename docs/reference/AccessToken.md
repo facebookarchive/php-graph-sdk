@@ -14,9 +14,9 @@ Returns the access token as a string. The `AccessToken` entity also makes use of
 
 ### getExpiresAt()
 ```php
-public \DateTime|null getExpiresAt()
+public \DateTimeInterface|null getExpiresAt()
 ```
-If the expiration date was provided when the `AccessToken` entity was instantiated, the `getExpiresAt()` method will return the access token expiration date as a [`DateTime` entity](http://php.net/manual/en/class.datetime.php). If the expiration date was not originally provided, the method will return `null`.
+If the expiration date was provided when the `AccessToken` entity was instantiated, the `getExpiresAt()` method will return the access token expiration date as a [`DateTimeInterface` entity](http://php.net/manual/en/class.datetime.php). If the expiration date was not originally provided, the method will return `null`.
 
 ### isExpired()
 ```php

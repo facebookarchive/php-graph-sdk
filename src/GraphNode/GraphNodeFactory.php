@@ -36,7 +36,7 @@ use Facebook\Exception\SDKException;
  * GraphNode - is ALWAYS an associative array
  * GraphNode - MAY contain GraphNode's "recurrable"
  * GraphNode - MAY contain GraphEdge's "recurrable"
- * GraphNode - MAY contain DateTime's "primitives"
+ * GraphNode - MAY contain DateTimeInterface's "primitives"
  * GraphNode - MAY contain string's "primitives"
  */
 class GraphNodeFactory

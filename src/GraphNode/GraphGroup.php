@@ -148,7 +148,7 @@ class GraphGroup extends GraphNode
     /**
      * Returns the `updated_time` (The last time the Group was updated (this includes changes in the Group's properties and changes in posts and comments if user can see them)) as \DateTime if present.
      *
-     * @return null|\DateTime
+     * @return null|\DateTimeInterface
      */
     public function getUpdatedTime()
     {

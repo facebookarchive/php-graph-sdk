@@ -22,6 +22,8 @@
  */
 namespace Facebook\Authentication;
 
+use DateTimeInterface;
+use Exception;
 use Facebook\Exception\SDKException;
 
 /**
@@ -60,7 +62,7 @@ class AccessTokenMetadata
 
         $this->metadata = $metadata['data'];
 
-        $this->castTimestampsToDateTime();
+        $this->castTimestampsToDateTimeInterface();
     }
 
     /**
@@ -192,7 +194,7 @@ class AccessTokenMetadata
     /**
      * DateTime when this access token expires.
      *
-     * @return null|\DateTime
+     * @return null|DateTimeInterface
      */
     public function getExpiresAt()
     {
@@ -217,7 +219,7 @@ class AccessTokenMetadata
      *
      * @see https://developers.facebook.com/docs/facebook-login/access-tokens#debug
      *
-     * @return null|\DateTime
+     * @return null|DateTimeInterface
      */
     public function getIssuedAt()
     {
@@ -348,24 +350,26 @@ class AccessTokenMetadata
      *
      * @param int $timestamp
      *
-     * @return \DateTime
+     * @return DateTimeInterface
+     * @throws Exception
      */
-    private function convertTimestampToDateTime($timestamp)
+    private function convertTimestampToDateTimeInterface($timestamp)
     {
-        $dt = new \DateTime();
+        $dt = new \DateTimeImmutable();
         $dt->setTimestamp($timestamp);
 
         return $dt;
     }
 
     /**
-     * Casts the unix timestamps as DateTime entities.
+     * Casts the unix timestamps as DateTimeInterface entities.
+     * @throws Exception
      */
-    private function castTimestampsToDateTime()
+    private function castTimestampsToDateTimeInterface()
     {
         foreach (static::$dateProperties as $key) {
             if (isset($this->metadata[$key]) && $this->metadata[$key] !== 0) {
-                $this->metadata[$key] = $this->convertTimestampToDateTime($this->metadata[$key]);
+                $this->metadata[$key] = $this->convertTimestampToDateTimeInterface($this->metadata[$key]);
             }
         }
     }
