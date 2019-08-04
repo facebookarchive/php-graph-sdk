@@ -54,7 +54,7 @@ class BatchRequest extends Request implements IteratorAggregate, ArrayAccess
     public function __construct(
         ?Application $app = null,
         array $requests = [],
-        ?string $accessToken = null,
+        $accessToken = null,
         ?string $graphVersion = null
     ) {
         parent::__construct($app, $accessToken, 'POST', '', [], '', $graphVersion);
