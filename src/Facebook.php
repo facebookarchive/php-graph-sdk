@@ -308,7 +308,7 @@ class Facebook
      *
      * @param string                  $endpoint
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $eTag
+     * @param string                  $eTag
      * @param null|string             $graphVersion
      *
      * @throws SDKException
@@ -318,7 +318,7 @@ class Facebook
     public function get(
         string $endpoint,
         $accessToken = null,
-        ?string $eTag = null,
+        string $eTag = '',
         ?string $graphVersion = null
     ): Response {
         return $this->sendRequest(
@@ -337,7 +337,7 @@ class Facebook
      * @param string                  $endpoint
      * @param array                   $params
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $eTag
+     * @param string                  $eTag
      * @param null|string             $graphVersion
      *
      * @throws SDKException
@@ -348,7 +348,7 @@ class Facebook
         string $endpoint,
         array $params = [],
         $accessToken = null,
-        ?string $eTag = null,
+        string $eTag = '',
         ?string $graphVersion = null
     ): Response {
         return $this->sendRequest(
@@ -367,7 +367,7 @@ class Facebook
      * @param string                  $endpoint
      * @param array                   $params
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $eTag
+     * @param string                  $eTag
      * @param null|string             $graphVersion
      *
      * @throws SDKException
@@ -378,7 +378,7 @@ class Facebook
         string $endpoint,
         array $params = [],
         $accessToken = null,
-        ?string $eTag = null,
+        string $eTag = '',
         ?string $graphVersion = null
     ): Response {
         return $this->sendRequest(
@@ -452,7 +452,7 @@ class Facebook
      * @param string                  $endpoint
      * @param array                   $params
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $eTag
+     * @param string                  $eTag
      * @param null|string             $graphVersion
      *
      * @throws SDKException
@@ -464,7 +464,7 @@ class Facebook
         string $endpoint,
         array $params = [],
         $accessToken = null,
-        ?string $eTag = null,
+        string $eTag = '',
         ?string $graphVersion = null
     ): Response {
         $accessToken = $accessToken ?: $this->defaultAccessToken;
@@ -528,7 +528,7 @@ class Facebook
      * @param string                  $endpoint
      * @param array                   $params
      * @param null|AccessToken|string $accessToken
-     * @param null|string             $eTag
+     * @param string                  $eTag
      * @param null|string             $graphVersion
      *
      * @throws SDKException
