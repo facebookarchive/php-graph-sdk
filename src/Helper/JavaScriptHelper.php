@@ -32,7 +32,7 @@ class JavaScriptHelper extends SignedRequestFromInputHelper
      *
      * @return null|string
      */
-    public function getRawSignedRequest()
+    public function getRawSignedRequest(): ?string
     {
         return $this->getRawSignedRequestFromCookie();
     }

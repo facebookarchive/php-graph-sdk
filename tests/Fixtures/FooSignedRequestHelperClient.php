@@ -28,7 +28,7 @@ use Facebook\Response;
 
 class FooSignedRequestHelperClient extends Client
 {
-    public function sendRequest(Request $request)
+    public function sendRequest(Request $request): Response
     {
         $params = $request->getParams();
         $rawResponse = json_encode([

@@ -41,7 +41,7 @@ class SessionPersistentDataHandler implements PersistentDataInterface
      *
      * @throws SDKException
      */
-    public function __construct($enableSessionCheck = true)
+    public function __construct(bool $enableSessionCheck = true)
     {
         if ($enableSessionCheck && session_status() !== PHP_SESSION_ACTIVE) {
             throw new SDKException(
@@ -54,7 +54,7 @@ class SessionPersistentDataHandler implements PersistentDataInterface
     /**
      * {@inheritdoc}
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (isset($_SESSION[$this->sessionPrefix . $key])) {
             return $_SESSION[$this->sessionPrefix . $key];
@@ -66,7 +66,7 @@ class SessionPersistentDataHandler implements PersistentDataInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value)
+    public function set(string $key, $value): void
     {
         $_SESSION[$this->sessionPrefix . $key] = $value;
     }

@@ -33,7 +33,7 @@ class GraphApplication extends GraphNode
      *
      * @return null|string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getField('id');
     }

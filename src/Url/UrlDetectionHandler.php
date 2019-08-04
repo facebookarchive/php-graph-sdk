@@ -30,7 +30,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
     /**
      * {@inheritdoc}
      */
-    public function getCurrentUrl()
+    public function getCurrentUrl(): string
     {
         return $this->getHttpScheme() . '://' . $this->getHostName() . $this->getServerVar('REQUEST_URI');
     }
@@ -40,7 +40,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return string
      */
-    protected function getHttpScheme()
+    protected function getHttpScheme(): string
     {
         return $this->isBehindSsl() ? 'https' : 'http';
     }
@@ -50,7 +50,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return bool
      */
-    protected function isBehindSsl()
+    protected function isBehindSsl(): bool
     {
         // Check for proxy first
         $protocol = $this->getHeader('X_FORWARDED_PROTO');
@@ -73,7 +73,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return bool
      */
-    protected function protocolWithActiveSsl($protocol)
+    protected function protocolWithActiveSsl(string $protocol): bool
     {
         $protocol = strtolower((string)$protocol);
 
@@ -89,7 +89,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return string
      */
-    protected function getHostName()
+    protected function getHostName(): string
     {
         // Check for proxy first
         $header = $this->getHeader('X_FORWARDED_HOST');
@@ -119,6 +119,9 @@ class UrlDetectionHandler implements UrlDetectionInterface
         return $host . $appendPort;
     }
 
+    /**
+     * @return string|int
+     */
     protected function getCurrentPort()
     {
         // Check for proxy first
@@ -142,7 +145,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return string
      */
-    protected function getServerVar($key)
+    protected function getServerVar(string $key): string
     {
         return $_SERVER[$key] ?? '';
     }
@@ -154,7 +157,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return string
      */
-    protected function getHeader($key)
+    protected function getHeader(string $key): string
     {
         return $this->getServerVar('HTTP_' . $key);
     }
@@ -167,7 +170,7 @@ class UrlDetectionHandler implements UrlDetectionInterface
      *
      * @return bool
      */
-    protected function isValidForwardedHost($header)
+    protected function isValidForwardedHost(string $header): bool
     {
         $elements = explode(',', $header);
         $host = $elements[count($elements) - 1];

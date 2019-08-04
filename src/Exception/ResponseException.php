@@ -43,9 +43,9 @@ class ResponseException extends SDKException
      * Creates a ResponseException.
      *
      * @param Response     $response          the response that threw the exception
-     * @param SDKException $previousException the more detailed exception
+     * @param SDKException|null $previousException the more detailed exception
      */
-    public function __construct(Response $response, SDKException $previousException = null)
+    public function __construct(Response $response, ?SDKException $previousException = null)
     {
         $this->response = $response;
         $this->responseData = $response->getDecodedBody();
@@ -63,7 +63,7 @@ class ResponseException extends SDKException
      *
      * @return ResponseException
      */
-    public static function create(Response $response)
+    public static function create(Response $response): ResponseException
     {
         $data = $response->getDecodedBody();
 
@@ -142,7 +142,7 @@ class ResponseException extends SDKException
      *
      * @return mixed
      */
-    private function get($key, $default = null)
+    private function get(string $key, $default = null)
     {
         if (isset($this->responseData['error'][$key])) {
             return $this->responseData['error'][$key];
@@ -156,7 +156,7 @@ class ResponseException extends SDKException
      *
      * @return int
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): int
     {
         return $this->response->getHttpStatusCode();
     }
@@ -166,7 +166,7 @@ class ResponseException extends SDKException
      *
      * @return int
      */
-    public function getSubErrorCode()
+    public function getSubErrorCode(): int
     {
         return $this->get('error_subcode', -1);
     }
@@ -176,7 +176,7 @@ class ResponseException extends SDKException
      *
      * @return string
      */
-    public function getErrorType()
+    public function getErrorType(): string
     {
         return $this->get('type', '');
     }
@@ -186,7 +186,7 @@ class ResponseException extends SDKException
      *
      * @return string
      */
-    public function getRawResponse()
+    public function getRawResponse(): string
     {
         return $this->response->getBody();
     }
@@ -196,7 +196,7 @@ class ResponseException extends SDKException
      *
      * @return array
      */
-    public function getResponseData()
+    public function getResponseData(): array
     {
         return $this->responseData;
     }
@@ -206,7 +206,7 @@ class ResponseException extends SDKException
      *
      * @return Response
      */
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->response;
     }

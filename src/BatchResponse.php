@@ -66,7 +66,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      *
      * @return Response[]
      */
-    public function getResponses()
+    public function getResponses(): array
     {
         return $this->responses;
     }
@@ -77,7 +77,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      *
      * @param array $responses
      */
-    public function setResponses(array $responses)
+    public function setResponses(array $responses): void
     {
         $this->responses = [];
 
@@ -92,7 +92,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      * @param int        $key
      * @param null|array $response
      */
-    public function addResponse($key, $response)
+    public function addResponse(int $key, ?array $response): void
     {
         $originalRequestName = $this->batchRequest[$key]['name'] ?? $key;
         $originalRequest = $this->batchRequest[$key]['request'] ?? null;
@@ -113,7 +113,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->responses);
     }
@@ -121,7 +121,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->addResponse($offset, $value);
     }
@@ -129,7 +129,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->responses[$offset]);
     }
@@ -137,7 +137,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->responses[$offset]);
     }
@@ -159,7 +159,7 @@ class BatchResponse extends Response implements IteratorAggregate, ArrayAccess
      *
      * @return array
      */
-    private function normalizeBatchHeaders(array $batchHeaders)
+    private function normalizeBatchHeaders(array $batchHeaders): array
     {
         $headers = [];
 

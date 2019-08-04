@@ -61,8 +61,11 @@ class RedirectLoginHelper
      * @param null|PersistentDataInterface $persistentDataHandler the persistent data handler
      * @param null|UrlDetectionInterface   $urlHandler            the URL detection handler
      */
-    public function __construct(OAuth2Client $oAuth2Client, PersistentDataInterface $persistentDataHandler = null, UrlDetectionInterface $urlHandler = null)
-    {
+    public function __construct(
+        OAuth2Client $oAuth2Client,
+        ?PersistentDataInterface $persistentDataHandler = null,
+        ?UrlDetectionInterface $urlHandler = null
+    ) {
         $this->oAuth2Client = $oAuth2Client;
         $this->persistentDataHandler = $persistentDataHandler ?: new SessionPersistentDataHandler();
         $this->urlDetectionHandler = $urlHandler ?: new UrlDetectionHandler();
@@ -73,7 +76,7 @@ class RedirectLoginHelper
      *
      * @return PersistentDataInterface
      */
-    public function getPersistentDataHandler()
+    public function getPersistentDataHandler(): PersistentDataInterface
     {
         return $this->persistentDataHandler;
     }
@@ -83,7 +86,7 @@ class RedirectLoginHelper
      *
      * @return UrlDetectionInterface
      */
-    public function getUrlDetectionHandler()
+    public function getUrlDetectionHandler(): UrlDetectionInterface
     {
         return $this->urlDetectionHandler;
     }
@@ -98,7 +101,7 @@ class RedirectLoginHelper
      *
      * @return string
      */
-    private function makeUrl($redirectUrl, array $scope, array $params = [], $separator = '&')
+    private function makeUrl(string $redirectUrl, array $scope, array $params = [], string $separator = '&'): string
     {
         $state = $this->persistentDataHandler->get('state') ?: $this->getPseudoRandomString();
         $this->persistentDataHandler->set('state', $state);
@@ -106,7 +109,7 @@ class RedirectLoginHelper
         return $this->oAuth2Client->getAuthorizationUrl($redirectUrl, $state, $scope, $params, $separator);
     }
 
-    private function getPseudoRandomString()
+    private function getPseudoRandomString(): string
     {
         return bin2hex(random_bytes(static::CSRF_LENGTH));
     }
@@ -120,7 +123,7 @@ class RedirectLoginHelper
      *
      * @return string
      */
-    public function getLoginUrl($redirectUrl, array $scope = [], $separator = '&')
+    public function getLoginUrl(string $redirectUrl, array $scope = [], string $separator = '&'): string
     {
         return $this->makeUrl($redirectUrl, $scope, [], $separator);
     }
@@ -136,7 +139,7 @@ class RedirectLoginHelper
      *
      * @return string
      */
-    public function getLogoutUrl($accessToken, $next, $separator = '&')
+    public function getLogoutUrl($accessToken, string $next, string $separator = '&')
     {
         if (!$accessToken instanceof AccessToken) {
             $accessToken = new AccessToken($accessToken);
@@ -163,7 +166,7 @@ class RedirectLoginHelper
      *
      * @return string
      */
-    public function getReRequestUrl($redirectUrl, array $scope = [], $separator = '&')
+    public function getReRequestUrl(string $redirectUrl, array $scope = [], string $separator = '&'): string
     {
         $params = ['auth_type' => 'rerequest'];
 
@@ -179,7 +182,7 @@ class RedirectLoginHelper
      *
      * @return string
      */
-    public function getReAuthenticationUrl($redirectUrl, array $scope = [], $separator = '&')
+    public function getReAuthenticationUrl(string $redirectUrl, array $scope = [], string $separator = '&'): string
     {
         $params = ['auth_type' => 'reauthenticate'];
 
@@ -193,9 +196,9 @@ class RedirectLoginHelper
      *
      * @throws SDKException
      *
-     * @return null|AccessToken
+     * @return null|string|AccessToken
      */
-    public function getAccessToken($redirectUrl = null)
+    public function getAccessToken(?string $redirectUrl = null)
     {
         if (!$code = $this->getCode()) {
             return null;
@@ -216,7 +219,7 @@ class RedirectLoginHelper
      *
      * @throws SDKException
      */
-    protected function validateCsrf()
+    protected function validateCsrf(): void
     {
         $state = $this->getState();
         if (!$state) {
@@ -237,7 +240,7 @@ class RedirectLoginHelper
     /**
      * Resets the CSRF so that it doesn't get reused.
      */
-    private function resetCsrf()
+    private function resetCsrf(): void
     {
         $this->persistentDataHandler->set('state', null);
     }
@@ -247,7 +250,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    protected function getCode()
+    protected function getCode(): ?string
     {
         return $this->getInput('code');
     }
@@ -257,7 +260,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    protected function getState()
+    protected function getState(): ?string
     {
         return $this->getInput('state');
     }
@@ -267,7 +270,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    public function getErrorCode()
+    public function getErrorCode(): ?string
     {
         return $this->getInput('error_code');
     }
@@ -277,7 +280,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    public function getError()
+    public function getError(): ?string
     {
         return $this->getInput('error');
     }
@@ -287,7 +290,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    public function getErrorReason()
+    public function getErrorReason(): ?string
     {
         return $this->getInput('error_reason');
     }
@@ -297,7 +300,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    public function getErrorDescription()
+    public function getErrorDescription(): ?string
     {
         return $this->getInput('error_description');
     }
@@ -309,7 +312,7 @@ class RedirectLoginHelper
      *
      * @return null|string
      */
-    private function getInput($key)
+    private function getInput(string $key): ?string
     {
         return $_GET[$key] ?? null;
     }

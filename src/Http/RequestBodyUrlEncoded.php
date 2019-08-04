@@ -45,7 +45,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): string
     {
         return http_build_query($this->params, null, '&');
     }

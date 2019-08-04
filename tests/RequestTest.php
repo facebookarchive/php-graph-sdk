@@ -128,7 +128,7 @@ class RequestTest extends TestCase
 
         $this->assertEquals($expectedUrl, $getUrl);
 
-        $postRequest = new Request($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar'], null, 'v0.0');
+        $postRequest = new Request($app, 'foo_token', 'POST', '/bar', ['foo' => 'bar'], '', 'v0.0');
 
         $postUrl = $postRequest->getUrl();
         $expectedUrl = '/v0.0/bar';

@@ -35,7 +35,7 @@ class UrlManipulator
      *
      * @return string the URL with the params removed
      */
-    public static function removeParamsFromUrl($url, array $paramsToFilter)
+    public static function removeParamsFromUrl(string $url, array $paramsToFilter): string
     {
         $parts = parse_url($url);
 
@@ -71,7 +71,7 @@ class UrlManipulator
      *
      * @return string
      */
-    public static function appendParamsToUrl($url, array $newParams = [])
+    public static function appendParamsToUrl(string $url, array $newParams = []): string
     {
         if (empty($newParams)) {
             return $url;
@@ -101,7 +101,7 @@ class UrlManipulator
      *
      * @return array
      */
-    public static function getParamsAsArray($url)
+    public static function getParamsAsArray(string $url): array
     {
         $query = parse_url($url, PHP_URL_QUERY);
         if (!$query) {
@@ -123,7 +123,7 @@ class UrlManipulator
      *
      * @return string the $urlToAddTo with any new params from $urlToStealFrom
      */
-    public static function mergeUrlParams($urlToStealFrom, $urlToAddTo)
+    public static function mergeUrlParams(string $urlToStealFrom, string $urlToAddTo): string
     {
         $newParams = static::getParamsAsArray($urlToStealFrom);
         // Nothing new to add, return as-is
@@ -141,7 +141,7 @@ class UrlManipulator
      *
      * @return string
      */
-    public static function forceSlashPrefix($string)
+    public static function forceSlashPrefix(?string $string): string
     {
         if (!$string) {
             return '';
@@ -157,7 +157,7 @@ class UrlManipulator
      *
      * @return string the $urlToTrim with the hostname and Graph version removed
      */
-    public static function baseGraphUrlEndpoint($urlToTrim)
+    public static function baseGraphUrlEndpoint(string $urlToTrim): string
     {
         return '/' . preg_replace('/^https:\/\/.+\.facebook\.com(\/v.+?)?\//', '', $urlToTrim);
     }

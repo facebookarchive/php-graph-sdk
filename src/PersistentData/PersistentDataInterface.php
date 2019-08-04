@@ -34,7 +34,7 @@ interface PersistentDataInterface
      *
      * @return mixed
      */
-    public function get($key);
+    public function get(string $key);
 
     /**
      * Set a value in the persistent data store.
@@ -42,5 +42,5 @@ interface PersistentDataInterface
      * @param string $key
      * @param mixed  $value
      */
-    public function set($key, $value);
+    public function set(string $key, $value): void;
 }

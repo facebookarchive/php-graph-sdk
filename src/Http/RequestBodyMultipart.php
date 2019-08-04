@@ -63,7 +63,7 @@ class RequestBodyMultipart implements RequestBodyInterface
     /**
      * {@inheritdoc}
      */
-    public function getBody()
+    public function getBody(): string
     {
         $body = '';
 
@@ -89,7 +89,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    public function getBoundary()
+    public function getBoundary(): string
     {
         return $this->boundary;
     }
@@ -102,7 +102,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    private function getFileString($name, File $file)
+    private function getFileString(string $name, File $file): string
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"%s\r\n\r\n%s\r\n",
@@ -122,7 +122,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    private function getParamString($name, $value)
+    private function getParamString(string $name, string $value): string
     {
         return sprintf(
             "--%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n",
@@ -139,7 +139,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return array
      */
-    private function getNestedParams(array $params)
+    private function getNestedParams(array $params): array
     {
         $query = http_build_query($params, null, '&');
         $params = explode('&', $query);
@@ -160,7 +160,7 @@ class RequestBodyMultipart implements RequestBodyInterface
      *
      * @return string
      */
-    protected function getFileHeaders(File $file)
+    protected function getFileHeaders(File $file): string
     {
         return "\r\nContent-Type: {$file->getMimetype()}";
     }

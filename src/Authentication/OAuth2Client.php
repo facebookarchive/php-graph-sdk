@@ -73,7 +73,7 @@ class OAuth2Client
      * @param Client      $client
      * @param string      $graphVersion the version of the Graph API to use
      */
-    public function __construct(Application $app, Client $client, $graphVersion)
+    public function __construct(Application $app, Client $client, string $graphVersion)
     {
         $this->app = $app;
         $this->client = $client;
@@ -86,7 +86,7 @@ class OAuth2Client
      *
      * @return null|Request
      */
-    public function getLastRequest()
+    public function getLastRequest(): ?Request
     {
         return $this->lastRequest;
     }
@@ -98,7 +98,7 @@ class OAuth2Client
      *
      * @return AccessTokenMetadata
      */
-    public function debugToken($accessToken)
+    public function debugToken($accessToken): AccessTokenMetadata
     {
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = ['input_token' => $accessToken];
@@ -109,7 +109,7 @@ class OAuth2Client
             'GET',
             '/debug_token',
             $params,
-            null,
+            '',
             $this->graphVersion
         );
         $response = $this->client->sendRequest($this->lastRequest);
@@ -129,8 +129,13 @@ class OAuth2Client
      *
      * @return string
      */
-    public function getAuthorizationUrl($redirectUrl, $state, array $scope = [], array $params = [], $separator = '&')
-    {
+    public function getAuthorizationUrl(
+        string $redirectUrl,
+        string $state,
+        array $scope = [],
+        array $params = [],
+        string $separator = '&'
+    ): string {
         $params += [
             'client_id' => $this->app->getId(),
             'state' => $state,
@@ -153,7 +158,7 @@ class OAuth2Client
      *
      * @return AccessToken
      */
-    public function getAccessTokenFromCode($code, $redirectUri = '')
+    public function getAccessTokenFromCode(string $code, string $redirectUri = '')
     {
         $params = [
             'code' => $code,
@@ -172,7 +177,7 @@ class OAuth2Client
      *
      * @return AccessToken
      */
-    public function getLongLivedAccessToken($accessToken)
+    public function getLongLivedAccessToken($accessToken): AccessToken
     {
         $accessToken = $accessToken instanceof AccessToken ? $accessToken->getValue() : $accessToken;
         $params = [
@@ -191,9 +196,9 @@ class OAuth2Client
      *
      * @throws SDKException
      *
-     * @return AccessToken
+     * @return string
      */
-    public function getCodeFromLongLivedAccessToken($accessToken, $redirectUri = '')
+    public function getCodeFromLongLivedAccessToken($accessToken, string $redirectUri = ''): string
     {
         $params = [
             'redirect_uri' => $redirectUri,
@@ -218,7 +223,7 @@ class OAuth2Client
      *
      * @return AccessToken
      */
-    protected function requestAnAccessToken(array $params)
+    protected function requestAnAccessToken(array $params): AccessToken
     {
         $response = $this->sendRequestWithClientParams('/oauth/access_token', $params);
         $data = $response->getDecodedBody();
@@ -255,7 +260,7 @@ class OAuth2Client
      *
      * @return Response
      */
-    protected function sendRequestWithClientParams($endpoint, array $params, $accessToken = null)
+    protected function sendRequestWithClientParams(string $endpoint, array $params, $accessToken = null): Response
     {
         $params += $this->getClientParams();
 
@@ -267,7 +272,7 @@ class OAuth2Client
             'GET',
             $endpoint,
             $params,
-            null,
+            '',
             $this->graphVersion
         );
 
@@ -279,7 +284,7 @@ class OAuth2Client
      *
      * @return array
      */
-    protected function getClientParams()
+    protected function getClientParams(): array
     {
         return [
             'client_id' => $this->app->getId(),

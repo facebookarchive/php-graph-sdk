@@ -56,7 +56,7 @@ abstract class SignedRequestFromInputHelper
      * @param Client      $client       the client to make HTTP requests
      * @param string      $graphVersion the version of Graph to use
      */
-    public function __construct(Application $app, Client $client, $graphVersion)
+    public function __construct(Application $app, Client $client, string $graphVersion)
     {
         $this->app = $app;
         $this->oAuth2Client = new OAuth2Client($this->app, $client, $graphVersion);
@@ -70,7 +70,7 @@ abstract class SignedRequestFromInputHelper
      * @param null|string
      * @param null|mixed $rawSignedRequest
      */
-    public function instantiateSignedRequest($rawSignedRequest = null)
+    public function instantiateSignedRequest(?string $rawSignedRequest = null)
     {
         $rawSignedRequest = $rawSignedRequest ?: $this->getRawSignedRequest();
 
@@ -88,7 +88,7 @@ abstract class SignedRequestFromInputHelper
      *
      * @return null|AccessToken
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?AccessToken
     {
         if ($this->signedRequest && $this->signedRequest->hasOAuthData()) {
             $code = $this->signedRequest->get('code');
@@ -111,7 +111,7 @@ abstract class SignedRequestFromInputHelper
      *
      * @return null|SignedRequest
      */
-    public function getSignedRequest()
+    public function getSignedRequest(): ?SignedRequest
     {
         return $this->signedRequest;
     }
@@ -121,7 +121,7 @@ abstract class SignedRequestFromInputHelper
      *
      * @return null|string
      */
-    public function getUserId()
+    public function getUserId(): ?string
     {
         return $this->signedRequest ? $this->signedRequest->getUserId() : null;
     }
@@ -131,14 +131,14 @@ abstract class SignedRequestFromInputHelper
      *
      * @return null|string
      */
-    abstract public function getRawSignedRequest();
+    abstract public function getRawSignedRequest(): ?string;
 
     /**
      * Get raw signed request from POST input.
      *
      * @return null|string
      */
-    public function getRawSignedRequestFromPost()
+    public function getRawSignedRequestFromPost(): ?string
     {
         if (isset($_POST['signed_request'])) {
             return $_POST['signed_request'];
@@ -152,7 +152,7 @@ abstract class SignedRequestFromInputHelper
      *
      * @return null|string
      */
-    public function getRawSignedRequestFromCookie()
+    public function getRawSignedRequestFromCookie(): ?string
     {
         if (isset($_COOKIE['fbsr_' . $this->app->getId()])) {
             return $_COOKIE['fbsr_' . $this->app->getId()];

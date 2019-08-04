@@ -949,7 +949,7 @@ class Mimetypes
      * @return self
      * @codeCoverageIgnore
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (!self::$instance) {
             self::$instance = new self();
@@ -965,7 +965,7 @@ class Mimetypes
      *
      * @return null|string
      */
-    public function fromExtension($extension)
+    public function fromExtension(string $extension): ?string
     {
         $extension = strtolower($extension);
 
@@ -979,7 +979,7 @@ class Mimetypes
      *
      * @return null|string
      */
-    public function fromFilename($filename)
+    public function fromFilename(string $filename): ?string
     {
         return $this->fromExtension(pathinfo($filename, PATHINFO_EXTENSION));
     }

@@ -59,7 +59,7 @@ class TransferChunk
      * @param int  $startOffset
      * @param int  $endOffset
      */
-    public function __construct(File $file, $uploadSessionId, $videoId, $startOffset, $endOffset)
+    public function __construct(File $file, int $uploadSessionId, int $videoId, int $startOffset, int $endOffset)
     {
         $this->file = $file;
         $this->uploadSessionId = $uploadSessionId;
@@ -73,7 +73,7 @@ class TransferChunk
      *
      * @return File
      */
-    public function getFile()
+    public function getFile(): File
     {
         return $this->file;
     }
@@ -83,7 +83,7 @@ class TransferChunk
      *
      * @return File
      */
-    public function getPartialFile()
+    public function getPartialFile(): File
     {
         $maxLength = $this->endOffset - $this->startOffset;
 
@@ -95,7 +95,7 @@ class TransferChunk
      *
      * @return int
      */
-    public function getUploadSessionId()
+    public function getUploadSessionId(): int
     {
         return $this->uploadSessionId;
     }
@@ -105,7 +105,7 @@ class TransferChunk
      *
      * @return bool
      */
-    public function isLastChunk()
+    public function isLastChunk(): bool
     {
         return $this->startOffset === $this->endOffset;
     }
@@ -113,7 +113,7 @@ class TransferChunk
     /**
      * @return int
      */
-    public function getStartOffset()
+    public function getStartOffset(): int
     {
         return $this->startOffset;
     }
@@ -123,7 +123,7 @@ class TransferChunk
      *
      * @return int
      */
-    public function getVideoId()
+    public function getVideoId(): int
     {
         return $this->videoId;
     }
