@@ -23,6 +23,7 @@
 namespace Facebook;
 
 use Facebook\Exception\SDKException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -199,9 +200,10 @@ class Client
      *
      * @param Request $request
      *
-     * @throws SDKException
-     *
      * @return Response
+     * @throws ClientExceptionInterface
+     *
+     * @throws SDKException
      */
     public function sendRequest(Request $request)
     {
@@ -239,9 +241,10 @@ class Client
      *
      * @param BatchRequest $request
      *
-     * @throws SDKException
-     *
      * @return BatchResponse
+     * @throws ClientExceptionInterface
+     *
+     * @throws SDKException
      */
     public function sendBatchRequest(BatchRequest $request)
     {
@@ -251,6 +254,11 @@ class Client
         return new BatchResponse($request, $Response);
     }
 
+    /**
+     * Create and prepares a PSR-7 object from a Facebook\Request object to be used with a PSR-18 Client
+     * @param Request $facebookRequest
+     * @return RequestInterface
+     */
     private function createPSR7RequestFromFacebookRequest(Request $facebookRequest): RequestInterface
     {
         $postToVideoUrl = $facebookRequest->containsVideoUploads();
@@ -276,16 +284,18 @@ class Client
         return $psrRequest->withBody($bodyStream);
     }
 
+    /**
+     * Flatten PSR-7 headers such they can be added to a Facebook\Response|Facebook\Request
+     * @param MessageInterface $psr7Message
+     * @param array $initialValues
+     * @return array
+     */
     private function flattenPSR7Headers(MessageInterface $psr7Message, array $initialValues = []): array
     {
         $flattenedHeaders = array_map(
             function ($value) { return implode(', ', $value); },
             $psr7Message->getHeaders()
         );
-        /* Old Implementation taken from sendRequest()
-        foreach ($psr7Message->getHeaders() as $name => $values) {
-            $initialValues[$name] = implode(", ", $values);
-        }*/
         return array_merge($initialValues, $flattenedHeaders);
     }
 }
