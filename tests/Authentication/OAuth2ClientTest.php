@@ -27,7 +27,10 @@ use Facebook\Application;
 use Facebook\Authentication\OAuth2Client;
 use Facebook\Authentication\AccessTokenMetadata;
 use Facebook\Authentication\AccessToken;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
+use RicardoFiorani\GuzzlePsr18Adapter\Client;
 
 class OAuth2ClientTest extends TestCase
 {
@@ -50,7 +53,7 @@ class OAuth2ClientTest extends TestCase
     protected function setUp()
     {
         $app = new Application('123', 'foo_secret');
-        $this->client = new FooClientForOAuth2Test();
+        $this->client = new FooClientForOAuth2Test(new Client(), new RequestFactory(), new StreamFactory());
         $this->oauth = new OAuth2Client($app, $this->client, static::TESTING_GRAPH_VERSION);
     }
 

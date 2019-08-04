@@ -23,12 +23,13 @@
 namespace Facebook\Tests\Fixtures;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class MyFooBatchHttpClient implements HttpClient
+class MyFooBatchHttpClient implements ClientInterface
 {
-    public function sendRequest(RequestInterface $request)
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         return new Response(
             200,

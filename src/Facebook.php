@@ -38,7 +38,9 @@ use Facebook\Helper\JavaScriptHelper;
 use Facebook\Helper\PageTabHelper;
 use Facebook\Helper\RedirectLoginHelper;
 use Facebook\Exception\SDKException;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @package Facebook
@@ -103,18 +105,24 @@ class Facebook
     /**
      * Instantiates a new Facebook super-class object.
      *
+     * @param ClientInterface $client
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface $streamFactory
      * @param array $config
      *
      * @throws SDKException
      */
-    public function __construct(array $config = [])
+    public function __construct(
+        ClientInterface $client,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        array $config = [])
     {
         $config = array_merge([
             'app_id' => getenv(static::APP_ID_ENV_NAME),
             'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
             'default_graph_version' => null,
             'enable_beta_mode' => false,
-            'http_client' => null,
             'persistent_data_handler' => null,
             'url_detection_handler' => null,
         ], $config);
@@ -125,16 +133,15 @@ class Facebook
         if (!$config['app_secret']) {
             throw new SDKException('Required "app_secret" key not supplied in config and could not find fallback environment variable "' . static::APP_SECRET_ENV_NAME . '"');
         }
-        if ($config['http_client'] !== null && !$config['http_client'] instanceof HttpClient) {
-            throw new \InvalidArgumentException('Required "http_client" key to be null or an instance of \Http\Client\HttpClient');
-        }
         if (!$config['default_graph_version']) {
             throw new \InvalidArgumentException('Required "default_graph_version" key not supplied in config');
         }
 
         $this->app = new Application($config['app_id'], $config['app_secret']);
         $this->client = new Client(
-            $config['http_client'],
+            $client,
+            $requestFactory,
+            $streamFactory,
             $config['enable_beta_mode']
         );
         $this->setUrlDetectionHandler($config['url_detection_handler'] ?: new UrlDetectionHandler());

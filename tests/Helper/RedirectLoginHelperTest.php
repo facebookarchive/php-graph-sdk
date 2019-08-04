@@ -28,6 +28,8 @@ use Facebook\Client;
 use Facebook\Helper\RedirectLoginHelper;
 use Facebook\PersistentData\InMemoryPersistentDataHandler;
 use Facebook\Tests\Fixtures\FooRedirectLoginOAuth2Client;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class RedirectLoginHelperTest extends TestCase
@@ -49,7 +51,9 @@ class RedirectLoginHelperTest extends TestCase
         $this->persistentDataHandler = new InMemoryPersistentDataHandler();
 
         $app = new Application('123', 'foo_app_secret');
-        $oAuth2Client = new FooRedirectLoginOAuth2Client($app, new Client(), 'v1337');
+        $oAuth2Client = new FooRedirectLoginOAuth2Client($app, new Client(
+            new \RicardoFiorani\GuzzlePsr18Adapter\Client(), new RequestFactory(), new StreamFactory()
+        ), 'v1337');
         $this->redirectLoginHelper = new RedirectLoginHelper($oAuth2Client, $this->persistentDataHandler);
     }
 

@@ -25,6 +25,8 @@ namespace Facebook\Tests\Helper;
 use Facebook\Application;
 use Facebook\Client;
 use Facebook\Helper\PageTabHelper;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class PageTabHelperTest extends TestCase
@@ -36,7 +38,9 @@ class PageTabHelperTest extends TestCase
         $_POST['signed_request'] = $this->rawSignedRequestAuthorized;
 
         $app = new Application('123', 'foo_app_secret');
-        $helper = new PageTabHelper($app, new Client(), 'v0.0');
+        $helper = new PageTabHelper($app, new Client(
+            new \RicardoFiorani\GuzzlePsr18Adapter\Client(), new RequestFactory(), new StreamFactory()
+        ), 'v0.0');
 
         $this->assertFalse($helper->isAdmin());
         $this->assertEquals('42', $helper->getPageId());
