@@ -218,10 +218,6 @@ class Client
         static::$requestCount++;
 
         // Prepare headers from associative array to a single string for each header.
-        $responseHeaders = [];
-        foreach ($psr7Response->getHeaders() as $name => $values) {
-            $responseHeaders[] = sprintf('%s: %s', $name, implode(", ", $values));
-        }
         $responseHeaders = $this->flattenPSR7Headers($psr7Response);
 
         $Response = new Response(
