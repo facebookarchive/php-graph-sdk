@@ -24,6 +24,7 @@ namespace Facebook\GraphNode;
 
 /**
  * @package Facebook
+ * @internal
  */
 class GraphNode
 {
