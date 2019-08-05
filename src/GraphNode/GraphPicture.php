@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphPicture extends GraphNode
+final class GraphPicture extends GraphNode
 {
     /**
      * Returns true if user picture is silhouette.

@@ -25,7 +25,7 @@ namespace Facebook\GraphNode;
 /**
  * @package Facebook
  */
-class GraphAchievement extends GraphNode
+final class GraphAchievement extends GraphNode
 {
     /**
      * @var array maps object key names to Graph object types

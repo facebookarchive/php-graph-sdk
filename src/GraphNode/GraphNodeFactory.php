@@ -29,6 +29,7 @@ use Facebook\Exception\SDKException;
  * Class GraphNodeFactory.
  *
  * @package Facebook
+ * @internal
  *
  * ## Assumptions ##
  * GraphEdge - is ALWAYS a numeric array
@@ -39,7 +40,7 @@ use Facebook\Exception\SDKException;
  * GraphNode - MAY contain DateTime's "primitives"
  * GraphNode - MAY contain string's "primitives"
  */
-class GraphNodeFactory
+final class GraphNodeFactory
 {
     /**
      * @const string The base graph object class.

@@ -29,7 +29,7 @@ use DateTime;
  *
  * @package Facebook
  */
-class Birthday extends DateTime
+final class Birthday extends DateTime
 {
     /**
      * @var bool

@@ -26,7 +26,7 @@ namespace Facebook\GraphNode;
  * @package Facebook
  */
 
-class GraphApplication extends GraphNode
+final class GraphApplication extends GraphNode
 {
     /**
      * Returns the ID for the application.

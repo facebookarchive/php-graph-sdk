@@ -29,7 +29,7 @@ use Facebook\Exception\SDKException;
 /**
  * @package Facebook
  */
-class GraphEdge implements \ArrayAccess, \Countable, \IteratorAggregate
+final class GraphEdge implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @var Request the original request that generated this data
