@@ -25,6 +25,8 @@ namespace Facebook\Tests\Helper;
 use Facebook\Application;
 use Facebook\Client;
 use Facebook\Helper\CanvasHelper;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class CanvasHelperTest extends TestCase
@@ -39,7 +41,9 @@ class CanvasHelperTest extends TestCase
     protected function setUp()
     {
         $app = new Application('123', 'foo_app_secret');
-        $this->helper = new CanvasHelper($app, new Client(), 'v0.0');
+        $this->helper = new CanvasHelper($app, new Client(
+            new \RicardoFiorani\GuzzlePsr18Adapter\Client(), new RequestFactory(), new StreamFactory()
+        ), 'v0.0');
     }
 
     public function testSignedRequestDataCanBeRetrievedFromPostData()

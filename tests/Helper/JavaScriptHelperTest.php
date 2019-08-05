@@ -25,6 +25,8 @@ namespace Facebook\Tests\Helper;
 use Facebook\Application;
 use Facebook\Client;
 use Facebook\Helper\JavaScriptHelper;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class JavaScriptHelperTest extends TestCase
@@ -36,7 +38,9 @@ class JavaScriptHelperTest extends TestCase
         $_COOKIE['fbsr_123'] = $this->rawSignedRequestAuthorized;
 
         $app = new Application('123', 'foo_app_secret');
-        $helper = new JavaScriptHelper($app, new Client(), 'v0.0');
+        $helper = new JavaScriptHelper($app, new Client(
+            new \RicardoFiorani\GuzzlePsr18Adapter\Client(), new RequestFactory(), new StreamFactory()
+        ), 'v0.0');
 
         $rawSignedRequest = $helper->getRawSignedRequest();
 

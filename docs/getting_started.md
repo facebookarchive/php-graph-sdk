@@ -30,14 +30,20 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 > **Warning:** This assumes you have already created and configured a Facebook App, which you can obtain from the [App Dashboard](https://developers.facebook.com/apps).
 
-Before we can send requests to the Graph API, we need to load our app configuration into the `Facebook\Facebook` service.
+Before we can send requests to the Graph API, we need to load our app configuration into the `Facebook\Facebook`
+service with the necessary dependencies.
 
 ```php
-$fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.10',
-  ]);
+$fb = new Facebook\Facebook(
+    $client,
+    $requestFactory,
+    $streamFactory,
+    [
+        'app_id' => '{app-id}',
+        'app_secret' => '{app-secret}',
+        'default_graph_version' => 'v2.10',
+    ]
+);
 ```
 
 You'll need to replace the `{app-id}` and `{app-secret}` with your Facebook app's ID and secret which can be obtained from the [app settings tab](https://developers.facebook.com/apps).

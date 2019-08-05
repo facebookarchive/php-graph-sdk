@@ -23,9 +23,12 @@
 namespace Facebook;
 
 use Facebook\Exception\SDKException;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @package Facebook
@@ -73,9 +76,19 @@ class Client
     protected $enableBetaMode = false;
 
     /**
-     * @var httpClient HTTP client handler
+     * @var ClientInterface HTTP client handler
      */
-    protected $httpClient;
+    private $httpClient;
+
+    /**
+     * @var RequestFactoryInterface
+     */
+    private $requestFactory;
+
+    /**
+     * @var StreamFactoryInterface
+     */
+    private $streamFactory;
 
     /**
      * @var int the number of calls that have been made to Graph
@@ -85,33 +98,21 @@ class Client
     /**
      * Instantiates a new Client object.
      *
-     * @param null|HttpClient $httpClient
+     * @param ClientInterface $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
      * @param bool            $enableBeta
      */
-    public function __construct(HttpClient $httpClient = null, $enableBeta = false)
-    {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
-        $this->enableBetaMode = $enableBeta;
-    }
-
-    /**
-     * Sets the HTTP client handler.
-     *
-     * @param HttpClient $httpClient
-     */
-    public function setHttpClient(HttpClient $httpClient)
-    {
+    public function __construct(
+        ClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        $enableBeta = false
+    ) {
         $this->httpClient = $httpClient;
-    }
-
-    /**
-     * Returns the HTTP client handler.
-     *
-     * @return HttpClient
-     */
-    public function getHttpClient()
-    {
-        return $this->httpClient;
+        $this->enableBetaMode = $enableBeta;
+        $this->requestFactory = $requestFactory;
+        $this->streamFactory = $streamFactory;
     }
 
     /**
@@ -142,6 +143,7 @@ class Client
 
     /**
      * Prepares the request for sending to the client handler.
+     * @deprecated
      *
      * @param Request $request
      *
@@ -178,9 +180,10 @@ class Client
      *
      * @param Request $request
      *
-     * @throws SDKException
-     *
      * @return Response
+     * @throws ClientExceptionInterface
+     *
+     * @throws SDKException
      */
     public function sendRequest(Request $request)
     {
@@ -188,19 +191,16 @@ class Client
             $request->validateAccessToken();
         }
 
-        list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
+        $psr7Request = $this->createPSR7RequestFromFacebookRequest($request);
+        // Add headers to FacebookRequest
+        $request->setHeaders($this->flattenPSR7Headers($psr7Request, $psr7Request->getHeaders()));
 
-        $psr7Response = $this->httpClient->sendRequest(
-            MessageFactoryDiscovery::find()->createRequest($method, $url, $headers, $body)
-        );
+        $psr7Response = $this->httpClient->sendRequest($psr7Request);
 
         static::$requestCount++;
 
         // Prepare headers from associative array to a single string for each header.
-        $responseHeaders = [];
-        foreach ($psr7Response->getHeaders() as $name => $values) {
-            $responseHeaders[] = sprintf('%s: %s', $name, implode(", ", $values));
-        }
+        $responseHeaders = $this->flattenPSR7Headers($psr7Response);
 
         $Response = new Response(
             $request,
@@ -221,9 +221,10 @@ class Client
      *
      * @param BatchRequest $request
      *
-     * @throws SDKException
-     *
      * @return BatchResponse
+     * @throws ClientExceptionInterface
+     *
+     * @throws SDKException
      */
     public function sendBatchRequest(BatchRequest $request)
     {
@@ -231,5 +232,51 @@ class Client
         $Response = $this->sendRequest($request);
 
         return new BatchResponse($request, $Response);
+    }
+
+    /**
+     * @TODO Move this to the Facebook\Request class
+     * Create and prepares a PSR-7 object from a Facebook\Request object to be used with a PSR-18 Client
+     * @param Request $facebookRequest
+     * @return RequestInterface
+     */
+    private function createPSR7RequestFromFacebookRequest(Request $facebookRequest): RequestInterface
+    {
+        $postToVideoUrl = $facebookRequest->containsVideoUploads();
+        $uri = $this->getBaseGraphUrl($postToVideoUrl) . $facebookRequest->getUrl();
+
+        $psrRequest = $this->requestFactory->createRequest($facebookRequest->getMethod(), $uri);
+
+        // If we're sending files they should be sent as multipart/form-data
+        if ($facebookRequest->containsFileUploads()) {
+            $requestBody = $facebookRequest->getMultipartBody();
+            $psrRequest = $psrRequest->withHeader(
+                'Content-Type',
+                'multipart/form-data; boundary=' . $requestBody->getBoundary()
+            );
+        } else {
+            $requestBody = $facebookRequest->getUrlEncodedBody();
+            $psrRequest = $psrRequest->withHeader('Content-Type', 'application/x-www-form-urlencoded');
+        }
+
+        // Create a StreamInterface from request body.
+        $bodyStream = $this->streamFactory->createStream($requestBody->getBody());
+
+        return $psrRequest->withBody($bodyStream);
+    }
+
+    /**
+     * Flatten PSR-7 headers such they can be added to a Facebook\Response|Facebook\Request
+     * @param MessageInterface $psr7Message
+     * @param array $initialValues
+     * @return array
+     */
+    private function flattenPSR7Headers(MessageInterface $psr7Message, array $initialValues = []): array
+    {
+        $flattenedHeaders = array_map(
+            function ($value) { return implode(', ', $value); },
+            $psr7Message->getHeaders()
+        );
+        return array_merge($initialValues, $flattenedHeaders);
     }
 }

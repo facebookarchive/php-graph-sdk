@@ -3,6 +3,14 @@
 The `Facebook\Client` service class juggles the dependencies needed to make requests to the Graph API.
 
 ## Facebook\Client
+```php
+public Facebook\Client __construct(
+        Psr\Http\Client\ClientInterface $client,
+        Psr\Http\Message\RequestFactoryInterface $requestFactory,
+        Psr\Http\Message\StreamFactoryInterface $streamFactory,
+        bool $enableBeta = false
+)
+```
 
 You most likely won't be working with the `Facebook\Client` service directly if you're using the `Facebook\Facebook` super service class, but if you have a highly customized environment, you might need to send requests with an instance of `Facebook\Client`.
 
@@ -16,7 +24,12 @@ $fbClient = $fb->getClient();
 Alternatively you could instantiate a new `Facebook\Client` service directly.
 
 ```php
-$fbClient = new Facebook\Client($httpClientHandler, $enableBeta = false);
+$fbClient = new Facebook\Client(
+    Psr\Http\Client\ClientInterface $client,
+    Psr\Http\Message\RequestFactoryInterface $requestFactory,
+    Psr\Http\Message\StreamFactoryInterface $streamFactory,
+    bool $enableBeta = false
+);
 ```
 
 The Graph API has a number of different base URL's based on what request you want to send. For example, if you wanted to send requests to the beta version of Graph, you'd need to send requests to [https://graph.beta.facebook.com](https://graph.beta.facebook.com) instead [https://graph.facebook.com](https://graph.facebook.com). And if you wanted to upload a video, that request would need to be sent to [https://graph-video.facebook.com](https://graph-video.facebook.com).
@@ -27,19 +40,19 @@ The `Facebook\Client` service takes the guess-work out of managing those base UR
 
 ### getHttpClientHandler()
 ```php
-public Facebook\HttpClients\HttpClientInterface getHttpClientHandler()
+public Psr\Http\Client\ClientInterface getHttpClientHandler()
 ```
 Returns the instance of `Facebook\HttpClients\HttpClientInterface` that the service is using.
 
 ### setHttpClientHandler()
 ```php
-public setHttpClientHandler(Facebook\HttpClients\HttpClientInterface $client)
+public void setHttpClientHandler(Psr\Http\Client\ClientInterface $client)
 ```
 If you've coded your own HTTP client to the `Facebook\HttpClients\HttpClientInterface`, you can inject it into the service using this method.
 
 ### enableBetaMode()
 ```php
-public enableBetaMode(boolean $enable = true)
+public void enableBetaMode(boolean $enable = true)
 ```
 Tells the service to send requests to the beta URL's which include [https://graph.beta.facebook.com](https://graph.beta.facebook.com) and [https://graph-video.beta.facebook.com](https://graph-video.beta.facebook.com).
 

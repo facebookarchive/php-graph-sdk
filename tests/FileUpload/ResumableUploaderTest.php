@@ -29,6 +29,8 @@ use Facebook\Client;
 use Facebook\FileUpload\ResumableUploader;
 use Facebook\FileUpload\TransferChunk;
 use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class ResumableUploaderTest extends TestCase
@@ -57,7 +59,7 @@ class ResumableUploaderTest extends TestCase
     {
         $this->fbApp = new Application('app_id', 'app_secret');
         $this->graphApi = new FakeGraphApiForResumableUpload();
-        $this->client = new Client($this->graphApi);
+        $this->client = new Client($this->graphApi, new RequestFactory(), new StreamFactory());
         $this->file = new File(__DIR__.'/../foo.txt');
     }
 

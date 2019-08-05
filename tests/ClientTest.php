@@ -30,12 +30,16 @@ use Facebook\Client;
 use Facebook\FileUpload\File;
 use Facebook\FileUpload\Video;
 // These are needed when you uncomment the HTTP clients below.
+use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
+use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\MyFooBatchHttpClient;
 use Facebook\Tests\Fixtures\MyFooHttpClient;
 use Facebook\Response;
 use Facebook\BatchResponse;
 use Facebook\GraphNode\GraphNode;
-use Http\Client\HttpClient;
+
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -63,40 +67,23 @@ class ClientTest extends TestCase
     protected function setUp()
     {
         $this->fbApp = new Application('id', 'shhhh!');
-        $this->fbClient = new Client(new MyFooHttpClient());
-    }
-
-    public function testACustomHttpClientCanBeInjected()
-    {
-        $handler = new MyFooHttpClient();
-        $client = new Client($handler);
-        $httpClient = $client->getHttpClient();
-
-        $this->assertInstanceOf(MyFooHttpClient::class, $httpClient);
-    }
-
-    public function testTheHttpClientWillFallbackToDefault()
-    {
-        $client = new Client();
-        $httpClient = $client->getHttpClient();
-
-        $this->assertInstanceOf(HttpClient::class, $httpClient);
+        $this->fbClient = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory());
     }
 
     public function testBetaModeCanBeDisabledOrEnabledViaConstructor()
     {
-        $client = new Client(null, false);
+        $client = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), false);
         $url = $client->getBaseGraphUrl();
         $this->assertEquals(Client::BASE_GRAPH_URL, $url);
 
-        $client = new Client(null, true);
+        $client = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), true);
         $url = $client->getBaseGraphUrl();
         $this->assertEquals(Client::BASE_GRAPH_URL_BETA, $url);
     }
 
     public function testBetaModeCanBeDisabledOrEnabledViaMethod()
     {
-        $client = new Client();
+        $client = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory());
         $client->enableBetaMode(false);
         $url = $client->getBaseGraphUrl();
         $this->assertEquals(Client::BASE_GRAPH_URL, $url);
@@ -108,7 +95,7 @@ class ClientTest extends TestCase
 
     public function testGraphVideoUrlCanBeSet()
     {
-        $client = new Client();
+        $client = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory());
         $client->enableBetaMode(false);
         $url = $client->getBaseGraphUrl($postToVideoUrl = true);
         $this->assertEquals(Client::BASE_GRAPH_VIDEO_URL, $url);
@@ -136,7 +123,7 @@ class ClientTest extends TestCase
         ];
         $fbBatchRequest = new BatchRequest($this->fbApp, $fbRequests);
 
-        $fbBatchClient = new Client(new MyFooBatchHttpClient());
+        $fbBatchClient = new Client(new MyFooBatchHttpClient(), new RequestFactory(), new StreamFactory());
         $response = $fbBatchClient->sendBatchRequest($fbBatchRequest);
 
         $this->assertInstanceOf(BatchResponse::class, $response);
@@ -274,6 +261,6 @@ class ClientTest extends TestCase
             TestCredentials::$appSecret
         );
 
-        static::$testClient = new Client();
+        static::$testClient = new Client(new \RicardoFiorani\GuzzlePsr18Adapter\Client(), new RequestFactory(), new StreamFactory());
     }
 }

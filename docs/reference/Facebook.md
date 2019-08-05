@@ -3,16 +3,30 @@
 The Facebook SDK for PHP is made up of many components. The `Facebook\Facebook` service class provides an easy interface for working with all the components of the SDK.
 
 ## Facebook\Facebook
+```php
+public Facebook\Facebook __construct(
+        Psr\Http\Client\ClientInterface $client,
+        Psr\Http\Message\RequestFactoryInterface $requestFactory,
+        Psr\Http\Message\StreamFactoryInterface $streamFactory,
+        array $config = []
+)
+```
 
-To instantiate a new `Facebook\Facebook` service, pass an array of configuration options to the constructor.
+To instantiate a new `Facebook\Facebook` service, pass an array of configuration options to the constructor after
+providing a PSR-18 Client and PSR-17 RequestFactory and StreamFactory.
 
 ```php
-$fb = new Facebook\Facebook([
-  'app_id' => '{app-id}',
-  'app_secret' => '{app-secret}',
-  'default_graph_version' => 'v2.10',
-  // . . .
-  ]);
+$fb = new Facebook\Facebook(
+    $client,
+    $requestFactory,
+    $streamFactory,
+    [
+        'app_id' => '{app-id}',
+        'app_secret' => '{app-secret}',
+        'default_graph_version' => 'v2.10',
+        // . . .
+    ]
+);
 ```
 
 Usage:
@@ -49,7 +63,6 @@ $fb = new Facebook\Facebook([
   'default_access_token' => '{access-token}',
   'enable_beta_mode' => true,
   'default_graph_version' => 'v2.10',
-  'http_client_handler' => 'guzzle',
   'persistent_data_handler' => 'memory',
   'url_detection_handler' => new MyUrlDetectionHandler(),
 ]);
@@ -70,23 +83,6 @@ The default fallback access token to use if one is not explicitly provided. The 
 ### `enable_beta_mode`
 Enable [beta mode](https://developers.facebook.com/docs/apps/beta-tier) so that request are made to the [https://graph.beta.facebook.com](https://graph.beta.facebook.com/) endpoint. Set to boolean `true` to enable or `false` to disable. Defaults to `false`.
 
-### `http_client_handler`
-Allows you to overwrite the default HTTP client.
-
-By default, the SDK will try to use cURL as the HTTP client. If a cURL implementation cannot be found, it will fallback to a stream wrapper HTTP client. You can force either HTTP client implementations by setting this value to `curl` or `stream`.
-
-If you wish to use Guzzle, you can set this value to `guzzle`, but it requires that you [install Guzzle](http://docs.guzzlephp.org/en/latest/) with composer.
-
-If you wish to write your own HTTP client, you can code your HTTP client to the `Facebook\HttpClients\HttpClientInterface` and set this value to an instance of your custom client.
-
-```php
-$fb = new Facebook([
-  'http_client_handler' => new MyCustomHttpClient(),
-]);
-```
-
-If any other value is provided an `InvalidArgumentException` will be thrown.
-
 ### `persistent_data_handler`
 Allows you to overwrite the default persistent data store.
 
@@ -95,9 +91,12 @@ By default, the SDK will try to use the native PHP session for the persistent da
 If you wish to write your own persistent data handler, you can code your persistent data handler to the [`Facebook\PersistentData\PersistentDataInterface`](PersistentDataInterface.md) and set the value of `persistent_data_handler` to an instance of your custom handler.
 
 ```php
-$fb = new Facebook([
-  'persistent_data_handler' => new MyCustomPersistentDataHandler(),
-]);
+$fb = new Facebook(
+    $client,
+    $requestFactory,
+    $streamFactory,
+    ['persistent_data_handler' => new MyCustomPersistentDataHandler()]
+);
 ```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
@@ -108,9 +107,12 @@ Allows you to overwrite the default URL detection logic.
 The SDK will do its best to detect the proper current URL but this can sometimes get tricky if you have a very customized environment. You can write your own URL detection logic that implements the ['Facebook\Url\UrlDetectionInterface'](UrlDetectionInterface.md)` and set the value of `url_detection_handler` to an instance of your custom URL detector.
 
 ```php
-$fb = new Facebook([
-  'url_detection_handler' => new MyUrlDetectionHandler(),
-]);
+$fb = new Facebook(
+    $client,
+    $requestFactory,
+    $streamFactory,
+    ['url_detection_handler' => new MyUrlDetectionHandler()]
+);
 ```
 
 If any other value is provided an `InvalidArgumentException` will be thrown.
@@ -122,16 +124,19 @@ The only required configuration options are `app_id`, `app_secret` and `default_
 To take advantage of this feature, simply set an environment variable named `FACEBOOK_APP_ID` with your Facebook app ID and set an environment variable named `FACEBOOK_APP_SECRET` with your Facebook app secret and you will be able to instantiate the `Facebook\Facebook` service with only needing to specify the `default_graph_version` option.
 
 ```php
-$fb = new Facebook\Facebook([
-    'default_graph_version' => 'v2.10',
-    ]);
+$fb = new Facebook\Facebook(
+    $client,
+    $requestFactory,
+    $streamFactory,
+    ['default_graph_version' => 'v2.10']
+);
 ```
 
 # Instance Methods
 
 ## getApplication()
 ```php
-public Application getApplication()
+public Facebook\Application getApplication()
 ```
 Returns the instance of `Facebook\Application` for the instantiated service.
 
@@ -167,7 +172,7 @@ Returns the default fallback [`AccessToken`](AccessToken.md) entity that is bein
 
 ## setDefaultAccessToken()
 ```php
-public setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
+public void setDefaultAccessToken(string|Facebook\AccessToken $accessToken)
 ```
 Sets the default fallback access token to be use with all requests sent to Graph. The access token can be a string or an instance of [`AccessToken`](AccessToken.md).
 

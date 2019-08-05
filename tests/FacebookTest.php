@@ -31,13 +31,13 @@ use Facebook\Tests\Fixtures\FakeGraphApiForResumableUpload;
 use Facebook\Tests\Fixtures\FooHttpClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
-use Facebook\HttpClients\CurlHttpClient;
-use Facebook\HttpClients\StreamHttpClient;
-use Facebook\HttpClients\GuzzleHttpClient;
 use Facebook\PersistentData\InMemoryPersistentDataHandler;
+use Facebook\Tests\Fixtures\MyFooHttpClient;
 use Facebook\Url\UrlDetectionHandler;
 use Facebook\Response;
 use Facebook\GraphNode\GraphUser;
+use Http\Factory\Guzzle\RequestFactory;
+use Http\Factory\Guzzle\StreamFactory;
 use PHPUnit\Framework\Error\Error;
 use PHPUnit\Framework\TestCase;
 
@@ -60,7 +60,7 @@ class Test extends TestCase
             'app_secret' => 'foo_secret',
             'default_graph_version' => 'v0.0',
         ];
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
     /**
@@ -74,7 +74,7 @@ class Test extends TestCase
             'app_id' => 'foo_id',
             'default_graph_version' => 'v0.0',
         ];
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
     /**
@@ -86,30 +86,9 @@ class Test extends TestCase
             'app_id' => 'foo_id',
             'app_secret' => 'foo_secret',
         ];
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSettingAnInvalidHttpClientTypeThrows()
-    {
-        $config = array_merge($this->config, [
-            'http_client' => 'foo_client',
-        ]);
-        new Facebook($config);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSettingAnInvalidHttpClientClassThrows()
-    {
-        $config = array_merge($this->config, [
-            'http_client' => new \stdClass(),
-        ]);
-        new Facebook($config);
-    }
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -118,7 +97,7 @@ class Test extends TestCase
         $config = array_merge($this->config, [
             'persistent_data_handler' => 'foo_handler',
         ]);
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
     public function testPersistentDataHandlerCanBeForced()
@@ -126,7 +105,7 @@ class Test extends TestCase
         $config = array_merge($this->config, [
             'persistent_data_handler' => 'memory'
         ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
         $this->assertInstanceOf(
             InMemoryPersistentDataHandler::class,
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
@@ -141,18 +120,18 @@ class Test extends TestCase
         $config = array_merge($this->config, [
             'url_detection_handler' => 'foo_handler',
         ]);
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
     public function testTheUrlHandlerWillDefaultToTheImplementation()
     {
-        $fb = new Facebook($this->config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $this->config);
         $this->assertInstanceOf(UrlDetectionHandler::class, $fb->getUrlDetectionHandler());
     }
 
     public function testAnAccessTokenCanBeSetAsAString()
     {
-        $fb = new Facebook($this->config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $this->config);
         $fb->setDefaultAccessToken('foo_token');
         $accessToken = $fb->getDefaultAccessToken();
 
@@ -162,7 +141,7 @@ class Test extends TestCase
 
     public function testAnAccessTokenCanBeSetAsAnAccessTokenEntity()
     {
-        $fb = new Facebook($this->config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $this->config);
         $fb->setDefaultAccessToken(new AccessToken('bar_token'));
         $accessToken = $fb->getDefaultAccessToken();
 
@@ -178,7 +157,7 @@ class Test extends TestCase
         $config = array_merge($this->config, [
             'default_access_token' => 123,
         ]);
-        new Facebook($config);
+        new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
     }
 
     public function testCreatingANewRequestWillDefaultToTheProperConfig()
@@ -188,7 +167,7 @@ class Test extends TestCase
             'enable_beta_mode' => true,
             'default_graph_version' => 'v1337',
         ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
 
         $request = $fb->request('FOO_VERB', '/foo');
         $this->assertEquals('1337', $request->getApplication()->getId());
@@ -208,7 +187,7 @@ class Test extends TestCase
             'enable_beta_mode' => true,
             'default_graph_version' => 'v1337',
         ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), $config);
 
         $batchRequest = $fb->newBatchRequest();
         $this->assertEquals('1337', $batchRequest->getApplication()->getId());
@@ -226,16 +205,11 @@ class Test extends TestCase
     public function testCanInjectCustomHandlers()
     {
         $config = array_merge($this->config, [
-            'http_client' => new FooHttpClientInterface(),
             'persistent_data_handler' => new FooPersistentDataInterface(),
             'url_detection_handler' => new FooUrlDetectionInterface(),
         ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new FooHttpClientInterface(), new RequestFactory(), new StreamFactory(), $config);
 
-        $this->assertInstanceOf(
-            FooHttpClientInterface::class,
-            $fb->getClient()->getHttpClient()
-        );
         $this->assertInstanceOf(
             FooPersistentDataInterface::class,
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
@@ -248,10 +222,7 @@ class Test extends TestCase
 
     public function testPaginationReturnsProperResponse()
     {
-        $config = array_merge($this->config, [
-            'http_client' => new FooHttpClientInterface(),
-        ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new FooHttpClientInterface(), new RequestFactory(), new StreamFactory(), $this->config);
 
         $request = new Request($fb->getApplication(), 'foo_token', 'GET');
         $graphEdge = new GraphEdge(
@@ -283,10 +254,7 @@ class Test extends TestCase
 
     public function testCanGetSuccessfulTransferWithMaxTries()
     {
-        $config = array_merge($this->config, [
-          'http_client' => new FakeGraphApiForResumableUpload(),
-        ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook(new FakeGraphApiForResumableUpload(), new RequestFactory(), new StreamFactory(), $this->config);
         $response = $fb->uploadVideo('me', __DIR__.'/foo.txt', [], 'foo-token', 3);
         $this->assertEquals([
           'video_id' => '1337',
@@ -302,10 +270,7 @@ class Test extends TestCase
         $client = new FakeGraphApiForResumableUpload();
         $client->failOnTransfer();
 
-        $config = array_merge($this->config, [
-          'http_client' => $client,
-        ]);
-        $fb = new Facebook($config);
+        $fb = new Facebook($client, new RequestFactory(), new StreamFactory(), $this->config);
         $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
     }
 }
