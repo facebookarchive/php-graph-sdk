@@ -211,10 +211,6 @@ class Test extends TestCase
         $fb = new Facebook(new FooHttpClientInterface(), new RequestFactory(), new StreamFactory(), $config);
 
         $this->assertInstanceOf(
-            FooHttpClientInterface::class,
-            $fb->getClient()->getHttpClient()
-        );
-        $this->assertInstanceOf(
             FooPersistentDataInterface::class,
             $fb->getRedirectLoginHelper()->getPersistentDataHandler()
         );

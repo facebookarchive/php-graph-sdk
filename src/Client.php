@@ -78,7 +78,7 @@ class Client
     /**
      * @var ClientInterface HTTP client handler
      */
-    protected $httpClient;
+    private $httpClient;
 
     /**
      * @var RequestFactoryInterface
@@ -113,26 +113,6 @@ class Client
         $this->enableBetaMode = $enableBeta;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
-    }
-
-    /**
-     * Sets the HTTP client handler.
-     *
-     * @param ClientInterface $httpClient
-     */
-    public function setHttpClient(ClientInterface $httpClient)
-    {
-        $this->httpClient = $httpClient;
-    }
-
-    /**
-     * Returns the HTTP client handler.
-     *
-     * @return ClientInterface
-     */
-    public function getHttpClient()
-    {
-        return $this->httpClient;
     }
 
     /**

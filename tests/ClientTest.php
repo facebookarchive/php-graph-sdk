@@ -70,23 +70,6 @@ class ClientTest extends TestCase
         $this->fbClient = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory());
     }
 
-    public function testACustomHttpClientCanBeInjected()
-    {
-        $handler = new MyFooHttpClient();
-        $client = new Client($handler, new RequestFactory(), new StreamFactory());
-        $httpClient = $client->getHttpClient();
-
-        $this->assertInstanceOf(MyFooHttpClient::class, $httpClient);
-    }
-/*
-    public function testTheHttpClientWillFallbackToDefault()
-    {
-        $client = new Client();
-        $httpClient = $client->getHttpClient();
-
-        $this->assertInstanceOf(HttpClient::class, $httpClient);
-    }
-*/
     public function testBetaModeCanBeDisabledOrEnabledViaConstructor()
     {
         $client = new Client(new MyFooHttpClient(), new RequestFactory(), new StreamFactory(), false);
