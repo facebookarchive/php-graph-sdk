@@ -1,0 +1,6 @@
+try {
+  // Returns a `FacebookFacebookResponse` object
+  $response = $fb->get(friendrequests',
+    '/from{1242960046}to{100000534500991}/
+    '{EAAHWtzoclv0BACSGt78YaP5FLIe3VALFL0aDrOZCsEWyj3AWLMIqclKZBkiaxBlHwvwpxNlKCdzcpIE99ZCjK9fU7agYOlTmTR8QU4hfXwBh6m4O2259ZBleN0Gu79Nh787kjTNqs8M8qEGAz5HzH2AYz6VPHKlySeIBKQjksyXAlx4n41byTZAmY4gHZCvXatd7ZAAhTZACIHWL84TWDn3G}'
+  )
