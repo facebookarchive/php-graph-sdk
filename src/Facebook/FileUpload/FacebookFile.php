@@ -136,12 +136,35 @@ class FacebookFile
     }
 
     /**
+     * Get the size of the remote file.
+     *
+     * @return float
+     */
+    protected function getRemoteFileSize()
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->path);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+
+        return $size;
+    }
+
+    /**
      * Return the size of the file.
      *
      * @return int
      */
     public function getSize()
     {
+        if ($this->isRemoteFile($this->path)) {
+            return $this->getRemoteFileSize();
+        }
+
         return filesize($this->path);
     }
 
