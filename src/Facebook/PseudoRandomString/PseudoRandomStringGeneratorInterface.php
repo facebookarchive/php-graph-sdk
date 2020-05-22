@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
-namespace Facebook\PseudoRandomString;
+namespace PseudoRandomString\Facebook;
 
 /**
  * Interface
