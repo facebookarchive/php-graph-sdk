@@ -24,8 +24,9 @@
 namespace Facebook\Tests\FileUpload;
 
 use Facebook\FileUpload\Mimetypes;
+use Facebook\Tests\BaseTestCase;
 
-class MimetypesTest extends \PHPUnit_Framework_TestCase
+class MimetypesTest extends BaseTestCase
 {
 
     /**

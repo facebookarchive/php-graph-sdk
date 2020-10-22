@@ -29,7 +29,7 @@ use Facebook\FacebookResponse;
 use Facebook\FacebookBatchRequest;
 use Facebook\FacebookBatchResponse;
 
-class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
+class FacebookBatchResponseTest extends BaseTestCase
 {
     /**
      * @var \Facebook\FacebookApp
@@ -41,7 +41,7 @@ class FacebookBatchResponseTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->app = new FacebookApp('123', 'foo_secret');
         $this->request = new FacebookRequest(

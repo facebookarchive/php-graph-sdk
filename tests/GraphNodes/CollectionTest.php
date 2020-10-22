@@ -24,8 +24,9 @@
 namespace Facebook\Tests\GraphNodes;
 
 use Facebook\GraphNodes\Collection;
+use Facebook\Tests\BaseTestCase;
 
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends BaseTestCase
 {
 
     public function testAnExistingPropertyCanBeAccessed()

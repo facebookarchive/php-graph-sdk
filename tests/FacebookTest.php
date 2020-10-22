@@ -23,6 +23,8 @@
  */
 namespace Facebook\Tests;
 
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookClient;
 use Facebook\FacebookRequest;
@@ -33,19 +35,19 @@ use Facebook\Tests\Fixtures\FooBarPseudoRandomStringGenerator;
 use Facebook\Tests\Fixtures\FooClientInterface;
 use Facebook\Tests\Fixtures\FooPersistentDataInterface;
 use Facebook\Tests\Fixtures\FooUrlDetectionInterface;
+use InvalidArgumentException;
 
-class FacebookTest extends \PHPUnit_Framework_TestCase
+class FacebookTest extends BaseTestCase
 {
     protected $config = [
         'app_id' => '1337',
         'app_secret' => 'foo_secret',
     ];
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testInstantiatingWithoutAppIdThrows()
     {
+        $this->expectException(FacebookSDKException::class)
+        ;
         // unset value so there is no fallback to test expected Exception
         putenv(Facebook::APP_ID_ENV_NAME.'=');
         $config = [
@@ -54,11 +56,10 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         new Facebook($config);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testInstantiatingWithoutAppSecretThrows()
     {
+        $this->expectException(FacebookSDKException::class);
+
         // unset value so there is no fallback to test expected Exception
         putenv(Facebook::APP_SECRET_ENV_NAME.'=');
         $config = [
@@ -67,11 +68,10 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         new Facebook($config);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingAnInvalidHttpClientHandlerThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $config = array_merge($this->config, [
             'http_client_handler' => 'foo_handler',
         ]);
@@ -117,11 +117,9 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingAnInvalidPersistentDataHandlerThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
         $config = array_merge($this->config, [
             'persistent_data_handler' => 'foo_handler',
         ]);
@@ -146,7 +144,7 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
             ? 'TypeError'
             : 'PHPUnit_Framework_Error';
 
-        $this->setExpectedException($expectedException);
+        $this->expectException($expectedException);
 
         $config = array_merge($this->config, [
             'url_detection_handler' => 'foo_handler',
@@ -180,11 +178,9 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar_token', (string)$accessToken);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingAnInvalidPseudoRandomStringGeneratorThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
         $config = array_merge($this->config, [
             'pseudo_random_string_generator' => 'foo_generator',
         ]);
@@ -273,11 +269,9 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSettingAnAccessThatIsNotStringOrAccessTokenThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
         $config = array_merge($this->config, [
             'default_access_token' => 123,
         ]);
@@ -402,11 +396,9 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         ], $response);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookResponseException
-     */
     public function testMaxingOutRetriesWillThrow()
     {
+        $this->expectException(FacebookResponseException::class);
         $client = new FakeGraphApiForResumableUpload();
         $client->failOnTransfer();
 

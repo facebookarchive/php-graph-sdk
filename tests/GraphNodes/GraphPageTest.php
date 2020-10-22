@@ -23,17 +23,18 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
+use Facebook\Tests\BaseTestCase;
 use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
 
-class GraphPageTest extends \PHPUnit_Framework_TestCase
+class GraphPageTest extends BaseTestCase
 {
     /**
      * @var \Facebook\FacebookResponse
      */
     protected $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
     }

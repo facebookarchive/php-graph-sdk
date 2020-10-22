@@ -27,8 +27,9 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Tests\BaseTestCase;
 
-class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
+class FacebookResponseExceptionTest extends BaseTestCase
 {
 
     /**
@@ -36,7 +37,7 @@ class FacebookResponseExceptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = new FacebookRequest(new FacebookApp('123', 'foo'));
     }

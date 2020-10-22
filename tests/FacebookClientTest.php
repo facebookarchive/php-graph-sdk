@@ -32,13 +32,15 @@ use Facebook\FacebookClient;
 use Facebook\FileUpload\FacebookFile;
 use Facebook\FileUpload\FacebookVideo;
 // These are needed when you uncomment the HTTP clients below.
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookGuzzleHttpClient;
-use Facebook\HttpClients\FacebookStreamHttpClient;
 use Facebook\Tests\Fixtures\MyFooBatchClientHandler;
 use Facebook\Tests\Fixtures\MyFooClientHandler;
+use Facebook\GraphNodes\GraphNode;
+use Facebook\FacebookBatchResponse;
+use Facebook\FacebookResponse;
+use Facebook\HttpClients\FacebookStreamHttpClient;
+use Facebook\HttpClients\FacebookCurlHttpClient;
 
-class FacebookClientTest extends \PHPUnit_Framework_TestCase
+class FacebookClientTest extends BaseTestCase
 {
     /**
      * @var FacebookApp
@@ -60,34 +62,34 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
      */
     public static $testFacebookClient;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fbApp = new FacebookApp('id', 'shhhh!');
         $this->fbClient = new FacebookClient(new MyFooClientHandler());
     }
 
-    public function testACustomHttpClientCanBeInjected()
+    public function testACustomHttpClientCanBeInjected(): void
     {
         $handler = new MyFooClientHandler();
         $client = new FacebookClient($handler);
         $httpHandler = $client->getHttpClientHandler();
 
-        $this->assertInstanceOf('Facebook\Tests\Fixtures\MyFooClientHandler', $httpHandler);
+        $this->assertInstanceOf(MyFooClientHandler::class, $httpHandler);
     }
 
-    public function testTheHttpClientWillFallbackToDefault()
+    public function testTheHttpClientWillFallbackToDefault(): void
     {
         $client = new FacebookClient();
         $httpHandler = $client->getHttpClientHandler();
 
         if (function_exists('curl_init')) {
-            $this->assertInstanceOf('Facebook\HttpClients\FacebookCurlHttpClient', $httpHandler);
+            $this->assertInstanceOf(FacebookCurlHttpClient::class, $httpHandler);
         } else {
-            $this->assertInstanceOf('Facebook\HttpClients\FacebookStreamHttpClient', $httpHandler);
+            $this->assertInstanceOf(FacebookStreamHttpClient::class, $httpHandler);
         }
     }
 
-    public function testBetaModeCanBeDisabledOrEnabledViaConstructor()
+    public function testBetaModeCanBeDisabledOrEnabledViaConstructor(): void
     {
         $client = new FacebookClient(null, false);
         $url = $client->getBaseGraphUrl();
@@ -98,7 +100,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA, $url);
     }
 
-    public function testBetaModeCanBeDisabledOrEnabledViaMethod()
+    public function testBetaModeCanBeDisabledOrEnabledViaMethod(): void
     {
         $client = new FacebookClient();
         $client->enableBetaMode(false);
@@ -110,7 +112,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FacebookClient::BASE_GRAPH_URL_BETA, $url);
     }
 
-    public function testGraphVideoUrlCanBeSet()
+    public function testGraphVideoUrlCanBeSet(): void
     {
         $client = new FacebookClient();
         $client->enableBetaMode(false);
@@ -122,17 +124,17 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL_BETA, $url);
     }
 
-    public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph()
+    public function testAFacebookRequestEntityCanBeUsedToSendARequestToGraph(): void
     {
         $fbRequest = new FacebookRequest($this->fbApp, 'token', 'GET', '/foo');
         $response = $this->fbClient->sendRequest($fbRequest);
 
-        $this->assertInstanceOf('Facebook\FacebookResponse', $response);
+        $this->assertInstanceOf(FacebookResponse::class, $response);
         $this->assertEquals(200, $response->getHttpStatusCode());
         $this->assertEquals('{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}', $response->getBody());
     }
 
-    public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph()
+    public function testAFacebookBatchRequestEntityCanBeUsedToSendABatchRequestToGraph(): void
     {
         $fbRequests = [
             new FacebookRequest($this->fbApp, 'token', 'GET', '/foo'),
@@ -143,12 +145,12 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $fbBatchClient = new FacebookClient(new MyFooBatchClientHandler());
         $response = $fbBatchClient->sendBatchRequest($fbBatchRequest);
 
-        $this->assertInstanceOf('Facebook\FacebookBatchResponse', $response);
+        $this->assertInstanceOf(FacebookBatchResponse::class, $response);
         $this->assertEquals('GET', $response[0]->getRequest()->getMethod());
         $this->assertEquals('POST', $response[1]->getRequest()->getMethod());
     }
 
-    public function testAFacebookBatchRequestWillProperlyBatchFiles()
+    public function testAFacebookBatchRequestWillProperlyBatchFiles(): void
     {
         $fbRequests = [
             new FacebookRequest($this->fbApp, 'token', 'POST', '/photo', [
@@ -163,19 +165,19 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $fbBatchRequest = new FacebookBatchRequest($this->fbApp, $fbRequests);
         $fbBatchRequest->prepareRequestsForBatch();
 
-        list($url, $method, $headers, $body) = $this->fbClient->prepareRequestMessage($fbBatchRequest);
+        [$url, $method, $headers, $body] = $this->fbClient->prepareRequestMessage($fbBatchRequest);
 
         $this->assertEquals(FacebookClient::BASE_GRAPH_VIDEO_URL . '/' . Facebook::DEFAULT_GRAPH_VERSION, $url);
         $this->assertEquals('POST', $method);
-        $this->assertContains('multipart/form-data; boundary=', $headers['Content-Type']);
-        $this->assertContains('Content-Disposition: form-data; name="batch"', $body);
-        $this->assertContains('Content-Disposition: form-data; name="include_headers"', $body);
-        $this->assertContains('"name":0,"attached_files":', $body);
-        $this->assertContains('"name":1,"attached_files":', $body);
-        $this->assertContains('"; filename="foo.txt"', $body);
+        $this->assertStringContainsString('multipart/form-data; boundary=', $headers['Content-Type']);
+        $this->assertStringContainsString('Content-Disposition: form-data; name="batch"', $body);
+        $this->assertStringContainsString('Content-Disposition: form-data; name="include_headers"', $body);
+        $this->assertStringContainsString('"name":0,"attached_files":', $body);
+        $this->assertStringContainsString('"name":1,"attached_files":', $body);
+        $this->assertStringContainsString('"; filename="foo.txt"', $body);
     }
 
-    public function testARequestOfParamsWillBeUrlEncoded()
+    public function testARequestOfParamsWillBeUrlEncoded(): void
     {
         $fbRequest = new FacebookRequest($this->fbApp, 'token', 'POST', '/foo', ['foo' => 'bar']);
         $response = $this->fbClient->sendRequest($fbRequest);
@@ -185,7 +187,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('application/x-www-form-urlencoded', $headersSent['Content-Type']);
     }
 
-    public function testARequestWithFilesWillBeMultipart()
+    public function testARequestWithFilesWillBeMultipart(): void
     {
         $myFile = new FacebookFile(__DIR__ . '/foo.txt');
         $fbRequest = new FacebookRequest($this->fbApp, 'token', 'POST', '/foo', ['file' => $myFile]);
@@ -193,12 +195,12 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
 
         $headersSent = $response->getRequest()->getHeaders();
 
-        $this->assertContains('multipart/form-data; boundary=', $headersSent['Content-Type']);
+        $this->assertStringContainsString('multipart/form-data; boundary=', $headersSent['Content-Type']);
     }
 
-    public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided()
+    public function testAFacebookRequestValidatesTheAccessTokenWhenOneIsNotProvided(): void
     {
-        $this->setExpectedException('Facebook\Exceptions\FacebookSDKException');
+        $this->expectException(FacebookSDKException::class);
 
         $fbRequest = new FacebookRequest($this->fbApp, null, 'GET', '/foo');
         $this->fbClient->sendRequest($fbRequest);
@@ -207,7 +209,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @group integration
      */
-    public function testCanCreateATestUserAndGetTheProfileAndThenDeleteTheTestUser()
+    public function testCanCreateATestUserAndGetTheProfileAndThenDeleteTheTestUser(): void
     {
         $this->initializeTestApp();
 
@@ -241,7 +243,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         );
         $graphNode = static::$testFacebookClient->sendRequest($request)->getGraphNode();
 
-        $this->assertInstanceOf('Facebook\GraphNodes\GraphNode', $graphNode);
+        $this->assertInstanceOf(GraphNode::class, $graphNode);
         $this->assertNotNull($graphNode->getField('id'));
         $this->assertEquals('Foo Phpunit User', $graphNode->getField('name'));
 
@@ -257,7 +259,7 @@ class FacebookClientTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($graphNode->getField('success'));
     }
 
-    public function initializeTestApp()
+    public function initializeTestApp(): void
     {
         if (!file_exists(__DIR__ . '/FacebookTestCredentials.php')) {
             throw new FacebookSDKException(
