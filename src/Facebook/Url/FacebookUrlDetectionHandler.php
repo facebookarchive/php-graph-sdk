@@ -95,6 +95,7 @@ class FacebookUrlDetectionHandler implements UrlDetectionInterface
     protected function getHostName()
     {
         // Check for proxy first
+	$header = null;
         $header = $this->getHeader('X_FORWARDED_HOST');
         if ($header && $this->isValidForwardedHost($header)) {
             $elements = explode(',', $header);
