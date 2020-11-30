@@ -24,8 +24,9 @@
 namespace Facebook\Tests\Http;
 
 use Facebook\Http\GraphRawResponse;
+use Facebook\Tests\BaseTestCase;
 
-class GraphRawResponseTest extends \PHPUnit_Framework_TestCase
+class GraphRawResponseTest extends BaseTestCase
 {
 
     protected $fakeRawProxyHeader = "HTTP/1.0 200 Connection established
@@ -51,7 +52,7 @@ HEADER;
     protected $jsonFakeHeader = 'x-fb-ads-insights-throttle: {"app_id_util_pct": 0.00,"acc_id_util_pct": 0.00}';
     protected $jsonFakeHeaderAsArray = ['x-fb-ads-insights-throttle' => '{"app_id_util_pct": 0.00,"acc_id_util_pct": 0.00}'];
 
-    public function testCanSetTheHeadersFromAnArray()
+    public function testCanSetTheHeadersFromAnArray(): void
     {
         $myHeaders = [
             'foo' => 'bar',
@@ -63,7 +64,7 @@ HEADER;
         $this->assertEquals($myHeaders, $headers);
     }
 
-    public function testCanSetTheHeadersFromAString()
+    public function testCanSetTheHeadersFromAString(): void
     {
         $response = new GraphRawResponse($this->fakeRawHeader, '');
         $headers = $response->getHeaders();
@@ -73,7 +74,7 @@ HEADER;
         $this->assertEquals(200, $httpResponseCode);
     }
 
-    public function testWillIgnoreProxyHeaders()
+    public function testWillIgnoreProxyHeaders(): void
     {
         $response = new GraphRawResponse($this->fakeRawProxyHeader . $this->fakeRawHeader, '');
         $headers = $response->getHeaders();
@@ -83,7 +84,7 @@ HEADER;
         $this->assertEquals(200, $httpResponseCode);
     }
 
-    public function testCanTransformJsonHeaderValues()
+    public function testCanTransformJsonHeaderValues(): void
     {
         $response = new GraphRawResponse($this->jsonFakeHeader, '');
         $headers = $response->getHeaders();
@@ -91,7 +92,7 @@ HEADER;
         $this->assertEquals($this->jsonFakeHeaderAsArray['x-fb-ads-insights-throttle'], $headers['x-fb-ads-insights-throttle']);
     }
     
-    public function testHttpResponseCode()
+    public function testHttpResponseCode(): void
     {
         // HTTP/1.0
         $headers = str_replace('HTTP/1.1', 'HTTP/1.0', $this->fakeRawHeader);

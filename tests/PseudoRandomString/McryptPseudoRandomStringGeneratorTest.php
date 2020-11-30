@@ -24,8 +24,9 @@
 namespace Facebook\Tests\PseudoRandomString;
 
 use Facebook\PseudoRandomString\McryptPseudoRandomStringGenerator;
+use Facebook\Tests\BaseTestCase;
 
-class McryptPseudoRandomStringGeneratorTest extends \PHPUnit_Framework_TestCase
+class McryptPseudoRandomStringGeneratorTest extends BaseTestCase
 {
     public function testCanGenerateRandomStringOfArbitraryLength()
     {

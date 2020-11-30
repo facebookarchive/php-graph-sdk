@@ -27,15 +27,16 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\GraphNodes\GraphNodeFactory;
+use Facebook\Tests\BaseTestCase;
 
-class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
+class GraphNodeFactoryTest extends BaseTestCase
 {
     /**
      * @var \Facebook\FacebookRequest
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $app = new FacebookApp('123', 'foo_app_secret');
         $this->request = new FacebookRequest(
@@ -58,11 +59,9 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->validateResponseCastableAsGraphNode();
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testANonGraphNodeResponseWillThrow()
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         $data = '{"data":[{"id":"123","name":"foo"},{"id":"1337","name":"bar"}]}';
         $res = new FacebookResponse($this->request, $data);
 
@@ -79,11 +78,9 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->validateResponseCastableAsGraphEdge();
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testANonGraphEdgeResponseWillThrow()
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         $data = '{"id":"123","name":"foo"}';
         $res = new FacebookResponse($this->request, $data);
 
@@ -102,11 +99,9 @@ class GraphNodeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($shouldFail, 'Expected the given array to not be castable as a GraphEdge.');
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testInvalidSubClassesWillThrow()
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         GraphNodeFactory::validateSubclass('FooSubClass');
     }
 

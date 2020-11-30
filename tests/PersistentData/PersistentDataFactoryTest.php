@@ -26,9 +26,10 @@ namespace Facebook\Tests\PersistentData;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataFactory;
+use Facebook\Tests\BaseTestCase;
 use PHPUnit_Framework_TestCase;
 
-class PersistentDataFactoryTest extends PHPUnit_Framework_TestCase
+class PersistentDataFactoryTest extends BaseTestCase
 {
     const COMMON_NAMESPACE = 'Facebook\PersistentData\\';
     const COMMON_INTERFACE = 'Facebook\PersistentData\PersistentDataInterface';

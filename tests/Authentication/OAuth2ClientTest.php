@@ -26,8 +26,9 @@ namespace Facebook\Tests\Authentication;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
+use Facebook\Tests\BaseTestCase;
 
-class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
+class OAuth2ClientTest extends BaseTestCase
 {
 
     /**
@@ -45,14 +46,14 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
      */
     protected $oauth;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $app = new FacebookApp('123', 'foo_secret');
         $this->client = new FooFacebookClientForOAuth2Test();
         $this->oauth = new OAuth2Client($app, $this->client, static::TESTING_GRAPH_VERSION);
     }
 
-    public function testCanGetMetadataFromAnAccessToken()
+    public function testCanGetMetadataFromAnAccessToken(): void
     {
         $this->client->setMetadataResponse();
 
@@ -74,15 +75,19 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
     }
 
-    public function testCanBuildAuthorizationUrl()
+    public function testCanBuildAuthorizationUrl(): void
     {
         $scope = ['email', 'base_foo'];
         $authUrl = $this->oauth->getAuthorizationUrl('https://foo.bar', 'foo_state', $scope, ['foo' => 'bar'], '*');
 
-        $this->assertContains('*', $authUrl);
+        $this->assertStringContainsString('*', $authUrl);
 
         $expectedUrl = 'https://www.facebook.com/' . static::TESTING_GRAPH_VERSION . '/dialog/oauth?';
-        $this->assertTrue(strpos($authUrl, $expectedUrl) === 0, 'Unexpected base authorization URL returned from getAuthorizationUrl().');
+        $this->assertSame(
+            strpos($authUrl, $expectedUrl),
+            0,
+            'Unexpected base authorization URL returned from getAuthorizationUrl().'
+        );
 
         $params = [
             'client_id' => '123',
@@ -93,11 +98,11 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ];
         foreach ($params as $key => $value) {
-            $this->assertContains($key . '=' . urlencode($value), $authUrl);
+            $this->assertStringContainsString($key . '=' . urlencode($value), $authUrl);
         }
     }
 
-    public function testCanGetAccessTokenFromCode()
+    public function testCanGetAccessTokenFromCode(): void
     {
         $this->client->setAccessTokenResponse();
 
@@ -122,7 +127,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
     }
 
-    public function testCanGetLongLivedAccessToken()
+    public function testCanGetLongLivedAccessToken(): void
     {
         $this->client->setAccessTokenResponse();
 
@@ -143,7 +148,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedParams, $request->getParams());
     }
 
-    public function testCanGetCodeFromLongLivedAccessToken()
+    public function testCanGetCodeFromLongLivedAccessToken(): void
     {
         $this->client->setCodeResponse();
 

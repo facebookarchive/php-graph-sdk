@@ -27,14 +27,14 @@ use Facebook\FacebookApp;
 use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 
-class FacebookResponseTest extends \PHPUnit_Framework_TestCase
+class FacebookResponseTest extends BaseTestCase
 {
     /**
      * @var \Facebook\FacebookRequest
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $app = new FacebookApp('123', 'foo_secret');
         $this->request = new FacebookRequest(
