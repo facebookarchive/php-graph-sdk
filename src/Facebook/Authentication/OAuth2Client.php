@@ -29,7 +29,7 @@ use Facebook\FacebookRequest;
 use Facebook\FacebookResponse;
 use Facebook\FacebookClient;
 use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Exceptions\;
 
 /**
  * Class OAuth2Client
