@@ -23,6 +23,8 @@
  */
 namespace Facebook\Tests\Authentication;
 
+/*Primeira linha abaixo de use facebook foi adicionada por mim */
+use Facebook\Facebook;
 use Facebook\Facebook;
 use Facebook\FacebookApp;
 use Facebook\Authentication\OAuth2Client;
