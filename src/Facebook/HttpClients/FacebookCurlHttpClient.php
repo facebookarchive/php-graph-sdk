@@ -103,6 +103,7 @@ class FacebookCurlHttpClient implements FacebookHttpClientInterface
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_CAINFO => __DIR__ . '/certs/DigiCertHighAssuranceEVRootCA.pem',
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
         ];
 
         if ($method !== "GET") {
