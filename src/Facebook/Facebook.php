@@ -129,6 +129,7 @@ class Facebook
             'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
             'default_graph_version' => static::DEFAULT_GRAPH_VERSION,
             'enable_beta_mode' => false,
+            'use_gaming_graph' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,
             'pseudo_random_string_generator' => null,
@@ -145,7 +146,8 @@ class Facebook
         $this->app = new FacebookApp($config['app_id'], $config['app_secret']);
         $this->client = new FacebookClient(
             HttpClientsFactory::createHttpClient($config['http_client_handler']),
-            $config['enable_beta_mode']
+            $config['enable_beta_mode'],
+            $config['use_gaming_graph']
         );
         $this->pseudoRandomStringGenerator = PseudoRandomStringGeneratorFactory::createPseudoRandomStringGenerator(
             $config['pseudo_random_string_generator']

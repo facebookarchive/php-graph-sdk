@@ -56,6 +56,11 @@ class FacebookClient
     const BASE_GRAPH_VIDEO_URL_BETA = 'https://graph-video.beta.facebook.com';
 
     /**
+     * @const string Gaming Graph API URL.
+     */
+    const GAMING_GRAPH_URL = 'https://graph.fb.gg';
+
+    /**
      * @const int The timeout in seconds for a normal request.
      */
     const DEFAULT_REQUEST_TIMEOUT = 60;
@@ -76,6 +81,11 @@ class FacebookClient
     protected $enableBetaMode = false;
 
     /**
+     * @var bool Toggle to use Gaming Graph url.
+     */
+    protected $useGamingGraph = false;
+
+    /**
      * @var FacebookHttpClientInterface HTTP client handler.
      */
     protected $httpClientHandler;
@@ -91,10 +101,11 @@ class FacebookClient
      * @param FacebookHttpClientInterface|null $httpClientHandler
      * @param boolean                          $enableBeta
      */
-    public function __construct(FacebookHttpClientInterface $httpClientHandler = null, $enableBeta = false)
+    public function __construct(FacebookHttpClientInterface $httpClientHandler = null, $enableBeta = false, $useGamingGraph = false)
     {
         $this->httpClientHandler = $httpClientHandler ?: $this->detectHttpClientHandler();
         $this->enableBetaMode = $enableBeta;
+        $this->useGamingGraph = $useGamingGraph;
     }
 
     /**
@@ -148,6 +159,10 @@ class FacebookClient
     {
         if ($postToVideoUrl) {
             return $this->enableBetaMode ? static::BASE_GRAPH_VIDEO_URL_BETA : static::BASE_GRAPH_VIDEO_URL;
+        }
+
+        if ($this->useGamingGraph) {
+            return static::GAMING_GRAPH_URL;
         }
 
         return $this->enableBetaMode ? static::BASE_GRAPH_URL_BETA : static::BASE_GRAPH_URL;
