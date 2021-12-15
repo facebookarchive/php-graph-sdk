@@ -416,4 +416,24 @@ class FacebookTest extends \PHPUnit_Framework_TestCase
         $fb = new Facebook($config);
         $fb->uploadVideo('4', __DIR__.'/foo.txt', [], 'foo-token', 3);
     }
+
+    public function testCreatingANewRequestWithGamingGraphDomain()
+    {
+        $config = array_merge($this->config, [
+            'app_id' => FacebookTestCredentials::$appId,
+            'app_secret' => FacebookTestCredentials::$appSecret,
+            'use_gaming_graph' => true,
+        ]);
+        $fb = new Facebook($config);
+
+        $oauth = $fb->getOAuth2Client();
+        $metadata = $oauth->debugToken('baz_token');
+
+        $this->assertInstanceOf('Facebook\Authentication\AccessTokenMetadata', $metadata);
+
+        $request = $oauth->getLastRequest();
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('/debug_token', $request->getEndpoint());
+        $this->assertEquals(Facebook::DEFAULT_GRAPH_VERSION, $request->getGraphVersion());
+    }
 }
