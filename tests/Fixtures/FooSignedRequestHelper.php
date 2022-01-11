@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,13 +23,22 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\Fixtures;
 
 use Facebook\Helpers\FacebookSignedRequestFromInputHelper;
 
+/**
+ *
+ */
 class FooSignedRequestHelper extends FacebookSignedRequestFromInputHelper
 {
-    public function getRawSignedRequest()
+    /**
+     * Get raw signed request from input.
+     *
+     * @return string|null
+     */
+    public function getRawSignedRequest(): ?string
     {
         return null;
     }

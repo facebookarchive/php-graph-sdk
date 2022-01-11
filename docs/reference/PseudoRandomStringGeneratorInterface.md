@@ -44,10 +44,10 @@ $fb = new Facebook\Facebook([
 Alternatively, if you're working with the `Facebook\Helpers\FacebookRedirectLoginHelper` directly, you can inject your custom generator via the constructor.
 
 ```php
-use Facebook\Helpers\FacebookRedirectLoginHelper;
+use Facebook\Helpers\RedirectLoginHelper;
 
 $myPseudoRandomStringGenerator = new MyCustomPseudoRandomStringGenerator();
-$helper = new FacebookRedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);
+$helper = new RedirectLoginHelper($fbApp, null, null, $myPseudoRandomStringGenerator);
 ```
 
 ## Method Reference

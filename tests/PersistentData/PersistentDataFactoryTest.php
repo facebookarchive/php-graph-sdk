@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -26,12 +28,16 @@ namespace Facebook\Tests\PersistentData;
 use Facebook\PersistentData\FacebookMemoryPersistentDataHandler;
 use Facebook\PersistentData\FacebookSessionPersistentDataHandler;
 use Facebook\PersistentData\PersistentDataFactory;
-use PHPUnit_Framework_TestCase;
+use Facebook\PersistentData\PersistentDataInterface;
+use PHPUnit\Framework\TestCase;
 
-class PersistentDataFactoryTest extends PHPUnit_Framework_TestCase
+/**
+ * Class PersistentDataFactoryTest
+ */
+class PersistentDataFactoryTest extends TestCase
 {
     const COMMON_NAMESPACE = 'Facebook\PersistentData\\';
-    const COMMON_INTERFACE = 'Facebook\PersistentData\PersistentDataInterface';
+    const COMMON_INTERFACE = PersistentDataInterface::class;
 
     /**
      * @param mixed  $handler
@@ -39,18 +45,18 @@ class PersistentDataFactoryTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider persistentDataHandlerProviders
      */
-    public function testCreatePersistentDataHandler($handler, $expected)
+    public function testCreatePersistentDataHandler(mixed $handler, string $expected): void
     {
         $persistentDataHandler = PersistentDataFactory::createPersistentDataHandler($handler);
 
-        $this->assertInstanceOf(self::COMMON_INTERFACE, $persistentDataHandler);
-        $this->assertInstanceOf($expected, $persistentDataHandler);
+        static::assertInstanceOf(self::COMMON_INTERFACE, $persistentDataHandler);
+        static::assertInstanceOf($expected, $persistentDataHandler);
     }
 
     /**
      * @return array
      */
-    public function persistentDataHandlerProviders()
+    public function persistentDataHandlerProviders(): array
     {
         $handlers = [
             ['memory', self::COMMON_NAMESPACE . 'FacebookMemoryPersistentDataHandler'],

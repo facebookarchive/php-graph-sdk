@@ -8,9 +8,9 @@ You can instantiate a new `FacebookBatchRequest` entity directly by sending the 
 by using the [`Facebook\Facebook::newBatchRequest()`](Facebook.md#newBatchRequest) factory method.
 
 ```php
-use Facebook\FacebookBatchRequest;
+use Facebook\BatchRequest;
 
-$request = new FacebookBatchRequest(
+$request = new BatchRequest(
   Facebook\FacebookApp $app,
   array $requests,
   string|null $accessToken,
@@ -86,7 +86,7 @@ $requests = [
   'foo' => $fb->request('GET', '/me'),
   'bar' => $fb->request('POST', '/me/feed', [/* */]),
 ];
-$batchRequest = new Facebook\FacebookBatchRequest($fb->getApp(), $requests, '{access-token}');
+$batchRequest = new Facebook\BatchRequest($fb->getApplication(), $requests, '{access-token}');
 
 var_dump($batchRequest[0]);
 /*

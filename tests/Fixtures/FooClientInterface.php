@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,16 +25,32 @@
  */
 namespace Facebook\Tests\Fixtures;
 
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class FooClientInterface implements FacebookHttpClientInterface
+/**
+ *
+ */
+class FooClientInterface extends Client
 {
-    public function send($url, $method, $body, array $headers, $timeOut)
+
+    /**
+     * Send an HTTP request.
+     *
+     * @param RequestInterface $request Request to send
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        return new GraphRawResponse(
-            "HTTP/1.1 1337 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
-            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}'
+        return new Response(
+            321,
+            ['Date' => 'Mon, 19 May 2014 18:37:17 GMT'],
+            '{"data":[{"id":"123","name":"Foo"},{"id":"1337","name":"Bar"}]}',
+            '1.1',
+            'OK',
         );
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,22 +23,27 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests;
 
-use Facebook\FacebookApp;
+use Facebook\Application;
 use Facebook\SignedRequest;
+use PHPUnit\Framework\TestCase;
 
-class SignedRequestTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class SignedRequestTest
+ */
+class SignedRequestTest extends TestCase
 {
     /**
-     * @var FacebookApp
+     * @var Application
      */
-    protected $app;
+    protected Application $app;
 
-    protected $rawSignature = 'U0_O1MqqNKUt32633zAkdd2Ce-jGVgRgJeRauyx_zC8=';
-    protected $rawPayload = 'eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjozMjEsImNvZGUiOiJmb29fY29kZSIsInN0YXRlIjoiZm9vX3N0YXRlIiwidXNlcl9pZCI6MTIzLCJmb28iOiJiYXIifQ==';
+    protected string $rawSignature = 'U0_O1MqqNKUt32633zAkdd2Ce-jGVgRgJeRauyx_zC8=';
+    protected string $rawPayload = 'eyJvYXV0aF90b2tlbiI6ImZvb190b2tlbiIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjozMjEsImNvZGUiOiJmb29fY29kZSIsInN0YXRlIjoiZm9vX3N0YXRlIiwidXNlcl9pZCI6MTIzLCJmb28iOiJiYXIifQ==';
 
-    protected $payloadData = [
+    protected array $payloadData = [
         'oauth_token' => 'foo_token',
         'algorithm' => 'HMAC-SHA256',
         'issued_at' => 321,
@@ -46,12 +53,12 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
         'foo' => 'bar',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->app = new FacebookApp('123', 'foo_app_secret');
+        $this->app = new Application('123', 'foo_app_secret');
     }
 
-    public function testAValidSignedRequestCanBeCreated()
+    public function testAValidSignedRequestCanBeCreated(): void
     {
         $sr = new SignedRequest($this->app);
         $rawSignedRequest = $sr->make($this->payloadData);
@@ -60,55 +67,47 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
         $payload = $srTwo->getPayload();
 
         $expectedRawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
-        $this->assertEquals($expectedRawSignedRequest, $rawSignedRequest);
-        $this->assertEquals($this->payloadData, $payload);
+        static::assertEquals($expectedRawSignedRequest, $rawSignedRequest);
+        static::assertEquals($this->payloadData, $payload);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
-    public function testInvalidSignedRequestsWillFailFormattingValidation()
+    public function testInvalidSignedRequestsWillFailFormattingValidation(): void
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         new SignedRequest($this->app, 'invalid_signed_request');
     }
 
-    public function testBase64EncodingIsUrlSafe()
+    public function testBase64EncodingIsUrlSafe(): void
     {
         $sr = new SignedRequest($this->app);
         $encodedData = $sr->base64UrlEncode('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~');
 
-        $this->assertEquals('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4_Lnx-', $encodedData);
+        static::assertEquals('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4_Lnx-', $encodedData);
     }
 
-    public function testAUrlSafeBase64EncodedStringCanBeDecoded()
+    public function testAUrlSafeBase64EncodedStringCanBeDecoded(): void
     {
         $sr = new SignedRequest($this->app);
         $decodedData = $sr->base64UrlDecode('YWlqa29wcnN0QURJSktMT1BRVFVWWDEyNTYhKV0tOjsiPD4/Lnx+');
 
-        $this->assertEquals('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~', $decodedData);
+        static::assertEquals('aijkoprstADIJKLOPQTUVX1256!)]-:;"<>?.|~', $decodedData);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
-    public function testAnImproperlyEncodedSignatureWillThrowAnException()
+    public function testAnImproperlyEncodedSignatureWillThrowAnException(): void
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         new SignedRequest($this->app, 'foo_sig.' . $this->rawPayload);
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testAnImproperlyEncodedPayloadWillThrowAnException()
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         new SignedRequest($this->app, $this->rawSignature . '.foo_payload');
     }
 
-    /**
-     * @expectedException \Facebook\Exceptions\FacebookSDKException
-     */
     public function testNonApprovedAlgorithmsWillThrowAnException()
     {
+        $this->expectException(\Facebook\Exceptions\FacebookSDKException::class);
         $signedRequestData = $this->payloadData;
         $signedRequestData['algorithm'] = 'FOO-ALGORITHM';
 
@@ -118,22 +117,22 @@ class SignedRequestTest extends \PHPUnit_Framework_TestCase
         new SignedRequest($this->app, $rawSignedRequest);
     }
 
-    public function testAsRawSignedRequestCanBeValidatedAndDecoded()
+    public function testAsRawSignedRequestCanBeValidatedAndDecoded(): void
     {
         $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
         $sr = new SignedRequest($this->app, $rawSignedRequest);
 
-        $this->assertEquals($this->payloadData, $sr->getPayload());
+        static::assertEquals($this->payloadData, $sr->getPayload());
     }
 
-    public function testARawSignedRequestCanBeValidatedAndDecoded()
+    public function testARawSignedRequestCanBeValidatedAndDecoded(): void
     {
         $rawSignedRequest = $this->rawSignature . '.' . $this->rawPayload;
         $sr = new SignedRequest($this->app, $rawSignedRequest);
 
-        $this->assertEquals($sr->getPayload(), $this->payloadData);
-        $this->assertEquals($sr->getRawSignedRequest(), $rawSignedRequest);
-        $this->assertEquals(123, $sr->getUserId());
-        $this->assertTrue($sr->hasOAuthData());
+        static::assertEquals($sr->getPayload(), $this->payloadData);
+        static::assertEquals($sr->getRawSignedRequest(), $rawSignedRequest);
+        static::assertEquals(123, $sr->getUserId());
+        static::assertTrue($sr->hasOAuthData());
     }
 }

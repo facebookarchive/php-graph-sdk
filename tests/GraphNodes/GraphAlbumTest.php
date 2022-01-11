@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,22 +23,33 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
+use Facebook\GraphNodes\GraphNode;
+use Facebook\GraphNodes\GraphPage;
+use Facebook\GraphNodes\GraphUser;
+use Facebook\Response;
 use Facebook\GraphNodes\GraphNodeFactory;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
-class GraphAlbumTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GraphAlbumTest
+ */
+class GraphAlbumTest extends TestCase
 {
+    use ProphecyTrait;
 
     /**
-     * @var \Facebook\FacebookResponse
+     * @var \Prophecy\Prophecy\ObjectProphecy|\Facebook\Response
      */
-    protected $responseMock;
+    protected \Prophecy\Prophecy\ObjectProphecy|Response $responseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->responseMock = m::mock('\\Facebook\\FacebookResponse');
+        parent::setUp();
+        $this->responseMock = $this->prophesize(Response::class);
     }
 
     public function testDatesGetCastToDateTime()
@@ -48,18 +61,15 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             'name' => 'Bar',
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $createdTime = $graphNode->getCreatedTime();
         $updatedTime = $graphNode->getUpdatedTime();
 
-        $this->assertInstanceOf('DateTime', $createdTime);
-        $this->assertInstanceOf('DateTime', $updatedTime);
+        static::assertInstanceOf('DateTime', $createdTime);
+        static::assertInstanceOf('DateTime', $updatedTime);
     }
 
     public function testFromGetsCastAsGraphUser()
@@ -72,16 +82,13 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $from = $graphNode->getFrom();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphUser', $from);
+        static::assertInstanceOf(GraphNode::class, $from);
     }
 
     public function testPlacePropertyWillGetCastAsGraphPageObject()
@@ -95,15 +102,12 @@ class GraphAlbumTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphNode = $factory->makeGraphAlbum();
 
         $place = $graphNode->getPlace();
 
-        $this->assertInstanceOf('\\Facebook\\GraphNodes\\GraphPage', $place);
+        static::assertInstanceOf(GraphNode::class, $place);
     }
 }

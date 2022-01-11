@@ -9,9 +9,9 @@ The `FacebookFile` entity represents a local or remote file to be uploaded with 
 There are two ways to instantiate a `FacebookFile` entity. One way is to instantiate it directly:
 
 ```php
-use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\File;
 
-$myFileToUpload = new FacebookFile('/path/to/file.jpg');
+$myFileToUpload = new File('/path/to/file.jpg');
 ```
 
 Alternatively, you can use the `fileToUpload()` factory on the `Facebook\Facebook` super service to instantiate a new `FacebookFile` entity.

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,13 +23,17 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\Fixtures;
 
 use Facebook\GraphNodes\GraphNode;
 
+/**
+ * Class MyFooGraphNode
+ */
 class MyFooGraphNode extends GraphNode
 {
-    protected static $graphObjectMap = [
-        'foo_object' => '\Facebook\Tests\Fixtures\MyFooSubClassGraphNode',
+    protected static array $graphNodeMap = [
+        'foo_object' => MyFooSubClassGraphNode::class,
     ];
 }

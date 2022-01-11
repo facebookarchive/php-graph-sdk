@@ -33,7 +33,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * @var array The parameters to send with this request.
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * Creates a new GraphUrlEncodedBody entity.
@@ -48,8 +48,8 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): string
     {
-        return http_build_query($this->params, null, '&');
+        return http_build_query($this->params);
     }
 }

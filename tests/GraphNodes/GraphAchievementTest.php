@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,6 +25,12 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
+use Facebook\GraphNodes\GraphApplication;
+use Facebook\GraphNodes\GraphNode;
+
+/**
+ * Class GraphAchievementTest
+ */
 class GraphAchievementTest extends AbstractGraphNode
 {
 
@@ -37,7 +45,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $id = $graphNode->getId();
 
-        $this->assertEquals($dataFromGraph['id'], $id);
+        static::assertEquals($dataFromGraph['id'], $id);
     }
 
     public function testTypeIsAlwaysString()
@@ -51,7 +59,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $type = $graphNode->getType();
 
-        $this->assertEquals('game.achievement', $type);
+        static::assertEquals('game.achievement', $type);
     }
 
     public function testNoFeedStoryIsBoolean()
@@ -65,7 +73,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $isNoFeedStory = $graphNode->isNoFeedStory();
 
-        $this->assertTrue(is_bool($isNoFeedStory));
+        static::assertTrue(is_bool($isNoFeedStory));
     }
 
     public function testDatesGetCastToDateTime()
@@ -79,7 +87,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $publishTime = $graphNode->getPublishTime();
 
-        $this->assertInstanceOf('DateTime', $publishTime);
+        static::assertInstanceOf('DateTime', $publishTime);
     }
 
     public function testFromGetsCastAsGraphUser()
@@ -96,7 +104,7 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $from = $graphNode->getFrom();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphUser', $from);
+        static::assertInstanceOf(GraphNode::class, $from);
     }
 
     public function testApplicationGetsCastAsGraphApplication()
@@ -112,6 +120,6 @@ class GraphAchievementTest extends AbstractGraphNode
 
         $app = $graphNode->getApplication();
 
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphApplication', $app);
+        static::assertInstanceOf(GraphNode::class, $app);
     }
 }

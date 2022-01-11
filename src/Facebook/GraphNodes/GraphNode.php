@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,19 +23,27 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\GraphNodes;
+
+use DateTimeInterface;
 
 /**
  * Class GraphNode
  *
  * @package Facebook
  */
-class GraphNode extends Collection
+class GraphNode implements \Stringable
 {
     /**
      * @var array Maps object key names to Graph object types.
      */
-    protected static $graphObjectMap = [];
+    protected static array $graphNodeMap = [];
+
+    /**
+     * The fields contained in the node.
+     */
+    private array $fields;
 
     /**
      * Init this Graph object.
@@ -42,68 +52,119 @@ class GraphNode extends Collection
      */
     public function __construct(array $data = [])
     {
-        parent::__construct($this->castItems($data));
+        $this->fields = $this->castFields($data);
+    }
+
+    /**
+     * Gets the value of a field from the Graph node.
+     *
+     * @param string $name    the field to retrieve
+     * @param mixed  $default the default to return if the field doesn't exist
+     */
+    public function getField(string $name, mixed $default = null): mixed
+    {
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name];
+        }
+
+        return $default;
+    }
+
+
+    /**
+     * Returns a list of all fields set on the object.
+     * @return array
+     */
+    public function getFieldNames(): array
+    {
+        return array_keys($this->fields);
+    }
+
+
+    /**
+     * Get all the fields in the node.
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function asArray(): array
+    {
+        return array_map(function ($value) {
+            if ($value instanceof self || $value instanceof GraphEdge) {
+                return $value->asArray();
+            }
+
+            return $value;
+        }, $this->fields);
+    }
+
+
+    /**
+     * Convert the collection to its string representation.
+     */
+    public function __toString(): string
+    {
+        return json_encode($this->uncastFields());
+    }
+
+
+    /**
+     * @return array
+     */
+    public static function getNodeMap(): array
+    {
+        return static::$graphNodeMap;
     }
 
     /**
      * Iterates over an array and detects the types each node
-     * should be cast to and returns all the items as an array.
-     *
+     * should be cast to and returns all the fields as an array.
      * @TODO Add auto-casting to AccessToken entities.
      *
-     * @param array $data The array to iterate over.
+     * @param array $data
      *
      * @return array
      */
-    public function castItems(array $data)
+    private function castFields(array $data): array
     {
-        $items = [];
+        $fields = [];
 
         foreach ($data as $k => $v) {
-            if ($this->shouldCastAsDateTime($k)
-                && (is_numeric($v)
-                    || $this->isIso8601DateString($v))
-            ) {
-                $items[$k] = $this->castToDateTime($v);
+            if ($this->shouldCastAsDateTime($k) && (is_numeric($v) || $this->isIso8601DateString($v))) {
+                $fields[$k] = $this->castToDateTime($v);
             } elseif ($k === 'birthday') {
-                $items[$k] = $this->castToBirthday($v);
+                $fields[$k] = $this->castToBirthday($v);
             } else {
-                $items[$k] = $v;
+                $fields[$k] = $v;
             }
         }
 
-        return $items;
+        return $fields;
     }
 
     /**
      * Uncasts any auto-casted datatypes.
-     * Basically the reverse of castItems().
-     *
+     * Basically the reverse of castFields().
      * @return array
      */
-    public function uncastItems()
+    private function uncastFields(): array
     {
-        $items = $this->asArray();
+        $fields = $this->asArray();
 
         return array_map(function ($v) {
             if ($v instanceof \DateTime) {
-                return $v->format(\DateTime::ISO8601);
+                return $v->format(DateTimeInterface::ISO8601);
             }
 
             return $v;
-        }, $items);
-    }
-
-    /**
-     * Get the collection of items as JSON.
-     *
-     * @param int $options
-     *
-     * @return string
-     */
-    public function asJson($options = 0)
-    {
-        return json_encode($this->uncastItems(), $options);
+        }, $fields);
     }
 
     /**
@@ -117,7 +178,7 @@ class GraphNode extends Collection
      * @see http://www.cl.cam.ac.uk/~mgk25/iso-time.html
      * @see http://en.wikipedia.org/wiki/ISO_8601
      */
-    public function isIso8601DateString($string)
+    public function isIso8601DateString(string $string): bool
     {
         // This insane regex was yoinked from here:
         // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -136,22 +197,22 @@ class GraphNode extends Collection
     /**
      * Determines if a value from Graph should be cast to DateTime.
      *
-     * @param string $key
+     * @param mixed $key
      *
      * @return boolean
      */
-    public function shouldCastAsDateTime($key)
+    public function shouldCastAsDateTime(mixed $key): bool
     {
         return in_array($key, [
             'created_time',
             'updated_time',
             'start_time',
+            'stop_time',
             'end_time',
             'backdated_time',
             'issued_at',
             'expires_at',
             'publish_time',
-            'joined'
         ], true);
     }
 
@@ -162,7 +223,7 @@ class GraphNode extends Collection
      *
      * @return \DateTime
      */
-    public function castToDateTime($value)
+    public function castToDateTime(int|string $value): \DateTime
     {
         if (is_int($value)) {
             $dt = new \DateTime();
@@ -181,18 +242,8 @@ class GraphNode extends Collection
      *
      * @return Birthday
      */
-    public function castToBirthday($value)
+    public function castToBirthday(string $value): Birthday
     {
         return new Birthday($value);
-    }
-
-    /**
-     * Getter for $graphObjectMap.
-     *
-     * @return array
-     */
-    public static function getObjectMap()
-    {
-        return static::$graphObjectMap;
     }
 }

@@ -23,7 +23,7 @@
  */
 namespace Facebook\Exceptions;
 
-use Facebook\FacebookResponse;
+use Facebook\Response;
 
 /**
  * Class FacebookResponseException
@@ -33,7 +33,7 @@ use Facebook\FacebookResponse;
 class FacebookResponseException extends FacebookSDKException
 {
     /**
-     * @var FacebookResponse The response that threw the exception.
+     * @var Response The response that threw the exception.
      */
     protected $response;
 
@@ -45,10 +45,10 @@ class FacebookResponseException extends FacebookSDKException
     /**
      * Creates a FacebookResponseException.
      *
-     * @param FacebookResponse     $response          The response that threw the exception.
+     * @param Response             $response          The response that threw the exception.
      * @param FacebookSDKException $previousException The more detailed exception.
      */
-    public function __construct(FacebookResponse $response, FacebookSDKException $previousException = null)
+    public function __construct(Response $response, FacebookSDKException $previousException = null)
     {
         $this->response = $response;
         $this->responseData = $response->getDecodedBody();
@@ -62,11 +62,11 @@ class FacebookResponseException extends FacebookSDKException
     /**
      * A factory for creating the appropriate exception based on the response from Graph.
      *
-     * @param FacebookResponse $response The response that threw the exception.
+     * @param Response $response The response that threw the exception.
      *
      * @return FacebookResponseException
      */
-    public static function create(FacebookResponse $response)
+    public static function create(Response $response)
     {
         $data = $response->getDecodedBody();
 
@@ -216,7 +216,7 @@ class FacebookResponseException extends FacebookSDKException
     /**
      * Returns the response entity used to create the exception.
      *
-     * @return FacebookResponse
+     * @return Response
      */
     public function getResponse()
     {

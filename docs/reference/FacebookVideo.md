@@ -9,9 +9,9 @@ The `FacebookVideo` entity represents a local or remote video file to be uploade
 There are two ways to instantiate a `FacebookVideo` entity. One way is to instantiate it directly:
 
 ```php
-use Facebook\FileUpload\FacebookVideo;
+use Facebook\FileUpload\Video;
 
-$myVideoFileToUpload = new FacebookVideo('/path/to/video-file.mp4');
+$myVideoFileToUpload = new Video('/path/to/video-file.mp4');
 ```
 
 Alternatively, you can use the `videoToUpload()` factory on the `Facebook\Facebook` super service to instantiate a new `FacebookVideo` entity.
