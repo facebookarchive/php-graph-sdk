@@ -24,10 +24,14 @@
 namespace Facebook\Tests\Authentication;
 
 use Facebook\Facebook;
-use Facebook\FacebookApp;
+use Facebook\Application;
 use Facebook\Authentication\OAuth2Client;
+use PHPUnit\Framework\TestCase;
 
-class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
+/**
+ *
+ */
+class OAuth2ClientTest extends TestCase
 {
 
     /**
@@ -36,19 +40,19 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
     const TESTING_GRAPH_VERSION = 'v1337';
 
     /**
-     * @var FooFacebookClientForOAuth2Test
+     * @var FooClientForOAuth2Test
      */
-    protected $client;
+    protected FooClientForOAuth2Test $client;
 
     /**
      * @var OAuth2Client
      */
-    protected $oauth;
+    protected OAuth2Client $oauth;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $app = new FacebookApp('123', 'foo_secret');
-        $this->client = new FooFacebookClientForOAuth2Test();
+        $app = new Application('123', 'foo_secret');
+        $this->client = new FooClientForOAuth2Test();
         $this->oauth = new OAuth2Client($app, $this->client, static::TESTING_GRAPH_VERSION);
     }
 
@@ -58,8 +62,8 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $metadata = $this->oauth->debugToken('baz_token');
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessTokenMetadata', $metadata);
-        $this->assertEquals('444', $metadata->getUserId());
+        static::assertInstanceOf('Facebook\Authentication\AccessTokenMetadata', $metadata);
+        static::assertEquals('444', $metadata->getUserId());
 
         $expectedParams = [
             'input_token' => 'baz_token',
@@ -68,10 +72,10 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         ];
 
         $request = $this->oauth->getLastRequest();
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/debug_token', $request->getEndpoint());
-        $this->assertEquals($expectedParams, $request->getParams());
-        $this->assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
+        static::assertEquals('GET', $request->getMethod());
+        static::assertEquals('/debug_token', $request->getEndpoint());
+        static::assertEquals($expectedParams, $request->getParams());
+        static::assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
     }
 
     public function testCanBuildAuthorizationUrl()
@@ -79,10 +83,10 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         $scope = ['email', 'base_foo'];
         $authUrl = $this->oauth->getAuthorizationUrl('https://foo.bar', 'foo_state', $scope, ['foo' => 'bar'], '*');
 
-        $this->assertContains('*', $authUrl);
+        static::assertStringContainsString('*', $authUrl);
 
         $expectedUrl = 'https://www.facebook.com/' . static::TESTING_GRAPH_VERSION . '/dialog/oauth?';
-        $this->assertTrue(strpos($authUrl, $expectedUrl) === 0, 'Unexpected base authorization URL returned from getAuthorizationUrl().');
+        static::assertTrue(str_starts_with($authUrl, $expectedUrl), 'Unexpected base authorization URL returned from getAuthorizationUrl().');
 
         $params = [
             'client_id' => '123',
@@ -93,7 +97,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
             'foo' => 'bar',
         ];
         foreach ($params as $key => $value) {
-            $this->assertContains($key . '=' . urlencode($value), $authUrl);
+            static::assertStringContainsString($key . '=' . urlencode($value), $authUrl);
         }
     }
 
@@ -103,8 +107,8 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = $this->oauth->getAccessTokenFromCode('bar_code', 'foo_uri');
 
-        $this->assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
-        $this->assertEquals('my_access_token', $accessToken->getValue());
+        static::assertInstanceOf('Facebook\Authentication\AccessToken', $accessToken);
+        static::assertEquals('my_access_token', $accessToken->getValue());
 
         $expectedParams = [
             'code' => 'bar_code',
@@ -116,10 +120,10 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         ];
 
         $request = $this->oauth->getLastRequest();
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/oauth/access_token', $request->getEndpoint());
-        $this->assertEquals($expectedParams, $request->getParams());
-        $this->assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
+        static::assertEquals('GET', $request->getMethod());
+        static::assertEquals('/oauth/access_token', $request->getEndpoint());
+        static::assertEquals($expectedParams, $request->getParams());
+        static::assertEquals(static::TESTING_GRAPH_VERSION, $request->getGraphVersion());
     }
 
     public function testCanGetLongLivedAccessToken()
@@ -128,7 +132,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = $this->oauth->getLongLivedAccessToken('short_token');
 
-        $this->assertEquals('my_access_token', $accessToken->getValue());
+        static::assertEquals('my_access_token', $accessToken->getValue());
 
         $expectedParams = [
             'grant_type' => 'fb_exchange_token',
@@ -140,7 +144,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         ];
 
         $request = $this->oauth->getLastRequest();
-        $this->assertEquals($expectedParams, $request->getParams());
+        static::assertEquals($expectedParams, $request->getParams());
     }
 
     public function testCanGetCodeFromLongLivedAccessToken()
@@ -149,7 +153,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
 
         $code = $this->oauth->getCodeFromLongLivedAccessToken('long_token', 'foo_uri');
 
-        $this->assertEquals('my_neat_code', $code);
+        static::assertEquals('my_neat_code', $code);
 
         $expectedParams = [
             'access_token' => 'long_token',
@@ -160,7 +164,7 @@ class OAuth2ClientTest extends \PHPUnit_Framework_TestCase
         ];
 
         $request = $this->oauth->getLastRequest();
-        $this->assertEquals($expectedParams, $request->getParams());
-        $this->assertEquals('/oauth/client_code', $request->getEndpoint());
+        static::assertEquals($expectedParams, $request->getParams());
+        static::assertEquals('/oauth/client_code', $request->getEndpoint());
     }
 }

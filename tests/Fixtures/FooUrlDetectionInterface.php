@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,13 +23,17 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\Fixtures;
 
 use Facebook\Url\UrlDetectionInterface;
 
+/**
+ * Class FooUrlDetectionInterface
+ */
 class FooUrlDetectionInterface implements UrlDetectionInterface
 {
-    public function getCurrentUrl()
+    public function getCurrentUrl(): string
     {
         return 'https://foo.bar';
     }

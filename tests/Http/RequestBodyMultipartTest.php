@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -24,11 +26,15 @@
 namespace Facebook\Tests\Http;
 
 use Facebook\Http\RequestBodyMultipart;
-use Facebook\FileUpload\FacebookFile;
+use Facebook\FileUpload\File;
+use PHPUnit\Framework\TestCase;
 
-class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class RequestBodyMultipartTest
+ */
+class RequestBodyMultipartTest extends TestCase
 {
-    public function testCanProperlyEncodeAnArrayOfParams()
+    public function testCanProperlyEncodeAnArrayOfParams(): void
     {
         $message = new RequestBodyMultipart([
             'foo' => 'bar',
@@ -42,12 +48,12 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
         $expectedBody .= "Content-Disposition: form-data; name=\"scawy_vawues\"\r\n\r\n@FooBar is a real twitter handle.\r\n";
         $expectedBody .= "--foo_boundary--\r\n";
 
-        $this->assertEquals($expectedBody, $body);
+        static::assertEquals($expectedBody, $body);
     }
 
-    public function testCanProperlyEncodeFilesAndParams()
+    public function testCanProperlyEncodeFilesAndParams(): void
     {
-        $file = new FacebookFile(__DIR__ . '/../foo.txt');
+        $file = new File(__DIR__ . '/../foo.txt');
         $message = new RequestBodyMultipart([
             'foo' => 'bar',
         ], [
@@ -62,10 +68,10 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
         $expectedBody .= "Content-Type: text/plain\r\n\r\nThis is a text file used for testing. Let's dance.\r\n";
         $expectedBody .= "--foo_boundary--\r\n";
 
-        $this->assertEquals($expectedBody, $body);
+        static::assertEquals($expectedBody, $body);
     }
 
-    public function testSupportsMultidimensionalParams()
+    public function testSupportsMultidimensionalParams(): void
     {
         $message = new RequestBodyMultipart([
           'foo' => 'bar',
@@ -77,9 +83,9 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
           'call_to_action' => [
             'type' => 'LEARN_MORE',
             'value' => [
-              'link' => 'http://example.com',
+              'link' => 'https://example.com',
               'sponsorship' => [
-                'image' => 'http://example.com/bar.jpg',
+                'image' => 'https://example.com/bar.jpg',
               ],
             ],
           ],
@@ -101,11 +107,11 @@ class RequestBodyMultipartTest extends \PHPUnit_Framework_TestCase
         $expectedBody .= "--foo_boundary\r\n";
         $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[type]\"\r\n\r\nLEARN_MORE\r\n";
         $expectedBody .= "--foo_boundary\r\n";
-        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][link]\"\r\n\r\nhttp://example.com\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][link]\"\r\n\r\nhttps://example.com\r\n";
         $expectedBody .= "--foo_boundary\r\n";
-        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][sponsorship][image]\"\r\n\r\nhttp://example.com/bar.jpg\r\n";
+        $expectedBody .= "Content-Disposition: form-data; name=\"call_to_action[value][sponsorship][image]\"\r\n\r\nhttps://example.com/bar.jpg\r\n";
         $expectedBody .= "--foo_boundary--\r\n";
 
-        $this->assertEquals($expectedBody, $body);
+        static::assertEquals($expectedBody, $body);
     }
 }

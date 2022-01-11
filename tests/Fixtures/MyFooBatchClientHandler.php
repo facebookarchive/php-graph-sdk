@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,18 +23,25 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\Fixtures;
 
-use Facebook\Http\GraphRawResponse;
-use Facebook\HttpClients\FacebookHttpClientInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class MyFooBatchClientHandler implements FacebookHttpClientInterface
+/**
+ * Class MyFooBatchClientHandler
+ */
+class MyFooBatchClientHandler extends Client
 {
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
-        return new GraphRawResponse(
-            "HTTP/1.1 200 OK\r\nDate: Mon, 19 May 2014 18:37:17 GMT",
-            '[{"code":"123","body":"Foo"},{"code":"1337","body":"Bar"}]'
+        return new Response(
+            200,
+            ['Date' => 'Mon, 19 May 2014 18:37:17 GMT'],
+            '[{"code":"123","body":"Foo"},{"code":"1337","body":"Bar"}]',
         );
     }
 }

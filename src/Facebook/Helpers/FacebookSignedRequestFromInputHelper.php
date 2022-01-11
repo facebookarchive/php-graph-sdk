@@ -24,8 +24,8 @@
 namespace Facebook\Helpers;
 
 use Facebook\Facebook;
-use Facebook\FacebookApp;
-use Facebook\FacebookClient;
+use Facebook\Application;
+use Facebook\Client;
 use Facebook\SignedRequest;
 use Facebook\Authentication\AccessToken;
 use Facebook\Authentication\OAuth2Client;
@@ -43,7 +43,7 @@ abstract class FacebookSignedRequestFromInputHelper
     protected $signedRequest;
 
     /**
-     * @var FacebookApp The FacebookApp entity.
+     * @var Application The FacebookApp entity.
      */
     protected $app;
 
@@ -55,11 +55,11 @@ abstract class FacebookSignedRequestFromInputHelper
     /**
      * Initialize the helper and process available signed request data.
      *
-     * @param FacebookApp    $app          The FacebookApp entity.
-     * @param FacebookClient $client       The client to make HTTP requests.
-     * @param string|null    $graphVersion The version of Graph to use.
+     * @param Application $app          The FacebookApp entity.
+     * @param Client      $client       The client to make HTTP requests.
+     * @param string|null $graphVersion The version of Graph to use.
      */
-    public function __construct(FacebookApp $app, FacebookClient $client, $graphVersion = null)
+    public function __construct(Application $app, Client $client, $graphVersion = null)
     {
         $this->app = $app;
         $graphVersion = $graphVersion ?: Facebook::DEFAULT_GRAPH_VERSION;

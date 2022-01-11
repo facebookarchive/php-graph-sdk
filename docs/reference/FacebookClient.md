@@ -16,7 +16,7 @@ $fbClient = $fb->getClient();
 Alternatively you could instantiate a new `Facebook\FacebookClient` service directly.
 
 ```php
-$fbClient = new Facebook\FacebookClient($httpClientHandler, $enableBeta = false);
+$fbClient = new Facebook\Client($httpClientHandler, $enableBeta = false);
 ```
 
 The Graph API has a number of different base URL's based on what request you want to send. For example, if you wanted to send requests to the beta version of Graph, you'd need to send requests to [https://graph.beta.facebook.com](https://graph.beta.facebook.com) instead [https://graph.facebook.com](https://graph.facebook.com). And if you wanted to upload a video, that request would need to be sent to [https://graph-video.facebook.com](https://graph-video.facebook.com).

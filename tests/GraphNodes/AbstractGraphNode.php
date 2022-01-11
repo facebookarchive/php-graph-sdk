@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,31 +23,40 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\GraphNodes;
 
-use Mockery as m;
 use Facebook\GraphNodes\GraphNodeFactory;
+use Facebook\Response;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
-abstract class AbstractGraphNode extends \PHPUnit_Framework_TestCase
+/**
+ * Class AbstractGraphNode
+ */
+abstract class AbstractGraphNode extends TestCase
 {
-    /**
-     * @var \Facebook\FacebookResponse|\Mockery\MockInterface
-     */
-    protected $responseMock;
+    use ProphecyTrait;
 
-    protected function setUp()
+    /** @var ObjectProphecy|Response */
+    protected ObjectProphecy|Response $responseMock;
+
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->responseMock = m::mock('\Facebook\FacebookResponse');
+        $this->responseMock = $this->prophesize(Response::class);
     }
 
-    protected function makeFactoryWithData($data)
+    /**
+     * @param $data
+     *
+     * @return \Facebook\GraphNodes\GraphNodeFactory
+     */
+    protected function makeFactoryWithData($data): GraphNodeFactory
     {
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($data);
+        $this->responseMock->getDecodedBody()->willReturn($data);
 
-        return new GraphNodeFactory($this->responseMock);
+        return new GraphNodeFactory($this->responseMock->reveal());
     }
 }

@@ -23,7 +23,7 @@
  */
 namespace Facebook\GraphNodes;
 
-use Facebook\FacebookRequest;
+use Facebook\Request;
 use Facebook\Url\FacebookUrlManipulator;
 use Facebook\Exceptions\FacebookSDKException;
 
@@ -35,7 +35,7 @@ use Facebook\Exceptions\FacebookSDKException;
 class GraphEdge extends Collection
 {
     /**
-     * @var FacebookRequest The original request that generated this data.
+     * @var Request The original request that generated this data.
      */
     protected $request;
 
@@ -57,13 +57,13 @@ class GraphEdge extends Collection
     /**
      * Init this collection of GraphNode's.
      *
-     * @param FacebookRequest $request            The original request that generated this data.
-     * @param array           $data               An array of GraphNode's.
-     * @param array           $metaData           An array of Graph meta data like pagination, etc.
-     * @param string|null     $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
-     * @param string|null     $subclassName       The subclass of the child GraphNode's.
+     * @param Request     $request            The original request that generated this data.
+     * @param array       $data               An array of GraphNode's.
+     * @param array       $metaData           An array of Graph meta data like pagination, etc.
+     * @param string|null $parentEdgeEndpoint The parent Graph edge endpoint that generated the list.
+     * @param string|null $subclassName       The subclass of the child GraphNode's.
      */
-    public function __construct(FacebookRequest $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
+    public function __construct(Request $request, array $data = [], array $metaData = [], $parentEdgeEndpoint = null, $subclassName = null)
     {
         $this->request = $request;
         $this->metaData = $metaData;
@@ -179,7 +179,7 @@ class GraphEdge extends Collection
      *
      * @param string $direction The direction of the page: next|previous
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
      * @throws FacebookSDKException
      */
@@ -199,7 +199,7 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "next" page request.
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
      * @throws FacebookSDKException
      */
@@ -211,7 +211,7 @@ class GraphEdge extends Collection
     /**
      * Gets the request object needed to make a "previous" page request.
      *
-     * @return FacebookRequest|null
+     * @return Request|null
      *
      * @throws FacebookSDKException
      */

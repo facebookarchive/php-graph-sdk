@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,118 +23,199 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\GraphNodes;
 
+use DateTime;
+use DateTimeInterface;
+use Facebook\GraphNodes\Birthday;
 use Facebook\GraphNodes\GraphNode;
+use Iterator;
+use PHPUnit\Framework\TestCase;
 
-class GraphNodeTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GraphNodeTest
+ */
+class GraphNodeTest extends TestCase
 {
     public function testAnEmptyBaseGraphNodeCanInstantiate()
     {
         $graphNode = new GraphNode();
         $backingData = $graphNode->asArray();
 
-        $this->assertEquals([], $backingData);
+        static::assertEquals([], $backingData);
     }
 
-    public function testAGraphNodeCanInstantiateWithData()
+    public function testAGraphNodeCanInstantiateWithData(): void
     {
         $graphNode = new GraphNode(['foo' => 'bar']);
         $backingData = $graphNode->asArray();
 
-        $this->assertEquals(['foo' => 'bar'], $backingData);
+        static::assertEquals(['foo' => 'bar'], $backingData);
     }
 
-    public function testDatesThatShouldBeCastAsDateTimeObjectsAreDetected()
+    /**
+     * @dataProvider provideDateTimeFieldNames
+     */
+    public function testCastDateTimeFieldsToDateTime($fieldName): void
     {
-        $graphNode = new GraphNode();
+        $graphNode = new GraphNode([$fieldName => '1989-11-02']);
 
-        // Should pass
-        $shouldPass = $graphNode->isIso8601DateString('1985-10-26T01:21:00+0000');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.');
-
-        $shouldPass = $graphNode->isIso8601DateString('1999-12-31');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.');
-
-        $shouldPass = $graphNode->isIso8601DateString('2009-05-19T14:39Z');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
-
-        $shouldPass = $graphNode->isIso8601DateString('2014-W36');
-        $this->assertTrue($shouldPass, 'Expected the valid ISO 8601 formatted date to pass.');
-
-        // Should fail
-        $shouldFail = $graphNode->isIso8601DateString('2009-05-19T14a39r');
-        $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
-
-        $shouldFail = $graphNode->isIso8601DateString('foo_time');
-        $this->assertFalse($shouldFail, 'Expected the invalid ISO 8601 format to fail.');
+        static::assertInstanceOf(DateTime::class, $graphNode->getField($fieldName));
     }
 
-    public function testATimeStampCanBeConvertedToADateTimeObject()
+    public static function provideDateTimeFieldNames(): Iterator
     {
-        $someTimeStampFromGraph = 1405547020;
-        $graphNode = new GraphNode();
-        $dateTime = $graphNode->castToDateTime($someTimeStampFromGraph);
-        $prettyDate = $dateTime->format(\DateTime::RFC1036);
-        $timeStamp = $dateTime->getTimestamp();
-
-        $this->assertInstanceOf('DateTime', $dateTime);
-        $this->assertEquals('Wed, 16 Jul 14 23:43:40 +0200', $prettyDate);
-        $this->assertEquals(1405547020, $timeStamp);
+        yield ['created_time'];
+        yield ['updated_time'];
+        yield ['start_time'];
+        yield ['stop_time'];
+        yield ['end_time'];
+        yield ['backdated_time'];
+        yield ['issued_at'];
+        yield ['expires_at'];
+        yield ['publish_time'];
     }
 
-    public function testAGraphDateStringCanBeConvertedToADateTimeObject()
+    /**
+     * @dataProvider provideValidDateTimeFieldValues
+     */
+    public function testCastDateTimeFieldValueToDateTime($value, $message, $prettyDate = null): void
     {
-        $someDateStringFromGraph = '2014-07-15T03:44:53+0000';
-        $graphNode = new GraphNode();
-        $dateTime = $graphNode->castToDateTime($someDateStringFromGraph);
-        $prettyDate = $dateTime->format(\DateTime::RFC1036);
-        $timeStamp = $dateTime->getTimestamp();
+        $graphNode = new GraphNode(['created_time' => $value]);
 
-        $this->assertInstanceOf('DateTime', $dateTime);
-        $this->assertEquals('Tue, 15 Jul 14 03:44:53 +0000', $prettyDate);
-        $this->assertEquals(1405395893, $timeStamp);
+        static::assertInstanceOf(DateTime::class, $graphNode->getField('created_time'), $message);
+
+        if ($prettyDate !== null) {
+            static::assertEquals($prettyDate, $graphNode->getField('created_time')->format(DateTimeInterface::RFC1036));
+        }
     }
 
-    public function testUncastingAGraphNodeWillUncastTheDateTimeObject()
+
+    public static function provideValidDateTimeFieldValues(): Iterator
     {
-        $collectionOne = new GraphNode(['foo', 'bar']);
-        $collectionTwo = new GraphNode([
+        yield ['1985-10-26T01:21:00+0000', 'Expected the valid ISO 8601 formatted date from Back To The Future to pass.'];
+        yield ['2014-07-15T03:44:53+0000', 'Expected the valid ISO 8601 formatted date to pass.', 'Tue, 15 Jul 14 03:44:53 +0000'];
+        yield ['1999-12-31', 'Expected the valid ISO 8601 formatted date to party like it\'s 1999.'];
+        yield ['2009-05-19T14:39Z', 'Expected the valid ISO 8601 formatted date to pass.'];
+        yield ['2014-W36', 'Expected the valid ISO 8601 formatted date to pass.'];
+        yield [1_405_547_020, 'Expected the valid timestamp to pass.', 'Wed, 16 Jul 14 23:43:40 +0200'];
+    }
+
+
+    /**
+     * @dataProvider provideInvalidDateTimeFieldValues
+     */
+    public function testNotCastDateTimeFieldValueToDateTime($value, $message): void
+    {
+        $graphNode = new GraphNode(['created_time' => $value]);
+
+        static::assertNotInstanceOf(DateTime::class, $graphNode->getField('created_time'), $message);
+    }
+
+
+    public static function provideInvalidDateTimeFieldValues(): Iterator
+    {
+        yield ['2009-05-19T14a39r', 'Expected the invalid ISO 8601 format to fail.'];
+        yield ['foo_time', 'Expected the invalid ISO 8601 format to fail.'];
+    }
+
+
+    public function testCastBirthdayFieldValueToBirthday(): void
+    {
+        $graphNode = new GraphNode(['birthday' => '11/02/1989']);
+
+        static::assertInstanceOf(Birthday::class, $graphNode->getField('birthday'));
+    }
+
+
+    public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject(): void
+    {
+        $graphNode = new GraphNode([
             'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
-            'some_collection' => $collectionOne,
+            'created_time' => '2014-07-15T03:44:53+0000',
         ]);
 
-        $uncastArray = $collectionTwo->uncastItems();
+        $graphNodeAsArray = $graphNode->asArray();
 
-        $this->assertEquals([
-            'id' => '123',
-            'date' => '2014-07-15T03:44:53+0000',
-            'some_collection' => ['foo', 'bar'],
-        ], $uncastArray);
+        static::assertInstanceOf(DateTime::class, $graphNodeAsArray['created_time']);
     }
 
-    public function testGettingGraphNodeAsAnArrayWillNotUncastTheDateTimeObject()
+
+    public function testGettingAGraphNodeAsAStringWillSafelyRepresentDateTimes(): void
     {
-        $collection = new GraphNode([
+        $graphNode = new GraphNode([
             'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+            'created_time' => '2014-07-15T03:44:53+0000',
         ]);
 
-        $collectionAsArray = $collection->asArray();
+        $graphNodeAsString = (string) $graphNode;
 
-        $this->assertInstanceOf('DateTime', $collectionAsArray['date']);
+        static::assertEquals('{"id":"123","created_time":"2014-07-15T03:44:53+0000"}', $graphNodeAsString);
     }
 
-    public function testReturningACollectionAsJasonWillSafelyRepresentDateTimes()
+
+    public function testAnExistingFieldCanBeAccessed(): void
     {
-        $collection = new GraphNode([
-            'id' => '123',
-            'date' => new \DateTime('2014-07-15T03:44:53+0000'),
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('foo');
+        static::assertEquals('bar', $field);
+    }
+
+
+    public function testAMissingFieldWillReturnNull(): void
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+        $field = $graphNode->getField('baz');
+
+        static::assertNull($field, 'Expected the property to return null.');
+    }
+
+
+    public function testAMissingFieldWillReturnTheDefault(): void
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('baz', 'faz');
+        static::assertEquals('faz', $field);
+    }
+
+
+    public function testFalseDefaultsWillReturnSameType(): void
+    {
+        $graphNode = new GraphNode(['foo' => 'bar']);
+
+        $field = $graphNode->getField('baz', '');
+        static::assertSame('', $field);
+
+        $field = $graphNode->getField('baz', 0);
+        static::assertSame(0, $field);
+
+        $field = $graphNode->getField('baz', false);
+        static::assertFalse($field);
+    }
+
+
+    public function testTheFieldsFromTheGraphNodeCanBeReturned(): void
+    {
+        $graphNode = new GraphNode([
+            'field1' => 'foo',
+            'field2' => 'bar',
+            'field3' => 'baz',
         ]);
 
-        $collectionAsString = $collection->asJson();
+        $fieldNames = $graphNode->getFieldNames();
+        static::assertEquals(['field1', 'field2', 'field3'], $fieldNames);
+    }
 
-        $this->assertEquals('{"id":"123","date":"2014-07-15T03:44:53+0000"}', $collectionAsString);
+
+    public function testAGraphNodeCanBeConvertedToAString(): void
+    {
+        $graphNode = new GraphNode(['foo', 'bar', 123]);
+
+        $graphNodeAsString = (string) $graphNode;
+
+        static::assertEquals('["foo","bar",123]', $graphNodeAsString);
     }
 }

@@ -9,7 +9,7 @@ The `Facebook\SignedRequest` entity represents a signed request.
 To instantiate a new `Facebook\SignedRequest` entity, pass the [`Facebook\FacebookApp`](FacebookApp.md) entity and raw signed request to the constructor.
 
 ```php
-$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
+$fbApp = new Facebook\Application('{app-id}', '{app-secret}');
 $signedRequest = new Facebook\SignedRequest($fbApp, 'raw.signed_request');
 ```
 
@@ -70,7 +70,7 @@ public string make(array $payload)
 Generates a valid raw signed request as a string that contains the data from the `$payload` array. The signature is signed using the app secret from the `Facebook\FacebookApp` entity. This can be useful for testing purposes.
 
 ```php
-$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
+$fbApp = new Facebook\Application('{app-id}', '{app-secret}');
 $signedRequest = new Facebook\SignedRequest($fbApp);
 
 $payload = [

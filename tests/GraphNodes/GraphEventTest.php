@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -23,87 +25,82 @@
  */
 namespace Facebook\Tests\GraphNodes;
 
-use Facebook\FacebookResponse;
-use Mockery as m;
+use Facebook\GraphNodes\GraphNode;
+use Facebook\Response;
 use Facebook\GraphNodes\GraphNodeFactory;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 
-class GraphEventTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GraphEventTest
+ */
+class GraphEventTest extends TestCase
 {
-    /**
-     * @var FacebookResponse
-     */
-    protected $responseMock;
+    use ProphecyTrait;
 
-    protected function setUp()
+    /** @var ObjectProphecy|Response */
+    protected ObjectProphecy|Response $responseMock;
+
+    protected function setUp(): void
     {
-        $this->responseMock = m::mock('\Facebook\FacebookResponse');
+        parent::setUp();
+        $this->responseMock = $this->prophesize(Response::class);
     }
 
-    public function testCoverGetsCastAsGraphCoverPhoto()
+    public function testCoverGetsCastAsGraphCoverPhoto(): void
     {
         $dataFromGraph = [
             'cover' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $cover = $graphObject->getCover();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphCoverPhoto', $cover);
+        static::assertInstanceOf(GraphNode::class, $cover);
     }
 
-    public function testPlaceGetsCastAsGraphPage()
+    public function testPlaceGetsCastAsGraphPage(): void
     {
         $dataFromGraph = [
             'place' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $place = $graphObject->getPlace();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphPage', $place);
+        static::assertInstanceOf(GraphNode::class, $place);
     }
 
-    public function testPictureGetsCastAsGraphPicture()
+    public function testPictureGetsCastAsGraphPicture(): void
     {
         $dataFromGraph = [
             'picture' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $picture = $graphObject->getPicture();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphPicture', $picture);
+        static::assertInstanceOf(GraphNode::class, $picture);
     }
 
-    public function testParentGroupGetsCastAsGraphGroup()
+    public function testParentGroupGetsCastAsGraphGroup(): void
     {
         $dataFromGraph = [
             'parent_group' => ['id' => '1337']
         ];
 
-        $this->responseMock
-            ->shouldReceive('getDecodedBody')
-            ->once()
-            ->andReturn($dataFromGraph);
-        $factory = new GraphNodeFactory($this->responseMock);
+        $this->responseMock->getDecodedBody()->willReturn($dataFromGraph);
+        $factory = new GraphNodeFactory($this->responseMock->reveal());
         $graphObject = $factory->makeGraphEvent();
 
         $parentGroup = $graphObject->getParentGroup();
-        $this->assertInstanceOf('\Facebook\GraphNodes\GraphGroup', $parentGroup);
+        static::assertInstanceOf(GraphNode::class, $parentGroup);
     }
 }

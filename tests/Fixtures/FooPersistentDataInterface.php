@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Copyright 2017 Facebook, Inc.
  *
@@ -21,17 +23,34 @@
  * DEALINGS IN THE SOFTWARE.
  *
  */
+
 namespace Facebook\Tests\Fixtures;
 
 use Facebook\PersistentData\PersistentDataInterface;
 
+/**
+ *
+ */
 class FooPersistentDataInterface implements PersistentDataInterface
 {
-    public function get($key)
+    /**
+     * Get a value from a persistent data store.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function get($key): string
     {
         return 'foo';
     }
 
+    /**
+     * Set a value in the persistent data store.
+     *
+     * @param string $key
+     * @param mixed  $value
+     */
     public function set($key, $value)
     {
     }

@@ -7,9 +7,9 @@ Represents a request that will be sent to the Graph API.
 You can instantiate a new `FacebookRequest` entity directly by sending the arguments to the constructor.
 
 ```php
-use Facebook\FacebookRequest;
+use Facebook\Request;
 
-$request = new FacebookRequest(
+$request = new Request(
   Facebook\FacebookApp $app,
   string $accessToken,
   string $method,
@@ -27,8 +27,8 @@ The `FacebookRequest` entity does not actually make any calls to the Graph API, 
 Usage:
 
 ```php
-$fbApp = new Facebook\FacebookApp('{app-id}', '{app-secret}');
-$request = new Facebook\FacebookRequest($fbApp, '{access-token}', 'GET', '/me');
+$fbApp = new Facebook\Application('{app-id}', '{app-secret}');
+$request = new Facebook\Request($fbApp, '{access-token}', 'GET', '/me');
 
 // OR
 
